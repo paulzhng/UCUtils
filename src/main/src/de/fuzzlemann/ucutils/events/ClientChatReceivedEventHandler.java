@@ -27,7 +27,9 @@ public class ClientChatReceivedEventHandler {
             e.setCanceled(true);
         }
 
-        if (ConfigUtil.reportAnnouncement && unformattedText.startsWith("Es liegt ein neuer Report von ")) {
+        if (ConfigUtil.reportAnnouncement
+                && (unformattedText.startsWith("Es liegt ein neuer Report von ")
+                || unformattedText.startsWith("[Report] Es liegt ein neuer Report"))) {
             Main.MINECRAFT.player.playSound(SoundUtil.REPORT_RECEIVED, 1, 1);
         }
 
