@@ -1,0 +1,23 @@
+{
+  "report_received": {
+    "category": "master",
+    "stream": true,
+    "sounds": [
+      "ucutils:master/report_received"
+    ]
+  },
+  "contract_placed": {
+    "category": "master",
+    "stream": true,
+    "sounds": [
+      "ucutils:master/contract_placed"
+    ]
+  },
+  "service_received": {
+    "category": "master",
+    "stream": true,
+    "sounds:": [
+      "ucutils:master/service_received"
+    ]
+  }
+}
