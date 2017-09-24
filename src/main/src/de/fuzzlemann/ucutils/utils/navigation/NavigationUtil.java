@@ -12,7 +12,7 @@ import net.minecraft.util.text.event.HoverEvent;
 public class NavigationUtil {
 
     public static ITextComponent getNavigationText(int x, int y, int z) {
-        TextComponentString text = new TextComponentString("\u00bb ");
+        TextComponentString text = new TextComponentString(" \u00bb ");
         text.getStyle().setColor(TextFormatting.GRAY);
 
         TextComponentString textMid = new TextComponentString("Route anzeigen");
