@@ -8,12 +8,12 @@ import java.util.Locale;
 
 public class Expression {
 
-    private static final DecimalFormat decimalFormat = new DecimalFormat("###,###.###", DecimalFormatSymbols.getInstance(Locale.GERMAN));
-    private static final String[] toReplace = new String[]{"PI", "E", "ANS"};
-    private static final String[] replacer = new String[]{String.valueOf(Math.PI), String.valueOf(Math.E), ""};
+    private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("###,###.###", DecimalFormatSymbols.getInstance(Locale.GERMAN));
+    private static final String[] TO_REPLACE = new String[]{"PI", "E", "ANS"};
+    private static final String[] REPLACER = new String[]{String.valueOf(Math.PI), String.valueOf(Math.E), ""};
 
     static {
-        decimalFormat.setMaximumFractionDigits(5);
+        DECIMAL_FORMAT.setMaximumFractionDigits(5);
     }
 
     private static double lastResult;
@@ -27,7 +27,7 @@ public class Expression {
     }
 
     public String parse() {
-        return decimalFormat.format(lastResult);
+        return DECIMAL_FORMAT.format(lastResult);
     }
 
     public void evaluate() throws ExpressionException {
@@ -41,8 +41,8 @@ public class Expression {
     }
 
     private void replaceVariables() {
-        replacer[2] = String.valueOf(lastResult);
-        expression = StringUtils.replaceEach(expression, toReplace, replacer);
+        REPLACER[2] = String.valueOf(lastResult);
+        expression = StringUtils.replaceEach(expression, TO_REPLACE, REPLACER);
     }
 
     private double parseExpression() throws ExpressionException {

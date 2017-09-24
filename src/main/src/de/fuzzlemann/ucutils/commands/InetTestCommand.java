@@ -25,13 +25,13 @@ public class InetTestCommand implements CommandExecutor {
     @Override
     @Command(labels = "inettest")
     public boolean onCommand(EntityPlayerSP p, String[] args) {
-        TextComponentString textBegin = new TextComponentString("Ping zu ");
-        TextComponentString textMid = new TextComponentString(": ");
-
-        textBegin.getStyle().setColor(TextFormatting.AQUA);
-        textMid.getStyle().setColor(TextFormatting.AQUA);
-
         new Thread(() -> {
+            TextComponentString textBegin = new TextComponentString("Ping zu ");
+            textBegin.getStyle().setColor(TextFormatting.AQUA);
+
+            TextComponentString textMid = new TextComponentString(": ");
+            textMid.getStyle().setColor(TextFormatting.AQUA);
+
             for (String host : HOSTS) {
                 TextComponentString hostComponent = new TextComponentString(host);
                 hostComponent.getStyle().setColor(TextFormatting.AQUA);

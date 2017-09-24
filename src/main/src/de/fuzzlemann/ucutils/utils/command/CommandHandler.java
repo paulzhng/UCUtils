@@ -2,10 +2,15 @@ package de.fuzzlemann.ucutils.utils.command;
 
 import de.fuzzlemann.ucutils.Main;
 import de.fuzzlemann.ucutils.commands.*;
+import de.fuzzlemann.ucutils.commands.job.NearestJobCommand;
 import de.fuzzlemann.ucutils.commands.mobile.ACallCommand;
 import de.fuzzlemann.ucutils.commands.mobile.ASMSCommand;
 import de.fuzzlemann.ucutils.commands.mobile.MobileBlockCommand;
 import de.fuzzlemann.ucutils.commands.mobile.MobileBlockListCommand;
+import de.fuzzlemann.ucutils.commands.todo.AddToDo;
+import de.fuzzlemann.ucutils.commands.todo.DoneToDo;
+import de.fuzzlemann.ucutils.commands.todo.RemoveToDo;
+import de.fuzzlemann.ucutils.commands.todo.ToDoListCommand;
 import lombok.SneakyThrows;
 import lombok.val;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -38,6 +43,11 @@ public class CommandHandler {
         registerCommand(new TimerCommand());
         registerCommand(new MobileBlockCommand());
         registerCommand(new MobileBlockListCommand());
+        registerCommand(new NearestJobCommand());
+        registerCommand(new ToDoListCommand());
+        registerCommand(new AddToDo());
+        registerCommand(new DoneToDo());
+        registerCommand(new RemoveToDo());
     }
 
     @SneakyThrows(NoSuchMethodException.class)

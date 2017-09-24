@@ -1,4 +1,11 @@
 {
+  "service_received": {
+    "category": "master",
+    "stream": true,
+    "sounds": [
+      "ucutils:master/service_received"
+    ]
+  },
   "report_received": {
     "category": "master",
     "stream": true,
@@ -13,11 +20,32 @@
       "ucutils:master/contract_placed"
     ]
   },
-  "service_received": {
+  "contract_fulfilled": {
     "category": "master",
     "stream": true,
-    "sounds:": [
-      "ucutils:master/service_received"
+    "sounds": [
+      "ucutils:master/contract_fulfilled"
+    ]
+  },
+  "player_invited": {
+    "category": "master",
+    "stream": true,
+    "sounds": [
+      "ucutils:master/player_invited"
+    ]
+  },
+  "player_uninvited": {
+    "category": "master",
+    "stream": true,
+    "sounds": [
+      "ucutils:master/player_uninvited"
+    ]
+  },
+  "bomb_placed": {
+    "category": "master",
+    "stream": true,
+    "sounds": [
+      "ucutils:master/bomb_placed"
     ]
   }
 }

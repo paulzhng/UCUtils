@@ -18,7 +18,7 @@ public class ACallCommand implements CommandExecutor {
     @Override
     @Command(labels = "acall", usage = "/%label% [Spieler]")
     public boolean onCommand(EntityPlayerSP p, String[] args) {
-        if (args.length < 2) return false;
+        if (args.length == 0) return false;
 
         new Thread(() -> {
             String player = args[0];

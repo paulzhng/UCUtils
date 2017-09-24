@@ -18,21 +18,36 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class ConfigUtil {
 
     public static Configuration config;
-    public static boolean blockResourcepackReminder = false;
+    public static boolean blockResourcePackReminder = false;
     public static boolean reportAnnouncement = true;
     public static boolean contractAnnouncement = true;
+    public static boolean contractFulfilledAnnouncement = true;
     public static boolean serviceAnnouncement = true;
+    public static boolean inviteAnnouncement = false;
+    public static boolean bombAnnouncement = true;
     public static boolean munitionDisplay = true;
     public static boolean logChat = true;
 
     public static void syncConfig() {
         config.load();
 
-        Property blockResourcepackReminderProperty = config.get(Configuration.CATEGORY_GENERAL,
-                "blockResourcepackReminder",
+        Property blockResourcePackReminderProperty = config.get(Configuration.CATEGORY_GENERAL,
+                "blockResourcePackReminder",
                 true,
-                "Blockiert die Nachricht, die einen informiert, dass man das UC Resourcepack downloaden sollte.");
-        blockResourcepackReminder = blockResourcepackReminderProperty.getBoolean();
+                "Blockiert die Nachricht, die einen informiert, dass man das UC Resourcepack downloaden sollte");
+        blockResourcePackReminder = blockResourcePackReminderProperty.getBoolean();
+
+        Property bombAnnouncementProperty = config.get(Configuration.CATEGORY_GENERAL,
+                "bombAnnouncement",
+                true,
+                "Spielt einen Sound ab, wenn eine Bombe gelegt wird");
+        bombAnnouncement = bombAnnouncementProperty.getBoolean();
+
+        Property inviteAnnouncementProperty = config.get(Configuration.CATEGORY_GENERAL,
+                "inviteAnnouncement",
+                false,
+                "Spielt einen Sound ab, wenn ein Spieler invitet oder uninvitet wird");
+        inviteAnnouncement = inviteAnnouncementProperty.getBoolean();
 
         Property reportAnnouncementProperty = config.get(Configuration.CATEGORY_GENERAL,
                 "reportAnnouncement",
@@ -45,6 +60,12 @@ public class ConfigUtil {
                 true,
                 "Spielt einen Sound ab, wenn ein Contract ausgesetzt wird");
         contractAnnouncement = contractAnnouncementProperty.getBoolean();
+
+        Property contractFulfilledAnnouncementProperty = config.get(Configuration.CATEGORY_GENERAL,
+                "contractFulfilledAnnouncement",
+                true,
+                "Spielt einen Sound ab, wenn ein Spieler auf der Contractliste getötet wird");
+        contractFulfilledAnnouncement = contractFulfilledAnnouncementProperty.getBoolean();
 
         Property serviceAnnouncementProperty = config.get(Configuration.CATEGORY_GENERAL,
                 "serviceAnnouncement",

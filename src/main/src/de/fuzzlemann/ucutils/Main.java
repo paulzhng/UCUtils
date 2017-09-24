@@ -21,7 +21,7 @@ public class Main {
     public static final String MOD_ID = "ucutils";
 
     static final String NAME = "UC Utils";
-    static final String VERSION = "1.12.1-1.0-SNAPSHOT";
+    static final String VERSION = "1.12.1-1.1";
     static final String GUI_FACTORY = "de.fuzzlemann.ucutils.utils.config.GuiFactoryUCUtils";
 
     @Mod.EventHandler

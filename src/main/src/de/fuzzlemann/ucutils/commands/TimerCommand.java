@@ -50,7 +50,7 @@ public class TimerCommand implements CommandExecutor {
                 TextComponentString text = new TextComponentString("Der Timer ");
                 text.getStyle().setColor(TextFormatting.AQUA);
 
-                TextComponentString textMid = new TextComponentString(" ist abgelaufen.");
+                TextComponentString textMid = new TextComponentString(" ist abgelaufen. ");
                 textMid.getStyle().setColor(TextFormatting.AQUA);
 
                 TextComponentString secondsComponent = new TextComponentString(seconds + (seconds == 1 ? " Sekunde" : " Sekunden"));

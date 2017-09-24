@@ -21,8 +21,8 @@ import java.util.stream.Collectors;
 @SideOnly(Side.CLIENT)
 public class MobileUtils {
 
-    private static File blockedFile = new File(JsonManager.directory, "blocked.storage");
-    private static List<String> blockedPlayers = JsonManager.loadObjects(blockedFile, String.class)
+    private static final File BLOCKED_FILE = new File(JsonManager.directory, "blocked.storage");
+    private static final List<String> BLOCKED_PLAYERS = JsonManager.loadObjects(BLOCKED_FILE, String.class)
             .stream()
             .map(object -> (String) object)
             .collect(Collectors.toList());
@@ -31,25 +31,25 @@ public class MobileUtils {
     private static CompletableFuture<Integer> future;
 
     public static void block(String playerName) {
-        blockedPlayers.add(playerName);
+        BLOCKED_PLAYERS.add(playerName);
         save();
     }
 
     public static void unblock(String playerName) {
-        blockedPlayers.remove(playerName);
+        BLOCKED_PLAYERS.remove(playerName);
         save();
     }
 
     public static boolean isBlocked(String playerName) {
-        return blockedPlayers.contains(playerName);
+        return BLOCKED_PLAYERS.contains(playerName);
     }
 
     public static List<String> getBlockedPlayers() {
-        return blockedPlayers;
+        return BLOCKED_PLAYERS;
     }
 
     private static void save() {
-        new Thread(() -> JsonManager.writeList(blockedFile, blockedPlayers)).start();
+        new Thread(() -> JsonManager.writeList(BLOCKED_FILE, BLOCKED_PLAYERS)).start();
     }
 
     public static Future<Integer> getNumber(EntityPlayerSP p, String numberPlayer) {

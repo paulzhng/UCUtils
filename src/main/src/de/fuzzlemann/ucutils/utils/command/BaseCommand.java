@@ -21,10 +21,10 @@ import java.util.List;
 @SideOnly(Side.CLIENT)
 public class BaseCommand extends CommandBase implements IClientCommand {
 
-    private final String NAME;
+    private final String name;
 
     BaseCommand(String name) {
-        this.NAME = name;
+        this.name = name;
     }
 
     @Override
@@ -35,18 +35,18 @@ public class BaseCommand extends CommandBase implements IClientCommand {
     @Override
     @Nonnull
     public String getName() {
-        return NAME;
+        return name;
     }
 
     @Override
     @Nonnull
     public String getUsage(@Nonnull ICommandSender sender) {
-        return "/" + NAME;
+        return "/" + name;
     }
 
     @Override
     public void execute(@Nonnull MinecraftServer server, @Nonnull ICommandSender sender, @Nonnull String[] args) {
-        CommandHandler.issueCommand(NAME, args);
+        CommandHandler.issueCommand(name, args);
     }
 
     @Override
