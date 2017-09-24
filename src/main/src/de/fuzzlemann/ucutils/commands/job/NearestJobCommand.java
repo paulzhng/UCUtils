@@ -3,8 +3,10 @@ package de.fuzzlemann.ucutils.commands.job;
 import de.fuzzlemann.ucutils.utils.command.Command;
 import de.fuzzlemann.ucutils.utils.command.CommandExecutor;
 import de.fuzzlemann.ucutils.utils.job.Job;
+import de.fuzzlemann.ucutils.utils.navigation.NavigationUtil;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.relauncher.Side;
@@ -54,7 +56,9 @@ public class NearestJobCommand implements CommandExecutor {
             TextComponentString textEnd = new TextComponentString(".");
             textEnd.getStyle().setColor(TextFormatting.AQUA);
 
-            p.sendMessage(text.appendSibling(jobComponent).appendSibling(blockComponent).appendSibling(distanceComponent).appendSibling(textEnd));
+            ITextComponent navigateThereComponent = new TextComponentString("\n").appendSibling(NavigationUtil.getNavigationText(nearestJob.getX(), nearestJob.getY(), nearestJob.getZ()));
+
+            p.sendMessage(text.appendSibling(jobComponent).appendSibling(blockComponent).appendSibling(distanceComponent).appendSibling(textEnd).appendSibling(navigateThereComponent));
         }).start();
 
         return true;
