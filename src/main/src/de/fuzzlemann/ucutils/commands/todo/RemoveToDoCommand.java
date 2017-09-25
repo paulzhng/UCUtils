@@ -14,7 +14,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  * @author Fuzzlemann
  */
 @SideOnly(Side.CLIENT)
-public class RemoveToDo implements CommandExecutor {
+public class RemoveToDoCommand implements CommandExecutor {
 
     @Override
     @Command(labels = "removetodo", usage = "/%label% [ID]")

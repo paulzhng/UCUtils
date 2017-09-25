@@ -35,7 +35,7 @@ public class NotificationEventHandler {
 
         if (ConfigUtil.blockResourcePackReminder
                 && (unformattedText.equals("Wir empfehlen dir unser Resourcepack zu nutzen.")
-                || unformattedText.equals("Unter http://server.unicacity.de/dl/UnicaCity.zip kannst du es dir herunterladen."))) {
+                || unformattedText.equals("Unter http://server.unicacity.de/dl/UnicaCity_v2R7.zip kannst du es dir herunterladen."))) {
             e.setCanceled(true);
             return;
         }
@@ -56,13 +56,13 @@ public class NotificationEventHandler {
             p.playSound(SoundUtil.REPORT_RECEIVED, 1, 1);
         }
 
-        if (ConfigUtil.bombAnnouncement && unformattedText.startsWith("News: ACHTUNG! Es wurde eine Bombe in der Nähe von")) {
+        if (ConfigUtil.bombAnnouncement && unformattedText.startsWith("News: ACHTUNG! Es wurde eine Bombe in der N\u00e4he von")) {
             p.playSound(SoundUtil.BOMB_PLACED, 0.15F, 1);
         }
 
         if (ConfigUtil.contractFulfilledAnnouncement
                 && unformattedText.startsWith("[Contract] ")
-                && unformattedText.contains(" getötet. Kopfgeld: ")) {
+                && unformattedText.contains(" get\u00f6tet. Kopfgeld: ")) {
             p.playSound(SoundUtil.CONTRACT_FULFILLED, 1, 1);
         }
 
@@ -78,16 +78,7 @@ public class NotificationEventHandler {
     }
 
     private static void modifyFriendJoin(ITextComponent message, String friendName) {
-        TextComponentString deleteComponent = new TextComponentString(" [\u2717] ");
-        deleteComponent.getStyle().setColor(TextFormatting.RED);
-
-        TextComponentString deleteHoverText = new TextComponentString("L\u00f6sche " + friendName + " als Freund");
-        deleteHoverText.getStyle().setColor(TextFormatting.RED);
-
-        deleteComponent.getStyle().setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, deleteHoverText));
-        deleteComponent.getStyle().setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/friend delete " + friendName));
-
-        TextComponentString callComponent = new TextComponentString("[\u260e] ");
+        TextComponentString callComponent = new TextComponentString(" [\u260e]");
         callComponent.getStyle().setColor(TextFormatting.DARK_GREEN);
 
         TextComponentString callHoverText = new TextComponentString("Rufe " + friendName + " an");
@@ -105,6 +96,15 @@ public class NotificationEventHandler {
         smsComponent.getStyle().setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, smsHoverText));
         smsComponent.getStyle().setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/asms " + friendName + " "));
 
-        message.appendSibling(deleteComponent).appendSibling(callComponent).appendSibling(smsComponent);
+        TextComponentString deleteComponent = new TextComponentString("[\u2717]");
+        deleteComponent.getStyle().setColor(TextFormatting.RED);
+
+        TextComponentString deleteHoverText = new TextComponentString("L\u00f6sche " + friendName + " als Freund");
+        deleteHoverText.getStyle().setColor(TextFormatting.RED);
+
+        deleteComponent.getStyle().setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, deleteHoverText));
+        deleteComponent.getStyle().setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/friend delete " + friendName));
+
+        message.appendSibling(callComponent).appendSibling(smsComponent).appendSibling(deleteComponent);
     }
 }

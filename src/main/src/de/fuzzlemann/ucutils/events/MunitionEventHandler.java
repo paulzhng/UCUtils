@@ -53,7 +53,7 @@ public class MunitionEventHandler {
         String munitionString = splittedLore[0];
         int munition = Integer.parseInt(munitionString.substring(2, munitionString.length()));
 
-        return --munition < 1 ? "\u00a7c0" : "\u00a76" + munition + "\u00a7b/\u00a76" + splittedLore[1];
+        return (--munition < 1 ? "\u00a7c0" : "\u00a76" + munition) + "\u00a7b/\u00a76" + splittedLore[1];
     }
 
     private static boolean isWeapon(ItemStack is) {

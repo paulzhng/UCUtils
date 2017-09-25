@@ -64,7 +64,7 @@ public class ConfigUtil {
         Property contractFulfilledAnnouncementProperty = config.get(Configuration.CATEGORY_GENERAL,
                 "contractFulfilledAnnouncement",
                 true,
-                "Spielt einen Sound ab, wenn ein Spieler auf der Contractliste getötet wird");
+                "Spielt einen Sound ab, wenn ein Spieler auf der Contractliste get\u00f6tet wird");
         contractFulfilledAnnouncement = contractFulfilledAnnouncementProperty.getBoolean();
 
         Property serviceAnnouncementProperty = config.get(Configuration.CATEGORY_GENERAL,
@@ -76,7 +76,7 @@ public class ConfigUtil {
         Property munitionDisplayProperty = config.get(Configuration.CATEGORY_GENERAL,
                 "munitionDisplay",
                 true,
-                "Die Munition wird angezeigt, wenn man schießt");
+                "Die Munition wird angezeigt, wenn man schie\u00dft");
         munitionDisplay = munitionDisplayProperty.getBoolean();
 
         Property logChatProperty = config.get(Configuration.CATEGORY_GENERAL,

@@ -13,7 +13,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  * @author Fuzzlemann
  */
 @SideOnly(Side.CLIENT)
-public class AddToDo implements CommandExecutor {
+public class AddToDoCommand implements CommandExecutor {
 
     @Override
     @Command(labels = "addtodo", usage = "/%label% [ToDo]")

@@ -14,7 +14,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  * @author Fuzzlemann
  */
 @SideOnly(Side.CLIENT)
-public class DoneToDo implements CommandExecutor {
+public class DoneToDoCommand implements CommandExecutor {
 
     @Override
     @Command(labels = "donetodo", usage = "/%label% [ID]")

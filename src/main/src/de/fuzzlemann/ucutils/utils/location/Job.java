@@ -1,11 +1,11 @@
-package de.fuzzlemann.ucutils.utils.job;
+package de.fuzzlemann.ucutils.utils.location;
 
 /**
  * @author Fuzzlemann
  */
 public enum Job {
-    PULVERMINE(510, 63, 178, "Pulvermine", "/startmine"),
-    MUELLMANN(510, 63, 178, "M\u00fcllmann", "/m\u00fcllmann"),
+    POWDER_MINE(510, 63, 178, "Pulvermine", "/startmine"),
+    REFUSE_COLLECTOR(510, 63, 178, "M\u00fcllmann", "/m\u00fcllmann"),
     PAPER_TRANSPORT(464, 64, 421, "Papiertransport", "/starttransport"),
     LUMBERJACK(433, 64, 420, "Holzf\u00e4ller", "/startwood"),
     MINE(-277, 69, 571, "Bergarbeiter", "/startstone"),

@@ -2,14 +2,19 @@ package de.fuzzlemann.ucutils.utils.command;
 
 import de.fuzzlemann.ucutils.Main;
 import de.fuzzlemann.ucutils.commands.*;
-import de.fuzzlemann.ucutils.commands.job.NearestJobCommand;
+import de.fuzzlemann.ucutils.commands.info.CInfoCommand;
+import de.fuzzlemann.ucutils.commands.info.FCInfoCommand;
+import de.fuzzlemann.ucutils.commands.info.FInfoCommand;
+import de.fuzzlemann.ucutils.commands.info.InfoCommand;
+import de.fuzzlemann.ucutils.commands.location.DistanceCommand;
+import de.fuzzlemann.ucutils.commands.location.NearestJobCommand;
 import de.fuzzlemann.ucutils.commands.mobile.ACallCommand;
 import de.fuzzlemann.ucutils.commands.mobile.ASMSCommand;
 import de.fuzzlemann.ucutils.commands.mobile.MobileBlockCommand;
 import de.fuzzlemann.ucutils.commands.mobile.MobileBlockListCommand;
-import de.fuzzlemann.ucutils.commands.todo.AddToDo;
-import de.fuzzlemann.ucutils.commands.todo.DoneToDo;
-import de.fuzzlemann.ucutils.commands.todo.RemoveToDo;
+import de.fuzzlemann.ucutils.commands.todo.AddToDoCommand;
+import de.fuzzlemann.ucutils.commands.todo.DoneToDoCommand;
+import de.fuzzlemann.ucutils.commands.todo.RemoveToDoCommand;
 import de.fuzzlemann.ucutils.commands.todo.ToDoListCommand;
 import lombok.SneakyThrows;
 import lombok.val;
@@ -45,9 +50,14 @@ public class CommandHandler {
         registerCommand(new MobileBlockListCommand());
         registerCommand(new NearestJobCommand());
         registerCommand(new ToDoListCommand());
-        registerCommand(new AddToDo());
-        registerCommand(new DoneToDo());
-        registerCommand(new RemoveToDo());
+        registerCommand(new AddToDoCommand());
+        registerCommand(new DoneToDoCommand());
+        registerCommand(new RemoveToDoCommand());
+        registerCommand(new DistanceCommand());
+        registerCommand(new CInfoCommand());
+        registerCommand(new FCInfoCommand());
+        registerCommand(new FInfoCommand());
+        registerCommand(new InfoCommand());
     }
 
     @SneakyThrows(NoSuchMethodException.class)

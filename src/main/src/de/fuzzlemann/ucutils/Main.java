@@ -1,5 +1,6 @@
 package de.fuzzlemann.ucutils;
 
+import de.fuzzlemann.ucutils.update.UpdateReminder;
 import de.fuzzlemann.ucutils.utils.command.CommandHandler;
 import de.fuzzlemann.ucutils.utils.config.ConfigUtil;
 import net.minecraft.client.Minecraft;
@@ -8,6 +9,8 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.io.IOException;
 
 /**
  * @author Fuzzlemann
@@ -19,9 +22,9 @@ public class Main {
     public static final Minecraft MINECRAFT = Minecraft.getMinecraft();
 
     public static final String MOD_ID = "ucutils";
+    public static final String VERSION = "1.12.1-1.2";
 
     static final String NAME = "UC Utils";
-    static final String VERSION = "1.12.1-1.1";
     static final String GUI_FACTORY = "de.fuzzlemann.ucutils.utils.config.GuiFactoryUCUtils";
 
     @Mod.EventHandler
@@ -30,5 +33,13 @@ public class Main {
         ConfigUtil.syncConfig();
 
         CommandHandler.registerAllCommands();
+
+        new Thread(() -> {
+            try {
+                UpdateReminder.updateUpdateNeeded();
+            } catch (IOException e1) {
+                UpdateReminder.updateNeeded = false;
+            }
+        }).start();
     }
 }
