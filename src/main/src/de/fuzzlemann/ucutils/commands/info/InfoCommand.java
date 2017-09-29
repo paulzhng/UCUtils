@@ -20,9 +20,9 @@ public class InfoCommand implements CommandExecutor {
     @Override
     @Command(labels = "info")
     public boolean onCommand(EntityPlayerSP p, String[] args) {
-        ITextComponent text = constructText("Fraktionen", "/fcinfo")
+        ITextComponent text = constructText("Fraktionen", "/finfo")
                 .appendSibling(constructText("Wichtige Befehle", "/cinfo"))
-                .appendSibling(constructText("Fraktionsbefehle", "/finfo"));
+                .appendSibling(constructText("Fraktionsbefehle", "/fcinfo"));
 
         p.sendMessage(text);
         return true;

@@ -1,5 +1,6 @@
 package de.fuzzlemann.ucutils.utils.command;
 
+import de.fuzzlemann.ucutils.Main;
 import de.fuzzlemann.ucutils.utils.ForgeUtils;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
@@ -22,9 +23,11 @@ import java.util.List;
 public class BaseCommand extends CommandBase implements IClientCommand {
 
     private final String name;
+    private final TabCompletion tabCompletion;
 
-    BaseCommand(String name) {
+    BaseCommand(String name, @Nullable TabCompletion tabCompletion) {
         this.name = name;
+        this.tabCompletion = tabCompletion;
     }
 
     @Override
@@ -57,6 +60,12 @@ public class BaseCommand extends CommandBase implements IClientCommand {
     @Override
     @Nonnull
     public List<String> getTabCompletions(@Nonnull MinecraftServer server, @Nonnull ICommandSender sender, @Nonnull String[] args, @Nullable BlockPos targetPos) {
+        if (tabCompletion != null) {
+            List<String> tabCompletions = tabCompletion.getTabCompletions(Main.MINECRAFT.player, args);
+
+            if (!tabCompletions.isEmpty()) return tabCompletions;
+        }
+
         List<String> players = ForgeUtils.getOnlinePlayers();
 
         if (players.isEmpty()) return players;

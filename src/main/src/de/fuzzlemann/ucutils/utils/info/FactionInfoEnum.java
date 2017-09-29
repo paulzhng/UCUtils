@@ -134,6 +134,7 @@ public enum FactionInfoEnum {
     private static FactionInfo constructFactionInfo(String fullName, String shortName, String hqPosition, String tasks, String factionType, String naviPoint, CommandDescription... commandDescriptions) {
         if (factionCommandInfo == null) {
             factionCommandInfo = new CommandInfo(new CommandDescription[]{
+                    new CommandDescription("/equip", "Equippe dich"),
                     new CommandDescription("/f", "Schreibe in den Fraktionschat"),
                     new CommandDescription("/fbank", "L\u00e4sst dir den Stand der Fraktionsbank anzeigen"),
                     new CommandDescription("/fbank einzahlen", "Zahle Geld in die Fraktionsbank ein"),

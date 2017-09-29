@@ -6,12 +6,17 @@ import de.fuzzlemann.ucutils.commands.info.CInfoCommand;
 import de.fuzzlemann.ucutils.commands.info.FCInfoCommand;
 import de.fuzzlemann.ucutils.commands.info.FInfoCommand;
 import de.fuzzlemann.ucutils.commands.info.InfoCommand;
+import de.fuzzlemann.ucutils.commands.jobs.ADropDrinkCommand;
+import de.fuzzlemann.ucutils.commands.jobs.ADropTransportCommand;
+import de.fuzzlemann.ucutils.commands.jobs.AGetPizzaCommand;
 import de.fuzzlemann.ucutils.commands.location.DistanceCommand;
+import de.fuzzlemann.ucutils.commands.location.NearestATMCommand;
 import de.fuzzlemann.ucutils.commands.location.NearestJobCommand;
 import de.fuzzlemann.ucutils.commands.mobile.ACallCommand;
 import de.fuzzlemann.ucutils.commands.mobile.ASMSCommand;
 import de.fuzzlemann.ucutils.commands.mobile.MobileBlockCommand;
 import de.fuzzlemann.ucutils.commands.mobile.MobileBlockListCommand;
+import de.fuzzlemann.ucutils.commands.police.ASUCommand;
 import de.fuzzlemann.ucutils.commands.todo.AddToDoCommand;
 import de.fuzzlemann.ucutils.commands.todo.DoneToDoCommand;
 import de.fuzzlemann.ucutils.commands.todo.RemoveToDoCommand;
@@ -25,6 +30,7 @@ import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nullable;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -38,35 +44,53 @@ public class CommandHandler {
 
     @SneakyThrows
     public static void registerAllCommands() {
+        registerCommand(new ClearChatCommand());
         registerCommand(new InetTestCommand());
         registerCommand(new CalculateCommand());
+
         registerCommand(new ASMSCommand());
         registerCommand(new ACallCommand());
-        registerCommand(new ClearChatCommand());
+
         registerCommand(new StopWatchCommand());
         registerCommand(new ClockCommand());
         registerCommand(new TimerCommand());
+
         registerCommand(new MobileBlockCommand());
         registerCommand(new MobileBlockListCommand());
-        registerCommand(new NearestJobCommand());
+
         registerCommand(new ToDoListCommand());
         registerCommand(new AddToDoCommand());
         registerCommand(new DoneToDoCommand());
         registerCommand(new RemoveToDoCommand());
+
+        registerCommand(new NearestJobCommand());
+        registerCommand(new NearestATMCommand());
         registerCommand(new DistanceCommand());
+
         registerCommand(new CInfoCommand());
         registerCommand(new FCInfoCommand());
         registerCommand(new FInfoCommand());
         registerCommand(new InfoCommand());
+
+        registerCommand(new ADropTransportCommand());
+        registerCommand(new ADropDrinkCommand());
+        registerCommand(new AGetPizzaCommand());
+
+        ASUCommand asuCommand = new ASUCommand();
+        registerCommand(asuCommand, asuCommand);
+    }
+
+    private static void registerCommand(CommandExecutor commandExecutor) {
+        registerCommand(commandExecutor, null);
     }
 
     @SneakyThrows(NoSuchMethodException.class)
-    private static void registerCommand(CommandExecutor commandExecutor) {
+    private static void registerCommand(CommandExecutor commandExecutor, @Nullable TabCompletion tabCompletion) {
         Command commandAnnotation = commandExecutor.getClass().getMethod("onCommand", EntityPlayerSP.class, String[].class).getAnnotation(Command.class);
         String[] labels = commandAnnotation.labels();
 
         for (val label : labels) {
-            ClientCommandHandler.instance.registerCommand(new BaseCommand(label));
+            ClientCommandHandler.instance.registerCommand(new BaseCommand(label, tabCompletion));
             COMMANDS.put(label, commandExecutor);
         }
     }
@@ -77,9 +101,8 @@ public class CommandHandler {
 
         if (commandExecutor == null) return;
 
-        Command commandAnnotation = commandExecutor.getClass().getMethod("onCommand", EntityPlayerSP.class, String[].class).getAnnotation(Command.class);
-
         EntityPlayerSP executor = Main.MINECRAFT.player;
+        Command commandAnnotation = commandExecutor.getClass().getMethod("onCommand", EntityPlayerSP.class, String[].class).getAnnotation(Command.class);
 
         if (commandExecutor.onCommand(executor, args)) return;
 

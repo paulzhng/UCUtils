@@ -1,6 +1,6 @@
 package de.fuzzlemann.ucutils.commands;
 
-import de.fuzzlemann.ucutils.utils.Expression;
+import de.fuzzlemann.ucutils.utils.math.Expression;
 import de.fuzzlemann.ucutils.utils.command.Command;
 import de.fuzzlemann.ucutils.utils.command.CommandExecutor;
 import net.minecraft.client.entity.EntityPlayerSP;

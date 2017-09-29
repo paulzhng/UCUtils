@@ -1,4 +1,4 @@
-package de.fuzzlemann.ucutils.utils;
+package de.fuzzlemann.ucutils.utils.math;
 
 import org.apache.commons.lang3.StringUtils;
 

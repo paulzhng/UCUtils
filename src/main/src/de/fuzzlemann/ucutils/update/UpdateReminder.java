@@ -1,7 +1,6 @@
 package de.fuzzlemann.ucutils.update;
 
 import de.fuzzlemann.ucutils.Main;
-import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.event.ClickEvent;
@@ -9,6 +8,7 @@ import net.minecraft.util.text.event.HoverEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.network.FMLNetworkEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.commons.io.IOUtils;
@@ -24,13 +24,17 @@ import java.nio.charset.StandardCharsets;
 @SideOnly(Side.CLIENT)
 public class UpdateReminder {
     public static boolean updateNeeded;
+    private static boolean connected;
 
     @SubscribeEvent
-    public static void onJoin(EntityJoinWorldEvent e) {
-        if (!updateNeeded) return;
+    public static void onJoin(FMLNetworkEvent.ClientConnectedToServerEvent e) {
+        connected = false;
+    }
 
-        EntityPlayerSP p = Main.MINECRAFT.player;
-        if (!e.getEntity().getName().equals(p.getName())) return;
+    @SubscribeEvent
+    public static void onJoinWorld(EntityJoinWorldEvent e) {
+        if (!updateNeeded) return;
+        if (!connected) return;
 
         TextComponentString text = new TextComponentString("Es ist ein neues Update von UCUtils verf\u00fcgbar!");
         text.getStyle().setColor(TextFormatting.RED);
@@ -41,7 +45,8 @@ public class UpdateReminder {
         text.getStyle().setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, hoverText));
         text.getStyle().setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "http://www.fuzzlemann.de/UCUtils.jar"));
 
-        p.sendMessage(text);
+        Main.MINECRAFT.player.sendMessage(text);
+        connected = true;
     }
 
     public static void updateUpdateNeeded() throws IOException {
