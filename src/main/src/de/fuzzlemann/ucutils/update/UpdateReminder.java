@@ -28,7 +28,7 @@ public class UpdateReminder {
 
     @SubscribeEvent
     public static void onJoin(FMLNetworkEvent.ClientConnectedToServerEvent e) {
-        connected = false;
+        connected = true;
     }
 
     @SubscribeEvent
@@ -43,7 +43,7 @@ public class UpdateReminder {
         hoverText.getStyle().setColor(TextFormatting.GREEN);
 
         text.getStyle().setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, hoverText));
-        text.getStyle().setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "http://www.fuzzlemann.de/UCUtils.jar"));
+        text.getStyle().setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://fuzzlemann.de/UCUtils.jar"));
 
         Main.MINECRAFT.player.sendMessage(text);
         connected = true;
@@ -58,7 +58,7 @@ public class UpdateReminder {
     }
 
     private static int getLatestVersion() throws IOException {
-        URL url = new URL("http://www.fuzzlemann.de/latestversion.html");
+        URL url = new URL("http://fuzzlemann.de/latestversion.html");
         String result = IOUtils.toString(url, StandardCharsets.UTF_8);
         return parseVersion(result);
     }

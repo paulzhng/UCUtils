@@ -15,10 +15,10 @@ import java.util.stream.Collectors;
  */
 public class WantedManager {
 
-    private static List<Wanted> wantedList = new ArrayList<>();
+    private static final List<Wanted> WANTED_LIST = new ArrayList<>();
 
     public static void fillWantedList() throws IOException {
-        URL url = new URL("http://www.fuzzlemann.de/wanteds.html");
+        URL url = new URL("http://fuzzlemann.de/wanteds.html");
         String result = IOUtils.toString(url, StandardCharsets.UTF_8);
 
         String[] wantedStrings = result.split("<>");
@@ -29,18 +29,18 @@ public class WantedManager {
             String reason = StringEscapeUtils.unescapeJava(splittedWantedString[0]);
             int wanteds = Integer.parseInt(splittedWantedString[1]);
 
-            wantedList.add(new Wanted(reason, wanteds));
+            WANTED_LIST.add(new Wanted(reason, wanteds));
         }
     }
 
     public static List<String> getWantedReasons() {
-        return wantedList.stream()
+        return WANTED_LIST.stream()
                 .map(Wanted::getReason)
                 .collect(Collectors.toList());
     }
 
     public static Wanted getWanted(String reason) {
-        for (Wanted wanted : wantedList) {
+        for (Wanted wanted : WANTED_LIST) {
             if (wanted.getReason().equalsIgnoreCase(reason)) return wanted;
         }
 
@@ -49,7 +49,7 @@ public class WantedManager {
 
         int delta = Integer.MAX_VALUE;
 
-        for (Wanted wanted : wantedList) {
+        for (Wanted wanted : WANTED_LIST) {
             String wantedReason = wanted.getReason().toLowerCase();
             if (!wantedReason.startsWith(lowerReason)) {
                 continue;

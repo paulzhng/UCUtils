@@ -15,7 +15,7 @@ import java.util.List;
  */
 public class JsonManager {
 
-    public static File directory = new File(Main.MINECRAFT.mcDataDir, "storage");
+    public static final File DIRECTORY = new File(Main.MINECRAFT.mcDataDir, "storage");
 
     /**
      * Writes the HashMap to the file
@@ -102,8 +102,8 @@ public class JsonManager {
 
     @SneakyThrows
     private static void createFile(File file) {
-        if (directory.mkdir())
-            System.out.println("[UCUtils] " + directory.getAbsoluteFile() + " created");
+        if (DIRECTORY.mkdir())
+            System.out.println("[UCUtils] " + DIRECTORY.getAbsoluteFile() + " created");
         if (file.createNewFile())
             System.out.println("[UCUtils] " + file.getAbsoluteFile() + " created");
     }

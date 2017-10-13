@@ -1,8 +1,9 @@
 package de.fuzzlemann.ucutils.commands;
 
-import de.fuzzlemann.ucutils.utils.math.Expression;
 import de.fuzzlemann.ucutils.utils.command.Command;
 import de.fuzzlemann.ucutils.utils.command.CommandExecutor;
+import de.fuzzlemann.ucutils.utils.math.Expression;
+import de.fuzzlemann.ucutils.utils.text.TextUtils;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
@@ -24,10 +25,7 @@ public class CalculateCommand implements CommandExecutor {
         try {
             expr.evaluate();
         } catch (Expression.ExpressionException e) {
-            TextComponentString errorString = new TextComponentString("Es ist ein Fehler bei der Evaluierung aufgetreten: " + e.getMessage());
-            errorString.getStyle().setColor(TextFormatting.RED);
-
-            p.sendMessage(errorString);
+            TextUtils.error("Es ist ein Fehler bei der Evaluierung aufgetreten: " + e.getMessage(), p);
             return true;
         }
 

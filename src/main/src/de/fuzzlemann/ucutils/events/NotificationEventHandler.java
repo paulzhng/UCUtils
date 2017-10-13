@@ -16,12 +16,20 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import java.util.regex.Pattern;
+
 /**
  * @author Fuzzlemann
  */
 @Mod.EventBusSubscriber
 @SideOnly(Side.CLIENT)
 public class NotificationEventHandler {
+
+    private static final Pattern RESOURCEPACK_PATTERN = Pattern.compile("^Wir empfehlen dir unser Resourcepack zu nutzen.$|" +
+            "^Unter http://server.unicacity.de/dl/UnicaCity_v2R7.zip kannst du es dir herunterladen.$");
+    private static final Pattern UNINVITE_PATTERN = Pattern.compile("^[a-zA-Z0-9_]+ wurde von [a-zA-Z0-9_]+ aus der Fraktion geschmissen.$");
+    private static final Pattern INVITE_PATTERN = Pattern.compile("^[a-zA-Z0-9_]+ ist der Fraktion mit Rang \\d beigetreten.$");
+
     @SubscribeEvent
     public static void onChatReceived(ClientChatReceivedEvent e) {
         val message = e.getMessage();
@@ -33,9 +41,7 @@ public class NotificationEventHandler {
             modifyFriendJoin(message, friendName);
         }
 
-        if (ConfigUtil.blockResourcePackReminder
-                && (unformattedText.equals("Wir empfehlen dir unser Resourcepack zu nutzen.")
-                || unformattedText.equals("Unter http://server.unicacity.de/dl/UnicaCity_v2R7.zip kannst du es dir herunterladen."))) {
+        if (ConfigUtil.blockResourcePackReminder && RESOURCEPACK_PATTERN.matcher(unformattedText).find()) {
             e.setCanceled(true);
             return;
         }
@@ -43,9 +49,9 @@ public class NotificationEventHandler {
         EntityPlayerSP p = Main.MINECRAFT.player;
 
         if (ConfigUtil.inviteAnnouncement) {
-            if (unformattedText.startsWith("Invite: ") && unformattedText.endsWith("beigetreten.")) {
+            if (INVITE_PATTERN.matcher(unformattedText).find()) {
                 p.playSound(SoundUtil.PLAYER_INVITED, 1, 1);
-            } else if (unformattedText.startsWith("Uninvite: ") && unformattedText.endsWith("aus der Fraktion geschmissen.")) {
+            } else if (UNINVITE_PATTERN.matcher(unformattedText).find()) {
                 p.playSound(SoundUtil.PLAYER_UNINVITED, 1, 1);
             }
         }

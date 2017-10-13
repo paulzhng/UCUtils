@@ -1,6 +1,7 @@
 package de.fuzzlemann.ucutils.utils;
 
 import de.fuzzlemann.ucutils.Main;
+import de.fuzzlemann.ucutils.utils.text.TextUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiPlayerTabOverlay;
 import net.minecraft.client.network.NetHandlerPlayClient;
@@ -32,21 +33,8 @@ public class ForgeUtils {
 
         return playerInfoMap.stream()
                 .map(tabOverlay::getPlayerName)
-                .map(playerName -> {
-                    if (playerName.startsWith("\u00a78[\u00a7r\u00a79UC\u00a7r\u00a78]")) {
-                        playerName = playerName.substring(16, playerName.length());
-                    }
-
-                    if (playerName.startsWith("\u00a78[\u00a7r\u00a76R\u00a7r\u00a78]")) {
-                        playerName = playerName.substring(15, playerName.length());
-                    }
-
-                    while (playerName.startsWith("\u00a7")) {
-                        playerName = playerName.substring(2, playerName.length());
-                    }
-
-                    return playerName;
-                })
+                .map(TextUtils::stripColor)
+                .map(TextUtils::stripPrefix)
                 .sorted()
                 .collect(Collectors.toList());
     }

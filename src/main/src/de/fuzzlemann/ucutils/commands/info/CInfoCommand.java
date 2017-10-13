@@ -14,7 +14,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class CInfoCommand implements CommandExecutor {
 
-    private static CommandInfo commandInfo = new CommandInfo(new CommandDescription[]{
+    private static final CommandInfo COMMAND_INFO = new CommandInfo(new CommandDescription[]{
             new CommandDescription("/report", "Mit dem Befehl forderst du Hilfe von einem Supporter an"),
             new CommandDescription("/s", "Mit diesem Befehl schreist du. Diese Nachricht ist im Radius von 35 Bl\u00f6cke lesbar"),
             new CommandDescription("/forum", "Mit diesem Befehl verifizierst du deinen Forum Account"),
@@ -33,7 +33,7 @@ public class CInfoCommand implements CommandExecutor {
     @Override
     @Command(labels = {"cinfo", "commandinfo"})
     public boolean onCommand(EntityPlayerSP p, String[] args) {
-        p.sendMessage(commandInfo.constructMessage("Wichtige Befehle"));
+        p.sendMessage(COMMAND_INFO.constructMessage("Wichtige Befehle"));
         return true;
     }
 }

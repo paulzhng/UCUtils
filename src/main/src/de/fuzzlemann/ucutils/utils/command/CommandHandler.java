@@ -76,6 +76,7 @@ public class CommandHandler {
         registerCommand(new ADropDrinkCommand());
         registerCommand(new AGetPizzaCommand());
 
+        registerCommand(new JShutdownCommand());
         ASUCommand asuCommand = new ASUCommand();
         registerCommand(asuCommand, asuCommand);
     }

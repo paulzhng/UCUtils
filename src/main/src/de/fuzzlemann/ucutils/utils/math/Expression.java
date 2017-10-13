@@ -30,7 +30,7 @@ public class Expression {
         return DECIMAL_FORMAT.format(lastResult);
     }
 
-    public void evaluate() throws ExpressionException {
+    public double evaluate() throws ExpressionException {
         replaceVariables();
 
         nextChar();
@@ -38,6 +38,7 @@ public class Expression {
         if (pos < expression.length()) throw new ExpressionException("Unexpected character: " + (char) ch);
 
         lastResult = x;
+        return x;
     }
 
     private void replaceVariables() {

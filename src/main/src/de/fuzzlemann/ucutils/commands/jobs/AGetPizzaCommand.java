@@ -2,11 +2,10 @@ package de.fuzzlemann.ucutils.commands.jobs;
 
 import de.fuzzlemann.ucutils.utils.command.Command;
 import de.fuzzlemann.ucutils.utils.command.CommandExecutor;
+import de.fuzzlemann.ucutils.utils.text.TextUtils;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.scoreboard.Score;
 import net.minecraft.scoreboard.Scoreboard;
-import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -21,40 +20,36 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @SideOnly(Side.CLIENT)
 public class AGetPizzaCommand implements CommandExecutor {
 
-    private Timer timer = new Timer();
-    private AtomicBoolean started = new AtomicBoolean();
+    private final Timer TIMER = new Timer();
+    private final AtomicBoolean STARTED = new AtomicBoolean();
 
     @Override
     @Command(labels = "agetpizza")
     public boolean onCommand(EntityPlayerSP p, String[] args) {
-        if (started.get()) return true;
+        if (STARTED.get()) return true;
 
         Scoreboard scoreboard = p.getWorldScoreboard();
 
         Score score = scoreboard.getScores().stream()
-                .peek(scorePredicate -> System.out.println(scorePredicate.getPlayerName()))
                 .filter(scorePredicate -> scorePredicate.getPlayerName().equals("\u00a72Pizzen\u00a78: "))
                 .findFirst()
                 .orElse(null);
 
         if (score == null || score.getScorePoints() != 0) {
-            TextComponentString text = new TextComponentString("Du musst derzeit keine Pizzen aufsammeln.");
-            text.getStyle().setColor(TextFormatting.RED);
-
-            p.sendMessage(text);
+            TextUtils.error("Du musst derzeit keine Pizzen einpacken.", p);
             return true;
         }
 
-        started.set(true);
+        STARTED.set(true);
 
-        timer.scheduleAtFixedRate(new TimerTask() {
+        TIMER.scheduleAtFixedRate(new TimerTask() {
             private int i;
 
             @Override
             public void run() {
                 p.sendChatMessage("/getpizza");
                 if (i++ > 15) {
-                    started.set(false);
+                    STARTED.set(false);
                     cancel();
                 }
             }

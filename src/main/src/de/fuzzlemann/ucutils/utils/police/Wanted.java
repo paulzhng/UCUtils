@@ -8,7 +8,7 @@ public class Wanted {
     private final String reason;
     private final int amount;
 
-    Wanted(String reason, int amount) {
+    public Wanted(String reason, int amount) {
         this.reason = reason;
         this.amount = amount;
     }

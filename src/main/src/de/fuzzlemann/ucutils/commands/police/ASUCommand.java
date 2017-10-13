@@ -3,18 +3,16 @@ package de.fuzzlemann.ucutils.commands.police;
 import de.fuzzlemann.ucutils.utils.command.Command;
 import de.fuzzlemann.ucutils.utils.command.CommandExecutor;
 import de.fuzzlemann.ucutils.utils.command.TabCompletion;
+import de.fuzzlemann.ucutils.utils.math.Expression;
 import de.fuzzlemann.ucutils.utils.police.Wanted;
 import de.fuzzlemann.ucutils.utils.police.WantedManager;
+import de.fuzzlemann.ucutils.utils.text.TextUtils;
+import lombok.SneakyThrows;
 import net.minecraft.client.entity.EntityPlayerSP;
-import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -24,25 +22,67 @@ import java.util.stream.Collectors;
 public class ASUCommand implements CommandExecutor, TabCompletion {
 
     @Override
-    @Command(labels = "asu", usage = "/%label% [Spieler] [Grund]")
+    @Command(labels = "asu", usage = "/%label% [Spieler(...)] [Grund] (Variation) (-v/-b)")
     public boolean onCommand(EntityPlayerSP p, String[] args) {
         if (args.length < 2) return false;
 
-        String player = args[0];
-        String reason = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
+        Set<Flag> flags = getFlag(args);
+        int variationIndex = args.length - 1 - flags.size();
+
+        int variation = 0;
+
+        try {
+            variation = Integer.parseInt(args[variationIndex]);
+        } catch (NumberFormatException e) {
+            variationIndex++;
+        }
+
+        if (Math.abs(variation) > 10) {
+            TextUtils.error("Die Variation darf nicht gr\u00f6\u00dfer als 10 Wanteds sein.", p);
+            return true;
+        }
+
+        int reasonIndex = variationIndex - 1;
+
+        List<String> players = Arrays.asList(args).subList(0, reasonIndex);
+        String reason = args[reasonIndex];
 
         Wanted wanted = WantedManager.getWanted(reason.replace('-', ' '));
 
         if (wanted == null) {
-            TextComponentString text = new TextComponentString("Der Wantedgrund wurde nicht gefunden.");
-            text.getStyle().setColor(TextFormatting.RED);
-
-            p.sendMessage(text);
+            TextUtils.error("Der Wantedgrund wurde nicht gefunden.", p);
             return true;
         }
 
-        p.sendChatMessage("/su " + wanted.getAmount() + " " + player + " " + wanted.getReason());
+        String wantedReason = wanted.getReason();
+        int wantedAmount = wanted.getAmount();
+
+        for (Flag flag : flags) {
+            wantedReason = flag.modifyReason(wantedReason);
+            wantedAmount = flag.modifyWanteds(wantedAmount);
+        }
+
+        giveWanteds(p, wantedReason, wantedAmount + variation, players);
         return true;
+    }
+
+    private void giveWanteds(EntityPlayerSP issuer, String reason, int amount, List<String> players) {
+        for (String player : players) {
+            issuer.sendChatMessage("/su " + amount + " " + player + " " + reason);
+        }
+    }
+
+    private static Set<Flag> getFlag(String[] args) {
+        Set<Flag> flags = new HashSet<>();
+
+        for (int i = args.length - 1; i > args.length - Flag.values().length - 1; i--) {
+            Flag flag = Flag.getFlag(args[i]);
+
+            if (flag != null)
+                flags.add(flag);
+        }
+
+        return flags;
     }
 
     @Override
@@ -52,21 +92,48 @@ public class ASUCommand implements CommandExecutor, TabCompletion {
         String reason = args[args.length - 1].toLowerCase();
         List<String> wantedReasons = WantedManager.getWantedReasons()
                 .stream()
-                .map(wantedReason -> wantedReason.replace(" ", "-"))
+                .map(wantedReason -> wantedReason.replace(' ', '-'))
                 .collect(Collectors.toList());
 
         if (reason.isEmpty()) return wantedReasons;
 
-        List<String> filteredReasons = new ArrayList<>();
+        wantedReasons.removeIf(wantedReason -> !wantedReason.toLowerCase().startsWith(reason));
 
-        for (String wantedReason : wantedReasons) {
-            if (wantedReason.toLowerCase().startsWith(reason.toLowerCase())) {
-                filteredReasons.add(wantedReason);
-            }
+        Collections.sort(wantedReasons);
+        return wantedReasons;
+    }
+
+    private enum Flag {
+        TRIED("-v", "Versuchte/s ", "", "x/2"),
+        SUBSIDY("-b", "Beihilfe bei der/dem ", "", "x-10");
+
+        private final String flagArgument;
+        private final String prependReason;
+        private final String postponeReason;
+        private final String wantedModification;
+
+        Flag(String flagArgument, String prependReason, String postponeReason, String wantedModification) {
+            this.flagArgument = flagArgument;
+            this.prependReason = prependReason;
+            this.postponeReason = postponeReason;
+            this.wantedModification = wantedModification;
         }
 
-        Collections.sort(filteredReasons);
+        private String modifyReason(String reason) {
+            return prependReason + reason + postponeReason;
+        }
 
-        return filteredReasons;
+        @SneakyThrows
+        private int modifyWanteds(int wanteds) {
+            return (int) new Expression(wantedModification.replace("x", String.valueOf(wanteds))).evaluate();
+        }
+
+        public static Flag getFlag(String string) {
+            for (Flag flag : Flag.values()) {
+                if (flag.flagArgument.equalsIgnoreCase(string)) return flag;
+            }
+
+            return null;
+        }
     }
 }

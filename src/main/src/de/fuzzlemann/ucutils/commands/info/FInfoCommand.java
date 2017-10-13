@@ -4,9 +4,9 @@ import de.fuzzlemann.ucutils.utils.command.Command;
 import de.fuzzlemann.ucutils.utils.command.CommandExecutor;
 import de.fuzzlemann.ucutils.utils.info.FactionInfo;
 import de.fuzzlemann.ucutils.utils.info.FactionInfoEnum;
+import de.fuzzlemann.ucutils.utils.text.TextUtils;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -35,10 +35,7 @@ public class FInfoCommand implements CommandExecutor {
         FactionInfoEnum factionInfoEnum = FactionInfoEnum.getFactionInfoEnum(args[0]);
 
         if (factionInfoEnum == null) {
-            TextComponentString text = new TextComponentString("Die Fraktion wurde nicht gefunden");
-            text.getStyle().setColor(TextFormatting.RED);
-
-            p.sendMessage(text);
+            TextUtils.error("Die Fraktion wurde nicht gefunden", p);
             return true;
         }
 

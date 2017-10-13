@@ -21,12 +21,12 @@ import java.util.stream.Collectors;
 @SideOnly(Side.CLIENT)
 public class MobileUtils {
 
-    private static final File BLOCKED_FILE = new File(JsonManager.directory, "blocked.storage");
+    private static final File BLOCKED_FILE = new File(JsonManager.DIRECTORY, "blocked.storage");
     private static final List<String> BLOCKED_PLAYERS = JsonManager.loadObjects(BLOCKED_FILE, String.class)
             .stream()
             .map(object -> (String) object)
             .collect(Collectors.toList());
-    private static boolean blockNextMessage = false;
+    private static boolean blockNextMessage;
 
     private static CompletableFuture<Integer> future;
 
@@ -53,9 +53,9 @@ public class MobileUtils {
     }
 
     public static Future<Integer> getNumber(EntityPlayerSP p, String numberPlayer) {
+        future = new CompletableFuture<>();
         p.sendChatMessage("/nummer " + numberPlayer);
 
-        future = new CompletableFuture<>();
         return future;
     }
 
@@ -63,6 +63,7 @@ public class MobileUtils {
     public static void onChat(ClientChatReceivedEvent e) {
         if (blockNextMessage) {
             e.setCanceled(true);
+            blockNextMessage = false;
             return;
         }
 

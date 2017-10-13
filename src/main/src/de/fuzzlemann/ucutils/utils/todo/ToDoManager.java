@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
  * @author Fuzzlemann
  */
 public class ToDoManager {
-    private static final File TO_DO_FILE = new File(JsonManager.directory, "toDo.storage");
+    private static final File TO_DO_FILE = new File(JsonManager.DIRECTORY, "toDo.storage");
     private static final List<ToDo> TO_DO_LIST = JsonManager.loadObjects(TO_DO_FILE, ToDo.class)
             .stream()
             .map(object -> (ToDo) object)

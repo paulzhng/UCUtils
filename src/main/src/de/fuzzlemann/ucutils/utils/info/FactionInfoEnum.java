@@ -7,7 +7,7 @@ import java.util.Arrays;
  */
 public enum FactionInfoEnum {
     UCPD(constructFactionInfo("UnicaCity Police Department", "UCPD",
-            "Das HQ befindet sich an der Anwaltskanzlei",
+            "Das HQ befindet sich an der Papierfabrik",
             "Die Polizei hat die Aufgabe, f\u00fcr Recht und " +
                     "Ordnung auf UC zu sorgen. Unter Anderen k\u00f6nnen sie " +
                     "Wanteds vergeben und sind somit ein wichtiger " +

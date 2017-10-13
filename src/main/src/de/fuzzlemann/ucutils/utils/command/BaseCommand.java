@@ -12,7 +12,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -73,16 +72,9 @@ public class BaseCommand extends CommandBase implements IClientCommand {
         String input = args[args.length - 1].toLowerCase();
 
         if (input.isEmpty()) return players;
+        players.removeIf(playerName -> !playerName.toLowerCase().startsWith(input));
 
-        List<String> matchingPlayers = new ArrayList<>();
-
-        for (String playerName : players) {
-            if (playerName.toLowerCase().startsWith(input))
-                matchingPlayers.add(playerName);
-        }
-
-        Collections.sort(matchingPlayers);
-
-        return matchingPlayers;
+        Collections.sort(players);
+        return players;
     }
 }

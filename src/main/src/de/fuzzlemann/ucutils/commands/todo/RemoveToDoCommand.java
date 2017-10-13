@@ -2,6 +2,7 @@ package de.fuzzlemann.ucutils.commands.todo;
 
 import de.fuzzlemann.ucutils.utils.command.Command;
 import de.fuzzlemann.ucutils.utils.command.CommandExecutor;
+import de.fuzzlemann.ucutils.utils.text.TextUtils;
 import de.fuzzlemann.ucutils.utils.todo.ToDo;
 import de.fuzzlemann.ucutils.utils.todo.ToDoManager;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -31,10 +32,7 @@ public class RemoveToDoCommand implements CommandExecutor {
         ToDo toDo = ToDoManager.getToDo(id);
 
         if (toDo == null) {
-            TextComponentString text = new TextComponentString("Es wurde kein ToDo mit dieser ID gefunden.");
-            text.getStyle().setColor(TextFormatting.RED);
-
-            p.sendMessage(text);
+            TextUtils.error("Es wurde kein ToDo mit dieser ID gefunden.", p);
             return true;
         }
 
