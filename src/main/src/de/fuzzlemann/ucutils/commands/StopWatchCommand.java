@@ -16,32 +16,6 @@ public class StopWatchCommand implements CommandExecutor {
 
     private long start = -1L;
 
-    @Override
-    @Command(labels = {"stopwatch", "stoppuhr"})
-    public boolean onCommand(EntityPlayerSP p, String[] args) {
-        if (start == -1) {
-            start = System.currentTimeMillis();
-
-            TextComponentString text = new TextComponentString("Du hast eine Stoppuhr gestartet.");
-            text.getStyle().setColor(TextFormatting.AQUA);
-
-            p.sendMessage(text);
-        } else {
-            long difference = System.currentTimeMillis() - start;
-            start = -1;
-
-            TextComponentString text = new TextComponentString("Die Zeit zwischen dem Beginn und Stopp: ");
-            text.getStyle().setColor(TextFormatting.AQUA);
-
-            TextComponentString time = new TextComponentString(formatMilliseconds(difference));
-            time.getStyle().setColor(TextFormatting.RED);
-
-            p.sendMessage(text.appendSibling(time));
-        }
-
-        return true;
-    }
-
     private static String formatMilliseconds(long ms) {
         StringBuilder sb = new StringBuilder();
         long milliseconds = ms % 1000;
@@ -69,5 +43,31 @@ public class StopWatchCommand implements CommandExecutor {
         }
 
         return sb.toString();
+    }
+
+    @Override
+    @Command(labels = {"stopwatch", "stoppuhr"})
+    public boolean onCommand(EntityPlayerSP p, String[] args) {
+        if (start == -1) {
+            start = System.currentTimeMillis();
+
+            TextComponentString text = new TextComponentString("Du hast eine Stoppuhr gestartet.");
+            text.getStyle().setColor(TextFormatting.AQUA);
+
+            p.sendMessage(text);
+        } else {
+            long difference = System.currentTimeMillis() - start;
+            start = -1;
+
+            TextComponentString text = new TextComponentString("Die Zeit zwischen dem Beginn und Stopp: ");
+            text.getStyle().setColor(TextFormatting.AQUA);
+
+            TextComponentString time = new TextComponentString(formatMilliseconds(difference));
+            time.getStyle().setColor(TextFormatting.RED);
+
+            p.sendMessage(text.appendSibling(time));
+        }
+
+        return true;
     }
 }

@@ -1,11 +1,11 @@
-package de.fuzzlemann.ucutils.commands.police;
+package de.fuzzlemann.ucutils.commands.faction.police;
 
 import de.fuzzlemann.ucutils.utils.command.Command;
 import de.fuzzlemann.ucutils.utils.command.CommandExecutor;
 import de.fuzzlemann.ucutils.utils.command.TabCompletion;
+import de.fuzzlemann.ucutils.utils.faction.police.WantedManager;
+import de.fuzzlemann.ucutils.utils.faction.police.WantedReason;
 import de.fuzzlemann.ucutils.utils.math.Expression;
-import de.fuzzlemann.ucutils.utils.police.Wanted;
-import de.fuzzlemann.ucutils.utils.police.WantedManager;
 import de.fuzzlemann.ucutils.utils.text.TextUtils;
 import lombok.SneakyThrows;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -21,8 +21,21 @@ import java.util.stream.Collectors;
 @SideOnly(Side.CLIENT)
 public class ASUCommand implements CommandExecutor, TabCompletion {
 
+    private static Set<Flag> getFlag(String[] args) {
+        Set<Flag> flags = new HashSet<>();
+
+        for (String arg : args) {
+            Flag flag = Flag.getFlag(arg);
+
+            if (flag != null)
+                flags.add(flag);
+        }
+
+        return flags;
+    }
+
     @Override
-    @Command(labels = "asu", usage = "/%label% [Spieler(...)] [Grund] (Variation) (-v/-b)")
+    @Command(labels = "asu", usage = "/%label% [Spieler(...)] [Grund] (Variation) (-v/-b/-fsa)")
     public boolean onCommand(EntityPlayerSP p, String[] args) {
         if (args.length < 2) return false;
 
@@ -47,7 +60,7 @@ public class ASUCommand implements CommandExecutor, TabCompletion {
         List<String> players = Arrays.asList(args).subList(0, reasonIndex);
         String reason = args[reasonIndex];
 
-        Wanted wanted = WantedManager.getWanted(reason.replace('-', ' '));
+        WantedReason wanted = WantedManager.getWantedReason(reason.replace('-', ' '));
 
         if (wanted == null) {
             TextUtils.error("Der Wantedgrund wurde nicht gefunden.", p);
@@ -72,19 +85,6 @@ public class ASUCommand implements CommandExecutor, TabCompletion {
         }
     }
 
-    private static Set<Flag> getFlag(String[] args) {
-        Set<Flag> flags = new HashSet<>();
-
-        for (int i = args.length - 1; i > args.length - Flag.values().length - 1; i--) {
-            Flag flag = Flag.getFlag(args[i]);
-
-            if (flag != null)
-                flags.add(flag);
-        }
-
-        return flags;
-    }
-
     @Override
     public List<String> getTabCompletions(EntityPlayerSP p, String[] args) {
         if (args.length != 2) return Collections.emptyList();
@@ -104,8 +104,9 @@ public class ASUCommand implements CommandExecutor, TabCompletion {
     }
 
     private enum Flag {
-        TRIED("-v", "Versuchte/s ", "", "x/2"),
-        SUBSIDY("-b", "Beihilfe bei der/dem ", "", "x-10");
+        TRIED("-v", "Versuchte/r/s ", "", "x/2"),
+        SUBSIDY("-b", "Beihilfe bei der/dem ", "", "x-10"),
+        DRIVERS_LICENSE_WITHDRAWAL("-fsa", "", " + F\u00fchrerscheinabnahme", "x");
 
         private final String flagArgument;
         private final String prependReason;
@@ -119,6 +120,14 @@ public class ASUCommand implements CommandExecutor, TabCompletion {
             this.wantedModification = wantedModification;
         }
 
+        static Flag getFlag(String string) {
+            for (Flag flag : Flag.values()) {
+                if (flag.flagArgument.equalsIgnoreCase(string)) return flag;
+            }
+
+            return null;
+        }
+
         private String modifyReason(String reason) {
             return prependReason + reason + postponeReason;
         }
@@ -126,14 +135,6 @@ public class ASUCommand implements CommandExecutor, TabCompletion {
         @SneakyThrows
         private int modifyWanteds(int wanteds) {
             return (int) new Expression(wantedModification.replace("x", String.valueOf(wanteds))).evaluate();
-        }
-
-        public static Flag getFlag(String string) {
-            for (Flag flag : Flag.values()) {
-                if (flag.flagArgument.equalsIgnoreCase(string)) return flag;
-            }
-
-            return null;
         }
     }
 }

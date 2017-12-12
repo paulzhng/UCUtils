@@ -20,13 +20,13 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @SideOnly(Side.CLIENT)
 public class ADropDrinkCommand implements CommandExecutor {
 
-    private final Timer TIMER = new Timer();
-    private final AtomicBoolean STARTED = new AtomicBoolean();
+    private final Timer timer = new Timer();
+    private final AtomicBoolean started = new AtomicBoolean();
 
     @Override
     @Command(labels = "adropdrink")
     public boolean onCommand(EntityPlayerSP p, String[] args) {
-        if (STARTED.get()) return true;
+        if (started.get()) return true;
 
         Scoreboard scoreboard = p.getWorldScoreboard();
 
@@ -42,16 +42,16 @@ public class ADropDrinkCommand implements CommandExecutor {
 
         int amount = score.getScorePoints();
 
-        STARTED.set(true);
+        started.set(true);
 
-        TIMER.scheduleAtFixedRate(new TimerTask() {
+        timer.scheduleAtFixedRate(new TimerTask() {
             private int i;
 
             @Override
             public void run() {
                 p.sendChatMessage("/dropdrink");
                 if (i++ > amount) {
-                    STARTED.set(false);
+                    started.set(false);
                     cancel();
                 }
             }

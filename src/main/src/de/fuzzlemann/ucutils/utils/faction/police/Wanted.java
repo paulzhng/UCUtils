@@ -1,4 +1,4 @@
-package de.fuzzlemann.ucutils.utils.police;
+package de.fuzzlemann.ucutils.utils.faction.police;
 
 /**
  * @author Fuzzlemann

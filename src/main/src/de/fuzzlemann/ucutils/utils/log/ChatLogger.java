@@ -26,9 +26,36 @@ import java.util.logging.Logger;
 @SideOnly(Side.CLIENT)
 public class ChatLogger {
 
-    public static ChatLogger instance;
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+    public static ChatLogger instance;
     private Logger logger;
+
+    public ChatLogger() {
+        String timeStamp = new SimpleDateFormat("yyyy-MM-dd'T'HH-mm-ss").format(new Date());
+
+        FileHandler fileHandler;
+        try {
+            File directory = new File(Main.MINECRAFT.mcDataDir, "chatlogs");
+            File logFile = new File(directory, "chatlog-" + timeStamp + ".txt");
+            if (directory.mkdirs())
+                System.out.println("ChatLog Directory created");
+
+            String path = logFile.getPath();
+            if (logFile.createNewFile())
+                System.out.println("ChatLog " + path + " created");
+            fileHandler = new FileHandler(path);
+        } catch (IOException e) {
+            ConfigUtil.logChat = false;
+            e.printStackTrace();
+            return;
+        }
+
+        logger = Logger.getLogger("ChatLogger");
+        logger.addHandler(fileHandler);
+        fileHandler.setFormatter(new ChatLogFormatter());
+
+        log("------------ Chat Log ------------");
+    }
 
     @SubscribeEvent
     public static void onChat(ClientChatEvent e) {
@@ -52,34 +79,6 @@ public class ChatLogger {
     public static void onClientConnect(FMLNetworkEvent.ClientDisconnectionFromServerEvent e) {
         if (ConfigUtil.logChat)
             instance.log("---- Disconnected from " + e.getManager().getRemoteAddress() + " ----");
-    }
-
-    public ChatLogger() {
-        String timeStamp = new SimpleDateFormat("yyyy-MM-dd'T'HH-mm-ss").format(new Date());
-
-        FileHandler fileHandler;
-        try {
-            File directory = new File(Main.MINECRAFT.mcDataDir, "chatlogs");
-            File logFile = new File(directory, "chatlog-" + timeStamp + ".txt");
-            if (directory.mkdirs())
-                System.out.println("ChatLog Directory created");
-
-            String path = logFile.getPath();
-            System.out.println(path);
-            if (logFile.createNewFile())
-                System.out.println("ChatLog " + path + " created");
-            fileHandler = new FileHandler(path);
-        } catch (IOException e) {
-            ConfigUtil.logChat = false;
-            e.printStackTrace();
-            return;
-        }
-
-        logger = Logger.getLogger("ChatLogger");
-        logger.addHandler(fileHandler);
-        fileHandler.setFormatter(new ChatLogFormatter());
-
-        log("------------ Chat Log ------------");
     }
 
     private void log(String message) {

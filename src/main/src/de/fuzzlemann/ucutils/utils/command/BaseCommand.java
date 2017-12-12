@@ -19,7 +19,7 @@ import java.util.List;
  * @author Fuzzlemann
  */
 @SideOnly(Side.CLIENT)
-public class BaseCommand extends CommandBase implements IClientCommand {
+class BaseCommand extends CommandBase implements IClientCommand {
 
     private final String name;
     private final TabCompletion tabCompletion;
@@ -31,7 +31,7 @@ public class BaseCommand extends CommandBase implements IClientCommand {
 
     @Override
     public boolean allowUsageWithoutPrefix(ICommandSender sender, String message) {
-        return true;
+        return false;
     }
 
     @Override
@@ -66,15 +66,14 @@ public class BaseCommand extends CommandBase implements IClientCommand {
         }
 
         List<String> players = ForgeUtils.getOnlinePlayers();
-
         if (players.isEmpty()) return players;
 
         String input = args[args.length - 1].toLowerCase();
-
         if (input.isEmpty()) return players;
-        players.removeIf(playerName -> !playerName.toLowerCase().startsWith(input));
 
+        players.removeIf(playerName -> !playerName.toLowerCase().startsWith(input));
         Collections.sort(players);
+
         return players;
     }
 }

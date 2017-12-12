@@ -16,20 +16,24 @@ import java.util.List;
  */
 public class Message {
 
-    private final List<MessagePart> MESSAGE_PARTS;
+    private final List<MessagePart> messageParts;
 
     private Message(List<MessagePart> messageParts) {
-        this.MESSAGE_PARTS = messageParts;
+        this.messageParts = messageParts;
+    }
+
+    public static MessageBuilder builder() {
+        return new MessageBuilder();
     }
 
     public List<MessagePart> getMessageParts() {
-        return MESSAGE_PARTS;
+        return messageParts;
     }
 
     public ITextComponent toTextComponent() {
         ITextComponent textComponent = null;
 
-        for (MessagePart messagePart : MESSAGE_PARTS) {
+        for (MessagePart messagePart : messageParts) {
             ITextComponent messageComponent = new TextComponentString(messagePart.getMessage());
 
             Style style = messageComponent.getStyle();
@@ -57,12 +61,8 @@ public class Message {
         return textComponent;
     }
 
-    public static MessageBuilder builder() {
-        return new MessageBuilder();
-    }
-
     public static final class MessageBuilder {
-        private final List<MessagePart> MESSAGE_PARTS = new ArrayList<>();
+        private final List<MessagePart> messageParts = new ArrayList<>();
 
         public MessagePart.MessagePartBuilder of(String text) {
             return MessagePart.builder().currentBuilder(this).message(text);
@@ -73,12 +73,12 @@ public class Message {
         }
 
         public MessageBuilder messageParts(MessagePart... messageParts) {
-            Collections.addAll(this.MESSAGE_PARTS, messageParts);
+            Collections.addAll(this.messageParts, messageParts);
             return this;
         }
 
         public Message build() {
-            return new Message(MESSAGE_PARTS);
+            return new Message(messageParts);
         }
     }
 }

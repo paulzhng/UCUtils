@@ -26,7 +26,7 @@ import java.util.regex.Pattern;
 public class NotificationEventHandler {
 
     private static final Pattern RESOURCEPACK_PATTERN = Pattern.compile("^Wir empfehlen dir unser Resourcepack zu nutzen.$|" +
-            "^Unter http://server.unicacity.de/dl/UnicaCity_v2R7.zip kannst du es dir herunterladen.$");
+            "^Unter http://server.unicacity.de/dl/UnicaCity[_a-zA-Z\\d]+.zip kannst du es dir herunterladen.$");
     private static final Pattern UNINVITE_PATTERN = Pattern.compile("^[a-zA-Z0-9_]+ wurde von [a-zA-Z0-9_]+ aus der Fraktion geschmissen.$");
     private static final Pattern INVITE_PATTERN = Pattern.compile("^[a-zA-Z0-9_]+ ist der Fraktion mit Rang \\d beigetreten.$");
 
@@ -59,7 +59,7 @@ public class NotificationEventHandler {
         if (ConfigUtil.reportAnnouncement
                 && (unformattedText.startsWith("Es liegt ein neuer Report")
                 || unformattedText.startsWith("\u00a7cEs liegt ein neuer Report"))) {
-            p.playSound(SoundUtil.REPORT_RECEIVED, 1, 1);
+            p.playSound(SoundUtil.REPORT_RECEIVED, 3, 1);
         }
 
         if (ConfigUtil.bombAnnouncement && unformattedText.startsWith("News: ACHTUNG! Es wurde eine Bombe in der N\u00e4he von")) {

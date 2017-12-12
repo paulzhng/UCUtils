@@ -26,8 +26,8 @@ public class MobileUtils {
             .stream()
             .map(object -> (String) object)
             .collect(Collectors.toList());
-    private static boolean blockNextMessage;
 
+    private static boolean blockNextMessage;
     private static CompletableFuture<Integer> future;
 
     public static void block(String playerName) {

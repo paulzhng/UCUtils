@@ -103,7 +103,7 @@ public class JsonManager {
     @SneakyThrows
     private static void createFile(File file) {
         if (DIRECTORY.mkdir())
-            System.out.println("[UCUtils] " + DIRECTORY.getAbsoluteFile() + " created");
+            System.out.println("[UCUtils] " + DIRECTORY + " created");
         if (file.createNewFile())
             System.out.println("[UCUtils] " + file.getAbsoluteFile() + " created");
     }

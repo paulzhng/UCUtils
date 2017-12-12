@@ -46,7 +46,7 @@ public class MobileBlockListCommand implements CommandExecutor {
             TextComponentString blockedComponent = new TextComponentString("  * " + blockedPlayer + " ");
             blockedComponent.getStyle().setColor(TextFormatting.GRAY);
 
-            TextComponentString hoverText = new TextComponentString("Entblock " + blockedPlayer);
+            TextComponentString hoverText = new TextComponentString(blockedPlayer + " entblocken");
             hoverText.getStyle().setColor(TextFormatting.GREEN);
 
             TextComponentString copiedUnblockComponent = unblockComponent.createCopy();

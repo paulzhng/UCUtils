@@ -11,12 +11,12 @@ public class Expression {
     private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("###,###.###", DecimalFormatSymbols.getInstance(Locale.GERMAN));
     private static final String[] TO_REPLACE = new String[]{"PI", "E", "ANS"};
     private static final String[] REPLACER = new String[]{String.valueOf(Math.PI), String.valueOf(Math.E), ""};
+    private static double lastResult;
 
     static {
         DECIMAL_FORMAT.setMaximumFractionDigits(5);
     }
 
-    private static double lastResult;
     private String expression;
 
     private int pos = -1;

@@ -20,7 +20,7 @@ import java.util.Objects;
  */
 @SideOnly(Side.CLIENT)
 public class InetTestCommand implements CommandExecutor {
-    private final List<String> HOSTS = Arrays.asList("server.unicacity.de", "www.unicacity.de", "ts.unicacity.de", "www.google.de");
+    private final List<String> hosts = Arrays.asList("server.unicacity.de", "www.unicacity.de", "ts.unicacity.de", "www.google.de");
 
     @Override
     @Command(labels = "inettest")
@@ -32,7 +32,7 @@ public class InetTestCommand implements CommandExecutor {
             TextComponentString textMid = new TextComponentString(": ");
             textMid.getStyle().setColor(TextFormatting.AQUA);
 
-            for (String host : HOSTS) {
+            for (String host : hosts) {
                 TextComponentString hostComponent = new TextComponentString(host);
                 hostComponent.getStyle().setColor(TextFormatting.AQUA);
 

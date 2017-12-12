@@ -21,6 +21,10 @@ public class MessagePart {
         this.clickEvent = clickEvent;
     }
 
+    public static MessagePartBuilder builder() {
+        return new MessagePartBuilder();
+    }
+
     public String getMessage() {
         return message;
     }
@@ -35,10 +39,6 @@ public class MessagePart {
 
     public ClickEvent getClickEvent() {
         return clickEvent;
-    }
-
-    public static MessagePartBuilder builder() {
-        return new MessagePartBuilder();
     }
 
     public static final class MessagePartBuilder {
@@ -81,7 +81,7 @@ public class MessagePart {
             return this;
         }
 
-        MessagePart build() {
+        public MessagePart build() {
             return new MessagePart(message, color, hoverEvent, clickEvent);
         }
 

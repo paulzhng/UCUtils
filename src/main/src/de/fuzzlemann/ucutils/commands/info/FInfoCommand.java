@@ -2,8 +2,8 @@ package de.fuzzlemann.ucutils.commands.info;
 
 import de.fuzzlemann.ucutils.utils.command.Command;
 import de.fuzzlemann.ucutils.utils.command.CommandExecutor;
+import de.fuzzlemann.ucutils.utils.faction.FactionEnum;
 import de.fuzzlemann.ucutils.utils.info.FactionInfo;
-import de.fuzzlemann.ucutils.utils.info.FactionInfoEnum;
 import de.fuzzlemann.ucutils.utils.text.TextUtils;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.util.text.TextComponentString;
@@ -22,8 +22,8 @@ public class FInfoCommand implements CommandExecutor {
         if (args.length == 0) {
             TextComponentString text = new TextComponentString("");
 
-            for (FactionInfoEnum factionInfoEnum : FactionInfoEnum.values()) {
-                FactionInfo factionInfo = factionInfoEnum.getFactionInfo();
+            for (FactionEnum factionEnum : FactionEnum.values()) {
+                FactionInfo factionInfo = factionEnum.getFactionInfo();
 
                 text.appendText("\n").appendSibling(factionInfo.constructClickableMessage("/finfo " + factionInfo.getShortName()));
             }
@@ -32,14 +32,14 @@ public class FInfoCommand implements CommandExecutor {
             return true;
         }
 
-        FactionInfoEnum factionInfoEnum = FactionInfoEnum.getFactionInfoEnum(args[0]);
+        FactionEnum factionEnum = FactionEnum.getFactionEnum(args[0]);
 
-        if (factionInfoEnum == null) {
+        if (factionEnum == null) {
             TextUtils.error("Die Fraktion wurde nicht gefunden", p);
             return true;
         }
 
-        p.sendMessage(factionInfoEnum.getFactionInfo().constructFactionMessage());
+        p.sendMessage(factionEnum.getFactionInfo().constructFactionMessage());
         return true;
     }
 }

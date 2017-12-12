@@ -12,6 +12,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.apache.commons.lang3.SystemUtils;
 
 /**
  * @author Fuzzlemann
@@ -22,26 +23,43 @@ public class JShutdownCommand implements CommandExecutor {
 
     private static boolean shutdown;
 
-    @Override
-    @Command(labels = {"jshutdown", "jailshutdown"})
-    public boolean onCommand(EntityPlayerSP p, String[] args) {
-        shutdown = !shutdown;
-
-        ITextComponent text;
-        text = shutdown
-                ? TextUtils.simpleMessage("Du hast den Shutdown eingeleitet: Wenn du aus dem Knast bist, wird dein PC heruntergefahren.", TextFormatting.RED)
-                : TextUtils.simpleMessage("Du hast den Shutdown abgebrochen", TextFormatting.GREEN);
-
-        p.sendMessage(text);
-        return true;
-    }
-
     @SubscribeEvent
     @SneakyThrows
     public static void onChat(ClientChatReceivedEvent e) {
         if (!shutdown) return;
         if (!e.getMessage().getUnformattedText().equals("[Gef\u00e4ngnis] Du bist wieder frei!")) return;
 
-        Runtime.getRuntime().exec("shutdown -s -t 0");
+        String shutdownCommand;
+
+        if (SystemUtils.IS_OS_AIX) {
+            shutdownCommand = "shutdown -Fh now";
+        } else if (SystemUtils.IS_OS_SOLARIS || SystemUtils.IS_OS_SUN_OS) {
+            shutdownCommand = "shutdown -y -i5 -gnow";
+        } else if (SystemUtils.IS_OS_MAC || SystemUtils.IS_OS_UNIX) {
+            shutdownCommand = "shutdown -h now";
+        } else if (SystemUtils.IS_OS_HP_UX) {
+            shutdownCommand = "shutdown -hy now";
+        } else if (SystemUtils.IS_OS_IRIX) {
+            shutdownCommand = "shutdown -y -g now";
+        } else if (SystemUtils.IS_OS_WINDOWS) {
+            shutdownCommand = "shutdown -s -t 0";
+        } else {
+            return;
+        }
+
+        Runtime.getRuntime().exec(shutdownCommand);
+    }
+
+    @Override
+    @Command(labels = {"jshutdown", "jailshutdown"})
+    public boolean onCommand(EntityPlayerSP p, String[] args) {
+        shutdown = !shutdown;
+
+        ITextComponent text = shutdown
+                ? TextUtils.simpleMessage("Du hast den Shutdown eingeleitet: Wenn du aus dem Knast bist, wird dein PC heruntergefahren.", TextFormatting.RED)
+                : TextUtils.simpleMessage("Du hast den Shutdown abgebrochen", TextFormatting.GREEN);
+
+        p.sendMessage(text);
+        return true;
     }
 }

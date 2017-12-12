@@ -1,11 +1,15 @@
-package de.fuzzlemann.ucutils.utils.info;
+package de.fuzzlemann.ucutils.utils.faction;
+
+import de.fuzzlemann.ucutils.utils.info.CommandDescription;
+import de.fuzzlemann.ucutils.utils.info.CommandInfo;
+import de.fuzzlemann.ucutils.utils.info.FactionInfo;
 
 import java.util.Arrays;
 
 /**
  * @author Fuzzlemann
  */
-public enum FactionInfoEnum {
+public enum FactionEnum {
     UCPD(constructFactionInfo("UnicaCity Police Department", "UCPD",
             "Das HQ befindet sich an der Papierfabrik",
             "Die Polizei hat die Aufgabe, f\u00fcr Recht und " +
@@ -96,25 +100,20 @@ public enum FactionInfoEnum {
             "864/68/202"
     ));
 
+    private static CommandInfo factionCommandInfo;
+    private static CommandInfo badFactionCommandInfo;
     private final FactionInfo factionInfo;
 
-    FactionInfoEnum(FactionInfo factionInfo) {
+    FactionEnum(FactionInfo factionInfo) {
         this.factionInfo = factionInfo;
     }
 
-    public FactionInfo getFactionInfo() {
-        return factionInfo;
-    }
-
-    public static FactionInfoEnum getFactionInfoEnum(String shortName) {
+    public static FactionEnum getFactionEnum(String shortName) {
         return Arrays.stream(values())
-                .filter(factionInfoEnum -> factionInfoEnum.getFactionInfo().getShortName().equalsIgnoreCase(shortName))
+                .filter(factionEnum -> factionEnum.getFactionInfo().getShortName().equalsIgnoreCase(shortName))
                 .findFirst()
                 .orElse(null);
     }
-
-    private static CommandInfo factionCommandInfo;
-    private static CommandInfo badFactionCommandInfo;
 
     private static FactionInfo constructBadFactionInfo(String fullName, String shortName, String hqPosition, String tasks, String naviPoint, CommandDescription... commandDescriptions) {
         if (badFactionCommandInfo == null) {
@@ -127,11 +126,15 @@ public enum FactionInfoEnum {
             );
         }
 
-        return constructFactionInfo(fullName, shortName, hqPosition, tasks, "Bad Fraktion", naviPoint,
+        return constructFactionInfo(fullName, shortName, true, hqPosition, tasks, "Bad Fraktion", naviPoint,
                 badFactionCommandInfo.createCopy().append(new CommandInfo(commandDescriptions)).getCommands());
     }
 
     private static FactionInfo constructFactionInfo(String fullName, String shortName, String hqPosition, String tasks, String factionType, String naviPoint, CommandDescription... commandDescriptions) {
+        return constructFactionInfo(fullName, shortName, false, hqPosition, tasks, factionType, naviPoint, commandDescriptions);
+    }
+
+    private static FactionInfo constructFactionInfo(String fullName, String shortName, boolean badFrak, String hqPosition, String tasks, String factionType, String naviPoint, CommandDescription... commandDescriptions) {
         if (factionCommandInfo == null) {
             factionCommandInfo = new CommandInfo(new CommandDescription[]{
                     new CommandDescription("/equip", "Equippe dich"),
@@ -142,7 +145,11 @@ public enum FactionInfoEnum {
             );
         }
 
-        return new FactionInfo(fullName, shortName, hqPosition, tasks, factionType, naviPoint,
+        return new FactionInfo(fullName, shortName, badFrak, hqPosition, tasks, factionType, naviPoint,
                 new CommandInfo(factionCommandInfo.createCopy().append(new CommandInfo(commandDescriptions)).getCommands()));
+    }
+
+    public FactionInfo getFactionInfo() {
+        return factionInfo;
     }
 }

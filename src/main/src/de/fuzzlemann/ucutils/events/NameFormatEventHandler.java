@@ -2,6 +2,7 @@ package de.fuzzlemann.ucutils.events;
 
 import de.fuzzlemann.ucutils.utils.text.TextUtils;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.scoreboard.ScorePlayerTeam;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -21,40 +22,40 @@ import java.util.regex.Pattern;
 @SideOnly(Side.CLIENT)
 public class NameFormatEventHandler {
 
+    //--------------------- Wanteds ---------------------\\
+    public static final Map<String, Integer> WANTED_MAP = new HashMap<>();
+    private static final Map<String, EntityPlayer> PLAYER_MAP = new HashMap<>();
     //--------------------- Hits ---------------------\\
     private static final List<String> HITLIST = new ArrayList<>();
-    private static long hitlistShown = 0L;
-
     private static final Pattern HIT_SET_PATTERN = Pattern.compile("^\\[Contract] Es wurde ein Kopfgeld auf [a-zA-Z0-9_]+ \\(\\d+\\$\\) ausgesetzt.$");
     private static final Pattern HIT_REMOVED_PATTERN = Pattern.compile("^\\[Contract] [a-zA-Z0-9_]+ hat [a-zA-Z0-9_]+ von der Contract Liste gel\u00f6scht. \\[-\\d+]");
     private static final Pattern HIT_KILLED_PATTERN = Pattern.compile("^\\[Contract] [a-zA-Z0-9_]+ hat [a-zA-Z0-9_]+ get\u00f6tet. Kopfgeld: \\d+\\$");
 
     //--------------------- Blacklist ---------------------\\
     private static final List<String> BLACKLIST = new ArrayList<>();
-    private static long blacklistShown = 0L;
-
     private static final Pattern BLACKLIST_ADDED_PATTERN = Pattern.compile("^\\[Blacklist] [a-zA-Z0-9_]+ wurde von [a-zA-Z0-9_]+ auf die Blacklist gesetzt!$");
     private static final Pattern BLACKLIST_REMOVED_PATTERN = Pattern.compile("^\\[Blacklist] [a-zA-Z0-9_]+ wurde von [a-zA-Z0-9_]+ von der Blacklist gel\u00f6scht!$");
-
-    //--------------------- Wanteds ---------------------\\
-    private static final Map<String, Integer> WANTED_MAP = new HashMap<>();
-    private static final Map<String, EntityPlayer> PLAYER_MAP = new HashMap<>();
-    private static long wantedsShown = 0L;
-
     private static final Pattern JAILED_PATTERN = Pattern.compile("^HQ: [a-zA-Z0-9_]+ wurde von [a-zA-Z0-9_]+ eingesperrt.$");
     private static final Pattern KILLED_PATTERN = Pattern.compile("^Beamter [a-zA-Z0-9_]+ hat [a-zA-Z0-9_]+ get\u00f6tet!$");
     private static final Pattern RECORDS_DELETED_SEINE_IHRE_PATTERN = Pattern.compile("^HQ: [a-zA-Z0-9_ ]+ [a-zA-Z0-9_]+ hat [a-zA-Z0-9_]+ (seine|ihre) Akten gel\u00f6scht, over.$");
     private static final Pattern RECORDS_DELETED_S_PATTERN = Pattern.compile("^HQ: [a-zA-Z0-9_ ]+ [a-zA-Z0-9_]+ hat [a-zA-Z0-9_]+'s Akten gel\u00f6scht, over.$");
     private static final Pattern WANTEDS_GIVEN_PATTERN = Pattern.compile("^HQ: [a-zA-Z0-9_]+'s momentanes WantedLevel: \\d+$");
+    private static long hitlistShown = 0L;
+    private static long blacklistShown = 0L;
+    private static long wantedsShown = 0L;
 
     @SubscribeEvent
     public static void onNameFormat(PlayerEvent.NameFormat e) {
-        String displayName = e.getDisplayname();
+        EntityPlayer p = e.getEntityPlayer();
+
         String userName = e.getUsername();
+        String displayName = ScorePlayerTeam.formatPlayerName(p.getTeam(), userName);
 
-        PLAYER_MAP.put(userName, e.getEntityPlayer());
+        PLAYER_MAP.put(userName, p);
 
-        if (displayName.contains("\u00a7k")) return; //Prevents people who are masked from being detected
+        //Prevents people who are masked from being detected
+        if (displayName.contains("\u00a7k"))
+            return;
 
         String color = getColor(userName);
         if (color == null) return;

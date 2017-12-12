@@ -9,8 +9,8 @@ public class ToDo {
 
     private final String message;
     private final long created;
-    private boolean done;
     private final int id;
+    private boolean done;
 
     public ToDo(String message) {
         this.message = message;

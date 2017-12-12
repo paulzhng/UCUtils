@@ -1,6 +1,6 @@
 package de.fuzzlemann.ucutils.utils.info;
 
-import de.fuzzlemann.ucutils.utils.location.NavigationUtil;
+import de.fuzzlemann.ucutils.utils.location.navigation.NavigationUtil;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
@@ -14,15 +14,17 @@ public class FactionInfo {
 
     private final String fullName;
     private final String shortName;
+    private final boolean badFrak;
     private final String hqPosition;
     private final String tasks;
     private final String factionType;
     private final String naviPoint;
     private final CommandInfo commandInfo;
 
-    FactionInfo(String fullName, String shortName, String hqPosition, String tasks, String factionType, String naviPoint, CommandInfo commandInfo) {
+    public FactionInfo(String fullName, String shortName, boolean badFrak, String hqPosition, String tasks, String factionType, String naviPoint, CommandInfo commandInfo) {
         this.fullName = fullName;
         this.shortName = shortName;
+        this.badFrak = badFrak;
         this.hqPosition = hqPosition;
         this.tasks = tasks;
         this.factionType = factionType;
@@ -36,6 +38,30 @@ public class FactionInfo {
 
     public String getShortName() {
         return shortName;
+    }
+
+    public boolean isBadFrak() {
+        return badFrak;
+    }
+
+    public String getHqPosition() {
+        return hqPosition;
+    }
+
+    public String getTasks() {
+        return tasks;
+    }
+
+    public String getFactionType() {
+        return factionType;
+    }
+
+    public String getNaviPoint() {
+        return naviPoint;
+    }
+
+    public CommandInfo getCommandInfo() {
+        return commandInfo;
     }
 
     public ITextComponent constructClickableMessage(String command) {

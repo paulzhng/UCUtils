@@ -1,4 +1,4 @@
-package de.fuzzlemann.ucutils.utils.location;
+package de.fuzzlemann.ucutils.utils.location.navigation;
 
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;

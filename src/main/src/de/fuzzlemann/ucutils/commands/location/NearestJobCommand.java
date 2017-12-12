@@ -3,7 +3,7 @@ package de.fuzzlemann.ucutils.commands.location;
 import de.fuzzlemann.ucutils.utils.command.Command;
 import de.fuzzlemann.ucutils.utils.command.CommandExecutor;
 import de.fuzzlemann.ucutils.utils.location.Job;
-import de.fuzzlemann.ucutils.utils.location.NavigationUtil;
+import de.fuzzlemann.ucutils.utils.location.navigation.NavigationUtil;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
@@ -21,10 +21,6 @@ public class NearestJobCommand implements CommandExecutor {
     @Override
     @Command(labels = "nearestjob")
     public boolean onCommand(EntityPlayerSP p, String[] args) {
-        if (Job.values().length == 0) {
-            return false;
-        }
-
         new Thread(() -> {
             BlockPos pos = p.getPosition();
 

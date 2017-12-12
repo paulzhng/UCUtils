@@ -21,7 +21,7 @@ import java.util.Set;
 @Mod.EventBusSubscriber
 public class MunitionEventHandler {
 
-    private static final Set<String> WEAPONS = ImmutableSet.of("\u00a78M4", "\u00a78MP5", "\u00a78Pistole", "\u00a78Jagdflinte", "\u00a7cFlammenwerfer");
+    private static final Set<String> WEAPONS = ImmutableSet.of("\u00a78M4", "\u00a78MP5", "\u00a78Pistole", "\u00a78Jagdflinte");
 
     @SubscribeEvent
     public static void onInteract(PlayerInteractEvent e) {
@@ -42,7 +42,6 @@ public class MunitionEventHandler {
 
     private static String getText(ItemStack is) {
         NBTTagCompound nbt = is.getTagCompound();
-
         if (nbt == null) return null;
 
         NBTTagCompound display = nbt.getCompoundTag("display");
