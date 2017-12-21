@@ -25,11 +25,14 @@ public class NameFormatEventHandler {
     //--------------------- Wanteds ---------------------\\
     public static final Map<String, Integer> WANTED_MAP = new HashMap<>();
     private static final Map<String, EntityPlayer> PLAYER_MAP = new HashMap<>();
+    private static long wantedsShown;
+
     //--------------------- Hits ---------------------\\
     private static final List<String> HITLIST = new ArrayList<>();
     private static final Pattern HIT_SET_PATTERN = Pattern.compile("^\\[Contract] Es wurde ein Kopfgeld auf [a-zA-Z0-9_]+ \\(\\d+\\$\\) ausgesetzt.$");
     private static final Pattern HIT_REMOVED_PATTERN = Pattern.compile("^\\[Contract] [a-zA-Z0-9_]+ hat [a-zA-Z0-9_]+ von der Contract Liste gel\u00f6scht. \\[-\\d+]");
     private static final Pattern HIT_KILLED_PATTERN = Pattern.compile("^\\[Contract] [a-zA-Z0-9_]+ hat [a-zA-Z0-9_]+ get\u00f6tet. Kopfgeld: \\d+\\$");
+    private static long hitlistShown;
 
     //--------------------- Blacklist ---------------------\\
     private static final List<String> BLACKLIST = new ArrayList<>();
@@ -40,9 +43,7 @@ public class NameFormatEventHandler {
     private static final Pattern RECORDS_DELETED_SEINE_IHRE_PATTERN = Pattern.compile("^HQ: [a-zA-Z0-9_ ]+ [a-zA-Z0-9_]+ hat [a-zA-Z0-9_]+ (seine|ihre) Akten gel\u00f6scht, over.$");
     private static final Pattern RECORDS_DELETED_S_PATTERN = Pattern.compile("^HQ: [a-zA-Z0-9_ ]+ [a-zA-Z0-9_]+ hat [a-zA-Z0-9_]+'s Akten gel\u00f6scht, over.$");
     private static final Pattern WANTEDS_GIVEN_PATTERN = Pattern.compile("^HQ: [a-zA-Z0-9_]+'s momentanes WantedLevel: \\d+$");
-    private static long hitlistShown = 0L;
-    private static long blacklistShown = 0L;
-    private static long wantedsShown = 0L;
+    private static long blacklistShown;
 
     @SubscribeEvent
     public static void onNameFormat(PlayerEvent.NameFormat e) {
@@ -54,8 +55,7 @@ public class NameFormatEventHandler {
         PLAYER_MAP.put(userName, p);
 
         //Prevents people who are masked from being detected
-        if (displayName.contains("\u00a7k"))
-            return;
+        if (displayName.contains("\u00a7k")) return;
 
         String color = getColor(userName);
         if (color == null) return;
@@ -220,9 +220,16 @@ public class NameFormatEventHandler {
         if (currentTime - wantedsShown > 1000L || !unformattedMessage.startsWith("  - ")) return;
 
         String[] splittedMessage = StringUtils.split(unformattedMessage, " | ");
+        if (splittedMessage.length < 3) return;
 
-        String name = TextUtils.stripPrefix(splittedMessage[1]);
-        int wanteds = Integer.parseInt(splittedMessage[2]);
+        String name;
+        int wanteds;
+        try {
+            name = TextUtils.stripPrefix(splittedMessage[1]);
+            wanteds = Integer.parseInt(splittedMessage[2]);
+        } catch (Exception exc) {
+            return;
+        }
 
         WANTED_MAP.put(name, wanteds);
         refreshDisplayName(name);

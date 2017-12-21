@@ -22,7 +22,7 @@ import java.util.List;
 @SideOnly(Side.CLIENT)
 public class ToDoListCommand implements CommandExecutor {
 
-    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd.MM.yyyy HH:mm");
+    private final SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm");
 
     @Override
     @Command(labels = {"todo", "todolist"})
@@ -78,7 +78,7 @@ public class ToDoListCommand implements CommandExecutor {
             ClickEvent deleteClickEvent = new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/removetodo " + toDo.getId());
             copiedDeleteComponent.getStyle().setClickEvent(deleteClickEvent);
 
-            TextComponentString prefixHoverText = new TextComponentString("Erstellt am " + DATE_FORMAT.format(new Date(toDo.getCreated())));
+            TextComponentString prefixHoverText = new TextComponentString("Erstellt am " + dateFormat.format(new Date(toDo.getCreated())));
             prefixHoverText.getStyle().setColor(TextFormatting.GRAY);
 
             HoverEvent prefixHoverEvent = new HoverEvent(HoverEvent.Action.SHOW_TEXT, prefixHoverText);

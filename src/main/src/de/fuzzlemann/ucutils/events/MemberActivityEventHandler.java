@@ -25,8 +25,8 @@ public class MemberActivityEventHandler {
     public static final List<String> MEMBER_LIST = new ArrayList<>();
 
     private static final Timer TIMER = new Timer();
-    private static long lastMessage = 0L;
-    private static long shown = 0L;
+    private static long lastMessage;
+    private static long shown;
 
     @SubscribeEvent
     public static void onChatReceived(ClientChatReceivedEvent e) {

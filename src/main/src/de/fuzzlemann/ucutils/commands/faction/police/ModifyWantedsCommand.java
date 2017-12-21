@@ -21,20 +21,8 @@ import java.util.stream.Collectors;
 @SideOnly(Side.CLIENT)
 public class ModifyWantedsCommand implements CommandExecutor, TabCompletion {
 
-    private static Set<Type> getTypes(String[] args) {
-        Set<Type> types = new HashSet<>();
-
-        for (int i = 1; i < args.length; i++) {
-            Type flag = Type.getType(args[i]);
-            if (flag != null)
-                types.add(flag);
-        }
-
-        return types;
-    }
-
     @Override
-    @Command(labels = {"modifywanteds", "mw"}, usage = "/%label% [Spieler] [GF/SF/S]")
+    @Command(labels = {"modifywanteds", "mw"}, usage = "/%label% [Spieler] [GF/SF/S/FSA]")
     public boolean onCommand(EntityPlayerSP p, String[] args) {
         if (args.length < 2) return false;
 
@@ -68,6 +56,18 @@ public class ModifyWantedsCommand implements CommandExecutor, TabCompletion {
         return true;
     }
 
+    private Set<Type> getTypes(String[] args) {
+        Set<Type> types = new HashSet<>();
+
+        for (int i = 1; i < args.length; i++) {
+            Type flag = Type.getType(args[i]);
+            if (flag != null)
+                types.add(flag);
+        }
+
+        return types;
+    }
+
     @Override
     public List<String> getTabCompletions(EntityPlayerSP p, String[] args) {
         if (args.length != 2) return Collections.emptyList();
@@ -88,7 +88,8 @@ public class ModifyWantedsCommand implements CommandExecutor, TabCompletion {
     private enum Type {
         SURRENDER("s", "", " + Stellung", "x-5"),
         GOOD("gf", "", " + Gute F\u00fchrung", "x-5"),
-        BAD("sf", "", " + Schlechte F\u00fchrung", "x+5");
+        BAD("sf", "", " + Schlechte F\u00fchrung", "x+5"),
+        DRIVERS_LICENSE_WITHDRAWAL("fsa", "", " + F\u00fchrerscheinabnahme", "x");
 
         private final String flagArgument;
         private final String prependReason;

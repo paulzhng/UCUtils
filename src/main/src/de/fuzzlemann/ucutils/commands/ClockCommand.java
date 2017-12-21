@@ -16,8 +16,8 @@ import java.util.Date;
  */
 @SideOnly(Side.CLIENT)
 public class ClockCommand implements CommandExecutor {
-    private static final SimpleDateFormat TIME_FORMAT = new SimpleDateFormat("HH:mm:ss 'Uhr'");
-    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd.MM.yyyy");
+    private final SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss 'Uhr'");
+    private final SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
 
     @Override
     @Command(labels = {"clock", "uhrzeit", "uhr"})
@@ -27,13 +27,13 @@ public class ClockCommand implements CommandExecutor {
         TextComponentString text = new TextComponentString("Es ist ");
         text.getStyle().setColor(TextFormatting.AQUA);
 
-        TextComponentString timeComponent = new TextComponentString(TIME_FORMAT.format(date));
+        TextComponentString timeComponent = new TextComponentString(timeFormat.format(date));
         timeComponent.getStyle().setColor(TextFormatting.RED);
 
         TextComponentString midText = new TextComponentString(" und der ");
         midText.getStyle().setColor(TextFormatting.AQUA);
 
-        TextComponentString dateComponent = new TextComponentString(DATE_FORMAT.format(date));
+        TextComponentString dateComponent = new TextComponentString(dateFormat.format(date));
         dateComponent.getStyle().setColor(TextFormatting.RED);
 
         TextComponentString endText = new TextComponentString(".");

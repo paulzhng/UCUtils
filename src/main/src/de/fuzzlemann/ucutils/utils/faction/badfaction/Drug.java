@@ -26,8 +26,7 @@ public class Drug {
 
     public static Drug getDrug(String name) {
         for (Drug drug : Drug.DRUGS) {
-            if (drug.getName().equalsIgnoreCase(name))
-                return drug;
+            if (drug.getName().equalsIgnoreCase(name)) return drug;
 
             for (String alternativeName : drug.getAlternative()) {
                 if (alternativeName.equalsIgnoreCase(name))

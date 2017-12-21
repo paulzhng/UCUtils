@@ -5,6 +5,7 @@ import de.fuzzlemann.ucutils.utils.io.JsonManager;
 import java.io.*;
 import java.net.Socket;
 import java.net.SocketException;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 /**
@@ -76,7 +77,7 @@ public class TSClientQuery {
 
         try {
             printWriter = new PrintWriter(socket.getOutputStream(), true);
-            bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream(), StandardCharsets.UTF_8));
 
             while (bufferedReader.ready()) bufferedReader.readLine();
         } catch (IOException e) {
@@ -91,6 +92,14 @@ public class TSClientQuery {
         if (apiKey == null) return false;
 
         Map<String, String> result = exec("auth apikey=" + apiKey, true);
-        return result != null && result.get("msg").equals("ok");
+        if (result == null) return false;
+        System.out.println("RESULT: " + result);
+
+        String msg = result.get("msg");
+
+        if (msg == null) return false;
+        System.out.println("MESSAGE: " + msg);
+
+        return msg.equals("ok");
     }
 }

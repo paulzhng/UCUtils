@@ -2,6 +2,7 @@ package de.fuzzlemann.ucutils.utils.command;
 
 import de.fuzzlemann.ucutils.Main;
 import de.fuzzlemann.ucutils.commands.*;
+import de.fuzzlemann.ucutils.commands.faction.CallReinforcementCommand;
 import de.fuzzlemann.ucutils.commands.faction.ChannelActivityCommand;
 import de.fuzzlemann.ucutils.commands.faction.TeamSpeakAPIKeyCommand;
 import de.fuzzlemann.ucutils.commands.faction.badfaction.ASellDrugCommand;
@@ -85,6 +86,8 @@ public class CommandHandler {
 
         registerCommand(new ChannelActivityCommand());
         registerCommand(new TeamSpeakAPIKeyCommand());
+
+        registerCommand(new CallReinforcementCommand());
 
         ASUCommand asuCommand = new ASUCommand();
         registerCommand(asuCommand, asuCommand);

@@ -130,6 +130,7 @@ public class WantedManager {
             Integer wanteds = NameFormatEventHandler.WANTED_MAP.get(player);
 
             if (wanteds == null) {
+                blockNextMessage = true;
                 future.complete(null);
                 future = null;
                 return;

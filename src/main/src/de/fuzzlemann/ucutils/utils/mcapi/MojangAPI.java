@@ -27,7 +27,13 @@ public class MojangAPI {
             .build(new CacheLoader<String, String>() {
                 @Override
                 public String load(@Nonnull String name) {
-                    return getUncachedUUID(name);
+                    String uuid = getUncachedUUID(name);
+
+                    if (uuid == null) {
+                        throw new NullPointerException();
+                    }
+
+                    return uuid;
                 }
             });
 
@@ -39,6 +45,7 @@ public class MojangAPI {
                     return getUncachedEarlierNames(name);
                 }
             });
+
 
     public static Multimap<String, String> getEarlierNames(List<String> names) {
         Multimap<String, String> earlierNames = HashMultimap.create();
@@ -60,6 +67,7 @@ public class MojangAPI {
 
         JsonElement jsonElement = getJsonElement("https://api.mojang.com/user/profiles/" + uuid + "/names");
         if (jsonElement == null) return earlierNames;
+        if (jsonElement.isJsonNull()) return earlierNames;
 
         for (JsonElement element : jsonElement.getAsJsonArray()) {
             earlierNames.add(element.getAsJsonObject().get("name").getAsString());
@@ -69,12 +77,17 @@ public class MojangAPI {
     }
 
     public static String getUUID(String currentName) {
-        return UUID_CACHE.getUnchecked(currentName);
+        try {
+            return UUID_CACHE.get(currentName);
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     private static String getUncachedUUID(String currentName) {
         JsonElement jsonElement = getJsonElement("https://api.mojang.com/users/profiles/minecraft/" + currentName);
         if (jsonElement == null) return null;
+        if (jsonElement.isJsonNull()) return null;
 
         return jsonElement.getAsJsonObject().get("id").getAsString();
     }

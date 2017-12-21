@@ -85,7 +85,7 @@ public class ChatLogger {
         logger.info(message + "\n");
     }
 
-    private class ChatLogFormatter extends Formatter {
+    private static class ChatLogFormatter extends Formatter {
         @Override
         public String format(LogRecord record) {
             return DATE_FORMAT.format(new Date()) + " | " + record.getMessage();

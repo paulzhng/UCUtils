@@ -40,6 +40,7 @@ public class ChannelActivityCommand implements CommandExecutor {
             try {
                 players = getPlayersInChannel();
             } catch (NullPointerException exc) {
+                exc.printStackTrace();
                 TextUtils.error("Du hast dein API Key noch nicht oder falsch gesetzt (/tsapikey)", p);
                 return;
             }
@@ -119,6 +120,7 @@ public class ChannelActivityCommand implements CommandExecutor {
 
     private List<String> getPlayersInChannel() {
         Map<String, String> whoAmIResult = TSClientQuery.exec("whoami");
+
         String channelClientListResult = TSClientQuery.rawExec("channelclientlist cid=" + whoAmIResult.get("cid"), false);
         if (channelClientListResult == null) return Collections.emptyList();
 

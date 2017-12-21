@@ -35,7 +35,9 @@ public class Expression {
 
         nextChar();
         double x = parseExpression();
-        if (pos < expression.length()) throw new ExpressionException("Unexpected character: " + (char) ch);
+        if (pos < expression.length()) {
+            throw new ExpressionException("Unexpected character: " + (char) ch);
+        }
 
         lastResult = x;
         return x;
@@ -97,7 +99,14 @@ public class Expression {
                     throw new ExpressionException("Unknown function: " + func);
             }
         } else {
-            throw new ExpressionException("Unexpected character: " + (char) ch);
+            char wrongChar;
+            if (pos == 1) {
+                wrongChar = expression.charAt(0);
+            } else {
+                wrongChar = (char) ch;
+            }
+
+            throw new ExpressionException("Unexpected character: " + wrongChar);
         }
 
         if (eat('^')) x = Math.pow(x, parseFactor());
@@ -118,7 +127,7 @@ public class Expression {
         return false;
     }
 
-    public class ExpressionException extends Exception {
+    public static class ExpressionException extends Exception {
 
         ExpressionException(String message) {
             super(message);

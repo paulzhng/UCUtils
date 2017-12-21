@@ -24,9 +24,7 @@ public class ForgeUtils {
         Minecraft minecraft = Main.MINECRAFT;
         NetHandlerPlayClient connection = minecraft.getConnection();
 
-        if (connection == null) {
-            return Collections.emptyList();
-        }
+        if (connection == null) return Collections.emptyList();
 
         Collection<NetworkPlayerInfo> playerInfoMap = connection.getPlayerInfoMap();
         GuiPlayerTabOverlay tabOverlay = minecraft.ingameGUI.getTabList();
