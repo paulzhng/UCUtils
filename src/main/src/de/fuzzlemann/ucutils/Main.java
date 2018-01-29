@@ -6,6 +6,8 @@ import de.fuzzlemann.ucutils.utils.config.ConfigUtil;
 import de.fuzzlemann.ucutils.utils.faction.badfaction.DrugUtil;
 import de.fuzzlemann.ucutils.utils.faction.police.WantedManager;
 import de.fuzzlemann.ucutils.utils.io.JsonManager;
+import de.fuzzlemann.ucutils.utils.noobchat.NoobChatManager;
+import de.fuzzlemann.ucutils.utils.punishment.PunishManager;
 import de.fuzzlemann.ucutils.utils.teamspeak.TSClientQuery;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.common.config.Configuration;
@@ -28,7 +30,7 @@ public class Main {
     public static final Minecraft MINECRAFT = Minecraft.getMinecraft();
 
     public static final String MOD_ID = "ucutils";
-    public static final String VERSION = "1.12.1-1.3";
+    public static final String VERSION = "1.12.1-1.4";
 
     static final String NAME = "UC Utils";
     static final String GUI_FACTORY = "de.fuzzlemann.ucutils.utils.config.GuiFactoryUCUtils";
@@ -51,6 +53,18 @@ public class Main {
                 WantedManager.fillWantedList();
             } catch (IOException exc) {
                 WantedManager.readSavedWantedList();
+            }
+
+            try {
+                PunishManager.fillViolationList();
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+
+            try {
+                NoobChatManager.fillNoobChatAnswerList();
+            } catch (IOException e1) {
+                e1.printStackTrace();
             }
 
             DrugUtil.loadDrugs();

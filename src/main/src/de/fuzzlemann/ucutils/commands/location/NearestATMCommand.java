@@ -23,42 +23,39 @@ public class NearestATMCommand implements CommandExecutor {
     public boolean onCommand(EntityPlayerSP p, String[] args) {
         if (ATM.values().length == 0) return false;
 
-        new Thread(() -> {
-            BlockPos pos = p.getPosition();
+        BlockPos pos = p.getPosition();
 
-            ATM nearestATM = null;
-            double nearestDistance = -1;
-            for (ATM atm : ATM.values()) {
-                double distance = pos.getDistance(atm.getX(), atm.getY(), atm.getZ());
+        ATM nearestATM = null;
+        double nearestDistance = -1;
+        for (ATM atm : ATM.values()) {
+            double distance = pos.getDistance(atm.getX(), atm.getY(), atm.getZ());
 
-                if (distance < nearestDistance || nearestDistance == -1) {
-                    nearestDistance = distance;
-                    nearestATM = atm;
-                }
+            if (distance < nearestDistance || nearestDistance == -1) {
+                nearestDistance = distance;
+                nearestATM = atm;
             }
+        }
 
-            assert nearestATM != null;
+        assert nearestATM != null;
 
-            TextComponentString text = new TextComponentString("Der n\u00e4heste ATM an dir ist ");
-            text.getStyle().setColor(TextFormatting.AQUA);
+        TextComponentString text = new TextComponentString("Der n\u00e4heste ATM an dir ist ");
+        text.getStyle().setColor(TextFormatting.AQUA);
 
-            TextComponentString atmComponent = new TextComponentString("ATM " + nearestATM.getId());
-            atmComponent.getStyle().setColor(TextFormatting.RED);
+        TextComponentString atmComponent = new TextComponentString("ATM " + nearestATM.getId());
+        atmComponent.getStyle().setColor(TextFormatting.RED);
 
-            TextComponentString blockComponent = new TextComponentString(". Die Distanz zu dem ATM betr\u00e4gt ");
-            blockComponent.getStyle().setColor(TextFormatting.AQUA);
+        TextComponentString blockComponent = new TextComponentString(". Die Distanz zu dem ATM betr\u00e4gt ");
+        blockComponent.getStyle().setColor(TextFormatting.AQUA);
 
-            TextComponentString distanceComponent = new TextComponentString((int) nearestDistance + " Meter");
-            distanceComponent.getStyle().setColor(TextFormatting.RED);
+        TextComponentString distanceComponent = new TextComponentString((int) nearestDistance + " Meter");
+        distanceComponent.getStyle().setColor(TextFormatting.RED);
 
-            TextComponentString textEnd = new TextComponentString(".");
-            textEnd.getStyle().setColor(TextFormatting.AQUA);
+        TextComponentString textEnd = new TextComponentString(".");
+        textEnd.getStyle().setColor(TextFormatting.AQUA);
 
-            ITextComponent navigateThereComponent = new TextComponentString("\n").appendSibling(NavigationUtil.getNavigationText(nearestATM.getX(), nearestATM.getY(), nearestATM.getZ()));
+        ITextComponent navigateThereComponent = new TextComponentString("\n").appendSibling(NavigationUtil.getNavigationText(nearestATM.getX(), nearestATM.getY(), nearestATM.getZ()));
 
-            p.sendMessage(text.appendSibling(atmComponent).appendSibling(blockComponent).appendSibling(distanceComponent).appendSibling(textEnd).appendSibling(navigateThereComponent));
-        }).start();
-
+        p.sendMessage(text.appendSibling(atmComponent).appendSibling(blockComponent).appendSibling(distanceComponent).appendSibling(textEnd).appendSibling(navigateThereComponent));
         return true;
     }
 }

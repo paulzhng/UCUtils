@@ -22,17 +22,6 @@ import org.apache.commons.lang3.StringUtils;
 @Mod.EventBusSubscriber
 public class CallReinforcementCommand implements CommandExecutor {
 
-    @Override
-    @Command(labels = {"reinforcement", "callreinforcement", "verst\u00e4rkung"})
-    public boolean onCommand(EntityPlayerSP p, String[] args) {
-        int posX = (int) p.posX;
-        int posY = (int) p.posY;
-        int posZ = (int) p.posZ;
-
-        p.sendChatMessage("/f Ben\u00f6tige Verst\u00e4rkung! -> X: " + posX + " | Y: " + posY + " | Z: " + posZ);
-        return true;
-    }
-
     @SubscribeEvent
     public static void onChatReceived(ClientChatReceivedEvent e) {
         String message = e.getMessage().getUnformattedText();
@@ -76,5 +65,16 @@ public class CallReinforcementCommand implements CommandExecutor {
     private static int parseLoc(String locString) {
         locString = locString.substring(4).trim();
         return Integer.parseInt(locString);
+    }
+
+    @Override
+    @Command(labels = {"reinforcement", "callreinforcement", "verst\u00e4rkung"})
+    public boolean onCommand(EntityPlayerSP p, String[] args) {
+        int posX = (int) p.posX;
+        int posY = (int) p.posY;
+        int posZ = (int) p.posZ;
+
+        p.sendChatMessage("/f Ben\u00f6tige Verst\u00e4rkung! -> X: " + posX + " | Y: " + posY + " | Z: " + posZ);
+        return true;
     }
 }

@@ -13,7 +13,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Collections;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author Fuzzlemann
@@ -72,6 +74,11 @@ class BaseCommand extends CommandBase implements IClientCommand {
         if (input.isEmpty()) return players;
 
         players.removeIf(playerName -> !playerName.toLowerCase().startsWith(input));
+
+        Set<String> setItems = new LinkedHashSet<>(players);
+        players.clear();
+        players.addAll(setItems);
+
         Collections.sort(players);
 
         return players;

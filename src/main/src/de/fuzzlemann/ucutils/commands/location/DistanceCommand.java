@@ -31,8 +31,8 @@ public class DistanceCommand implements CommandExecutor {
             return false;
         }
 
-        if (x == -1) {
-            x = (int) p.posX;
+        if (y == -1) {
+            y = (int) p.posY;
         }
 
         int distance = (int) p.getPosition().getDistance(x, y, z);

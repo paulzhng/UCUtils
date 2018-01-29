@@ -8,6 +8,7 @@ import de.fuzzlemann.ucutils.commands.faction.TeamSpeakAPIKeyCommand;
 import de.fuzzlemann.ucutils.commands.faction.badfaction.ASellDrugCommand;
 import de.fuzzlemann.ucutils.commands.faction.badfaction.DrugPriceCommand;
 import de.fuzzlemann.ucutils.commands.faction.police.ASUCommand;
+import de.fuzzlemann.ucutils.commands.faction.police.CheckMedicalLicenseCommand;
 import de.fuzzlemann.ucutils.commands.faction.police.ModifyWantedsCommand;
 import de.fuzzlemann.ucutils.commands.info.CInfoCommand;
 import de.fuzzlemann.ucutils.commands.info.FCInfoCommand;
@@ -23,6 +24,8 @@ import de.fuzzlemann.ucutils.commands.mobile.ACallCommand;
 import de.fuzzlemann.ucutils.commands.mobile.ASMSCommand;
 import de.fuzzlemann.ucutils.commands.mobile.MobileBlockCommand;
 import de.fuzzlemann.ucutils.commands.mobile.MobileBlockListCommand;
+import de.fuzzlemann.ucutils.commands.supporter.PunishCommand;
+import de.fuzzlemann.ucutils.commands.supporter.SendNoobChatCommand;
 import de.fuzzlemann.ucutils.commands.todo.AddToDoCommand;
 import de.fuzzlemann.ucutils.commands.todo.DoneToDoCommand;
 import de.fuzzlemann.ucutils.commands.todo.RemoveToDoCommand;
@@ -89,6 +92,8 @@ public class CommandHandler {
 
         registerCommand(new CallReinforcementCommand());
 
+        registerCommand(new CheckMedicalLicenseCommand());
+
         ASUCommand asuCommand = new ASUCommand();
         registerCommand(asuCommand, asuCommand);
 
@@ -100,6 +105,12 @@ public class CommandHandler {
 
         DrugPriceCommand drugPriceCommand = new DrugPriceCommand();
         registerCommand(drugPriceCommand, drugPriceCommand);
+
+        PunishCommand punishCommand = new PunishCommand();
+        registerCommand(punishCommand, punishCommand);
+
+        SendNoobChatCommand sendNoobChatCommand = new SendNoobChatCommand();
+        registerCommand(sendNoobChatCommand, sendNoobChatCommand);
     }
 
     private static void registerCommand(CommandExecutor commandExecutor) {

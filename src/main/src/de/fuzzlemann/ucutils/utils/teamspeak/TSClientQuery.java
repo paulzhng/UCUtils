@@ -93,13 +93,8 @@ public class TSClientQuery {
 
         Map<String, String> result = exec("auth apikey=" + apiKey, true);
         if (result == null) return false;
-        System.out.println("RESULT: " + result);
-
         String msg = result.get("msg");
 
-        if (msg == null) return false;
-        System.out.println("MESSAGE: " + msg);
-
-        return msg.equals("ok");
+        return msg != null && msg.equals("ok");
     }
 }

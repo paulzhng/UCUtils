@@ -80,9 +80,7 @@ public class WantedManager {
 
         for (WantedReason wanted : WANTED_LIST) {
             String wantedReason = wanted.getReason().toLowerCase();
-            if (!wantedReason.startsWith(lowerReason)) {
-                continue;
-            }
+            if (!wantedReason.startsWith(lowerReason)) continue;
 
             int curDelta = Math.abs(wantedReason.length() - lowerReason.length());
             if (curDelta < delta) {
@@ -90,17 +88,15 @@ public class WantedManager {
                 delta = curDelta;
             }
 
-            if (curDelta == 0) {
-                break;
-            }
+            if (curDelta == 0) break;
         }
 
         return foundWanted;
     }
 
     public static Future<Wanted> getWanteds(String player) {
-        Main.MINECRAFT.player.sendChatMessage("/wantedinfo " + player);
         future = new CompletableFuture<>();
+        Main.MINECRAFT.player.sendChatMessage("/wantedinfo " + player);
         return future;
     }
 

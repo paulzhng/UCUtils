@@ -25,15 +25,11 @@ public class NameFormatEventHandler {
     //--------------------- Wanteds ---------------------\\
     public static final Map<String, Integer> WANTED_MAP = new HashMap<>();
     private static final Map<String, EntityPlayer> PLAYER_MAP = new HashMap<>();
-    private static long wantedsShown;
-
     //--------------------- Hits ---------------------\\
     private static final List<String> HITLIST = new ArrayList<>();
     private static final Pattern HIT_SET_PATTERN = Pattern.compile("^\\[Contract] Es wurde ein Kopfgeld auf [a-zA-Z0-9_]+ \\(\\d+\\$\\) ausgesetzt.$");
     private static final Pattern HIT_REMOVED_PATTERN = Pattern.compile("^\\[Contract] [a-zA-Z0-9_]+ hat [a-zA-Z0-9_]+ von der Contract Liste gel\u00f6scht. \\[-\\d+]");
     private static final Pattern HIT_KILLED_PATTERN = Pattern.compile("^\\[Contract] [a-zA-Z0-9_]+ hat [a-zA-Z0-9_]+ get\u00f6tet. Kopfgeld: \\d+\\$");
-    private static long hitlistShown;
-
     //--------------------- Blacklist ---------------------\\
     private static final List<String> BLACKLIST = new ArrayList<>();
     private static final Pattern BLACKLIST_ADDED_PATTERN = Pattern.compile("^\\[Blacklist] [a-zA-Z0-9_]+ wurde von [a-zA-Z0-9_]+ auf die Blacklist gesetzt!$");
@@ -43,6 +39,8 @@ public class NameFormatEventHandler {
     private static final Pattern RECORDS_DELETED_SEINE_IHRE_PATTERN = Pattern.compile("^HQ: [a-zA-Z0-9_ ]+ [a-zA-Z0-9_]+ hat [a-zA-Z0-9_]+ (seine|ihre) Akten gel\u00f6scht, over.$");
     private static final Pattern RECORDS_DELETED_S_PATTERN = Pattern.compile("^HQ: [a-zA-Z0-9_ ]+ [a-zA-Z0-9_]+ hat [a-zA-Z0-9_]+'s Akten gel\u00f6scht, over.$");
     private static final Pattern WANTEDS_GIVEN_PATTERN = Pattern.compile("^HQ: [a-zA-Z0-9_]+'s momentanes WantedLevel: \\d+$");
+    private static long wantedsShown;
+    private static long hitlistShown;
     private static long blacklistShown;
 
     @SubscribeEvent

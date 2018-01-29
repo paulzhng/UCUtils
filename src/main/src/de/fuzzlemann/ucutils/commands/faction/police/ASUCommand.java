@@ -21,19 +21,6 @@ import java.util.stream.Collectors;
 @SideOnly(Side.CLIENT)
 public class ASUCommand implements CommandExecutor, TabCompletion {
 
-    private static Set<Flag> getFlag(String[] args) {
-        Set<Flag> flags = new HashSet<>();
-
-        for (String arg : args) {
-            Flag flag = Flag.getFlag(arg);
-
-            if (flag != null)
-                flags.add(flag);
-        }
-
-        return flags;
-    }
-
     @Override
     @Command(labels = "asu", usage = "/%label% [Spieler(...)] [Grund] (Variation) (-v/-b/-fsa)")
     public boolean onCommand(EntityPlayerSP p, String[] args) {
@@ -101,6 +88,19 @@ public class ASUCommand implements CommandExecutor, TabCompletion {
 
         Collections.sort(wantedReasons);
         return wantedReasons;
+    }
+
+    private Set<Flag> getFlag(String[] args) {
+        Set<Flag> flags = new HashSet<>();
+
+        for (String arg : args) {
+            Flag flag = Flag.getFlag(arg);
+
+            if (flag != null)
+                flags.add(flag);
+        }
+
+        return flags;
     }
 
     private enum Flag {

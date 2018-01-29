@@ -41,7 +41,7 @@ public class Drug {
         return name;
     }
 
-    public String[] getAlternative() {
+    private String[] getAlternative() {
         return alternative;
     }
 

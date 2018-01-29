@@ -36,6 +36,8 @@ public class ChannelActivityCommand implements CommandExecutor {
     @Command(labels = "channelactivity")
     public boolean onCommand(EntityPlayerSP p, String[] args) {
         new Thread(() -> {
+            TSClientQuery.auth();
+
             List<String> players;
             try {
                 players = getPlayersInChannel();
