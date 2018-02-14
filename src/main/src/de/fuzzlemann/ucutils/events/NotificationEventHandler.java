@@ -3,7 +3,6 @@ package de.fuzzlemann.ucutils.events;
 import de.fuzzlemann.ucutils.Main;
 import de.fuzzlemann.ucutils.utils.SoundUtil;
 import de.fuzzlemann.ucutils.utils.config.ConfigUtil;
-import lombok.val;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
@@ -27,18 +26,24 @@ public class NotificationEventHandler {
 
     private static final Pattern RESOURCEPACK_PATTERN = Pattern.compile("^Wir empfehlen dir unser Resourcepack zu nutzen.$|" +
             "^Unter http://server.unicacity.de/dl/UnicaCity[_a-zA-Z\\d]+.zip kannst du es dir herunterladen.$");
-    private static final Pattern UNINVITE_PATTERN = Pattern.compile("^[a-zA-Z0-9_]+ wurde von [a-zA-Z0-9_]+ aus der Fraktion geschmissen.$");
+    private static final Pattern UNINVITE_PATTERN = Pattern.compile("^[\\[UC\\]]*[a-zA-Z0-9_]+ wurde von [\\[UC\\]]*[a-zA-Z0-9_]+ aus der Fraktion geschmissen.$");
     private static final Pattern INVITE_PATTERN = Pattern.compile("^[a-zA-Z0-9_]+ ist der Fraktion mit Rang \\d beigetreten.$");
+    private static final Pattern FRIEND_JOINED_PATTERN = Pattern.compile("^ \u00bb Freundesliste: [a-zA-Z0-9_]+ ist nun online.$");
+    private static final Pattern REPORT_RECEIVED_PATTERN = Pattern.compile("^\u00a7cEs liegt ein neuer Report \u00a78\\[\u00a79\\d+\u00a78]\u00a7c von \u00a76[a-zA-Z0-9_]+ \u00a7cvor! Thema: \u00a79[a-zA-Z]+$|" +
+            "^Es liegt ein neuer Report von [a-zA-Z0-9_]+ vor! Thema: [a-zA-Z]+$");
+    private static final Pattern REPORT_ACCEPTED_PATTERN = Pattern.compile("^\\[Report] Du hast den Report von [a-zA-Z0-9_]+ \\[Level \\d+] angenommen! Thema: [a-zA-Z]+$");
+    private static final Pattern BOMB_PLACED_PATTERN = Pattern.compile("^News: ACHTUNG! Es wurde eine Bombe in der N\u00e4he von .+ gefunden!$");
 
     @SubscribeEvent
     public static void onChatReceived(ClientChatReceivedEvent e) {
-        val message = e.getMessage();
-        val unformattedText = message.getUnformattedText();
+        ITextComponent message = e.getMessage();
+        String unformattedText = message.getUnformattedText();
 
-        if (unformattedText.startsWith(" \u00bb Freundesliste:") && unformattedText.endsWith("ist nun online.")) {
+        if (FRIEND_JOINED_PATTERN.matcher(unformattedText).find()) {
             String friendName = unformattedText.split(" ")[3];
 
             modifyFriendJoin(message, friendName);
+            return;
         }
 
         if (ConfigUtil.blockResourcePackReminder && RESOURCEPACK_PATTERN.matcher(unformattedText).find()) {
@@ -51,35 +56,44 @@ public class NotificationEventHandler {
         if (ConfigUtil.inviteAnnouncement) {
             if (INVITE_PATTERN.matcher(unformattedText).find()) {
                 p.playSound(SoundUtil.PLAYER_INVITED, 1, 1);
+                return;
             } else if (UNINVITE_PATTERN.matcher(unformattedText).find()) {
                 p.playSound(SoundUtil.PLAYER_UNINVITED, 1, 1);
+                return;
             }
         }
 
-        if (ConfigUtil.reportAnnouncement
-                && (unformattedText.startsWith("Es liegt ein neuer Report")
-                || unformattedText.startsWith("\u00a7cEs liegt ein neuer Report"))) {
+        if (ConfigUtil.reportAnnouncement && REPORT_RECEIVED_PATTERN.matcher(unformattedText).find()) {
             p.playSound(SoundUtil.REPORT_RECEIVED, 3, 1);
+            return;
         }
 
-        if (ConfigUtil.bombAnnouncement && unformattedText.startsWith("News: ACHTUNG! Es wurde eine Bombe in der N\u00e4he von")) {
+        if (ConfigUtil.bombAnnouncement && BOMB_PLACED_PATTERN.matcher(unformattedText).find()) {
             p.playSound(SoundUtil.BOMB_PLACED, 0.15F, 1);
+            return;
         }
 
         if (ConfigUtil.contractFulfilledAnnouncement
                 && unformattedText.startsWith("[Contract] ")
                 && unformattedText.contains(" get\u00f6tet. Kopfgeld: ")) {
             p.playSound(SoundUtil.CONTRACT_FULFILLED, 1, 1);
+            return;
         }
 
         if (ConfigUtil.contractAnnouncement && unformattedText.startsWith("[Contract] Es wurde ein Kopfgeld auf")) {
             p.playSound(SoundUtil.CONTRACT_PLACED, 1, 1);
+            return;
         }
 
-        if (ConfigUtil.serviceAnnouncement &&
-                (unformattedText.startsWith("HQ: Achtung! Ein Notruf von ")
-                        || unformattedText.startsWith("Achtung! Ein Notruf von "))) {
+        if (ConfigUtil.serviceAnnouncement
+                && (unformattedText.startsWith("HQ: Achtung! Ein Notruf von ")
+                || unformattedText.startsWith("Achtung! Ein Notruf von "))) {
             p.playSound(SoundUtil.SERVICE_RECEIVED, 1, 1);
+            return;
+        }
+
+        if (!ConfigUtil.reportGreeting.isEmpty() && REPORT_ACCEPTED_PATTERN.matcher(unformattedText).find()) {
+            p.sendChatMessage(ConfigUtil.reportGreeting);
         }
     }
 

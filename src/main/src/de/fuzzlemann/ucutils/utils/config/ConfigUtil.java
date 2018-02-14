@@ -2,6 +2,7 @@ package de.fuzzlemann.ucutils.utils.config;
 
 import de.fuzzlemann.ucutils.Main;
 import de.fuzzlemann.ucutils.utils.log.ChatLogger;
+import de.fuzzlemann.ucutils.utils.teamspeak.TSClientQuery;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
@@ -27,6 +28,7 @@ public class ConfigUtil {
     public static boolean bombAnnouncement = true;
     public static boolean munitionDisplay = true;
     public static boolean logChat = true;
+    public static String reportGreeting = "";
 
     public static void syncConfig() {
         config.load();
@@ -87,6 +89,18 @@ public class ConfigUtil {
 
         if (logChat)
             ChatLogger.instance = new ChatLogger();
+
+        Property tsApiKeyProperty = config.get(Configuration.CATEGORY_GENERAL,
+                "tsApiKey",
+                "",
+                "Der TS API Key (TeamSpeak ALT + P -> Erweiterungen -> ClientQuery -> Einstellungen -> API Key).");
+        TSClientQuery.apiKey = tsApiKeyProperty.getString();
+
+        Property reportGreetingProperty = config.get(Configuration.CATEGORY_GENERAL,
+                "reportGreeting",
+                "",
+                "Die Begr\u00fc\u00dfung, die beim Betreten eines Reports geschrieben wird (Nur als Teammitglied wichtig) (Wenn keine erw\u00fcnscht ist, leer lassen)");
+        reportGreeting = reportGreetingProperty.getString();
     }
 
     @SubscribeEvent

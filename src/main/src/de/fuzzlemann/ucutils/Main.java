@@ -5,10 +5,8 @@ import de.fuzzlemann.ucutils.utils.command.CommandHandler;
 import de.fuzzlemann.ucutils.utils.config.ConfigUtil;
 import de.fuzzlemann.ucutils.utils.faction.badfaction.DrugUtil;
 import de.fuzzlemann.ucutils.utils.faction.police.WantedManager;
-import de.fuzzlemann.ucutils.utils.io.JsonManager;
 import de.fuzzlemann.ucutils.utils.noobchat.NoobChatManager;
 import de.fuzzlemann.ucutils.utils.punishment.PunishManager;
-import de.fuzzlemann.ucutils.utils.teamspeak.TSClientQuery;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.Mod;
@@ -17,8 +15,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.io.IOException;
-
-import static de.fuzzlemann.ucutils.utils.teamspeak.TSClientQuery.API_KEY_FILE;
 
 /**
  * @author Fuzzlemann
@@ -68,8 +64,6 @@ public class Main {
             }
 
             DrugUtil.loadDrugs();
-
-            TSClientQuery.apiKey = (String) JsonManager.loadObject(API_KEY_FILE, String.class);
         }).start();
     }
 }

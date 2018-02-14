@@ -6,7 +6,6 @@ import de.fuzzlemann.ucutils.utils.command.TabCompletion;
 import de.fuzzlemann.ucutils.utils.faction.police.Wanted;
 import de.fuzzlemann.ucutils.utils.faction.police.WantedManager;
 import de.fuzzlemann.ucutils.utils.math.Expression;
-import lombok.SneakyThrows;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -115,7 +114,6 @@ public class ModifyWantedsCommand implements CommandExecutor, TabCompletion {
             return prependReason + reason + postponeReason;
         }
 
-        @SneakyThrows
         private int modifyWanteds(int wanteds) {
             return (int) new Expression(wantedModification.replace("x", String.valueOf(wanteds))).evaluate();
         }

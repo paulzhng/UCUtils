@@ -27,7 +27,6 @@ public class CheckMedicalLicenseCommand implements CommandExecutor {
         builder.of(" medizinische Marihuanalizenz.").color(TextFormatting.AQUA).advance();
 
         p.sendMessage(builder.build().toTextComponent());
-
         return true;
     }
 }

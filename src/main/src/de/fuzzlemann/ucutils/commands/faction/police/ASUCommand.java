@@ -7,7 +7,6 @@ import de.fuzzlemann.ucutils.utils.faction.police.WantedManager;
 import de.fuzzlemann.ucutils.utils.faction.police.WantedReason;
 import de.fuzzlemann.ucutils.utils.math.Expression;
 import de.fuzzlemann.ucutils.utils.text.TextUtils;
-import lombok.SneakyThrows;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -132,7 +131,6 @@ public class ASUCommand implements CommandExecutor, TabCompletion {
             return prependReason + reason + postponeReason;
         }
 
-        @SneakyThrows
         private int modifyWanteds(int wanteds) {
             return (int) new Expression(wantedModification.replace("x", String.valueOf(wanteds))).evaluate();
         }

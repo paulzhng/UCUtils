@@ -48,7 +48,7 @@ public class PunishCommand implements CommandExecutor, TabCompletion {
 
     @Override
     public List<String> getTabCompletions(EntityPlayerSP p, String[] args) {
-        if (args.length != 2) return Collections.emptyList();
+        if (args.length == 1) return Collections.emptyList();
 
         String input = args[args.length - 1].toLowerCase();
         List<String> violationReasons = PunishManager.getViolations().stream()

@@ -15,6 +15,8 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.regex.Pattern;
+
 /**
  * @author Fuzzlemann
  */
@@ -22,27 +24,25 @@ import org.apache.commons.lang3.StringUtils;
 @Mod.EventBusSubscriber
 public class CallReinforcementCommand implements CommandExecutor {
 
+    private static Pattern REINFORCEMENT_PATTERN = Pattern.compile("^.+ [\\[UC\\]]*[a-zA-Z0-9_]+: Ben\u00f6tige Verst\u00e4rkung! -> X: -*\\d+ \\| Y: -*\\d+ \\| Z: -*\\d+$");
+
     @SubscribeEvent
     public static void onChatReceived(ClientChatReceivedEvent e) {
         String message = e.getMessage().getUnformattedText();
 
+        if (!REINFORCEMENT_PATTERN.matcher(message).find()) return;
+
         String[] splitMessage = StringUtils.split(message, ":", 2);
-        if (splitMessage.length != 2) return;
-
+        String name = splitMessage[0];
         String fChatMessage = splitMessage[1];
-
-        if (!fChatMessage.startsWith(" Ben\u00f6tige Verst\u00e4rkung! ->")) return;
-
-        String name;
 
         int posX;
         int posY;
         int posZ;
 
         try {
-            name = splitMessage[0];
-
             String[] fullLocString = StringUtils.split(fChatMessage.substring(25), "|", 3);
+
             posX = parseLoc(fullLocString[0]);
             posY = parseLoc(fullLocString[1]);
             posZ = parseLoc(fullLocString[2]);

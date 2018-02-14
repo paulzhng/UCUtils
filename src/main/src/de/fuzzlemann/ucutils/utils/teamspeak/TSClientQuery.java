@@ -1,8 +1,9 @@
 package de.fuzzlemann.ucutils.utils.teamspeak;
 
-import de.fuzzlemann.ucutils.utils.io.JsonManager;
-
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.SocketException;
 import java.nio.charset.StandardCharsets;
@@ -13,8 +14,7 @@ import java.util.Map;
  */
 public class TSClientQuery {
 
-    public static final File API_KEY_FILE = new File(JsonManager.DIRECTORY, "tsapikey.storage");
-    public static String apiKey;
+    public static String apiKey = "";
 
     private static Socket socket;
     private static BufferedReader bufferedReader;
@@ -36,7 +36,10 @@ public class TSClientQuery {
     }
 
     private static String rawExec(String command, boolean auth, boolean tryAgain) {
-        if (!auth && !connect()) return null;
+        if (auth && !connect()) return null;
+
+        if (bufferedReader == null)
+            auth();
 
         String result;
         try {
@@ -88,8 +91,8 @@ public class TSClientQuery {
         return auth();
     }
 
-    public static boolean auth() {
-        if (apiKey == null) return false;
+    private static boolean auth() {
+        if (apiKey == null || apiKey.isEmpty()) return false;
 
         Map<String, String> result = exec("auth apikey=" + apiKey, true);
         if (result == null) return false;

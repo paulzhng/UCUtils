@@ -30,7 +30,7 @@ public class Expression {
         return DECIMAL_FORMAT.format(lastResult);
     }
 
-    public double evaluate() throws ExpressionException {
+    public double evaluate() {
         replaceVariables();
 
         nextChar();
@@ -100,8 +100,9 @@ public class Expression {
             }
         } else {
             char wrongChar;
-            if (pos == 1) {
-                wrongChar = expression.charAt(0);
+
+            if (ch == -1) {
+                wrongChar = expression.charAt(expression.length() - 1);
             } else {
                 wrongChar = (char) ch;
             }
@@ -127,7 +128,7 @@ public class Expression {
         return false;
     }
 
-    public static class ExpressionException extends Exception {
+    public static class ExpressionException extends RuntimeException {
 
         ExpressionException(String message) {
             super(message);

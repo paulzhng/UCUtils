@@ -29,20 +29,6 @@ public class Violation {
         this.punishments = punishments;
     }
 
-    public String getReason() {
-        return reason;
-    }
-
-    public List<String> getCommands(String player) {
-        return punishments.stream()
-                .map(punishment -> punishment.parseCommand(player))
-                .collect(Collectors.toList());
-    }
-
-    public List<Punishment> getPunishments() {
-        return punishments;
-    }
-
     public static Violation combineViolations(List<Violation> violations) {
         ListMultimap<Punishment.PunishmentType, Punishment> punishmentMap = LinkedListMultimap.create();
 
@@ -88,5 +74,19 @@ public class Violation {
         }
 
         return new Violation(null, punishments);
+    }
+
+    public String getReason() {
+        return reason;
+    }
+
+    public List<String> getCommands(String player) {
+        return punishments.stream()
+                .map(punishment -> punishment.parseCommand(player))
+                .collect(Collectors.toList());
+    }
+
+    public List<Punishment> getPunishments() {
+        return punishments;
     }
 }

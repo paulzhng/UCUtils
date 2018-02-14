@@ -4,7 +4,7 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.google.common.collect.HashMultimap;
-import com.google.common.collect.Multimap;
+import com.google.common.collect.SetMultimap;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import org.apache.commons.io.IOUtils;
@@ -47,8 +47,8 @@ public class MojangAPI {
             });
 
 
-    public static Multimap<String, String> getEarlierNames(List<String> names) {
-        Multimap<String, String> earlierNames = HashMultimap.create();
+    public static SetMultimap<String, String> getEarlierNames(List<String> names) {
+        SetMultimap<String, String> earlierNames = HashMultimap.create();
 
         names.parallelStream().forEach(name -> earlierNames.putAll(name, getEarlierNames(name)));
 

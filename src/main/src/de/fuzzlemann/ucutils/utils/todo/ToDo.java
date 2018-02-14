@@ -35,6 +35,10 @@ public class ToDo {
         this.done = done;
     }
 
+    public int getId() {
+        return id;
+    }
+
     public void delete() {
         ToDoManager.getToDoList().remove(this);
         save();
@@ -47,9 +51,5 @@ public class ToDo {
 
     public void save() {
         ToDoManager.save();
-    }
-
-    public int getId() {
-        return id;
     }
 }

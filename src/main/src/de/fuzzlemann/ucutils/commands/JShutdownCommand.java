@@ -3,7 +3,6 @@ package de.fuzzlemann.ucutils.commands;
 import de.fuzzlemann.ucutils.utils.command.Command;
 import de.fuzzlemann.ucutils.utils.command.CommandExecutor;
 import de.fuzzlemann.ucutils.utils.text.TextUtils;
-import lombok.SneakyThrows;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
@@ -13,6 +12,8 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.commons.lang3.SystemUtils;
+
+import java.io.IOException;
 
 /**
  * @author Fuzzlemann
@@ -24,7 +25,6 @@ public class JShutdownCommand implements CommandExecutor {
     private static boolean shutdown;
 
     @SubscribeEvent
-    @SneakyThrows
     public static void onChat(ClientChatReceivedEvent e) {
         if (!shutdown) return;
         if (!e.getMessage().getUnformattedText().equals("[Gef\u00e4ngnis] Du bist wieder frei!")) return;
@@ -47,7 +47,11 @@ public class JShutdownCommand implements CommandExecutor {
             return;
         }
 
-        Runtime.getRuntime().exec(shutdownCommand);
+        try {
+            Runtime.getRuntime().exec(shutdownCommand);
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
     }
 
     @Override

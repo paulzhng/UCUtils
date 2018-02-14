@@ -1,6 +1,5 @@
 package de.fuzzlemann.ucutils.utils;
 
-import lombok.val;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 
@@ -18,7 +17,7 @@ public class SoundUtil {
     public static final SoundEvent PLAYER_UNINVITED = register("player_uninvited");
 
     private static SoundEvent register(String name) {
-        val loc = new ResourceLocation("ucutils", name);
+        ResourceLocation loc = new ResourceLocation("ucutils", name);
         return new SoundEvent(loc);
     }
 }

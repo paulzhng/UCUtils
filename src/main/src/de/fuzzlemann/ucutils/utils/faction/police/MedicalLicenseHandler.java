@@ -13,7 +13,7 @@ public class MedicalLicenseHandler {
 
     public static boolean hasMedicalLicense(String playerName) {
         try {
-            URL url = new URL("http://fuzzlemann.de/medicallicense.php?username=" + playerName.toLowerCase());
+            URL url = new URL("http://fuzzlemann.de/medicallicense.php?username=" + playerName);
             return Boolean.valueOf(IOUtils.toString(url, StandardCharsets.UTF_8));
         } catch (IOException e) {
             return false;

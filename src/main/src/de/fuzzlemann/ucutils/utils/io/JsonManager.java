@@ -2,12 +2,13 @@ package de.fuzzlemann.ucutils.utils.io;
 
 import com.google.gson.Gson;
 import de.fuzzlemann.ucutils.Main;
-import lombok.Cleanup;
-import lombok.SneakyThrows;
-import lombok.val;
+import org.apache.commons.io.FileUtils;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -18,22 +19,25 @@ public class JsonManager {
     public static final File DIRECTORY = new File(Main.MINECRAFT.mcDataDir, "storage");
 
     /**
-     * Writes the HashMap to the file
+     * Writes a Collection to the file
      *
-     * @param file       The file that the HashMap should be written to
-     * @param objectList The HashMap that should be written to the file
+     * @param file       The Collection that the list should be written to
+     * @param objectList The Collection that should be written to the file
      */
-    @SneakyThrows
-    public static void writeList(File file, List<?> objectList) {
+    public static void writeList(File file, Collection<?> objectList) {
         createFile(file);
 
-        @Cleanup
-        val writer = new BufferedWriter(new FileWriter(file));
-        val gson = new Gson();
+        Gson gson = new Gson();
+        List<String> jsonList = new ArrayList<>();
 
-        for (val object : objectList) {
-            writer.write(gson.toJson(object));
-            writer.newLine();
+        for (Object object : objectList) {
+            jsonList.add(gson.toJson(object));
+        }
+
+        try {
+            FileUtils.writeLines(file, StandardCharsets.UTF_8.toString(), jsonList);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -43,15 +47,16 @@ public class JsonManager {
      * @param file   The file that the Object should be written to
      * @param object The Object that should be written to the file
      */
-    @SneakyThrows
     public static void writeObject(File file, Object object) {
         createFile(file);
 
-        @Cleanup
-        val writer = new BufferedWriter(new FileWriter(file));
-        val gson = new Gson();
+        Gson gson = new Gson();
 
-        writer.write(gson.toJson(object));
+        try {
+            FileUtils.write(file, gson.toJson(object), StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -62,20 +67,20 @@ public class JsonManager {
      * @param clazz The class which the objects corresponds to
      * @return A list of all objects loaded
      */
-    @SneakyThrows
     public static List<Object> loadObjects(File file, Class<?> clazz) {
         createFile(file);
 
         List<Object> objectList = new ArrayList<>();
 
-        @Cleanup
-        val reader = new BufferedReader(new FileReader(file));
-        val gson = new Gson();
+        Gson gson = new Gson();
 
-        String line;
-        while ((line = reader.readLine()) != null) {
-            val object = gson.fromJson(line, clazz);
-            objectList.add(object);
+        try {
+            for (String line : FileUtils.readLines(file, StandardCharsets.UTF_8)) {
+                Object object = gson.fromJson(line, clazz);
+                objectList.add(object);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
         return objectList;
@@ -88,23 +93,29 @@ public class JsonManager {
      * @param clazz The class which the object corresponds to
      * @return The object that's loaded
      */
-    @SneakyThrows
     public static Object loadObject(File file, Class<?> clazz) {
         createFile(file);
 
-        @Cleanup
-        val reader = new BufferedReader(new FileReader(file));
-        val gson = new Gson();
+        Gson gson = new Gson();
 
-        val line = reader.readLine();
+        String line = null;
+        try {
+            line = FileUtils.lineIterator(file, StandardCharsets.UTF_8.toString()).nextLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         return gson.fromJson(line, clazz);
     }
 
-    @SneakyThrows
     private static void createFile(File file) {
         if (DIRECTORY.mkdir())
             System.out.println("[UCUtils] " + DIRECTORY + " created");
-        if (file.createNewFile())
-            System.out.println("[UCUtils] " + file.getAbsoluteFile() + " created");
+        try {
+            if (file.createNewFile())
+                System.out.println("[UCUtils] " + file.getAbsoluteFile() + " created");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

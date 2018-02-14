@@ -36,14 +36,12 @@ public class ChannelActivityCommand implements CommandExecutor {
     @Command(labels = "channelactivity")
     public boolean onCommand(EntityPlayerSP p, String[] args) {
         new Thread(() -> {
-            TSClientQuery.auth();
-
             List<String> players;
             try {
                 players = getPlayersInChannel();
             } catch (NullPointerException exc) {
                 exc.printStackTrace();
-                TextUtils.error("Du hast dein API Key noch nicht oder falsch gesetzt (/tsapikey)", p);
+                TextUtils.error("Du hast dein API Key noch nicht oder falsch gesetzt.", p);
                 return;
             }
 
@@ -62,7 +60,7 @@ public class ChannelActivityCommand implements CommandExecutor {
             }
 
             members.removeAll(players);
-            removeEarlierPlayers(players, members);
+            removeEarlierNames(players, members);
 
             if (args.length != 0 && args[0].equalsIgnoreCase("copy")) {
                 copyList(members);
@@ -108,7 +106,7 @@ public class ChannelActivityCommand implements CommandExecutor {
         clipboard.setContents(stringSelection, null);
     }
 
-    private void removeEarlierPlayers(List<String> players, List<String> members) {
+    private void removeEarlierNames(List<String> players, List<String> members) {
         Multimap<String, String> earlierNames = MojangAPI.getEarlierNames(members);
         for (String name : earlierNames.values()) {
             for (String earlierName : earlierNames.get(name)) {

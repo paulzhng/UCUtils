@@ -4,7 +4,7 @@ import de.fuzzlemann.ucutils.Main;
 import de.fuzzlemann.ucutils.commands.*;
 import de.fuzzlemann.ucutils.commands.faction.CallReinforcementCommand;
 import de.fuzzlemann.ucutils.commands.faction.ChannelActivityCommand;
-import de.fuzzlemann.ucutils.commands.faction.TeamSpeakAPIKeyCommand;
+import de.fuzzlemann.ucutils.commands.faction.CheckActiveMembersCommand;
 import de.fuzzlemann.ucutils.commands.faction.badfaction.ASellDrugCommand;
 import de.fuzzlemann.ucutils.commands.faction.badfaction.DrugPriceCommand;
 import de.fuzzlemann.ucutils.commands.faction.police.ASUCommand;
@@ -20,18 +20,13 @@ import de.fuzzlemann.ucutils.commands.jobs.AGetPizzaCommand;
 import de.fuzzlemann.ucutils.commands.location.DistanceCommand;
 import de.fuzzlemann.ucutils.commands.location.NearestATMCommand;
 import de.fuzzlemann.ucutils.commands.location.NearestJobCommand;
-import de.fuzzlemann.ucutils.commands.mobile.ACallCommand;
-import de.fuzzlemann.ucutils.commands.mobile.ASMSCommand;
-import de.fuzzlemann.ucutils.commands.mobile.MobileBlockCommand;
-import de.fuzzlemann.ucutils.commands.mobile.MobileBlockListCommand;
+import de.fuzzlemann.ucutils.commands.mobile.*;
 import de.fuzzlemann.ucutils.commands.supporter.PunishCommand;
 import de.fuzzlemann.ucutils.commands.supporter.SendNoobChatCommand;
 import de.fuzzlemann.ucutils.commands.todo.AddToDoCommand;
 import de.fuzzlemann.ucutils.commands.todo.DoneToDoCommand;
 import de.fuzzlemann.ucutils.commands.todo.RemoveToDoCommand;
 import de.fuzzlemann.ucutils.commands.todo.ToDoListCommand;
-import lombok.SneakyThrows;
-import lombok.val;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
@@ -51,7 +46,6 @@ public class CommandHandler {
 
     private static final Map<String, CommandExecutor> COMMANDS = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
 
-    @SneakyThrows
     public static void registerAllCommands() {
         registerCommand(new ClearChatCommand());
         registerCommand(new InetTestCommand());
@@ -64,6 +58,7 @@ public class CommandHandler {
         registerCommand(new ClockCommand());
         registerCommand(new TimerCommand());
 
+        registerCommand(new ReplyCommand());
         registerCommand(new MobileBlockCommand());
         registerCommand(new MobileBlockListCommand());
 
@@ -88,11 +83,12 @@ public class CommandHandler {
         registerCommand(new JShutdownCommand());
 
         registerCommand(new ChannelActivityCommand());
-        registerCommand(new TeamSpeakAPIKeyCommand());
 
         registerCommand(new CallReinforcementCommand());
 
         registerCommand(new CheckMedicalLicenseCommand());
+
+        registerCommand(new CheckActiveMembersCommand());
 
         ASUCommand asuCommand = new ASUCommand();
         registerCommand(asuCommand, asuCommand);
@@ -117,24 +113,35 @@ public class CommandHandler {
         registerCommand(commandExecutor, null);
     }
 
-    @SneakyThrows(NoSuchMethodException.class)
     private static void registerCommand(CommandExecutor commandExecutor, @Nullable TabCompletion tabCompletion) {
-        Command commandAnnotation = commandExecutor.getClass().getMethod("onCommand", EntityPlayerSP.class, String[].class).getAnnotation(Command.class);
+        Command commandAnnotation;
+        try {
+            commandAnnotation = commandExecutor.getClass().getMethod("onCommand", EntityPlayerSP.class, String[].class).getAnnotation(Command.class);
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+            return;
+        }
+
         String[] labels = commandAnnotation.labels();
 
-        for (val label : labels) {
+        for (String label : labels) {
             ClientCommandHandler.instance.registerCommand(new BaseCommand(label, tabCompletion));
             COMMANDS.put(label, commandExecutor);
         }
     }
 
-    @SneakyThrows(NoSuchMethodException.class)
-    public static void issueCommand(String label, String[] args) {
-        val commandExecutor = COMMANDS.get(label);
+    static void issueCommand(String label, String[] args) {
+        CommandExecutor commandExecutor = COMMANDS.get(label);
         if (commandExecutor == null) return;
 
         EntityPlayerSP executor = Main.MINECRAFT.player;
-        Command commandAnnotation = commandExecutor.getClass().getMethod("onCommand", EntityPlayerSP.class, String[].class).getAnnotation(Command.class);
+        Command commandAnnotation;
+        try {
+            commandAnnotation = commandExecutor.getClass().getMethod("onCommand", EntityPlayerSP.class, String[].class).getAnnotation(Command.class);
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+            return;
+        }
 
         if (commandExecutor.onCommand(executor, args)) return;
 
@@ -142,7 +149,7 @@ public class CommandHandler {
         if (!usage.isEmpty()) {
             usage = usage.replace("%label%", label);
 
-            val chatComponent = new TextComponentString(usage);
+            TextComponentString chatComponent = new TextComponentString(usage);
             chatComponent.getStyle().setColor(TextFormatting.RED);
 
             executor.sendMessage(chatComponent);

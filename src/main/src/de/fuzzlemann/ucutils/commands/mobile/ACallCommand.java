@@ -23,7 +23,7 @@ public class ACallCommand implements CommandExecutor {
         new Thread(() -> {
             String player = args[0];
 
-            int number = 0;
+            int number = -1;
             try {
                 number = MobileUtils.getNumber(p, player).get();
             } catch (InterruptedException | ExecutionException e) {

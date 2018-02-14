@@ -12,6 +12,7 @@ import java.io.File;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Future;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /**
@@ -26,9 +27,12 @@ public class MobileUtils {
             .stream()
             .map(object -> (String) object)
             .collect(Collectors.toList());
+    private static final Pattern SMS_PATTERN = Pattern.compile("Dein Handy klingelt! Eine Nachricht von [a-zA-Z0-9_]+ \\(\\d+\\).");
+    private static final Pattern NUMBER_PATTERN = Pattern.compile("Nummer von [a-zA-Z0-9_]+: \\d+");
 
     private static boolean blockNextMessage;
     private static CompletableFuture<Integer> future;
+    private static int lastNumber = -1;
 
     public static void block(String playerName) {
         BLOCKED_PLAYERS.add(playerName);
@@ -59,6 +63,10 @@ public class MobileUtils {
         return future;
     }
 
+    public static int getLastNumber() {
+        return lastNumber;
+    }
+
     @SubscribeEvent
     public static void onChat(ClientChatReceivedEvent e) {
         if (blockNextMessage) {
@@ -69,13 +77,20 @@ public class MobileUtils {
 
         String message = e.getMessage().getUnformattedText();
 
-        if (message.startsWith("Dein Handy klingelt! Eine Nachricht von ")) {
-            String playerName = message.split(" ")[6];
+        if (SMS_PATTERN.matcher(message).find()) {
+            String[] splittedMessage = message.split(" ");
+            String playerName = splittedMessage[6];
+
             if (MobileUtils.isBlocked(playerName)) {
                 e.setCanceled(true);
                 blockNextMessage = true;
                 return;
             }
+
+            String numberString = splittedMessage[7];
+            numberString = numberString.substring(1, numberString.length() - 2);
+
+            lastNumber = Integer.parseInt(numberString);
         }
 
         if (future != null) {
@@ -85,7 +100,7 @@ public class MobileUtils {
                 return;
             }
 
-            if (!message.startsWith("Nummer von")) return;
+            if (!NUMBER_PATTERN.matcher(message).find()) return;
             e.setCanceled(true);
 
             String numberString = message.split(":")[1];
