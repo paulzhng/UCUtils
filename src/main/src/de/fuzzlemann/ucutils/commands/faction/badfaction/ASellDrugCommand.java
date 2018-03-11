@@ -38,7 +38,7 @@ public class ASellDrugCommand implements CommandExecutor, TabCompletion {
 
         Drug drug = Drug.getDrug(args[1]);
         if (drug == null) {
-            TextUtils.error("Die Droge wurde nicht gefunden.", p);
+            TextUtils.error("Die Droge wurde nicht gefunden.");
             return true;
         }
 

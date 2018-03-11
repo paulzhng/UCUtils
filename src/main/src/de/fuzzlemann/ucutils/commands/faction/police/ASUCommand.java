@@ -37,7 +37,7 @@ public class ASUCommand implements CommandExecutor, TabCompletion {
         }
 
         if (Math.abs(variation) > 10) {
-            TextUtils.error("Die Variation darf nicht gr\u00f6\u00dfer als 10 Wanteds sein.", p);
+            TextUtils.error("Die Variation darf nicht gr\u00f6\u00dfer als 10 Wanteds sein.");
             return true;
         }
 
@@ -49,7 +49,7 @@ public class ASUCommand implements CommandExecutor, TabCompletion {
         WantedReason wanted = WantedManager.getWantedReason(reason.replace('-', ' '));
 
         if (wanted == null) {
-            TextUtils.error("Der Wantedgrund wurde nicht gefunden.", p);
+            TextUtils.error("Der Wantedgrund wurde nicht gefunden.");
             return true;
         }
 

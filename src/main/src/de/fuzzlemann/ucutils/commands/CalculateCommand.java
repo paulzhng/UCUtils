@@ -25,7 +25,7 @@ public class CalculateCommand implements CommandExecutor {
         try {
             expr.evaluate();
         } catch (Expression.ExpressionException e) {
-            TextUtils.error("Es ist ein Fehler bei der Evaluierung aufgetreten: " + e.getMessage(), p);
+            TextUtils.error("Es ist ein Fehler bei der Evaluierung aufgetreten: " + e.getMessage());
             return true;
         }
 

@@ -32,7 +32,7 @@ public class DoneToDoCommand implements CommandExecutor {
         ToDo toDo = ToDoManager.getToDo(id);
 
         if (toDo == null) {
-            TextUtils.error("Es wurde kein ToDo Eintrag mit dieser ID gefunden.", p);
+            TextUtils.error("Es wurde kein ToDo Eintrag mit dieser ID gefunden.");
             return true;
         }
 

@@ -36,7 +36,7 @@ public class ADropTransportCommand implements CommandExecutor {
                 .orElse(null);
 
         if (score == null) {
-            TextUtils.error("Du bist in keinem Transport", p);
+            TextUtils.error("Du bist in keinem Transport");
             return true;
         }
 

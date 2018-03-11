@@ -36,7 +36,7 @@ public class ADropDrinkCommand implements CommandExecutor {
                 .orElse(null);
 
         if (score == null) {
-            TextUtils.error("Du lieferst gerade keine Getr\u00e4nke aus!", p);
+            TextUtils.error("Du lieferst gerade keine Getr\u00e4nke aus!");
             return true;
         }
 

@@ -45,7 +45,7 @@ public class DrugPriceCommand implements CommandExecutor, TabCompletion {
                     price = Integer.parseInt(args[2]);
                 } catch (NumberFormatException e) {
                     return false;
-                }
+                }d
 
                 drug.setPrice(price);
                 DrugUtil.savePrices();

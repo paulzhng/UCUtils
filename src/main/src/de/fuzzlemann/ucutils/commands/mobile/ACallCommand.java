@@ -7,8 +7,6 @@ import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import java.util.concurrent.ExecutionException;
-
 /**
  * @author Fuzzlemann
  */
@@ -23,13 +21,7 @@ public class ACallCommand implements CommandExecutor {
         new Thread(() -> {
             String player = args[0];
 
-            int number = -1;
-            try {
-                number = MobileUtils.getNumber(p, player).get();
-            } catch (InterruptedException | ExecutionException e) {
-                e.printStackTrace();
-            }
-
+            int number = MobileUtils.getNumber(p, player);
             if (number == -1) return;
 
             p.sendChatMessage("/call " + number);

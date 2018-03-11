@@ -46,7 +46,14 @@ public class UpdateReminder {
         text.getStyle().setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://fuzzlemann.de/UCUtils.jar"));
 
         Main.MINECRAFT.player.sendMessage(text);
-        connected = true;
+        connected = false;
+    }
+
+    public static void main(String[] args) throws IOException {
+        URL url = new URL("http://fuzzlemann.de/latestversion.html");
+        String result = IOUtils.toString(url, StandardCharsets.UTF_8);
+
+        System.out.println(result);
     }
 
     public static void updateUpdateNeeded() throws IOException {

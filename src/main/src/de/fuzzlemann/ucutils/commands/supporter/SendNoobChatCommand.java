@@ -26,7 +26,7 @@ public class SendNoobChatCommand implements CommandExecutor, TabCompletion {
         NoobChatAnswer answer = NoobChatManager.getAnswer(key);
 
         if (answer == null) {
-            TextUtils.error("Es wurde keine Antwort mit diesem Antwort-K\u00fcrzel gefunden.", p);
+            TextUtils.error("Es wurde keine Antwort mit diesem Antwort-K\u00fcrzel gefunden.");
             return true;
         }
 

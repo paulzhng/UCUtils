@@ -64,7 +64,7 @@ public class TSClientQuery {
         return result;
     }
 
-    private static boolean connect() {
+    public static boolean connect() {
         return connect(true);
     }
 

@@ -6,12 +6,12 @@ import de.fuzzlemann.ucutils.utils.command.TabCompletion;
 import de.fuzzlemann.ucutils.utils.faction.police.Wanted;
 import de.fuzzlemann.ucutils.utils.faction.police.WantedManager;
 import de.fuzzlemann.ucutils.utils.math.Expression;
+import de.fuzzlemann.ucutils.utils.text.TextUtils;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.*;
-import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
 /**
@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 public class ModifyWantedsCommand implements CommandExecutor, TabCompletion {
 
     @Override
-    @Command(labels = {"modifywanteds", "mw"}, usage = "/%label% [Spieler] [GF/SF/S/FSA]")
+    @Command(labels = {"modifywanteds", "mw"}, usage = "/%label% [Spieler] [GF/SF/SSF/S/DA10/DA15]")
     public boolean onCommand(EntityPlayerSP p, String[] args) {
         if (args.length < 2) return false;
 
@@ -30,15 +30,12 @@ public class ModifyWantedsCommand implements CommandExecutor, TabCompletion {
 
         new Thread(() -> {
             String player = args[0];
+            Wanted wanted = WantedManager.getWanteds(player);
 
-            Wanted wanted = null;
-            try {
-                wanted = WantedManager.getWanteds(player).get();
-            } catch (InterruptedException | ExecutionException e) {
-                e.printStackTrace();
+            if (wanted == null) {
+                TextUtils.error("Du hast /wanteds noch nicht ausgef\u00fchrt.");
+                return;
             }
-
-            if (wanted == null) return;
 
             String wantedReason = wanted.getReason();
             int wantedAmount = wanted.getAmount();
@@ -86,9 +83,11 @@ public class ModifyWantedsCommand implements CommandExecutor, TabCompletion {
 
     private enum Type {
         SURRENDER("s", "", " + Stellung", "x-5"),
-        GOOD("gf", "", " + Gute F\u00fchrung", "x-5"),
-        BAD("sf", "", " + Schlechte F\u00fchrung", "x+5"),
-        DRIVERS_LICENSE_WITHDRAWAL("fsa", "", " + F\u00fchrerscheinabnahme", "x");
+        GOOD_CONDUCT("gf", "", " + Gute F\u00fchrung", "x-5"),
+        BAD_CONDUCT("sf", "", " + Schlechte F\u00fchrung", "x+10"),
+        VERY_BAD_CONDUCT("ssf", "", " + Sehr schlechte F\u00fchrung", "x+15"),
+        DRUG_REMOVAL_10("da10", "", " + Drogenabnahme", "x-10"),
+        DRUG_REMOVAL_15("da15", "", " + Drogenabnahme", "x-15");
 
         private final String flagArgument;
         private final String prependReason;

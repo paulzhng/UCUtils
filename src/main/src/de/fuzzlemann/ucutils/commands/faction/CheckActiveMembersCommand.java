@@ -28,7 +28,7 @@ public class CheckActiveMembersCommand implements CommandExecutor {
     private static final Timer TIMER = new Timer();
     private static final Pattern FACTION_MEMBERS_PATTERN = Pattern.compile("^ {2}=== Fraktionsmitglieder \\[[a-zA-Z. ]+] ===$");
     private static long memberlistShown;
-    private static Map<Boolean, Integer> memberMap = new HashMap<>();
+    private static final Map<Boolean, Integer> MEMBER_MAP = new HashMap<>();
     private static CompletableFuture<Map<Boolean, Integer>> future;
 
     @Override
@@ -87,14 +87,14 @@ public class CheckActiveMembersCommand implements CommandExecutor {
         if (FACTION_MEMBERS_PATTERN.matcher(message).find()) {
             e.setCanceled(true);
             memberlistShown = currentTime;
-            memberMap.clear();
-            memberMap.put(false, 0);
-            memberMap.put(true, 0);
+            MEMBER_MAP.clear();
+            MEMBER_MAP.put(false, 0);
+            MEMBER_MAP.put(true, 0);
 
             TIMER.schedule(new TimerTask() {
                 @Override
                 public void run() {
-                    future.complete(memberMap);
+                    future.complete(MEMBER_MAP);
                 }
             }, 400L);
             return;
@@ -103,7 +103,7 @@ public class CheckActiveMembersCommand implements CommandExecutor {
         if (currentTime - memberlistShown > 400L || !message.startsWith(" \u00bb ")) return;
 
         boolean inactive = !message.endsWith("AFK") && !message.endsWith("Nicht im Dienst");
-        memberMap.merge(inactive, 1, (a, b) -> a + b);
+        MEMBER_MAP.merge(inactive, 1, (a, b) -> a + b);
 
         e.setCanceled(true);
     }

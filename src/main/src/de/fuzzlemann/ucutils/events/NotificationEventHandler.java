@@ -33,6 +33,8 @@ public class NotificationEventHandler {
             "^Es liegt ein neuer Report von [a-zA-Z0-9_]+ vor! Thema: [a-zA-Z]+$");
     private static final Pattern REPORT_ACCEPTED_PATTERN = Pattern.compile("^\\[Report] Du hast den Report von [a-zA-Z0-9_]+ \\[Level \\d+] angenommen! Thema: [a-zA-Z]+$");
     private static final Pattern BOMB_PLACED_PATTERN = Pattern.compile("^News: ACHTUNG! Es wurde eine Bombe in der N\u00e4he von .+ gefunden!$");
+    private static final Pattern SERVICE_ANNOUNCEMENT_PATTERN = Pattern.compile("^HQ: Achtung! Ein Notruf von [a-zA-Z0-9_]+ \\(.+\\), over.$|" +
+            "^Ein Notruf von [a-zA-Z0-9_]+ \\(.+\\).$");
 
     @SubscribeEvent
     public static void onChatReceived(ClientChatReceivedEvent e) {
@@ -85,9 +87,7 @@ public class NotificationEventHandler {
             return;
         }
 
-        if (ConfigUtil.serviceAnnouncement
-                && (unformattedText.startsWith("HQ: Achtung! Ein Notruf von ")
-                || unformattedText.startsWith("Achtung! Ein Notruf von "))) {
+        if (ConfigUtil.serviceAnnouncement && SERVICE_ANNOUNCEMENT_PATTERN.matcher(unformattedText).find()) {
             p.playSound(SoundUtil.SERVICE_RECEIVED, 1, 1);
             return;
         }

@@ -21,10 +21,8 @@ import org.apache.commons.lang3.StringUtils;
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author Fuzzlemann
@@ -41,12 +39,12 @@ public class ChannelActivityCommand implements CommandExecutor {
                 players = getPlayersInChannel();
             } catch (NullPointerException exc) {
                 exc.printStackTrace();
-                TextUtils.error("Du hast dein API Key noch nicht oder falsch gesetzt.", p);
+                TextUtils.error("Du hast dein API Key noch nicht oder falsch gesetzt.");
                 return;
             }
 
             if (players.isEmpty()) {
-                TextUtils.error("Du bist nicht im TeamSpeak online.", p);
+                TextUtils.error("Du bist nicht im TeamSpeak online.");
                 return;
             }
 
@@ -55,7 +53,7 @@ public class ChannelActivityCommand implements CommandExecutor {
             List<String> members = new ArrayList<>(MemberActivityEventHandler.MEMBER_LIST);
 
             if (members.isEmpty()) {
-                TextUtils.error("Du hast /memberactivity noch nicht ausgef\u00fchrt.", p);
+                TextUtils.error("Du hast /memberactivity noch nicht ausgef\u00fchrt.");
                 return;
             }
 
@@ -120,6 +118,10 @@ public class ChannelActivityCommand implements CommandExecutor {
 
     private List<String> getPlayersInChannel() {
         Map<String, String> whoAmIResult = TSClientQuery.exec("whoami");
+
+        String cid = whoAmIResult.get("cid");
+
+        if (cid == null) TSClientQuery.connect();
 
         String channelClientListResult = TSClientQuery.rawExec("channelclientlist cid=" + whoAmIResult.get("cid"), false);
         if (channelClientListResult == null) return Collections.emptyList();

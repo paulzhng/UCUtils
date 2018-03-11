@@ -36,7 +36,7 @@ public class AGetPizzaCommand implements CommandExecutor {
                 .orElse(null);
 
         if (score == null || score.getScorePoints() != 0) {
-            TextUtils.error("Du musst derzeit keine Pizzen einpacken.", p);
+            TextUtils.error("Du musst derzeit keine Pizzen einpacken.");
             return true;
         }
 

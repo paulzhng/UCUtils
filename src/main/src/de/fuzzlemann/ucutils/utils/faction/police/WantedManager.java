@@ -18,7 +18,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Future;
+import java.util.concurrent.ExecutionException;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -38,6 +38,8 @@ public class WantedManager {
     private static CompletableFuture<Wanted> future;
 
     public static void fillWantedList() throws IOException {
+        WANTED_LIST.clear();
+
         URL url = new URL("http://fuzzlemann.de/wanteds.html");
         String result = IOUtils.toString(url, StandardCharsets.UTF_8);
 
@@ -56,6 +58,8 @@ public class WantedManager {
     }
 
     public static void readSavedWantedList() {
+        WANTED_LIST.clear();
+
         WANTED_LIST.addAll(JsonManager.loadObjects(WANTED_FILE, WantedReason.class)
                 .stream()
                 .map(object -> (WantedReason) object)
@@ -94,10 +98,19 @@ public class WantedManager {
         return foundWanted;
     }
 
-    public static Future<Wanted> getWanteds(String player) {
+    public static Wanted getWanteds(String player) {
         future = new CompletableFuture<>();
         Main.MINECRAFT.player.sendChatMessage("/wantedinfo " + player);
-        return future;
+
+        Wanted wanted;
+        try {
+            wanted = future.get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        return wanted;
     }
 
     @SubscribeEvent

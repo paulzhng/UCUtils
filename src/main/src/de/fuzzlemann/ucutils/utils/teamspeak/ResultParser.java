@@ -64,9 +64,6 @@ public final class ResultParser {
         str = str.replace("\\v", String.valueOf((char) 11)); // Vertical Tab
 
         str = str.replace("\\\\", "\\");
-
         return str;
     }
-
-
 }

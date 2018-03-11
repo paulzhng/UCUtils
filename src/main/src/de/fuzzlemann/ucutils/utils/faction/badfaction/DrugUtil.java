@@ -14,6 +14,8 @@ public class DrugUtil {
     private static final File DRUG_PRICE_FILE = new File(JsonManager.DIRECTORY, "drugprices.storage");
 
     public static void loadDrugs() {
+        Drug.DRUGS.clear();
+
         List<Drug> drugs = JsonManager.loadObjects(DRUG_PRICE_FILE, Drug.class)
                 .stream()
                 .map(object -> (Drug) object)

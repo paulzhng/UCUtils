@@ -10,6 +10,8 @@ import de.fuzzlemann.ucutils.utils.punishment.PunishManager;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -32,38 +34,41 @@ public class Main {
     static final String GUI_FACTORY = "de.fuzzlemann.ucutils.utils.config.GuiFactoryUCUtils";
 
     @Mod.EventHandler
-    public void init(FMLPreInitializationEvent e) {
+    public void preInit(FMLPreInitializationEvent e) {
         ConfigUtil.config = new Configuration(e.getSuggestedConfigurationFile());
         ConfigUtil.syncConfig();
+    }
 
+    @Mod.EventHandler
+    public void init(FMLInitializationEvent e) {
         CommandHandler.registerAllCommands();
+    }
 
-        new Thread(() -> {
-            try {
-                UpdateReminder.updateUpdateNeeded();
-            } catch (IOException exc) {
-                UpdateReminder.updateNeeded = false;
-            }
+    @Mod.EventHandler
+    public void postInit(FMLPostInitializationEvent e) {
+        new Thread(Main::refreshData).start();
+    }
 
-            try {
-                WantedManager.fillWantedList();
-            } catch (IOException exc) {
-                WantedManager.readSavedWantedList();
-            }
+    public static void refreshData() {
+        try {
+            UpdateReminder.updateUpdateNeeded();
+        } catch (IOException exc) {
+            UpdateReminder.updateNeeded = false;
+        }
 
-            try {
-                PunishManager.fillViolationList();
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+        try {
+            WantedManager.fillWantedList();
+        } catch (IOException exc) {
+            WantedManager.readSavedWantedList();
+        }
 
-            try {
-                NoobChatManager.fillNoobChatAnswerList();
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+        try {
+            PunishManager.fillViolationList();
+            NoobChatManager.fillNoobChatAnswerList();
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
 
-            DrugUtil.loadDrugs();
-        }).start();
+        DrugUtil.loadDrugs();
     }
 }

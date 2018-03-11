@@ -19,6 +19,8 @@ public class NoobChatManager {
     private static final List<NoobChatAnswer> NOOB_CHAT_ANSWERS = new ArrayList<>();
 
     public static void fillNoobChatAnswerList() throws IOException {
+        NOOB_CHAT_ANSWERS.clear();
+
         URL url = new URL("http://fuzzlemann.de/noobchatanswers.html");
         String result = IOUtils.toString(url, StandardCharsets.UTF_8);
 

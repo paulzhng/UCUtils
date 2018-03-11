@@ -23,6 +23,8 @@ public class PunishManager {
     private static final List<Violation> VIOLATIONS = new ArrayList<>();
 
     public static void fillViolationList() throws IOException {
+        VIOLATIONS.clear();
+
         URL url = new URL("http://fuzzlemann.de/violations.html");
         String result = IOUtils.toString(url, StandardCharsets.UTF_8);
 

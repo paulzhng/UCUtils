@@ -23,6 +23,9 @@ import de.fuzzlemann.ucutils.commands.location.NearestJobCommand;
 import de.fuzzlemann.ucutils.commands.mobile.*;
 import de.fuzzlemann.ucutils.commands.supporter.PunishCommand;
 import de.fuzzlemann.ucutils.commands.supporter.SendNoobChatCommand;
+import de.fuzzlemann.ucutils.commands.time.ClockCommand;
+import de.fuzzlemann.ucutils.commands.time.StopWatchCommand;
+import de.fuzzlemann.ucutils.commands.time.TimerCommand;
 import de.fuzzlemann.ucutils.commands.todo.AddToDoCommand;
 import de.fuzzlemann.ucutils.commands.todo.DoneToDoCommand;
 import de.fuzzlemann.ucutils.commands.todo.RemoveToDoCommand;
@@ -49,18 +52,20 @@ public class CommandHandler {
     public static void registerAllCommands() {
         registerCommand(new ClearChatCommand());
         registerCommand(new InetTestCommand());
+        registerCommand(new RefreshDataCommand());
         registerCommand(new CalculateCommand());
-
-        registerCommand(new ASMSCommand());
-        registerCommand(new ACallCommand());
 
         registerCommand(new StopWatchCommand());
         registerCommand(new ClockCommand());
         registerCommand(new TimerCommand());
 
+        registerCommand(new ASMSCommand());
+        registerCommand(new ACallCommand());
+
         registerCommand(new ReplyCommand());
         registerCommand(new MobileBlockCommand());
         registerCommand(new MobileBlockListCommand());
+        registerCommand(new DoNotDisturbCommand());
 
         registerCommand(new ToDoListCommand());
         registerCommand(new AddToDoCommand());
@@ -83,7 +88,6 @@ public class CommandHandler {
         registerCommand(new JShutdownCommand());
 
         registerCommand(new ChannelActivityCommand());
-
         registerCommand(new CallReinforcementCommand());
 
         registerCommand(new CheckMedicalLicenseCommand());

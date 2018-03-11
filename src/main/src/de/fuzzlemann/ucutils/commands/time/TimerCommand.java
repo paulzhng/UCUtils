@@ -1,11 +1,10 @@
-package de.fuzzlemann.ucutils.commands;
+package de.fuzzlemann.ucutils.commands.time;
 
 import de.fuzzlemann.ucutils.utils.command.Command;
 import de.fuzzlemann.ucutils.utils.command.CommandExecutor;
 import de.fuzzlemann.ucutils.utils.text.Message;
 import de.fuzzlemann.ucutils.utils.text.TextUtils;
 import net.minecraft.client.entity.EntityPlayerSP;
-import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -42,16 +41,14 @@ public class TimerCommand implements CommandExecutor {
                 }
 
                 int currentTimerID = ++timerID;
-                TextComponentString text = new TextComponentString("Der Timer ");
-                text.getStyle().setColor(TextFormatting.AQUA);
 
-                TextComponentString timerIDComponent = new TextComponentString(String.valueOf(currentTimerID));
-                timerIDComponent.getStyle().setColor(TextFormatting.RED);
+                Message.MessageBuilder builder = Message.builder();
 
-                TextComponentString textEnd = new TextComponentString(" wurde gestartet.");
-                text.getStyle().setColor(TextFormatting.AQUA);
+                builder.of("Der Timer ").color(TextFormatting.AQUA).advance()
+                        .of(String.valueOf(currentTimerID)).color(TextFormatting.RED).advance()
+                        .of(" wurde gestartet.").color(TextFormatting.AQUA).advance();
 
-                p.sendMessage(text.appendSibling(timerIDComponent).appendSibling(textEnd));
+                p.sendMessage(builder.build().toTextComponent());
 
                 long millis = TimeUnit.SECONDS.toMillis(seconds);
 
@@ -59,19 +56,15 @@ public class TimerCommand implements CommandExecutor {
                 timer.schedule(new TimerTask() {
                     @Override
                     public void run() {
-                        TextComponentString text = new TextComponentString("Der Timer ");
-                        text.getStyle().setColor(TextFormatting.AQUA);
+                        Message.MessageBuilder builder2 = Message.builder();
 
-                        TextComponentString textMid = new TextComponentString(" ist abgelaufen. ");
-                        textMid.getStyle().setColor(TextFormatting.AQUA);
+                        builder2.of("Der Timer ").color(TextFormatting.AQUA).advance()
+                                .of(String.valueOf(currentTimerID)).color(TextFormatting.RED).advance()
+                                .of(" ist abgelaufen. ").color(TextFormatting.AQUA).advance()
+                                .of(seconds + (seconds == 1 ? " Sekunde" : " Sekunden")).color(TextFormatting.RED).advance()
+                                .of(" sind vergangen.").color(TextFormatting.AQUA).advance();
 
-                        TextComponentString secondsComponent = new TextComponentString(seconds + (seconds == 1 ? " Sekunde" : " Sekunden"));
-                        secondsComponent.getStyle().setColor(TextFormatting.RED);
-
-                        TextComponentString textEnd = new TextComponentString(" sind vergangen.");
-                        textEnd.getStyle().setColor(TextFormatting.AQUA);
-
-                        p.sendMessage(text.appendSibling(timerIDComponent).appendSibling(textMid).appendSibling(secondsComponent).appendSibling(textEnd));
+                        p.sendMessage(builder2.build().toTextComponent());
                         timers.remove(currentTimerID);
                     }
                 }, millis);
@@ -88,7 +81,7 @@ public class TimerCommand implements CommandExecutor {
 
     private void sendTimerList(EntityPlayerSP p) {
         if (timers.isEmpty()) {
-            TextUtils.error("Es ist derzeit kein Timer aktiv.", p);
+            TextUtils.error("Es ist derzeit kein Timer aktiv.");
             return;
         }
 
@@ -101,7 +94,6 @@ public class TimerCommand implements CommandExecutor {
             long time = entry.getValue();
 
             long timeLeft = TimeUnit.MILLISECONDS.toSeconds(time - System.currentTimeMillis());
-
 
             builder.of("  * Timer " + id).color(TextFormatting.GRAY).advance()
                     .of(": ").color(TextFormatting.DARK_GRAY).advance()

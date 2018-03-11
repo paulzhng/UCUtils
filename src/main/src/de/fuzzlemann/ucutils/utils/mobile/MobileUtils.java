@@ -11,7 +11,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.io.File;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Future;
+import java.util.concurrent.ExecutionException;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -56,11 +56,16 @@ public class MobileUtils {
         new Thread(() -> JsonManager.writeList(BLOCKED_FILE, BLOCKED_PLAYERS)).start();
     }
 
-    public static Future<Integer> getNumber(EntityPlayerSP p, String numberPlayer) {
+    public static int getNumber(EntityPlayerSP p, String numberPlayer) {
         future = new CompletableFuture<>();
         p.sendChatMessage("/nummer " + numberPlayer);
 
-        return future;
+        try {
+            return future.get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+            return -1;
+        }
     }
 
     public static int getLastNumber() {

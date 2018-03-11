@@ -8,7 +8,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.Arrays;
-import java.util.concurrent.ExecutionException;
 
 /**
  * @author Fuzzlemann
@@ -25,13 +24,7 @@ public class ASMSCommand implements CommandExecutor {
             String player = args[0];
             String message = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
 
-            int number = 0;
-            try {
-                number = MobileUtils.getNumber(p, player).get();
-            } catch (InterruptedException | ExecutionException e) {
-                e.printStackTrace();
-            }
-
+            int number = MobileUtils.getNumber(p, player);
             if (number == -1) return;
 
             p.sendChatMessage("/sms " + number + " " + message);

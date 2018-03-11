@@ -24,24 +24,25 @@ public class NameFormatEventHandler {
 
     //--------------------- Wanteds ---------------------\\
     public static final Map<String, Integer> WANTED_MAP = new HashMap<>();
-    private static final Map<String, EntityPlayer> PLAYER_MAP = new HashMap<>();
+    private static final Pattern JAILED_PATTERN = Pattern.compile("^HQ: [\\[UC\\]]*[a-zA-Z0-9_]+ wurde von [\\[UC\\]]*[a-zA-Z0-9_]+ eingesperrt.$");
+    private static final Pattern KILLED_PATTERN = Pattern.compile("^(Beamter|Agent) [\\[UC\\]]*[a-zA-Z0-9_]+ hat [\\[UC\\]]*[a-zA-Z0-9_]+ get\u00f6tet!$");
+    private static final Pattern RECORDS_DELETED_POSSESSIVE_PATTERN = Pattern.compile("^HQ: .+ [\\[UC\\]]*[a-zA-Z0-9_]+ hat [\\[UC\\]]*[a-zA-Z0-9_]+ (seine|ihre) Akten gel\u00f6scht, over.$");
+    private static final Pattern RECORDS_DELETED_S_PATTERN = Pattern.compile("^HQ: .+ [\\[UC\\]]*[a-zA-Z0-9_]+ hat [\\[UC\\]]*[a-zA-Z0-9_]+'s Akten gel\u00f6scht, over.$");
+    private static final Pattern WANTEDS_GIVEN_PATTERN = Pattern.compile("^HQ: [\\[UC\\]]*[a-zA-Z0-9_]+'s momentanes WantedLevel: \\d+$");
+    private static long wantedsShown;
     //--------------------- Hits ---------------------\\
     private static final List<String> HITLIST = new ArrayList<>();
-    private static final Pattern HIT_SET_PATTERN = Pattern.compile("^\\[Contract] Es wurde ein Kopfgeld auf [a-zA-Z0-9_]+ \\(\\d+\\$\\) ausgesetzt.$");
-    private static final Pattern HIT_REMOVED_PATTERN = Pattern.compile("^\\[Contract] [a-zA-Z0-9_]+ hat [a-zA-Z0-9_]+ von der Contract Liste gel\u00f6scht. \\[-\\d+]");
-    private static final Pattern HIT_KILLED_PATTERN = Pattern.compile("^\\[Contract] [a-zA-Z0-9_]+ hat [a-zA-Z0-9_]+ get\u00f6tet. Kopfgeld: \\d+\\$");
+    private static final Pattern HIT_SET_PATTERN = Pattern.compile("^\\[Contract] Es wurde ein Kopfgeld auf [\\[UC\\]]*[a-zA-Z0-9_]+ \\(\\d+\\$\\) ausgesetzt.$");
+    private static final Pattern HIT_REMOVED_PATTERN = Pattern.compile("^\\[Contract] [\\[UC\\]]*[a-zA-Z0-9_]+ hat [\\[UC\\]]*[a-zA-Z0-9_]+ von der Contract Liste gel\u00f6scht. \\[-\\d+]");
+    private static final Pattern HIT_KILLED_PATTERN = Pattern.compile("^\\[Contract] [\\[UC\\]]*[a-zA-Z0-9_]+ hat [\\[UC\\]]*[a-zA-Z0-9_]+ get\u00f6tet. Kopfgeld: \\d+\\$");
+    private static long hitlistShown;
     //--------------------- Blacklist ---------------------\\
     private static final List<String> BLACKLIST = new ArrayList<>();
-    private static final Pattern BLACKLIST_ADDED_PATTERN = Pattern.compile("^\\[Blacklist] [a-zA-Z0-9_]+ wurde von [a-zA-Z0-9_]+ auf die Blacklist gesetzt!$");
-    private static final Pattern BLACKLIST_REMOVED_PATTERN = Pattern.compile("^\\[Blacklist] [a-zA-Z0-9_]+ wurde von [a-zA-Z0-9_]+ von der Blacklist gel\u00f6scht!$");
-    private static final Pattern JAILED_PATTERN = Pattern.compile("^HQ: [a-zA-Z0-9_]+ wurde von [a-zA-Z0-9_]+ eingesperrt.$");
-    private static final Pattern KILLED_PATTERN = Pattern.compile("^Beamter [a-zA-Z0-9_]+ hat [a-zA-Z0-9_]+ get\u00f6tet!$");
-    private static final Pattern RECORDS_DELETED_SEINE_IHRE_PATTERN = Pattern.compile("^HQ: [a-zA-Z0-9_ ]+ [a-zA-Z0-9_]+ hat [a-zA-Z0-9_]+ (seine|ihre) Akten gel\u00f6scht, over.$");
-    private static final Pattern RECORDS_DELETED_S_PATTERN = Pattern.compile("^HQ: [a-zA-Z0-9_ ]+ [a-zA-Z0-9_]+ hat [a-zA-Z0-9_]+'s Akten gel\u00f6scht, over.$");
-    private static final Pattern WANTEDS_GIVEN_PATTERN = Pattern.compile("^HQ: [a-zA-Z0-9_]+'s momentanes WantedLevel: \\d+$");
-    private static long wantedsShown;
-    private static long hitlistShown;
+    private static final Pattern BLACKLIST_ADDED_PATTERN = Pattern.compile("^\\[Blacklist] [\\[UC\\]]*[a-zA-Z0-9_]+ wurde von [\\[UC\\]]*[a-zA-Z0-9_]+ auf die Blacklist gesetzt!$");
+    private static final Pattern BLACKLIST_REMOVED_PATTERN = Pattern.compile("^\\[Blacklist] [\\[UC\\]]*[a-zA-Z0-9_]+ wurde von [\\[UC\\]]*[a-zA-Z0-9_]+ von der Blacklist gel\u00f6scht!$");
     private static long blacklistShown;
+
+    private static final Map<String, EntityPlayer> PLAYER_MAP = new HashMap<>();
 
     @SubscribeEvent
     public static void onNameFormat(PlayerEvent.NameFormat e) {
@@ -53,7 +54,10 @@ public class NameFormatEventHandler {
         PLAYER_MAP.put(userName, p);
 
         //Prevents people who are masked from being detected
-        if (displayName.contains("\u00a7k")) return;
+        if (displayName.contains("\u00a7k")) {
+            e.setDisplayname(displayName);
+            return;
+        }
 
         String color = getColor(userName);
         if (color == null) return;
@@ -79,7 +83,7 @@ public class NameFormatEventHandler {
         if (currentTime - hitlistShown > 5000L || !unformattedMessage.startsWith(" - ")) return;
 
         String[] splittedMessage = StringUtils.split(unformattedMessage, " ");
-        String name = splittedMessage[1];
+        String name = TextUtils.stripPrefix(splittedMessage[1]);
 
         HITLIST.add(name);
         refreshDisplayName(name);
@@ -183,7 +187,7 @@ public class NameFormatEventHandler {
             String[] splittedMessage = unformattedMessage.split(" ");
             name = splittedMessage[splittedMessage.length - 4];
             name = name.substring(0, name.length() - 2);
-        } else if (RECORDS_DELETED_SEINE_IHRE_PATTERN.matcher(unformattedMessage).find()) {
+        } else if (RECORDS_DELETED_POSSESSIVE_PATTERN.matcher(unformattedMessage).find()) {
             String[] splittedMessage = unformattedMessage.split(" ");
             name = splittedMessage[splittedMessage.length - 5];
         } else if (JAILED_PATTERN.matcher(unformattedMessage).find()) {
