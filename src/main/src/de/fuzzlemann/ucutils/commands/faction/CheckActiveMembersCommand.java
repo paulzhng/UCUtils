@@ -43,8 +43,6 @@ public class CheckActiveMembersCommand implements CommandExecutor {
             for (Faction faction : Faction.values()) {
                 Map<Boolean, Integer> members = getMembers(faction);
 
-                assert members != null;
-
                 int activeMembers = members.get(true);
                 int inactiveMembers = members.get(false);
 
@@ -70,7 +68,7 @@ public class CheckActiveMembersCommand implements CommandExecutor {
             return future.get();
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
-            return null;
+            throw new IllegalStateException(e);
         } finally {
             future = null;
         }

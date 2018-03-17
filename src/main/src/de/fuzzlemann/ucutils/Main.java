@@ -25,6 +25,7 @@ import java.io.IOException;
 @SideOnly(Side.CLIENT)
 @Mod(name = Main.NAME, modid = Main.MOD_ID, version = Main.VERSION, clientSideOnly = true, guiFactory = Main.GUI_FACTORY)
 public class Main {
+
     public static final Minecraft MINECRAFT = Minecraft.getMinecraft();
 
     public static final String MOD_ID = "ucutils";

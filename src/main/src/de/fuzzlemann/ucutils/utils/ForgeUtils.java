@@ -3,7 +3,6 @@ package de.fuzzlemann.ucutils.utils;
 import de.fuzzlemann.ucutils.Main;
 import de.fuzzlemann.ucutils.utils.text.TextUtils;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiPlayerTabOverlay;
 import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraftforge.fml.relauncher.Side;
@@ -26,11 +25,10 @@ public class ForgeUtils {
 
         if (connection == null) return Collections.emptyList();
 
-        Collection<NetworkPlayerInfo> playerInfoMap = connection.getPlayerInfoMap();
-        GuiPlayerTabOverlay tabOverlay = minecraft.ingameGUI.getTabList();
+        Collection<NetworkPlayerInfo> playerInfoList = connection.getPlayerInfoMap();
 
-        return playerInfoMap.stream()
-                .map(tabOverlay::getPlayerName)
+        return playerInfoList.stream()
+                .map(playerInfo -> playerInfo.getGameProfile().getName())
                 .map(TextUtils::stripColor)
                 .map(TextUtils::stripPrefix)
                 .sorted()
