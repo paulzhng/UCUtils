@@ -66,6 +66,9 @@ public class ASUCommand implements CommandExecutor, TabCompletion {
     }
 
     private void giveWanteds(EntityPlayerSP issuer, String reason, int amount, List<String> players) {
+        if (amount > 69)
+            amount = 69;
+
         for (String player : players) {
             issuer.sendChatMessage("/su " + amount + " " + player + " " + reason);
         }

@@ -94,11 +94,11 @@ public class CheckActiveMembersCommand implements CommandExecutor {
                 public void run() {
                     future.complete(MEMBER_MAP);
                 }
-            }, 400L);
+            }, 200L);
             return;
         }
 
-        if (currentTime - memberlistShown > 400L || !message.startsWith(" \u00bb ")) return;
+        if (currentTime - memberlistShown > 200L || !message.startsWith(" \u00bb ")) return;
 
         boolean inactive = !message.endsWith("AFK") && !message.endsWith("Nicht im Dienst");
         MEMBER_MAP.merge(inactive, 1, (a, b) -> a + b);

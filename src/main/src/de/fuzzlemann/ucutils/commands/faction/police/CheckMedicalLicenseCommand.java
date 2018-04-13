@@ -22,9 +22,9 @@ public class CheckMedicalLicenseCommand implements CommandExecutor {
 
         Message.MessageBuilder builder = Message.builder();
 
-        builder.of(playerName + " besitzt ").color(TextFormatting.AQUA).advance();
-        builder.of(hasMedicalLicense ? "eine" : "keine").color(hasMedicalLicense ? TextFormatting.GREEN : TextFormatting.RED).advance();
-        builder.of(" medizinische Marihuanalizenz.").color(TextFormatting.AQUA).advance();
+        builder.of(playerName + " besitzt ").color(TextFormatting.AQUA).advance()
+                .of(hasMedicalLicense ? "eine" : "keine").color(hasMedicalLicense ? TextFormatting.GREEN : TextFormatting.RED).advance()
+                .of(" medizinische Marihuanalizenz.").color(TextFormatting.AQUA).advance();
 
         p.sendMessage(builder.build().toTextComponent());
         return true;

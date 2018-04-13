@@ -5,6 +5,7 @@ import de.fuzzlemann.ucutils.commands.*;
 import de.fuzzlemann.ucutils.commands.faction.CallReinforcementCommand;
 import de.fuzzlemann.ucutils.commands.faction.ChannelActivityCommand;
 import de.fuzzlemann.ucutils.commands.faction.CheckActiveMembersCommand;
+import de.fuzzlemann.ucutils.commands.faction.ToggleMafiaSpeechCommand;
 import de.fuzzlemann.ucutils.commands.faction.badfaction.ASellDrugCommand;
 import de.fuzzlemann.ucutils.commands.faction.badfaction.DrugPriceCommand;
 import de.fuzzlemann.ucutils.commands.faction.police.ASUCommand;
@@ -87,12 +88,13 @@ public class CommandHandler {
 
         registerCommand(new JShutdownCommand());
 
+        registerCommand(new CheckActiveMembersCommand());
         registerCommand(new ChannelActivityCommand());
         registerCommand(new CallReinforcementCommand());
 
-        registerCommand(new CheckMedicalLicenseCommand());
+        registerCommand(new ToggleMafiaSpeechCommand());
 
-        registerCommand(new CheckActiveMembersCommand());
+        registerCommand(new CheckMedicalLicenseCommand());
 
         ASUCommand asuCommand = new ASUCommand();
         registerCommand(asuCommand, asuCommand);

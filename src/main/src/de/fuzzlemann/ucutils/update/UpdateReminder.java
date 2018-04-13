@@ -49,13 +49,6 @@ public class UpdateReminder {
         connected = false;
     }
 
-    public static void main(String[] args) throws IOException {
-        URL url = new URL("http://fuzzlemann.de/latestversion.html");
-        String result = IOUtils.toString(url, StandardCharsets.UTF_8);
-
-        System.out.println(result);
-    }
-
     public static void updateUpdateNeeded() throws IOException {
         updateNeeded = getCurrentVersion() < getLatestVersion();
     }

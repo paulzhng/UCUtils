@@ -41,12 +41,22 @@ public class ModifyWantedsCommand implements CommandExecutor, TabCompletion {
             int wantedAmount = wanted.getAmount();
 
             for (Type flag : types) {
+                if (wantedReason.contains(flag.postponeReason)) continue;
+
+                if (flag == Type.VERY_BAD_CONDUCT && wantedReason.contains(Type.BAD_CONDUCT.postponeReason)) {
+                    wantedReason = wantedReason.replace(Type.BAD_CONDUCT.postponeReason, "");
+                    wantedAmount -= 10;
+                }
+
                 wantedReason = flag.modifyReason(wantedReason);
                 wantedAmount = flag.modifyWanteds(wantedAmount);
             }
 
             if (wanted.getAmount() > wantedAmount)
                 p.sendChatMessage("/clear " + player + " .");
+
+            if (wantedAmount > 69)
+                wantedAmount = 69;
             p.sendChatMessage("/su " + wantedAmount + " " + player + " " + wantedReason);
         }).start();
         return true;
@@ -66,7 +76,7 @@ public class ModifyWantedsCommand implements CommandExecutor, TabCompletion {
 
     @Override
     public List<String> getTabCompletions(EntityPlayerSP p, String[] args) {
-        if (args.length != 2) return Collections.emptyList();
+        if (args.length == 1) return Collections.emptyList();
 
         String type = args[args.length - 1].toLowerCase();
         List<String> wantedReasons = Arrays.stream(Type.values())

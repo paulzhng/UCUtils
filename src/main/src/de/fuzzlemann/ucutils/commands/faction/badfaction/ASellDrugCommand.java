@@ -51,7 +51,6 @@ public class ASellDrugCommand implements CommandExecutor, TabCompletion {
         }
 
         int price = amount * (drug.getPrice() + variation);
-
         p.sendChatMessage("/selldrug " + args[0] + " " + drug.getName() + " " + amount + " " + price);
         return true;
     }

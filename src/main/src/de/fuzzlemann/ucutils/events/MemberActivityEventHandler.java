@@ -56,9 +56,9 @@ public class MemberActivityEventHandler {
             public void run() {
                 if (lastMessage <= 50L) return;
 
-                Main.MINECRAFT.player.sendMessage(Message.builder().of("\u00bb ").color(TextFormatting.GOLD).advance()
-                        .of("Memberanzahl: ").color(TextFormatting.GRAY).advance()
-                        .of(String.valueOf(MEMBER_LIST.size())).color(TextFormatting.DARK_GRAY).advance().build().toTextComponent());
+                Main.MINECRAFT.player.sendMessage(Message.builder().of("\u00bb ").color(TextFormatting.GRAY).advance()
+                        .of("Memberanzahl: ").color(TextFormatting.DARK_AQUA).advance()
+                        .of(String.valueOf(MEMBER_LIST.size())).color(TextFormatting.GREEN).advance().build().toTextComponent());
 
                 lastMessage = 0;
                 shown = 0;

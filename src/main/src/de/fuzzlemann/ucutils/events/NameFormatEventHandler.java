@@ -54,10 +54,7 @@ public class NameFormatEventHandler {
         PLAYER_MAP.put(userName, p);
 
         //Prevents people who are masked from being detected
-        if (displayName.contains("\u00a7k")) {
-            e.setDisplayname(displayName);
-            return;
-        }
+        if (displayName.contains("\u00a7k")) return;
 
         String color = getColor(userName);
         if (color == null) return;

@@ -21,7 +21,7 @@ import java.util.Objects;
  */
 @SideOnly(Side.CLIENT)
 public class InetTestCommand implements CommandExecutor {
-    private final List<String> hosts = Arrays.asList("server.unicacity.de", "www.unicacity.de", "ts.unicacity.de", "www.google.de");
+    private final List<String> hosts = Arrays.asList("unicacity.de", "fuzzlemann.de", "www.google.de");
 
     @Override
     @Command(labels = "inettest")
