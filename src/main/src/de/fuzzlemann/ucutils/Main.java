@@ -3,7 +3,8 @@ package de.fuzzlemann.ucutils;
 import de.fuzzlemann.ucutils.update.UpdateReminder;
 import de.fuzzlemann.ucutils.utils.command.CommandHandler;
 import de.fuzzlemann.ucutils.utils.config.ConfigUtil;
-import de.fuzzlemann.ucutils.utils.faction.badfaction.DrugUtil;
+import de.fuzzlemann.ucutils.utils.faction.badfaction.blacklist.BlacklistUtil;
+import de.fuzzlemann.ucutils.utils.faction.badfaction.drug.DrugUtil;
 import de.fuzzlemann.ucutils.utils.faction.police.WantedManager;
 import de.fuzzlemann.ucutils.utils.noobchat.NoobChatManager;
 import de.fuzzlemann.ucutils.utils.punishment.PunishManager;
@@ -71,5 +72,6 @@ public class Main {
         }
 
         DrugUtil.loadDrugs();
+        BlacklistUtil.loadBlacklistReasons();
     }
 }

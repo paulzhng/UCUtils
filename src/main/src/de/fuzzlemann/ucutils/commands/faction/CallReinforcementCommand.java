@@ -74,7 +74,14 @@ public class CallReinforcementCommand implements CommandExecutor {
         int posY = (int) p.posY;
         int posZ = (int) p.posZ;
 
-        p.sendChatMessage("/f Ben\u00f6tige Verst\u00e4rkung! -> X: " + posX + " | Y: " + posY + " | Z: " + posZ);
+        String chatType;
+        if (args.length == 1 && args[0].equalsIgnoreCase("-d")) {
+            chatType = "d";
+        } else {
+            chatType = "f";
+        }
+
+        p.sendChatMessage("/" + chatType + " Ben\u00f6tige Verst\u00e4rkung! -> X: " + posX + " | Y: " + posY + " | Z: " + posZ);
         return true;
     }
 }

@@ -3,8 +3,8 @@ package de.fuzzlemann.ucutils.commands.faction.badfaction;
 import de.fuzzlemann.ucutils.utils.command.Command;
 import de.fuzzlemann.ucutils.utils.command.CommandExecutor;
 import de.fuzzlemann.ucutils.utils.command.TabCompletion;
-import de.fuzzlemann.ucutils.utils.faction.badfaction.drug.Drug;
-import de.fuzzlemann.ucutils.utils.faction.badfaction.drug.DrugUtil;
+import de.fuzzlemann.ucutils.utils.faction.badfaction.blacklist.BlacklistReason;
+import de.fuzzlemann.ucutils.utils.faction.badfaction.blacklist.BlacklistUtil;
 import de.fuzzlemann.ucutils.utils.text.Message;
 import de.fuzzlemann.ucutils.utils.text.TextUtils;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -21,23 +21,23 @@ import java.util.stream.Collectors;
  * @author Fuzzlemann
  */
 @SideOnly(Side.CLIENT)
-public class DrugPriceCommand implements CommandExecutor, TabCompletion {
+public class BlacklistPriceCommand implements CommandExecutor, TabCompletion {
 
     @Override
-    @Command(labels = {"drugprice", "drugprices"}, usage = "/%label% [list/setprice] (Droge) (Preis)")
+    @Command(labels = {"blacklistprice", "blprice", "blp"}, usage = "/%label% [setprice/list] (Grund) (Preis)")
     public boolean onCommand(EntityPlayerSP p, String[] args) {
         if (args.length == 0) return false;
 
         switch (args[0].toLowerCase()) {
             case "list":
-                sendDrugPrices(p);
+                sendBlacklistPrices(p);
                 break;
             case "setprice":
                 if (args.length < 3) return false;
 
-                Drug drug = DrugUtil.getDrug(args[1]);
-                if (drug == null) {
-                    p.sendMessage(TextUtils.simpleMessage("Die Droge wurde nicht gefunden.", TextFormatting.RED));
+                BlacklistReason blacklistReason = BlacklistUtil.getBlacklistReason(args[1]);
+                if (blacklistReason == null) {
+                    p.sendMessage(TextUtils.simpleMessage("Der Blacklistgrund wurde nicht gefunden.", TextFormatting.RED));
                     return true;
                 }
 
@@ -48,11 +48,11 @@ public class DrugPriceCommand implements CommandExecutor, TabCompletion {
                     return false;
                 }
 
-                drug.setPrice(price);
-                DrugUtil.savePrices();
+                blacklistReason.setPrice(price);
+                BlacklistUtil.savePrices();
 
                 p.sendMessage(Message.builder().of("Du hast den Preis von ").color(TextFormatting.AQUA).advance()
-                        .of(drug.getName()).color(TextFormatting.RED).advance()
+                        .of(blacklistReason.getReason()).color(TextFormatting.RED).advance()
                         .of(" zu ").color(TextFormatting.AQUA).advance()
                         .of(String.valueOf(price) + "$ ").color(TextFormatting.RED).advance()
                         .of("ge\u00e4ndert.").color(TextFormatting.AQUA).advance().build().toTextComponent());
@@ -70,9 +70,10 @@ public class DrugPriceCommand implements CommandExecutor, TabCompletion {
         if (!args[0].equalsIgnoreCase("setprice")) return Collections.emptyList();
 
         String drug = args[args.length - 1].toLowerCase();
-        List<String> drugNames = DrugUtil.DRUGS
+        List<String> drugNames = BlacklistUtil.BLACKLIST_REASONS
                 .stream()
-                .map(Drug::getName)
+                .map(BlacklistReason::getReason)
+                .map(blacklistReason -> blacklistReason.replace(' ', '-'))
                 .collect(Collectors.toList());
 
         if (drug.isEmpty()) return drugNames;
@@ -83,14 +84,14 @@ public class DrugPriceCommand implements CommandExecutor, TabCompletion {
         return drugNames;
     }
 
-    private void sendDrugPrices(EntityPlayerSP p) {
+    private void sendBlacklistPrices(EntityPlayerSP p) {
         Message.MessageBuilder builder = Message.builder();
 
-        builder.of("\u00bb ").color(TextFormatting.GOLD).advance().of("Eingestellte Drogenpreise\n").color(TextFormatting.DARK_PURPLE).advance();
-        for (Drug drug : DrugUtil.DRUGS) {
-            builder.of("  * " + drug.getName()).color(TextFormatting.GRAY).advance()
+        builder.of("\u00bb ").color(TextFormatting.GOLD).advance().of("Eingestellte Blacklistpreise\n").color(TextFormatting.DARK_PURPLE).advance();
+        for (BlacklistReason blacklistReason : BlacklistUtil.BLACKLIST_REASONS) {
+            builder.of("  * " + blacklistReason.getReason()).color(TextFormatting.GRAY).advance()
                     .of(": ").color(TextFormatting.DARK_GRAY).advance()
-                    .of(drug.getPrice() + "$\n").color(TextFormatting.RED).advance();
+                    .of(blacklistReason.getPrice() + "$\n").color(TextFormatting.RED).advance();
         }
 
         p.sendMessage(builder.build().toTextComponent());

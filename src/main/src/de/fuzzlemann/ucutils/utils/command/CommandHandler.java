@@ -2,11 +2,10 @@ package de.fuzzlemann.ucutils.utils.command;
 
 import de.fuzzlemann.ucutils.Main;
 import de.fuzzlemann.ucutils.commands.*;
-import de.fuzzlemann.ucutils.commands.faction.CallReinforcementCommand;
-import de.fuzzlemann.ucutils.commands.faction.ChannelActivityCommand;
-import de.fuzzlemann.ucutils.commands.faction.CheckActiveMembersCommand;
-import de.fuzzlemann.ucutils.commands.faction.ToggleMafiaSpeechCommand;
+import de.fuzzlemann.ucutils.commands.faction.*;
 import de.fuzzlemann.ucutils.commands.faction.badfaction.ASellDrugCommand;
+import de.fuzzlemann.ucutils.commands.faction.badfaction.ASetBlacklistCommand;
+import de.fuzzlemann.ucutils.commands.faction.badfaction.BlacklistPriceCommand;
 import de.fuzzlemann.ucutils.commands.faction.badfaction.DrugPriceCommand;
 import de.fuzzlemann.ucutils.commands.faction.police.ASUCommand;
 import de.fuzzlemann.ucutils.commands.faction.police.CheckMedicalLicenseCommand;
@@ -87,12 +86,14 @@ public class CommandHandler {
         registerCommand(new AGetPizzaCommand());
 
         registerCommand(new JShutdownCommand());
+        registerCommand(new FShutdownCommand());
 
         registerCommand(new CheckActiveMembersCommand());
         registerCommand(new ChannelActivityCommand());
         registerCommand(new CallReinforcementCommand());
 
         registerCommand(new ToggleMafiaSpeechCommand());
+        registerCommand(new SchwarzmarktLocationsCommand());
 
         registerCommand(new CheckMedicalLicenseCommand());
 
@@ -107,6 +108,12 @@ public class CommandHandler {
 
         DrugPriceCommand drugPriceCommand = new DrugPriceCommand();
         registerCommand(drugPriceCommand, drugPriceCommand);
+
+        ASetBlacklistCommand aSetBlacklistCommand = new ASetBlacklistCommand();
+        registerCommand(aSetBlacklistCommand, aSetBlacklistCommand);
+
+        BlacklistPriceCommand blacklistPriceCommand = new BlacklistPriceCommand();
+        registerCommand(blacklistPriceCommand, blacklistPriceCommand);
 
         PunishCommand punishCommand = new PunishCommand();
         registerCommand(punishCommand, punishCommand);

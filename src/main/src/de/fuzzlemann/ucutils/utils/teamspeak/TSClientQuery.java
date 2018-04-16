@@ -88,6 +88,8 @@ public class TSClientQuery {
             return false;
         }
 
+        KeepAliveUtil.start();
+
         return auth();
     }
 

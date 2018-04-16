@@ -1,16 +1,12 @@
-package de.fuzzlemann.ucutils.utils.faction.badfaction;
+package de.fuzzlemann.ucutils.utils.faction.badfaction.drug;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Objects;
 
 /**
  * @author Fuzzlemann
  */
 public class Drug {
-
-    public static final List<Drug> DRUGS = new ArrayList<>();
 
     private final String name;
     private final String[] alternative;
@@ -24,24 +20,11 @@ public class Drug {
         this.price = 1;
     }
 
-    public static Drug getDrug(String name) {
-        for (Drug drug : Drug.DRUGS) {
-            if (drug.getName().equalsIgnoreCase(name)) return drug;
-
-            for (String alternativeName : drug.getAlternative()) {
-                if (alternativeName.equalsIgnoreCase(name))
-                    return drug;
-            }
-        }
-
-        return null;
-    }
-
     public String getName() {
         return name;
     }
 
-    private String[] getAlternative() {
+    String[] getAlternative() {
         return alternative;
     }
 

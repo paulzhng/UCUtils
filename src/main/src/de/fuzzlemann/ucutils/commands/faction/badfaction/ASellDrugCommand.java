@@ -3,7 +3,8 @@ package de.fuzzlemann.ucutils.commands.faction.badfaction;
 import de.fuzzlemann.ucutils.utils.command.Command;
 import de.fuzzlemann.ucutils.utils.command.CommandExecutor;
 import de.fuzzlemann.ucutils.utils.command.TabCompletion;
-import de.fuzzlemann.ucutils.utils.faction.badfaction.Drug;
+import de.fuzzlemann.ucutils.utils.faction.badfaction.drug.Drug;
+import de.fuzzlemann.ucutils.utils.faction.badfaction.drug.DrugUtil;
 import de.fuzzlemann.ucutils.utils.text.TextUtils;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraftforge.fml.relauncher.Side;
@@ -36,7 +37,7 @@ public class ASellDrugCommand implements CommandExecutor, TabCompletion {
             variation = 0;
         }
 
-        Drug drug = Drug.getDrug(args[1]);
+        Drug drug = DrugUtil.getDrug(args[1]);
         if (drug == null) {
             TextUtils.error("Die Droge wurde nicht gefunden.");
             return true;
@@ -60,7 +61,7 @@ public class ASellDrugCommand implements CommandExecutor, TabCompletion {
         if (args.length != 2) return Collections.emptyList();
 
         String drug = args[args.length - 1].toLowerCase();
-        List<String> drugNames = Drug.DRUGS
+        List<String> drugNames = DrugUtil.DRUGS
                 .stream()
                 .map(Drug::getName)
                 .collect(Collectors.toList());

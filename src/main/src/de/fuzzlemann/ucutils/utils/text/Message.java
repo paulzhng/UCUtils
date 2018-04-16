@@ -8,6 +8,7 @@ import net.minecraft.util.text.event.ClickEvent;
 import net.minecraft.util.text.event.HoverEvent;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -74,6 +75,11 @@ public class Message {
 
         public MessageBuilder messageParts(MessagePart... messageParts) {
             Collections.addAll(this.messageParts, messageParts);
+            return this;
+        }
+
+        public MessageBuilder messageParts(Collection<MessagePart> messageParts) {
+            this.messageParts.addAll(messageParts);
             return this;
         }
 

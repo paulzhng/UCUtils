@@ -18,25 +18,25 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  */
 @SideOnly(Side.CLIENT)
 @Mod.EventBusSubscriber
-public class JShutdownCommand implements CommandExecutor {
+public class FShutdownCommand implements CommandExecutor {
 
     private static boolean shutdown;
 
     @SubscribeEvent
     public static void onChat(ClientChatReceivedEvent e) {
         if (!shutdown) return;
-        if (!e.getMessage().getUnformattedText().equals("[Gef\u00e4ngnis] Du bist wieder frei!")) return;
+        if (!e.getMessage().getUnformattedText().equals("Du lebst nun wieder.")) return;
 
         ForgeUtils.shutdownPC();
     }
 
     @Override
-    @Command(labels = {"jshutdown", "jailshutdown"})
+    @Command(labels = {"fshutdown", "friedhofshutdown"})
     public boolean onCommand(EntityPlayerSP p, String[] args) {
         shutdown = !shutdown;
 
         ITextComponent text = shutdown
-                ? TextUtils.simpleMessage("Du hast den Shutdown eingeleitet: Wenn du aus dem Knast bist, wird dein PC heruntergefahren.", TextFormatting.RED)
+                ? TextUtils.simpleMessage("Du hast den Shutdown eingeleitet: Wenn du wieder lebst, wird dein PC heruntergefahren.", TextFormatting.RED)
                 : TextUtils.simpleMessage("Du hast den Shutdown abgebrochen", TextFormatting.GREEN);
 
         p.sendMessage(text);

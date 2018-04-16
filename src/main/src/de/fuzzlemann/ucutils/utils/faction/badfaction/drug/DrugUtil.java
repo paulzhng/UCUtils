@@ -1,8 +1,9 @@
-package de.fuzzlemann.ucutils.utils.faction.badfaction;
+package de.fuzzlemann.ucutils.utils.faction.badfaction.drug;
 
 import de.fuzzlemann.ucutils.utils.io.JsonManager;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -11,10 +12,11 @@ import java.util.stream.Collectors;
  */
 public class DrugUtil {
 
+    public static final List<Drug> DRUGS = new ArrayList<>();
     private static final File DRUG_PRICE_FILE = new File(JsonManager.DIRECTORY, "drugprices.storage");
 
     public static void loadDrugs() {
-        Drug.DRUGS.clear();
+        DRUGS.clear();
 
         List<Drug> drugs = JsonManager.loadObjects(DRUG_PRICE_FILE, Drug.class)
                 .stream()
@@ -31,15 +33,28 @@ public class DrugUtil {
         addDrug(new Drug("Eisen", new String[]{"Iron"}, false), drugs);
         addDrug(new Drug("Masken", new String[]{"Maske", "Mask", "Masks"}, false), drugs);
 
-        Drug.DRUGS.addAll(drugs);
+        DRUGS.addAll(drugs);
     }
 
     public static void savePrices() {
-        JsonManager.writeList(DRUG_PRICE_FILE, Drug.DRUGS);
+        JsonManager.writeList(DRUG_PRICE_FILE, DRUGS);
     }
 
     private static void addDrug(Drug drug, List<Drug> drugs) {
         if (!drugs.contains(drug))
             drugs.add(drug);
+    }
+
+    public static Drug getDrug(String name) {
+        for (Drug drug : DRUGS) {
+            if (drug.getName().equalsIgnoreCase(name)) return drug;
+
+            for (String alternativeName : drug.getAlternative()) {
+                if (alternativeName.equalsIgnoreCase(name))
+                    return drug;
+            }
+        }
+
+        return null;
     }
 }
