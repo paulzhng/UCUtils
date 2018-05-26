@@ -25,9 +25,7 @@
  */
 package de.fuzzlemann.ucutils.utils.teamspeak;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.StringTokenizer;
+import java.util.*;
 
 public final class ResultParser {
 
@@ -49,6 +47,17 @@ public final class ResultParser {
             }
         }
         return options;
+    }
+
+    public static List<Map<String, String>> parseMap(String rawResponse) {
+        String[] rawMaps = rawResponse.split("\\|");
+        List<Map<String, String>> result = new ArrayList<>();
+
+        for (String rawMap : rawMaps) {
+            result.add(ResultParser.parse(rawMap));
+        }
+
+        return result;
     }
 
     private static String decode(String str) {

@@ -24,7 +24,7 @@ import java.util.regex.Pattern;
 @Mod.EventBusSubscriber
 public class CallReinforcementCommand implements CommandExecutor {
 
-    private static Pattern REINFORCEMENT_PATTERN = Pattern.compile("^.+ [\\[UC\\]]*[a-zA-Z0-9_]+: Ben\u00f6tige Verst\u00e4rkung! -> X: -*\\d+ \\| Y: -*\\d+ \\| Z: -*\\d+$");
+    private static final Pattern REINFORCEMENT_PATTERN = Pattern.compile("^.+ [\\[UC\\]]*[a-zA-Z0-9_]+: Ben\u00f6tige Verst\u00e4rkung! -> X: -*\\d+ \\| Y: -*\\d+ \\| Z: -*\\d+$");
 
     @SubscribeEvent
     public static void onChatReceived(ClientChatReceivedEvent e) {

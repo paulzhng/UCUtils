@@ -36,7 +36,7 @@ public class ChannelActivityCommand implements CommandExecutor {
         new Thread(() -> {
             List<String> players;
             try {
-                players = getPlayersInChannel();
+                players = getPlayersInChannel(true);
             } catch (NullPointerException exc) {
                 exc.printStackTrace();
                 TextUtils.error("Du hast dein API Key noch nicht oder falsch gesetzt.");
@@ -116,14 +116,16 @@ public class ChannelActivityCommand implements CommandExecutor {
         }
     }
 
-    private List<String> getPlayersInChannel() {
+    private List<String> getPlayersInChannel(boolean retry) {
         Map<String, String> whoAmIResult = TSClientQuery.exec("whoami");
-
         String cid = whoAmIResult.get("cid");
 
-        if (cid == null) TSClientQuery.connect();
+        if (cid == null) {
+            TSClientQuery.connect();
+            return getPlayersInChannel(false);
+        }
 
-        String channelClientListResult = TSClientQuery.rawExec("channelclientlist cid=" + whoAmIResult.get("cid"), false);
+        String channelClientListResult = TSClientQuery.rawExec("channelclientlist cid=" + cid, false);
         if (channelClientListResult == null) return Collections.emptyList();
 
         List<String> clientIDs = new ArrayList<>();

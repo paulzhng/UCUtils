@@ -11,6 +11,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.io.File;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -31,11 +32,35 @@ public class ChatLogger {
     private Logger logger;
 
     public ChatLogger() {
+        File directory = new File(Main.MINECRAFT.mcDataDir, "chatlogs");
+
+        deleteTempFiles(directory);
+        FileHandler fileHandler = createChatLog(directory);
+        if (fileHandler == null) return;
+
+        logger = Logger.getLogger("ChatLogger");
+        logger.addHandler(fileHandler);
+        fileHandler.setFormatter(new ChatLogFormatter());
+
+        log("------------ Chat Log ------------");
+    }
+
+    private void deleteTempFiles(File directory) {
+        FilenameFilter filenameFilter = (dir, name) -> name.endsWith(".txt.lck");
+        File[] files = directory.listFiles(filenameFilter);
+        if (files == null) return;
+
+        for (File file : files) {
+            if (!file.delete())
+                System.out.println("Temporary file " + file.getPath() + " couldn't be deleted!");
+        }
+    }
+
+    private FileHandler createChatLog(File directory) {
         String timeStamp = new SimpleDateFormat("yyyy-MM-dd'T'HH-mm-ss").format(new Date());
 
         FileHandler fileHandler;
         try {
-            File directory = new File(Main.MINECRAFT.mcDataDir, "chatlogs");
             File logFile = new File(directory, "chatlog-" + timeStamp + ".txt");
             if (directory.mkdirs())
                 System.out.println("ChatLog Directory created");
@@ -47,14 +72,14 @@ public class ChatLogger {
         } catch (IOException e) {
             ConfigUtil.logChat = false;
             e.printStackTrace();
-            return;
+            return null;
         }
 
-        logger = Logger.getLogger("ChatLogger");
-        logger.addHandler(fileHandler);
-        fileHandler.setFormatter(new ChatLogFormatter());
+        return fileHandler;
+    }
 
-        log("------------ Chat Log ------------");
+    private void log(String message) {
+        logger.info(message + "\n");
     }
 
     @SubscribeEvent
@@ -79,10 +104,6 @@ public class ChatLogger {
     public static void onClientConnect(FMLNetworkEvent.ClientDisconnectionFromServerEvent e) {
         if (ConfigUtil.logChat)
             instance.log("---- Disconnected from " + e.getManager().getRemoteAddress() + " ----");
-    }
-
-    private void log(String message) {
-        logger.info(message + "\n");
     }
 
     private static class ChatLogFormatter extends Formatter {

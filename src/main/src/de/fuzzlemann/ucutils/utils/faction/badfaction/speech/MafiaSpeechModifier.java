@@ -1,20 +1,9 @@
-package de.fuzzlemann.ucutils.commands.faction;
+package de.fuzzlemann.ucutils.utils.faction.badfaction.speech;
 
 import com.google.common.base.CharMatcher;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import de.fuzzlemann.ucutils.utils.command.Command;
-import de.fuzzlemann.ucutils.utils.command.CommandExecutor;
-import de.fuzzlemann.ucutils.utils.text.TextUtils;
-import net.minecraft.client.entity.EntityPlayerSP;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraftforge.client.event.ClientChatEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 import java.util.Map;
@@ -26,11 +15,8 @@ import java.util.stream.Collectors;
 /**
  * @author Fuzzlemann
  */
-@Mod.EventBusSubscriber
-@SideOnly(Side.CLIENT)
-public class ToggleMafiaSpeechCommand implements CommandExecutor {
+public class MafiaSpeechModifier implements SpeechModifier {
 
-    private static boolean activated;
     private static final Pattern VOCALS_PATTERN = Pattern.compile("[aeiou\u00f6\u00e4\u00fcAEIOU\u00c4\u00dc\u00d6\u00e0\u00e1\u00e8\u00e9\u00ec\u00ed\u00f3\u00f2\u00f9\u00fa\u00c0\u00c1\u00c8\u00c9\u00cc\u00cd\u00d2\u00d3\u00d9\u00da]");
     private static final Set<String> EXCLUDED = Sets.newHashSet("xd");
     private static final List<Map.Entry<String, String>> REPLACE_IGNORE_CASE = Lists.newArrayList(
@@ -49,59 +35,9 @@ public class ToggleMafiaSpeechCommand implements CommandExecutor {
             Maps.immutableEntry("danke", "grazie"),
             Maps.immutableEntry("bitte", "prego")
     );
-    private static final Set<String> COMMANDS = Sets.newHashSet("asms", "sms", "w", "close", "whisper", "s", "schreien");
 
     @Override
-    @Command(labels = {"togglemafiaspeech", "togmafiaspeech", "togglemafia", "togmafia"})
-    public boolean onCommand(EntityPlayerSP p, String[] args) {
-        activated = !activated;
-
-        ITextComponent text = activated
-                ? TextUtils.simpleMessage("Du hast die Mafiasprache eingeschalten.", TextFormatting.GREEN)
-                : TextUtils.simpleMessage("Du hast die Mafiasprache ausgeschalten.", TextFormatting.RED);
-
-        p.sendMessage(text);
-        return true;
-    }
-
-    @SubscribeEvent
-    public static void onChat(ClientChatEvent e) {
-        if (!activated) return;
-
-        String message = e.getMessage();
-        String[] splitted = message.split(" ");
-
-        if (message.startsWith("/")) {
-            if (splitted.length == 1) return;
-
-            String command = splitted[0].toLowerCase();
-            command = command.substring(1, command.length());
-
-            if (COMMANDS.contains(command)) {
-                int ignoredPositions = command.equals("sms") || command.equals("asms") ? 2 : 1;
-
-                String[] unmodifiable = new String[ignoredPositions];
-                System.arraycopy(splitted, 0, unmodifiable, 0, ignoredPositions);
-
-                String[] modifiable = new String[splitted.length - ignoredPositions];
-                System.arraycopy(splitted, ignoredPositions, modifiable, 0, splitted.length - ignoredPositions);
-
-                String modifiableString = turnIntoMafiaSpeech(modifiable);
-
-                String fullCommand = String.join(" ", unmodifiable);
-                if (!modifiableString.isEmpty())
-                    fullCommand += " " + modifiableString;
-
-                e.setMessage(fullCommand);
-            }
-
-            return;
-        }
-
-        e.setMessage(turnIntoMafiaSpeech(splitted));
-    }
-
-    private static String turnIntoMafiaSpeech(String[] words) {
+    public String turnIntoSpeech(String[] words) {
         String fullString = String.join(" ", words);
         for (Map.Entry<String, String> entry : REPLACE_IGNORE_CASE) {
             String toReplace = entry.getKey();

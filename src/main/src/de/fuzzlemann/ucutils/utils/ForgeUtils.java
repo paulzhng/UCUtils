@@ -5,6 +5,7 @@ import de.fuzzlemann.ucutils.utils.text.TextUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.client.network.NetworkPlayerInfo;
+import net.minecraft.scoreboard.ScorePlayerTeam;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.commons.lang3.SystemUtils;
@@ -35,6 +36,12 @@ public class ForgeUtils {
                 .map(TextUtils::stripPrefix)
                 .sorted()
                 .collect(Collectors.toList());
+    }
+
+    public static String getTablistName(NetworkPlayerInfo networkPlayerInfoIn) {
+        return networkPlayerInfoIn.getDisplayName() != null
+                ? networkPlayerInfoIn.getDisplayName().getFormattedText()
+                : ScorePlayerTeam.formatPlayerName(networkPlayerInfoIn.getPlayerTeam(), networkPlayerInfoIn.getGameProfile().getName());
     }
 
     public static void shutdownPC() {

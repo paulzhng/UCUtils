@@ -2,11 +2,16 @@ package de.fuzzlemann.ucutils.utils.command;
 
 import de.fuzzlemann.ucutils.Main;
 import de.fuzzlemann.ucutils.commands.*;
-import de.fuzzlemann.ucutils.commands.faction.*;
-import de.fuzzlemann.ucutils.commands.faction.badfaction.ASellDrugCommand;
-import de.fuzzlemann.ucutils.commands.faction.badfaction.ASetBlacklistCommand;
-import de.fuzzlemann.ucutils.commands.faction.badfaction.BlacklistPriceCommand;
-import de.fuzzlemann.ucutils.commands.faction.badfaction.DrugPriceCommand;
+import de.fuzzlemann.ucutils.commands.faction.CallReinforcementCommand;
+import de.fuzzlemann.ucutils.commands.faction.ChannelActivityCommand;
+import de.fuzzlemann.ucutils.commands.faction.CheckActiveMembersCommand;
+import de.fuzzlemann.ucutils.commands.faction.SchwarzmarktLocationsCommand;
+import de.fuzzlemann.ucutils.commands.faction.badfaction.blacklist.ASellDrugCommand;
+import de.fuzzlemann.ucutils.commands.faction.badfaction.blacklist.BlacklistPriceCommand;
+import de.fuzzlemann.ucutils.commands.faction.badfaction.drug.ASetBlacklistCommand;
+import de.fuzzlemann.ucutils.commands.faction.badfaction.drug.DrugPriceCommand;
+import de.fuzzlemann.ucutils.commands.faction.badfaction.speech.ToggleMafiaSpeechCommand;
+import de.fuzzlemann.ucutils.commands.faction.badfaction.speech.ToggleTriadenSpeechCommand;
 import de.fuzzlemann.ucutils.commands.faction.police.ASUCommand;
 import de.fuzzlemann.ucutils.commands.faction.police.CheckMedicalLicenseCommand;
 import de.fuzzlemann.ucutils.commands.faction.police.ModifyWantedsCommand;
@@ -21,6 +26,7 @@ import de.fuzzlemann.ucutils.commands.location.DistanceCommand;
 import de.fuzzlemann.ucutils.commands.location.NearestATMCommand;
 import de.fuzzlemann.ucutils.commands.location.NearestJobCommand;
 import de.fuzzlemann.ucutils.commands.mobile.*;
+import de.fuzzlemann.ucutils.commands.supporter.MoveHereCommand;
 import de.fuzzlemann.ucutils.commands.supporter.PunishCommand;
 import de.fuzzlemann.ucutils.commands.supporter.SendNoobChatCommand;
 import de.fuzzlemann.ucutils.commands.time.ClockCommand;
@@ -93,9 +99,12 @@ public class CommandHandler {
         registerCommand(new CallReinforcementCommand());
 
         registerCommand(new ToggleMafiaSpeechCommand());
+        registerCommand(new ToggleTriadenSpeechCommand());
         registerCommand(new SchwarzmarktLocationsCommand());
 
         registerCommand(new CheckMedicalLicenseCommand());
+
+        registerCommand(new MoveHereCommand());
 
         ASUCommand asuCommand = new ASUCommand();
         registerCommand(asuCommand, asuCommand);

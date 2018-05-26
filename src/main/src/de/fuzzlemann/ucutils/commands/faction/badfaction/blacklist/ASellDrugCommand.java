@@ -1,4 +1,4 @@
-package de.fuzzlemann.ucutils.commands.faction.badfaction;
+package de.fuzzlemann.ucutils.commands.faction.badfaction.blacklist;
 
 import de.fuzzlemann.ucutils.utils.command.Command;
 import de.fuzzlemann.ucutils.utils.command.CommandExecutor;

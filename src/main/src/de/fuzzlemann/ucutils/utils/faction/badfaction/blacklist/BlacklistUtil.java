@@ -21,6 +21,7 @@ public class BlacklistUtil {
         List<BlacklistReason> blacklistReasons = JsonManager.loadObjects(BLACKLIST_REASON_FILE, BlacklistReason.class)
                 .stream()
                 .map(object -> (BlacklistReason) object)
+                .distinct()
                 .collect(Collectors.toList());
 
         addBlacklistReason(new BlacklistReason("Mord eines Fraktionsleaders"), blacklistReasons);
@@ -28,6 +29,9 @@ public class BlacklistUtil {
         addBlacklistReason(new BlacklistReason("Verrat von illegalen Gesch\u00e4ften"), blacklistReasons);
         addBlacklistReason(new BlacklistReason("Rufmord an der Fraktion"), blacklistReasons);
         addBlacklistReason(new BlacklistReason("Operationen im Hoheitsgebiet einer Fraktion"), blacklistReasons);
+        addBlacklistReason(new BlacklistReason("Gangzone"), blacklistReasons);
+        addBlacklistReason(new BlacklistReason("Fraktionssch\u00e4digung"), blacklistReasons);
+        addBlacklistReason(new BlacklistReason("Fraktionsverrat"), blacklistReasons);
 
         BLACKLIST_REASONS.addAll(blacklistReasons);
     }

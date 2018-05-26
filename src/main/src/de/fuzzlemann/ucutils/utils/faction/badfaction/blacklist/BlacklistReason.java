@@ -1,5 +1,7 @@
 package de.fuzzlemann.ucutils.utils.faction.badfaction.blacklist;
 
+import java.util.Objects;
+
 /**
  * @author Fuzzlemann
  */
@@ -23,5 +25,18 @@ public class BlacklistReason {
 
     public void setPrice(int price) {
         this.price = price;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        BlacklistReason that = (BlacklistReason) o;
+        return Objects.equals(reason, that.reason);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(reason);
     }
 }

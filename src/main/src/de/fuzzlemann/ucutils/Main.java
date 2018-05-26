@@ -1,6 +1,7 @@
 package de.fuzzlemann.ucutils;
 
 import de.fuzzlemann.ucutils.update.UpdateReminder;
+import de.fuzzlemann.ucutils.utils.TabListSortHandler;
 import de.fuzzlemann.ucutils.utils.command.CommandHandler;
 import de.fuzzlemann.ucutils.utils.config.ConfigUtil;
 import de.fuzzlemann.ucutils.utils.faction.badfaction.blacklist.BlacklistUtil;
@@ -47,8 +48,10 @@ public class Main {
     }
 
     @Mod.EventHandler
-    public void postInit(FMLPostInitializationEvent e) {
+    public void postInit(FMLPostInitializationEvent e) throws NoSuchFieldException, IllegalAccessException {
         new Thread(Main::refreshData).start();
+
+        TabListSortHandler.initTablistSort();
     }
 
     public static void refreshData() {

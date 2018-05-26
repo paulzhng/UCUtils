@@ -21,6 +21,7 @@ public class DrugUtil {
         List<Drug> drugs = JsonManager.loadObjects(DRUG_PRICE_FILE, Drug.class)
                 .stream()
                 .map(object -> (Drug) object)
+                .distinct()
                 .collect(Collectors.toList());
 
         addDrug(new Drug("Kokain", new String[]{"Koks"}, true), drugs);
