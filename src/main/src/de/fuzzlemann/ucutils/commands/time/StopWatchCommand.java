@@ -1,5 +1,6 @@
 package de.fuzzlemann.ucutils.commands.time;
 
+import de.fuzzlemann.ucutils.utils.FormatUtils;
 import de.fuzzlemann.ucutils.utils.command.Command;
 import de.fuzzlemann.ucutils.utils.command.CommandExecutor;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -15,35 +16,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class StopWatchCommand implements CommandExecutor {
 
     private long start = -1L;
-
-    private static String formatMilliseconds(long ms) {
-        StringBuilder sb = new StringBuilder();
-        long milliseconds = ms % 1000;
-        ms /= 1000;
-        long seconds = ms % 60;
-        ms /= 60;
-        long minutes = ms % 60;
-        ms /= 60;
-        long hours = ms % 24;
-
-        if (hours != 0) {
-            sb.append(hours).append(hours == 1 ? " Stunde " : " Stunden ");
-        }
-
-        if (minutes != 0) {
-            sb.append(minutes).append(minutes == 1 ? " Minute " : " Minuten ");
-        }
-
-        if (seconds != 0) {
-            sb.append(seconds).append(seconds == 1 ? " Sekunde " : " Sekunden ");
-        }
-
-        if (milliseconds != 0) {
-            sb.append(milliseconds).append(milliseconds == 1 ? " Millisekunde" : " Millisekunden");
-        }
-
-        return sb.toString();
-    }
 
     @Override
     @Command(labels = {"stopwatch", "stoppuhr"})
@@ -62,7 +34,7 @@ public class StopWatchCommand implements CommandExecutor {
             TextComponentString text = new TextComponentString("Die Zeit zwischen dem Beginn und Stopp: ");
             text.getStyle().setColor(TextFormatting.AQUA);
 
-            TextComponentString time = new TextComponentString(formatMilliseconds(difference));
+            TextComponentString time = new TextComponentString(FormatUtils.formatMilliseconds(difference));
             time.getStyle().setColor(TextFormatting.RED);
 
             p.sendMessage(text.appendSibling(time));

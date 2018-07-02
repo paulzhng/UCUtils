@@ -47,6 +47,8 @@ public class TSClientQuery {
             printWriter.println(command);
 
             result = bufferedReader.readLine();
+            System.out.println("command = " + command);
+            System.out.println("result = " + result);
             if (tryAgain && result != null && result.equals("error id=1796 msg=currently\\snot\\spossible")) {
                 auth();
                 return rawExec(command, auth, false);
@@ -73,12 +75,10 @@ public class TSClientQuery {
 
         try {
             socket = new Socket("127.0.0.1", 25639);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        }
 
-        try {
+            socket.setTcpNoDelay(true);
+            socket.setSoTimeout(4000);
+
             printWriter = new PrintWriter(socket.getOutputStream(), true);
             bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream(), StandardCharsets.UTF_8));
 
@@ -89,7 +89,6 @@ public class TSClientQuery {
         }
 
         KeepAliveUtil.start();
-
         return auth();
     }
 
@@ -98,8 +97,8 @@ public class TSClientQuery {
 
         Map<String, String> result = exec("auth apikey=" + apiKey, true);
         if (result == null) return false;
-        String msg = result.get("msg");
 
+        String msg = result.get("msg");
         return msg != null && msg.equals("ok");
     }
 }

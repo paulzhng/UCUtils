@@ -18,7 +18,7 @@ public class SpeechModifyUtil {
             if (splitted.length == 1) return null;
 
             String command = splitted[0].toLowerCase();
-            command = command.substring(1, command.length());
+            command = command.substring(1);
 
             if (COMMANDS.contains(command)) {
                 int ignoredPositions = command.equals("sms") || command.equals("asms") ? 2 : 1;

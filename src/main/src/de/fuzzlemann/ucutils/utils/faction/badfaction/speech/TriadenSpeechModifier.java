@@ -12,7 +12,7 @@ public class TriadenSpeechModifier implements SpeechModifier {
         StringJoiner joiner = new StringJoiner(" ");
 
         for (String word : words) {
-            joiner.add(word.replace('r', 'l'));
+            joiner.add(word.replace('r', 'l').replace('R', 'L'));
         }
 
         return joiner.toString();

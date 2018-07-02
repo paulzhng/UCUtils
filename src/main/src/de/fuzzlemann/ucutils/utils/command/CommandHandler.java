@@ -26,9 +26,10 @@ import de.fuzzlemann.ucutils.commands.location.DistanceCommand;
 import de.fuzzlemann.ucutils.commands.location.NearestATMCommand;
 import de.fuzzlemann.ucutils.commands.location.NearestJobCommand;
 import de.fuzzlemann.ucutils.commands.mobile.*;
-import de.fuzzlemann.ucutils.commands.supporter.MoveHereCommand;
-import de.fuzzlemann.ucutils.commands.supporter.PunishCommand;
-import de.fuzzlemann.ucutils.commands.supporter.SendNoobChatCommand;
+import de.fuzzlemann.ucutils.commands.supporter.*;
+import de.fuzzlemann.ucutils.commands.teamspeak.MoveCommand;
+import de.fuzzlemann.ucutils.commands.teamspeak.MoveHereCommand;
+import de.fuzzlemann.ucutils.commands.teamspeak.MoveToCommand;
 import de.fuzzlemann.ucutils.commands.time.ClockCommand;
 import de.fuzzlemann.ucutils.commands.time.StopWatchCommand;
 import de.fuzzlemann.ucutils.commands.time.TimerCommand;
@@ -63,7 +64,9 @@ public class CommandHandler {
 
         registerCommand(new StopWatchCommand());
         registerCommand(new ClockCommand());
-        registerCommand(new TimerCommand());
+
+        TimerCommand timerCommand = new TimerCommand();
+        registerCommand(timerCommand, timerCommand);
 
         registerCommand(new ASMSCommand());
         registerCommand(new ACallCommand());
@@ -105,6 +108,9 @@ public class CommandHandler {
         registerCommand(new CheckMedicalLicenseCommand());
 
         registerCommand(new MoveHereCommand());
+        registerCommand(new MoveCommand());
+        registerCommand(new MoveToCommand());
+        registerCommand(new AReviveCommand());
 
         ASUCommand asuCommand = new ASUCommand();
         registerCommand(asuCommand, asuCommand);

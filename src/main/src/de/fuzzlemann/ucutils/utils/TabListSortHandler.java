@@ -66,11 +66,12 @@ public class TabListSortHandler {
             String stringOneStartsWith = ORDERED_ENTRIES.stream().filter(stringOne::startsWith).findAny().orElse(null);
             String stringTwoStartsWith = ORDERED_ENTRIES.stream().filter(stringTwo::startsWith).findAny().orElse(null);
 
-            if (stringOneStartsWith != null && stringTwoStartsWith != null)
-                return ORDERED_ENTRIES.indexOf(stringOneStartsWith) - ORDERED_ENTRIES.indexOf(stringTwoStartsWith);
+            if (stringOneStartsWith != null && stringTwoStartsWith != null) {
+                int sgn = ORDERED_ENTRIES.indexOf(stringOneStartsWith) - ORDERED_ENTRIES.indexOf(stringTwoStartsWith);
+                return sgn != 0 ? sgn : stringOne.compareTo(stringTwo);
+            }
 
             if (stringOneStartsWith != null) return -1;
-
             if (stringTwoStartsWith != null) return 1;
 
             return stringOne.compareTo(stringTwo);

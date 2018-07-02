@@ -31,7 +31,11 @@ public class ADropTransportCommand implements CommandExecutor {
         Scoreboard scoreboard = p.getWorldScoreboard();
 
         Score score = scoreboard.getScores().stream()
-                .filter(scorePredicate -> scorePredicate.getPlayerName().equals("\u00a79Kisten\u00a78: "))
+                .filter(scorePredicate -> {
+                    String playerName = scorePredicate.getPlayerName();
+
+                    return playerName.equals("\u00a79Kisten\u00a78: ") || playerName.equals("\u00a79Waffenkisten\u00a78: ");
+                })
                 .findFirst()
                 .orElse(null);
 
@@ -43,7 +47,6 @@ public class ADropTransportCommand implements CommandExecutor {
         int amount = score.getScorePoints();
 
         started.set(true);
-
         timer.scheduleAtFixedRate(new TimerTask() {
             private int i;
 

@@ -22,7 +22,7 @@ public class KeepAliveUtil {
                 public void run() {
                     TSClientQuery.rawExec("whoami", false);
                 }
-            }, TimeUnit.MINUTES.toMillis(5), TimeUnit.MINUTES.toMillis(5));
+            }, TimeUnit.MINUTES.toMillis(1), TimeUnit.MINUTES.toMillis(1));
         }).start();
     }
 }

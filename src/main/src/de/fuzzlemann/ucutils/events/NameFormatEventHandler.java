@@ -78,6 +78,7 @@ public class NameFormatEventHandler {
         }
 
         if (currentTime - hitlistShown > 5000L || !unformattedMessage.startsWith(" - ")) return;
+        if (!unformattedMessage.contains("$")) return;
 
         String[] splittedMessage = StringUtils.split(unformattedMessage, " ");
         String name = TextUtils.stripPrefix(splittedMessage[1]);

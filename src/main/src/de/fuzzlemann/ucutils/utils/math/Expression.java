@@ -12,6 +12,7 @@ public class Expression {
     private static final String[] TO_REPLACE = new String[]{"PI", "E", "ANS"};
     private static final String[] REPLACER = new String[]{String.valueOf(Math.PI), String.valueOf(Math.E), "0"};
     private static double lastResult;
+    private double result;
 
     static {
         DECIMAL_FORMAT.setMaximumFractionDigits(5);
@@ -27,7 +28,7 @@ public class Expression {
     }
 
     public String parse() {
-        return DECIMAL_FORMAT.format(lastResult);
+        return DECIMAL_FORMAT.format(result);
     }
 
     public double evaluate() {
@@ -39,6 +40,7 @@ public class Expression {
             throw new ExpressionException("Unexpected character: " + (char) ch);
         }
 
+        this.result = x;
         lastResult = x;
         return x;
     }

@@ -46,11 +46,11 @@ public class Violation {
     public static Violation combineViolations(List<Violation> violations) {
         ListMultimap<Punishment.PunishmentType, Punishment> punishmentMap = LinkedListMultimap.create();
 
-        List<Punishment> banPunishments = new ArrayList<>();
+        List<Punishment> disconnectPunishments = new ArrayList<>();
         for (Violation violation : violations) {
             for (Punishment punishment : violation.getPunishments()) {
-                if (punishment.getType() == Punishment.PunishmentType.TEMPORARY_BAN || punishment.getType() == Punishment.PunishmentType.PERMANENT_BAN) {
-                    banPunishments.add(punishment);
+                if (punishment.getType() == Punishment.PunishmentType.TEMPORARY_BAN || punishment.getType() == Punishment.PunishmentType.PERMANENT_BAN || punishment.getType() == Punishment.PunishmentType.KICK) {
+                    disconnectPunishments.add(punishment);
                     continue;
                 }
 
@@ -58,7 +58,7 @@ public class Violation {
             }
         }
 
-        for (Punishment banPunishment : banPunishments) {
+        for (Punishment banPunishment : disconnectPunishments) {
             punishmentMap.put(banPunishment.getType(), banPunishment);
         }
 

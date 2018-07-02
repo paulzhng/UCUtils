@@ -21,8 +21,10 @@ import org.apache.commons.lang3.StringUtils;
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Fuzzlemann
@@ -120,7 +122,7 @@ public class ChannelActivityCommand implements CommandExecutor {
         Map<String, String> whoAmIResult = TSClientQuery.exec("whoami");
         String cid = whoAmIResult.get("cid");
 
-        if (cid == null) {
+        if (cid == null && retry) {
             TSClientQuery.connect();
             return getPlayersInChannel(false);
         }
