@@ -28,7 +28,7 @@ public class MobileUtils {
             .stream()
             .map(object -> (String) object)
             .collect(Collectors.toList());
-    private static final Pattern SMS_PATTERN = Pattern.compile("Dein Handy klingelt! Eine Nachricht von ([a-zA-Z0-9_])+ \\((\\d+\\))\\.");
+    private static final Pattern SMS_PATTERN = Pattern.compile("Dein Handy klingelt! Eine Nachricht von ([a-zA-Z0-9_]+) \\((\\d+\\))\\.");
     private static final Pattern NUMBER_PATTERN = Pattern.compile("Nummer von [a-zA-Z0-9_]+: (\\d+)");
 
     private static boolean blockNextMessage;
