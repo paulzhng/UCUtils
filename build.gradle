@@ -1,0 +1,65 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        jcenter()
+        maven {
+            url = "https://plugins.gradle.org/m2/"
+            url = "http://files.minecraftforge.net/maven"
+        }
+    }
+
+    dependencies {
+        classpath "io.franzbecker:gradle-lombok:1.10"
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
+    }
+}
+
+plugins {
+    id 'io.franzbecker.gradle-lombok' version '1.10'
+}
+
+apply plugin: 'io.franzbecker.gradle-lombok'
+apply plugin: 'net.minecraftforge.gradle.forge'
+apply plugin: 'signing'
+
+lombok {
+    version = "1.16.4"
+    sha256 = ""
+}
+
+version = "1.12.1-1.5"
+group = "de.fuzzlemann.ucutils"
+archivesBaseName = "ucutils"
+
+compileJava {
+    sourceCompatibility = targetCompatibility = '1.8'
+}
+
+minecraft {
+    version = "1.12.1-14.22.1.2485"
+    runDir = "run"
+    mappings = "snapshot_20170624"
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs('src/main/src')
+        }
+    }
+}
+
+processResources {
+    inputs.property "version", project.version
+    inputs.property "mcversion", project.minecraft.version
+
+    from(sourceSets.main.resources.srcDirs) {
+        include 'mcmod.info'
+
+        expand 'version': project.version, 'mcversion': project.minecraft.version
+    }
+
+    from(sourceSets.main.resources.srcDirs) {
+        exclude 'mcmod.info'
+    }
+}
