@@ -25,7 +25,7 @@ public class ASUCommand implements CommandExecutor, TabCompletion {
     public boolean onCommand(EntityPlayerSP p, String[] args) {
         if (args.length < 2) return false;
 
-        Set<Flag> flags = getFlag(args);
+        Set<Flag> flags = getFlags(args);
         int variationIndex = args.length - 1 - flags.size();
 
         int variation = 0;
@@ -92,7 +92,7 @@ public class ASUCommand implements CommandExecutor, TabCompletion {
         return wantedReasons;
     }
 
-    private Set<Flag> getFlag(String[] args) {
+    private Set<Flag> getFlags(String[] args) {
         Set<Flag> flags = new HashSet<>();
 
         for (String arg : args) {

@@ -54,7 +54,7 @@ public class DrugPriceCommand implements CommandExecutor, TabCompletion {
                 p.sendMessage(Message.builder().of("Du hast den Preis von ").color(TextFormatting.AQUA).advance()
                         .of(drug.getName()).color(TextFormatting.RED).advance()
                         .of(" zu ").color(TextFormatting.AQUA).advance()
-                        .of(String.valueOf(price) + "$ ").color(TextFormatting.RED).advance()
+                        .of(price + "$ ").color(TextFormatting.RED).advance()
                         .of("ge\u00e4ndert.").color(TextFormatting.AQUA).advance().build().toTextComponent());
                 break;
             default:

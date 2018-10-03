@@ -16,15 +16,22 @@ public class FormatUtils {
         long hours = ms % 24;
 
         if (hours != 0) {
-            sb.append(hours).append(hours == 1 ? " Stunde " : " Stunden ");
+            sb.append(hours).append(hours == 1 ? " Stunde" : " Stunden");
+
+            if (minutes != 0 || seconds != 0 || milliseconds != 0)
+                sb.append(" ");
         }
 
         if (minutes != 0) {
-            sb.append(minutes).append(minutes == 1 ? " Minute " : " Minuten ");
+            sb.append(minutes).append(minutes == 1 ? " Minute" : " Minuten");
+            if (seconds != 0 || milliseconds != 0)
+                sb.append(" ");
         }
 
         if (seconds != 0) {
-            sb.append(seconds).append(seconds == 1 ? " Sekunde " : " Sekunden ");
+            sb.append(seconds).append(seconds == 1 ? " Sekunde" : " Sekunden");
+            if (milliseconds != 0)
+                sb.append(" ");
         }
 
         if (milliseconds != 0) {

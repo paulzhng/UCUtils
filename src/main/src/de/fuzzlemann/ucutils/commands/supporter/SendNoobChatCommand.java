@@ -8,7 +8,6 @@ import de.fuzzlemann.ucutils.utils.noobchat.NoobChatManager;
 import de.fuzzlemann.ucutils.utils.text.TextUtils;
 import net.minecraft.client.entity.EntityPlayerSP;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -43,13 +42,13 @@ public class SendNoobChatCommand implements CommandExecutor, TabCompletion {
         List<String> answerKeys = NoobChatManager.getAnswerKeys()
                 .stream()
                 .map(answerKey -> answerKey.replace(' ', '-'))
+                .sorted()
                 .collect(Collectors.toList());
 
         if (input.isEmpty()) return answerKeys;
 
         answerKeys.removeIf(answerKey -> !answerKey.toLowerCase().startsWith(input));
 
-        Collections.sort(answerKeys);
         return answerKeys;
     }
 }

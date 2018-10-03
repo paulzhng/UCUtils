@@ -1,4 +1,4 @@
-package de.fuzzlemann.ucutils.commands.faction.badfaction.blacklist;
+package de.fuzzlemann.ucutils.commands.faction.badfaction.drug;
 
 import de.fuzzlemann.ucutils.utils.command.Command;
 import de.fuzzlemann.ucutils.utils.command.CommandExecutor;
@@ -18,24 +18,12 @@ import java.util.stream.Collectors;
  * @author Fuzzlemann
  */
 @SideOnly(Side.CLIENT)
-public class ASellDrugCommand implements CommandExecutor, TabCompletion {
+public class GiveDrugCommand implements CommandExecutor, TabCompletion {
 
     @Override
-    @Command(labels = "aselldrug", usage = "/%label% [Spieler] [Droge] [Menge] (Variation)")
+    @Command(labels = "givedrug", usage = "/%label% [Spieler] [Droge] [Menge] [-m]")
     public boolean onCommand(EntityPlayerSP p, String[] args) {
         if (args.length < 3) return false;
-
-        int variation;
-
-        if (args.length == 4) {
-            try {
-                variation = Integer.parseInt(args[3]);
-            } catch (NumberFormatException e) {
-                return false;
-            }
-        } else {
-            variation = 0;
-        }
 
         Drug drug = DrugUtil.getDrug(args[1]);
         if (drug == null) {
@@ -51,8 +39,10 @@ public class ASellDrugCommand implements CommandExecutor, TabCompletion {
             return false;
         }
 
-        int price = amount * (drug.getPrice() + variation);
-        p.sendChatMessage("/selldrug " + args[0] + " " + drug.getName() + " " + amount + " " + price);
+        if (args.length > 3 && args[3].equalsIgnoreCase("-m"))
+            p.sendChatMessage("/pay " + args[0] + " 1");
+
+        p.sendChatMessage("/selldrug " + args[0] + " " + drug.getName() + " " + amount + " " + 1);
         return true;
     }
 

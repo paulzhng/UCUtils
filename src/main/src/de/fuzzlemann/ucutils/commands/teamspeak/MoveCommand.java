@@ -44,7 +44,7 @@ public class MoveCommand implements CommandExecutor {
         List<Map<String, String>> clientsMoveTo = TSUtils.getClientsByName(moveTo);
 
         if (clientsMoved.isEmpty() || clientsMoveTo.isEmpty()) {
-            TextUtils.error("Einer der beiden Spieler befindet sich nicht auf dem TeamSpeak.");
+            TextUtils.error("Einer der Spieler befindet sich nicht auf dem TeamSpeak.");
             return;
         }
 

@@ -83,21 +83,21 @@ public enum Faction {
             new CommandDescription("/marry", "Verheirate 2 Spieler"),
             new CommandDescription("/gottesdienst", "Er\u00f6ffne einen Gottesdienst")
     )),
-    MAFIA("Mafia", constructBadFactionInfo("Mafia", "Mafia",
+    MAFIA("Mafia", constructBadFactionInfo("La Cosa Nostra", "Cosa Nostra",
             "Sie besitzen eine gro\u00dfe Villa in der N\u00e4he des Waffenladen bzw. der Polizeistation",
             "Die Mafia besitzt die Aufgaben Drogen zu verkaufen, Waffen herzustellen und nat\u00fcrlich Roleplay zu betreiben.",
             "10/69/-464",
             new CommandDescription("/newgun", "Stelle Munition und Waffen her"),
             new CommandDescription("/sellgun", "Verkaufe deine erstellen Waffen und Munition")
     )),
-    MEXICAN("Mexican", constructBadFactionInfo("Mexikanisches Kartell", "Kartell",
+    MEXICAN("Mexican", constructBadFactionInfo("Calder\u00f3n Kartell", "Calder\u00f3n",
             "Das Kartell besitzt eine Art Festung im mexikanischem Gebiet in der N\u00e4he der Fahrschule",
             "Das Kartell hat neben dem Roleplay noch die Aufgabe Drogen zu verkaufen und die beliebten Briefbomben herzustellen.",
             "-90/70/-357",
             new CommandDescription("/brief", "Hole dir mit diesem Befehl einen Brief in der Postzentrale"),
             new CommandDescription("/briefbombe", "Stelle aus einem Brief und Schwarzpulver eine Briefbombe her"))
     ),
-    GANG("Gang", constructBadFactionInfo("Gang", "Gang",
+    GANG("Gang", constructBadFactionInfo("Juggalos", "Juggalos",
             "Die Gang besitzt einen kleinen Hof umrandet mit H\u00e4usern in der N\u00e4he des Waffenladens",
             "Stra\u00dfenrennen, Drogenverkauf und Geiselnahmen! Genau das sind die Aufgaben der Gang!",
             "-160/69/201",
@@ -112,6 +112,11 @@ public enum Faction {
             "Das Hauptquartier der Triaden befindet sich ungef\u00e4hr am Eingang von Chinatown",
             "Die Triaden - ein Wort - eine Fraktion - 1 Milliarden Chinesen",
             "1006/69/-101"
+    )),
+    OBRIEN("O_Brien", constructBadFactionInfo("O'Brien Familie", "O'Brien",
+            "Das Hauptquartier der O'Briens befindet sich im irischen Viertel.",
+            "Irische Butter.",
+            "0/0/0"
     ));
 
     private static CommandInfo factionCommandInfo;

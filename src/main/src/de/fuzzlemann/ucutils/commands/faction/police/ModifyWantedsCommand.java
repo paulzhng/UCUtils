@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 public class ModifyWantedsCommand implements CommandExecutor, TabCompletion {
 
     @Override
-    @Command(labels = {"modifywanteds", "mw"}, usage = "/%label% [Spieler] [GF/SF/SSF/S/DA10/DA15]")
+    @Command(labels = {"modifywanteds", "mw"}, usage = "/%label% [Spieler] [GF/SF/SSF/S/DA10/DA15/FSA]")
     public boolean onCommand(EntityPlayerSP p, String[] args) {
         if (args.length < 2) return false;
 
@@ -97,7 +97,8 @@ public class ModifyWantedsCommand implements CommandExecutor, TabCompletion {
         BAD_CONDUCT("sf", "", " + Schlechte F\u00fchrung", "x+10"),
         VERY_BAD_CONDUCT("ssf", "", " + Sehr schlechte F\u00fchrung", "x+15"),
         DRUG_REMOVAL_10("da10", "", " + Drogenabnahme", "x-10"),
-        DRUG_REMOVAL_15("da15", "", " + Drogenabnahme", "x-15");
+        DRUG_REMOVAL_15("da15", "", " + Drogenabnahme", "x-15"),
+        DRIVERS_LICENSE_WITHDRAWAL("fsa", "", " + F\u00fchrerscheinabnahme", "x");
 
         private final String flagArgument;
         private final String prependReason;

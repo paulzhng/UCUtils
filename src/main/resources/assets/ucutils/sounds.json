@@ -47,5 +47,12 @@
     "sounds": [
       "ucutils:master/bomb_placed"
     ]
+  },
+  "timer": {
+    "category": "master",
+    "stream": true,
+    "sounds": [
+      "ucutils:master/timer"
+    ]
   }
 }

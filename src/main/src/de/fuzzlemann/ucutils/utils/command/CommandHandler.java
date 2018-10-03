@@ -6,10 +6,12 @@ import de.fuzzlemann.ucutils.commands.faction.CallReinforcementCommand;
 import de.fuzzlemann.ucutils.commands.faction.ChannelActivityCommand;
 import de.fuzzlemann.ucutils.commands.faction.CheckActiveMembersCommand;
 import de.fuzzlemann.ucutils.commands.faction.SchwarzmarktLocationsCommand;
-import de.fuzzlemann.ucutils.commands.faction.badfaction.blacklist.ASellDrugCommand;
+import de.fuzzlemann.ucutils.commands.faction.badfaction.drug.ASellDrugCommand;
 import de.fuzzlemann.ucutils.commands.faction.badfaction.blacklist.BlacklistPriceCommand;
-import de.fuzzlemann.ucutils.commands.faction.badfaction.drug.ASetBlacklistCommand;
+import de.fuzzlemann.ucutils.commands.faction.badfaction.blacklist.ASetBlacklistCommand;
 import de.fuzzlemann.ucutils.commands.faction.badfaction.drug.DrugPriceCommand;
+import de.fuzzlemann.ucutils.commands.faction.badfaction.drug.GiveDrugCommand;
+import de.fuzzlemann.ucutils.commands.faction.badfaction.speech.ToggleKerzakovSpeechCommand;
 import de.fuzzlemann.ucutils.commands.faction.badfaction.speech.ToggleMafiaSpeechCommand;
 import de.fuzzlemann.ucutils.commands.faction.badfaction.speech.ToggleTriadenSpeechCommand;
 import de.fuzzlemann.ucutils.commands.faction.police.ASUCommand;
@@ -58,7 +60,7 @@ public class CommandHandler {
 
     public static void registerAllCommands() {
         registerCommand(new ClearChatCommand());
-        registerCommand(new InetTestCommand());
+        registerCommand(new InternetTestCommand());
         registerCommand(new RefreshDataCommand());
         registerCommand(new CalculateCommand());
 
@@ -102,7 +104,9 @@ public class CommandHandler {
         registerCommand(new CallReinforcementCommand());
 
         registerCommand(new ToggleMafiaSpeechCommand());
+        registerCommand(new ToggleKerzakovSpeechCommand());
         registerCommand(new ToggleTriadenSpeechCommand());
+
         registerCommand(new SchwarzmarktLocationsCommand());
 
         registerCommand(new CheckMedicalLicenseCommand());
@@ -110,7 +114,6 @@ public class CommandHandler {
         registerCommand(new MoveHereCommand());
         registerCommand(new MoveCommand());
         registerCommand(new MoveToCommand());
-        registerCommand(new AReviveCommand());
 
         ASUCommand asuCommand = new ASUCommand();
         registerCommand(asuCommand, asuCommand);
@@ -124,6 +127,9 @@ public class CommandHandler {
         DrugPriceCommand drugPriceCommand = new DrugPriceCommand();
         registerCommand(drugPriceCommand, drugPriceCommand);
 
+        GiveDrugCommand giveDrugCommand = new GiveDrugCommand();
+        registerCommand(giveDrugCommand, giveDrugCommand);
+
         ASetBlacklistCommand aSetBlacklistCommand = new ASetBlacklistCommand();
         registerCommand(aSetBlacklistCommand, aSetBlacklistCommand);
 
@@ -135,6 +141,8 @@ public class CommandHandler {
 
         SendNoobChatCommand sendNoobChatCommand = new SendNoobChatCommand();
         registerCommand(sendNoobChatCommand, sendNoobChatCommand);
+
+        registerCommand(new ABuyCommand());
     }
 
     private static void registerCommand(CommandExecutor commandExecutor) {

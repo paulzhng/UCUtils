@@ -54,8 +54,4 @@ public class MoveHereCommand implements CommandExecutor {
         TSClientQuery.exec("clientmove cid=" + myChannelIDOptional.get() + " " + stringJoiner);
         Main.MINECRAFT.player.sendMessage(TextUtils.simpleMessage("Die Aktion wurde erfolgreich ausgef\u00fchrt.", TextFormatting.GREEN));
     }
-
-    public static void main(String[] args) {
-        TSClientQuery.exec("clientmove cid=97 clid=46|clid=501");
-    }
 }

@@ -1,13 +1,21 @@
 package de.fuzzlemann.ucutils.commands.time;
 
+import de.fuzzlemann.ucutils.Main;
 import de.fuzzlemann.ucutils.utils.FormatUtils;
 import de.fuzzlemann.ucutils.utils.command.Command;
 import de.fuzzlemann.ucutils.utils.command.CommandExecutor;
 import de.fuzzlemann.ucutils.utils.command.TabCompletion;
+import de.fuzzlemann.ucutils.utils.sound.SoundUtil;
+import de.fuzzlemann.ucutils.utils.sound.TimerSound;
 import de.fuzzlemann.ucutils.utils.text.Message;
+import de.fuzzlemann.ucutils.utils.text.MessagePart;
 import de.fuzzlemann.ucutils.utils.text.TextUtils;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.event.ClickEvent;
+import net.minecraft.util.text.event.HoverEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -18,12 +26,13 @@ import java.util.*;
  */
 @SideOnly(Side.CLIENT)
 public class TimerCommand implements CommandExecutor, TabCompletion {
+    private TimerSound currentTimerSound;
     private final Timer timer = new Timer();
     private final Map<Integer, Long> timers = new HashMap<>();
     private int timerID = 0;
 
     @Override
-    @Command(labels = "timer", usage = "/%label% [list/start] (Zeit)")
+    @Command(labels = "timer", usage = "/%label% [list/start/stop] (Zeit/ID)")
     public boolean onCommand(EntityPlayerSP p, String[] args) {
         if (args.length == 0) return false;
 
@@ -48,21 +57,56 @@ public class TimerCommand implements CommandExecutor, TabCompletion {
                 timer.schedule(new TimerTask() {
                     @Override
                     public void run() {
+                        if (timers.remove(currentTimerID) == null) return;
+
                         Message.MessageBuilder builder2 = Message.builder();
 
                         builder2.of("Der Timer ").color(TextFormatting.AQUA).advance()
                                 .of(String.valueOf(currentTimerID)).color(TextFormatting.RED).advance()
                                 .of(" ist abgelaufen. ").color(TextFormatting.AQUA).advance()
                                 .of(FormatUtils.formatMilliseconds(millis)).color(TextFormatting.RED).advance()
-                                .of(" sind vergangen.").color(TextFormatting.AQUA).advance();
+                                .of(" sind vergangen.").color(TextFormatting.AQUA).advance()
+                                .of(" [\u2713]").color(TextFormatting.GREEN).clickEvent(ClickEvent.Action.RUN_COMMAND, "/timer stopsound").advance();
 
                         p.sendMessage(builder2.build().toTextComponent());
-                        timers.remove(currentTimerID);
+                        p.playSound(SoundUtil.TIMER, 1, 1);
+
+                        if (currentTimerSound != null) {
+                            currentTimerSound.stop();
+
+                            Main.MINECRAFT.getSoundHandler().stop("ucutils:timer", SoundCategory.MASTER);
+                        }
+
+                        currentTimerSound = new TimerSound();
+                        Minecraft.getMinecraft().getSoundHandler().playSound(currentTimerSound);
                     }
                 }, millis);
                 break;
+            case "stop":
+                if (args.length < 2) return false;
+
+                int id;
+                try {
+                    id = Integer.parseInt(args[1]);
+                } catch (NumberFormatException e) {
+                    return false;
+                }
+
+                if (timers.remove(id) == null) {
+                    TextUtils.error("Der Timer wurde nicht gefunden.");
+                    return true;
+                }
+
+                TextUtils.error("Der Timer wurde gel\u00f6scht.");
             case "list":
                 sendTimerList(p);
+                break;
+            case "stopsound":
+                if (currentTimerSound != null) {
+                    currentTimerSound.stop();
+                }
+
+                Main.MINECRAFT.getSoundHandler().stop("ucutils:timer", SoundCategory.MASTER);
                 break;
             default:
                 return false;
@@ -89,7 +133,9 @@ public class TimerCommand implements CommandExecutor, TabCompletion {
 
             builder.of("  * Timer " + id).color(TextFormatting.GRAY).advance()
                     .of(": ").color(TextFormatting.DARK_GRAY).advance()
-                    .of(FormatUtils.formatMilliseconds(timeLeft) + " verbleibend\n").color(TextFormatting.RED).advance();
+                    .of(FormatUtils.formatMilliseconds(timeLeft) + " verbleibend").color(TextFormatting.RED).advance()
+                    .of(" [\u2717]").color(TextFormatting.RED).clickEvent(ClickEvent.Action.RUN_COMMAND, "/timer stop " + id)
+                    .hoverEvent(HoverEvent.Action.SHOW_TEXT, MessagePart.builder().message("Den Timer l\u00f6schen").color(TextFormatting.RED).build()).advance();
         }
 
         p.sendMessage(builder.build().toTextComponent());
@@ -97,7 +143,7 @@ public class TimerCommand implements CommandExecutor, TabCompletion {
 
     @Override
     public List<String> getTabCompletions(EntityPlayerSP p, String[] args) {
-        if (args.length == 1) return Arrays.asList("list", "start");
+        if (args.length == 1) return Arrays.asList("list", "start", "stop");
 
         return Collections.emptyList();
     }

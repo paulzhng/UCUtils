@@ -10,7 +10,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.StringJoiner;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 /**
  * @author Fuzzlemann
@@ -69,9 +68,9 @@ public class MafiaSpeechModifier implements SpeechModifier {
 
                 boolean addSpecialCharacters = lastIndex != i;
                 if (addSpecialCharacters) {
-                    replaceWord = replaceRetainingCase(replaceWord.substring(0, i + 1));
+                    replaceWord = SpeechModifyUtil.replaceRetainingCase(replaceWord.substring(0, i + 1), REPLACE_RETAIN_CASE);
                 } else {
-                    replaceWord = replaceRetainingCase(replaceWord);
+                    replaceWord = SpeechModifyUtil.replaceRetainingCase(replaceWord, REPLACE_RETAIN_CASE);
                 }
 
                 boolean addE = !VOCALS_PATTERN.matcher(String.valueOf(replaceWord.charAt(replaceWord.length() - 1))).find();
@@ -89,34 +88,5 @@ public class MafiaSpeechModifier implements SpeechModifier {
         }
 
         return stringJoiner.toString();
-    }
-
-    private static String replaceRetainingCase(String toReplaceString) {
-        for (Map.Entry<String, String> entry : REPLACE_RETAIN_CASE) {
-            String toReplace = entry.getKey();
-            String replaceTo = entry.getValue();
-
-            if (toReplace.equalsIgnoreCase(toReplaceString))
-                toReplaceString = replaceRetainingCase(toReplaceString, replaceTo);
-        }
-
-        return toReplaceString;
-    }
-
-    private static String replaceRetainingCase(String toReplace, String replaceTo) {
-        return toReplace.replaceAll("(?i)" + toReplace, replaceTo.chars()
-                .mapToObj(i -> (char) i)
-                .map(i -> {
-                    int index = replaceTo.indexOf(i);
-                    boolean lowerCase = index > toReplace.length() - 1;
-
-                    if (!lowerCase)
-                        lowerCase = Character.isLowerCase(toReplace.charAt(index));
-
-                    return lowerCase
-                            ? Character.toString(Character.toLowerCase(i))
-                            : Character.toString(Character.toUpperCase(i));
-                })
-                .collect(Collectors.joining()));
     }
 }

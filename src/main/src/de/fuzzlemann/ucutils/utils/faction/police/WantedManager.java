@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -32,7 +33,7 @@ public class WantedManager {
     private static final File WANTED_FILE = new File(JsonManager.DIRECTORY, "wanteds.storage");
     private static final List<WantedReason> WANTED_LIST = new ArrayList<>();
 
-    private static final Pattern WANTED_INFO_PATTERN = Pattern.compile("^HQ: [a-zA-Z0-9_]+ wird aus folgendem Grund gesucht: .+, Over.$");
+    private static final Pattern WANTED_INFO_PATTERN = Pattern.compile("^HQ: (?:\\[UC])*([a-zA-Z0-9_]+) wird aus folgendem Grund gesucht: (.+), Over.$");
 
     private static boolean blockNextMessage;
     private static CompletableFuture<Wanted> future;
@@ -114,58 +115,41 @@ public class WantedManager {
     }
 
     @SubscribeEvent
-    public static void onChat(ClientChatReceivedEvent e) {
+    public static void onChatReceived(ClientChatReceivedEvent e) {
         if (blockNextMessage) {
             e.setCanceled(true);
             blockNextMessage = false;
             return;
         }
 
+        if (future == null) return;
         String message = e.getMessage().getUnformattedText();
 
-        if (future != null) {
-            if (message.equals("HQ: Der Spieler wird nicht gesucht, Over.")) {
-                future.complete(null);
-                future = null;
-                return;
-            }
-
-            if (!WANTED_INFO_PATTERN.matcher(message).find()) return;
-            e.setCanceled(true);
-
-            String[] splittedMessage = message.split(" ");
-
-            String player = splittedMessage[1];
-            Integer wanteds = NameFormatEventHandler.WANTED_MAP.get(player);
-
-            if (wanteds == null) {
-                blockNextMessage = true;
-                future.complete(null);
-                future = null;
-                return;
-            }
-
-            StringBuilder sb = new StringBuilder();
-
-            for (int i = 0; i < splittedMessage.length; i++) {
-                if (i <= 6 || i == splittedMessage.length - 1) continue;
-
-                String messagePart = splittedMessage[i];
-                boolean lastString = i == splittedMessage.length - 2;
-
-                if (lastString)
-                    messagePart = messagePart.substring(0, messagePart.length() - 1);
-
-                sb.append(messagePart);
-
-                if (!lastString)
-                    sb.append(" ");
-            }
-
-            future.complete(new Wanted(sb.toString(), wanteds));
+        if (message.equals("HQ: Der Spieler wird nicht gesucht, Over.")) {
+            future.complete(null);
             future = null;
-
-            blockNextMessage = true;
+            return;
         }
+
+        Matcher matcher = WANTED_INFO_PATTERN.matcher(message);
+        if (!matcher.find()) return;
+
+        String player = matcher.group(1);
+        Integer wanteds = NameFormatEventHandler.WANTED_MAP.get(player);
+
+        if (wanteds == null) {
+            blockNextMessage = true;
+            future.complete(null);
+            future = null;
+            return;
+        }
+
+        String reason = matcher.group(2);
+
+        future.complete(new Wanted(reason, wanteds));
+        future = null;
+
+        blockNextMessage = true;
+        e.setCanceled(true);
     }
 }

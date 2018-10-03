@@ -50,7 +50,7 @@ public class MunitionEventHandler {
         String[] splittedLore = lore.split("/");
 
         String munitionString = splittedLore[0];
-        int munition = Integer.parseInt(munitionString.substring(2, munitionString.length()));
+        int munition = Integer.parseInt(munitionString.substring(2));
 
         return (--munition < 1 ? "\u00a7c0" : "\u00a76" + munition) + "\u00a7b/\u00a76" + splittedLore[1];
     }

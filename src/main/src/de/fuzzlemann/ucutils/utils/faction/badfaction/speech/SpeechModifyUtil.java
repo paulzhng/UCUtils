@@ -2,7 +2,10 @@ package de.fuzzlemann.ucutils.utils.faction.badfaction.speech;
 
 import com.google.common.collect.Sets;
 
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @author Fuzzlemann
@@ -42,5 +45,34 @@ public class SpeechModifyUtil {
         }
 
         return modifier.turnIntoSpeech(splitted);
+    }
+
+    public static String replaceRetainingCase(String toReplaceString, List<Map.Entry<String, String>> replaceMap) {
+        for (Map.Entry<String, String> entry : replaceMap) {
+            String toReplace = entry.getKey();
+            String replaceTo = entry.getValue();
+
+            if (toReplace.equalsIgnoreCase(toReplaceString))
+                toReplaceString = replaceRetainingCase(toReplaceString, replaceTo);
+        }
+
+        return toReplaceString;
+    }
+
+    public static String replaceRetainingCase(String toReplace, String replaceTo) {
+        return toReplace.replaceAll("(?i)" + toReplace, replaceTo.chars()
+                .mapToObj(i -> (char) i)
+                .map(i -> {
+                    int index = replaceTo.indexOf(i);
+                    boolean lowerCase = index > toReplace.length() - 1;
+
+                    if (!lowerCase)
+                        lowerCase = Character.isLowerCase(toReplace.charAt(index));
+
+                    return lowerCase
+                            ? Character.toString(Character.toLowerCase(i))
+                            : Character.toString(Character.toUpperCase(i));
+                })
+                .collect(Collectors.joining()));
     }
 }

@@ -26,7 +26,7 @@ public class MemberActivityEventHandler {
     public static final List<String> MEMBER_LIST = new ArrayList<>();
 
     private static final Timer TIMER = new Timer();
-    private static final Pattern MEMBER_ACTIVITY_PATTERN = Pattern.compile("^Member Aktivit\u00e4t der Fraktion: [a-zA-Z]+$");
+    private static final Pattern MEMBER_ACTIVITY_PATTERN = Pattern.compile("^Member Aktivit\u00e4t der Fraktion: .+$");
     private static long lastMessage;
     private static long shown;
 
@@ -46,6 +46,8 @@ public class MemberActivityEventHandler {
             return;
 
         lastMessage = currentTime;
+
+        //TODO REGEX
         String name = unformattedMessage.substring(4, unformattedMessage.length() - 1);
         name = name.split(":")[0];
 

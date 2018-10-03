@@ -20,11 +20,11 @@ import java.util.Objects;
  * @author Fuzzlemann
  */
 @SideOnly(Side.CLIENT)
-public class InetTestCommand implements CommandExecutor {
+public class InternetTestCommand implements CommandExecutor {
     private final List<String> hosts = Arrays.asList("unicacity.de", "fuzzlemann.de", "www.google.de");
 
     @Override
-    @Command(labels = "inettest")
+    @Command(labels = {"internettest", "inettest"})
     public boolean onCommand(EntityPlayerSP p, String[] args) {
         new Thread(() -> {
             TextComponentString textBegin = new TextComponentString("Ping zu ");

@@ -26,7 +26,7 @@ import java.util.regex.Pattern;
 public class CheckActiveMembersCommand implements CommandExecutor {
 
     private static final Timer TIMER = new Timer();
-    private static final Pattern FACTION_MEMBERS_PATTERN = Pattern.compile("^ {2}=== Fraktionsmitglieder \\[[a-zA-Z. ]+] ===$");
+    private static final Pattern FACTION_MEMBERS_PATTERN = Pattern.compile("^ {2}=== Fraktionsmitglieder .+ ===$");
     private static long memberlistShown;
     private static final Map<Boolean, Integer> MEMBER_MAP = new HashMap<>();
     private static CompletableFuture<Map<Boolean, Integer>> future;
@@ -79,7 +79,6 @@ public class CheckActiveMembersCommand implements CommandExecutor {
         if (future == null) return;
 
         String message = e.getMessage().getUnformattedText();
-
         long currentTime = System.currentTimeMillis();
 
         if (FACTION_MEMBERS_PATTERN.matcher(message).find()) {
@@ -94,7 +93,7 @@ public class CheckActiveMembersCommand implements CommandExecutor {
                 public void run() {
                     future.complete(MEMBER_MAP);
                 }
-            }, 200L);
+            }, 300L);
             return;
         }
 

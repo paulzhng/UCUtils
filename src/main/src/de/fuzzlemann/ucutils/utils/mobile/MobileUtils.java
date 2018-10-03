@@ -12,6 +12,7 @@ import java.io.File;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -27,8 +28,8 @@ public class MobileUtils {
             .stream()
             .map(object -> (String) object)
             .collect(Collectors.toList());
-    private static final Pattern SMS_PATTERN = Pattern.compile("Dein Handy klingelt! Eine Nachricht von [a-zA-Z0-9_]+ \\(\\d+\\).");
-    private static final Pattern NUMBER_PATTERN = Pattern.compile("Nummer von [a-zA-Z0-9_]+: \\d+");
+    private static final Pattern SMS_PATTERN = Pattern.compile("Dein Handy klingelt! Eine Nachricht von ([a-zA-Z0-9_])+ \\((\\d+\\))\\.");
+    private static final Pattern NUMBER_PATTERN = Pattern.compile("Nummer von [a-zA-Z0-9_]+: (\\d+)");
 
     private static boolean blockNextMessage;
     private static CompletableFuture<Integer> future;
@@ -82,9 +83,9 @@ public class MobileUtils {
 
         String message = e.getMessage().getUnformattedText();
 
-        if (SMS_PATTERN.matcher(message).find()) {
-            String[] splittedMessage = message.split(" ");
-            String playerName = splittedMessage[6];
+        Matcher smsMatcher = SMS_PATTERN.matcher(message);
+        if (smsMatcher.find()) {
+            String playerName = smsMatcher.group(1);
 
             if (MobileUtils.isBlocked(playerName)) {
                 e.setCanceled(true);
@@ -92,10 +93,7 @@ public class MobileUtils {
                 return;
             }
 
-            String numberString = splittedMessage[7];
-            numberString = numberString.substring(1, numberString.length() - 2);
-
-            lastNumber = Integer.parseInt(numberString);
+            lastNumber = Integer.parseInt(smsMatcher.group(2));
         }
 
         if (future != null) {
@@ -105,14 +103,15 @@ public class MobileUtils {
                 return;
             }
 
-            if (!NUMBER_PATTERN.matcher(message).find()) return;
-            e.setCanceled(true);
+            Matcher numberMatcher = NUMBER_PATTERN.matcher(message);
+            if (!numberMatcher.find()) return;
 
-            String numberString = message.split(":")[1];
-            int number = Integer.parseInt(numberString.substring(1, numberString.length()));
+            int number = Integer.parseInt(numberMatcher.group(1));
 
             future.complete(number);
             future = null;
+
+            e.setCanceled(true);
         }
     }
 }

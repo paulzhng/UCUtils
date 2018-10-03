@@ -1,7 +1,7 @@
 package de.fuzzlemann.ucutils.events;
 
 import de.fuzzlemann.ucutils.Main;
-import de.fuzzlemann.ucutils.utils.SoundUtil;
+import de.fuzzlemann.ucutils.utils.sound.SoundUtil;
 import de.fuzzlemann.ucutils.utils.config.ConfigUtil;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.util.text.ITextComponent;
@@ -15,6 +15,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -25,24 +26,25 @@ import java.util.regex.Pattern;
 public class NotificationEventHandler {
 
     private static final Pattern RESOURCEPACK_PATTERN = Pattern.compile("^Wir empfehlen dir unser Resourcepack zu nutzen.$|" +
-            "^Unter http://server.unicacity.de/dl/UnicaCity[_a-zA-Z\\d]+.zip kannst du es dir herunterladen.$");
-    private static final Pattern UNINVITE_PATTERN = Pattern.compile("^[\\[UC\\]]*[a-zA-Z0-9_]+ wurde von [\\[UC\\]]*[a-zA-Z0-9_]+ aus der Fraktion geschmissen.$");
+            "^Unter http://unicacity.de/dl/UnicaCity[_a-zA-Z\\d]+.zip kannst du es dir herunterladen.$");
+    private static final Pattern UNINVITE_PATTERN = Pattern.compile("^(?:\\[UC])*[a-zA-Z0-9_]+ wurde von (?:\\[UC])*[a-zA-Z0-9_]+ aus der Fraktion geschmissen.$");
     private static final Pattern INVITE_PATTERN = Pattern.compile("^[a-zA-Z0-9_]+ ist der Fraktion mit Rang \\d beigetreten.$");
-    private static final Pattern FRIEND_JOINED_PATTERN = Pattern.compile("^ \u00bb Freundesliste: [a-zA-Z0-9_]+ ist nun online.$");
+    private static final Pattern FRIEND_JOINED_PATTERN = Pattern.compile("^ \u00bb Freundesliste: ([a-zA-Z0-9_]+) ist nun online.$");
     private static final Pattern REPORT_RECEIVED_PATTERN = Pattern.compile("^\u00a7cEs liegt ein neuer Report \u00a78\\[\u00a79\\d+\u00a78]\u00a7c von \u00a76[a-zA-Z0-9_]+ \u00a7cvor! Thema: \u00a79[a-zA-Z]+$|" +
             "^Es liegt ein neuer Report von [a-zA-Z0-9_]+ vor! Thema: [a-zA-Z]+$");
     private static final Pattern REPORT_ACCEPTED_PATTERN = Pattern.compile("^\\[Report] Du hast den Report von [a-zA-Z0-9_]+ \\[Level \\d+] angenommen! Thema: [a-zA-Z]+$");
     private static final Pattern BOMB_PLACED_PATTERN = Pattern.compile("^News: ACHTUNG! Es wurde eine Bombe in der N\u00e4he von .+ gefunden!$");
-    private static final Pattern SERVICE_ANNOUNCEMENT_PATTERN = Pattern.compile("^HQ: Achtung! Ein Notruf von [a-zA-Z0-9_]+ \\(.+\\), over.$|" +
-            "^Ein Notruf von [a-zA-Z0-9_]+ \\(.+\\).$");
+    private static final Pattern SERVICE_ANNOUNCEMENT_PATTERN = Pattern.compile("^HQ: Achtung! Ein Notruf von (?:\\[UC])*[a-zA-Z0-9_]+ \\(.+\\), over.$|" +
+            "^Ein Notruf von (?:\\[UC])*[a-zA-Z0-9_]+ \\(.+\\).$");
 
     @SubscribeEvent
     public static void onChatReceived(ClientChatReceivedEvent e) {
         ITextComponent message = e.getMessage();
         String unformattedText = message.getUnformattedText();
 
-        if (FRIEND_JOINED_PATTERN.matcher(unformattedText).find()) {
-            String friendName = unformattedText.split(" ")[3];
+        Matcher friendJoinedMatcher = FRIEND_JOINED_PATTERN.matcher(unformattedText);
+        if (friendJoinedMatcher.find()) {
+            String friendName = friendJoinedMatcher.group(1);
 
             modifyFriendJoin(message, friendName);
             return;

@@ -1,6 +1,7 @@
 package de.fuzzlemann.ucutils;
 
 import de.fuzzlemann.ucutils.update.UpdateReminder;
+import de.fuzzlemann.ucutils.utils.AnalyticsUtil;
 import de.fuzzlemann.ucutils.utils.TabListSortHandler;
 import de.fuzzlemann.ucutils.utils.command.CommandHandler;
 import de.fuzzlemann.ucutils.utils.config.ConfigUtil;
@@ -31,7 +32,7 @@ public class Main {
     public static final Minecraft MINECRAFT = Minecraft.getMinecraft();
 
     public static final String MOD_ID = "ucutils";
-    public static final String VERSION = "1.12.1-1.4";
+    public static final String VERSION = "1.12.1-1.5";
 
     static final String NAME = "UC Utils";
     static final String GUI_FACTORY = "de.fuzzlemann.ucutils.utils.config.GuiFactoryUCUtils";
@@ -50,6 +51,7 @@ public class Main {
     @Mod.EventHandler
     public void postInit(FMLPostInitializationEvent e) throws NoSuchFieldException, IllegalAccessException {
         new Thread(Main::refreshData).start();
+        new Thread(AnalyticsUtil::sendStartupAnalytics).start();
 
         TabListSortHandler.initTablistSort();
     }
