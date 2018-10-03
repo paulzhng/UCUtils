@@ -34,7 +34,7 @@ public class ADropTransportCommand implements CommandExecutor {
                 .filter(scorePredicate -> {
                     String playerName = scorePredicate.getPlayerName();
 
-                    return playerName.equals("\u00a79Kisten\u00a78: ") || playerName.equals("\u00a79Waffenkisten\u00a78: ");
+                    return playerName.equals("§9Kisten§8: ") || playerName.equals("§9Waffenkisten§8: ");
                 })
                 .findFirst()
                 .orElse(null);

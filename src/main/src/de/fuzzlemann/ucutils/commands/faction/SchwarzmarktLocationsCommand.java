@@ -34,7 +34,7 @@ public class SchwarzmarktLocationsCommand implements CommandExecutor {
     public boolean onCommand(EntityPlayerSP p, String[] args) {
         Message.MessageBuilder builder = Message.builder();
 
-        builder.of("\u00bb ").color(TextFormatting.GOLD).advance().of("Positionen der m\u00f6glichen Schwarzm\u00e4rkte\n").color(TextFormatting.DARK_PURPLE).advance();
+        builder.of("» ").color(TextFormatting.GOLD).advance().of("Positionen der möglichen Schwarzmärkte\n").color(TextFormatting.DARK_PURPLE).advance();
 
         for (Map.Entry<String, BlockPos> entry : BLACK_MARKET_LIST) {
             String blackMarketName = entry.getKey();

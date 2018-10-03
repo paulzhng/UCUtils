@@ -36,7 +36,7 @@ public class UpdateReminder {
         if (!updateNeeded) return;
         if (!connected) return;
 
-        TextComponentString text = new TextComponentString("Es ist ein neues Update von UCUtils verf\u00fcgbar!");
+        TextComponentString text = new TextComponentString("Es ist ein neues Update von UCUtils verfügbar!");
         text.getStyle().setColor(TextFormatting.RED);
 
         TextComponentString hoverText = new TextComponentString("Download");

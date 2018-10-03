@@ -111,7 +111,7 @@ public class FactionInfo {
     }
 
     private ITextComponent getPrefix() {
-        TextComponentString prefix = new TextComponentString("\n \u00bb ");
+        TextComponentString prefix = new TextComponentString("\n » ");
         prefix.getStyle().setColor(TextFormatting.GRAY);
 
         return prefix;

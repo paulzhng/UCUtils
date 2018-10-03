@@ -26,8 +26,8 @@ import java.util.regex.Pattern;
 @Mod.EventBusSubscriber
 public class CallReinforcementCommand implements CommandExecutor {
 
-    private static final Pattern REINFORCEMENT_PATTERN = Pattern.compile("^(.+ ((?:\\[UC])*[a-zA-Z0-9_]+)): Ben\u00f6tige Verst\u00e4rkung! -> X: (-*\\d+) \\| Y: (-*\\d+) \\| Z: (-*\\d+)$");
-    private static final Pattern ON_THE_WAY_PATTERN = Pattern.compile("^(.+ (?:\\[UC])*[a-zA-Z0-9_]+): ((?:\\[UC])*[a-zA-Z0-9_]+), ich bin zu deinem Verst\u00e4rkungsruf unterwegs! \\((\\d+) Meter entfernt\\)$");
+    private static final Pattern REINFORCEMENT_PATTERN = Pattern.compile("^(.+ ((?:\\[UC])*[a-zA-Z0-9_]+)): Benötige Verstärkung! -> X: (-*\\d+) \\| Y: (-*\\d+) \\| Z: (-*\\d+)$");
+    private static final Pattern ON_THE_WAY_PATTERN = Pattern.compile("^(.+ (?:\\[UC])*[a-zA-Z0-9_]+): ((?:\\[UC])*[a-zA-Z0-9_]+), ich bin zu deinem Verstärkungsruf unterwegs! \\((\\d+) Meter entfernt\\)$");
 
     @SubscribeEvent
     public static void onChatReceived(ClientChatReceivedEvent e) {
@@ -49,7 +49,7 @@ public class CallReinforcementCommand implements CommandExecutor {
 
             Message message = Message.builder()
                     .of(fullName).color(TextFormatting.DARK_GREEN).advance()
-                    .of(" ben\u00f6tigt Unterst\u00fctzung bei X: " + posX + " | Y: " + posY + " | Z: " + posZ + "! (" + distance + " Meter entfernt)").color(TextFormatting.GREEN).advance().build();
+                    .of(" benötigt Unterstützung bei X: " + posX + " | Y: " + posY + " | Z: " + posZ + "! (" + distance + " Meter entfernt)").color(TextFormatting.GREEN).advance().build();
 
             Message message2 = Message.builder()
                     .messageParts(NavigationUtil.getNavigationMessage(posX, posY, posZ).getMessageParts())
@@ -74,7 +74,7 @@ public class CallReinforcementCommand implements CommandExecutor {
 
             Message message = Message.builder()
                     .of(senderFullName).color(TextFormatting.DARK_GREEN).advance()
-                    .of(" kommt zum Verst\u00e4rkungsruf von " + reinforcementSenderName + "! (" + distance + " Meter entfernt)").color(TextFormatting.GREEN).advance().build();
+                    .of(" kommt zum Verstärkungsruf von " + reinforcementSenderName + "! (" + distance + " Meter entfernt)").color(TextFormatting.GREEN).advance().build();
 
             p.sendMessage(message.toTextComponent());
             e.setCanceled(true);
@@ -82,7 +82,7 @@ public class CallReinforcementCommand implements CommandExecutor {
     }
 
     @Override
-    @Command(labels = {"reinforcement", "callreinforcement", "verst\u00e4rkung"})
+    @Command(labels = {"reinforcement", "callreinforcement", "verstärkung"})
     public boolean onCommand(EntityPlayerSP p, String[] args) {
         String type;
         if (args.length != 0) {
@@ -112,9 +112,9 @@ public class CallReinforcementCommand implements CommandExecutor {
 
                     String message;
                     if (args.length == 6 && args[5].equals("-d")) {
-                        message = "/d " + name + ", ich bin zu deinem Verst\u00e4rkungsruf unterwegs! (" + (int) p.getPosition().getDistance(x, y, z) + " Meter entfernt)";
+                        message = "/d " + name + ", ich bin zu deinem Verstärkungsruf unterwegs! (" + (int) p.getPosition().getDistance(x, y, z) + " Meter entfernt)";
                     } else {
-                        message = "/f " + name + ", ich bin zu deinem Verst\u00e4rkungsruf unterwegs! (" + (int) p.getPosition().getDistance(x, y, z) + " Meter entfernt)";
+                        message = "/f " + name + ", ich bin zu deinem Verstärkungsruf unterwegs! (" + (int) p.getPosition().getDistance(x, y, z) + " Meter entfernt)";
                     }
 
                     p.sendChatMessage(message);
@@ -130,7 +130,7 @@ public class CallReinforcementCommand implements CommandExecutor {
         int posY = (int) p.posY;
         int posZ = (int) p.posZ;
 
-        p.sendChatMessage("/" + type + " Ben\u00f6tige Verst\u00e4rkung! -> X: " + posX + " | Y: " + posY + " | Z: " + posZ);
+        p.sendChatMessage("/" + type + " Benötige Verstärkung! -> X: " + posX + " | Y: " + posY + " | Z: " + posZ);
         return true;
     }
 }

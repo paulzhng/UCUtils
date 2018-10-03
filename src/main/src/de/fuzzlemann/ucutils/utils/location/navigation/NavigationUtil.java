@@ -64,7 +64,7 @@ public class NavigationUtil {
     private static Message constructNavigationMessage(String naviCommand) {
         Message.MessageBuilder builder = Message.builder();
 
-        return builder.of(" \u00bb ").color(TextFormatting.GRAY).advance()
+        return builder.of(" » ").color(TextFormatting.GRAY).advance()
                 .messageParts(constructRawNavigationMessage(naviCommand).getMessageParts())
                 .build();
     }

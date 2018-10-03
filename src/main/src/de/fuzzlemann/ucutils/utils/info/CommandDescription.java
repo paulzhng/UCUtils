@@ -32,7 +32,7 @@ public class CommandDescription {
     }
 
     private ITextComponent getPrefix() {
-        TextComponentString prefix = new TextComponentString(" \u00bb ");
+        TextComponentString prefix = new TextComponentString(" » ");
         prefix.getStyle().setColor(TextFormatting.GRAY);
 
         return prefix;

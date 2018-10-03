@@ -37,13 +37,13 @@ public class NearestJobCommand implements CommandExecutor {
 
             assert nearestJob != null;
 
-            TextComponentString text = new TextComponentString("Der n\u00e4heste Job an dir ist ");
+            TextComponentString text = new TextComponentString("Der näheste Job an dir ist ");
             text.getStyle().setColor(TextFormatting.AQUA);
 
             TextComponentString jobComponent = new TextComponentString(nearestJob.getName());
             jobComponent.getStyle().setColor(TextFormatting.RED);
 
-            TextComponentString blockComponent = new TextComponentString(". Die Distanz zu dem Job betr\u00e4gt ");
+            TextComponentString blockComponent = new TextComponentString(". Die Distanz zu dem Job beträgt ");
             blockComponent.getStyle().setColor(TextFormatting.AQUA);
 
             TextComponentString distanceComponent = new TextComponentString((int) nearestDistance + " Meter");

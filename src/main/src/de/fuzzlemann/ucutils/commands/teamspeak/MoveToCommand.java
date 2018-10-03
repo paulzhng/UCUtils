@@ -40,6 +40,6 @@ public class MoveToCommand implements CommandExecutor {
         String channelID = client.get("cid");
 
         TSClientQuery.exec("clientmove cid=" + channelID + " clid=0");
-        Main.MINECRAFT.player.sendMessage(TextUtils.simpleMessage("Die Aktion wurde erfolgreich ausgef\u00fchrt.", TextFormatting.GREEN));
+        Main.MINECRAFT.player.sendMessage(TextUtils.simpleMessage("Die Aktion wurde erfolgreich ausgeführt.", TextFormatting.GREEN));
     }
 }

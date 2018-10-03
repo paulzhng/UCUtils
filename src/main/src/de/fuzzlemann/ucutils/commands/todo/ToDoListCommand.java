@@ -30,31 +30,31 @@ public class ToDoListCommand implements CommandExecutor {
         List<ToDo> toDoList = ToDoManager.getToDoList();
 
         if (toDoList.isEmpty()) {
-            TextComponentString text = new TextComponentString("Du hast derzeit keine ToDo-Eintr\u00e4ge.");
+            TextComponentString text = new TextComponentString("Du hast derzeit keine ToDo-Einträge.");
             text.getStyle().setColor(TextFormatting.GREEN);
 
             p.sendMessage(text);
             return true;
         }
 
-        TextComponentString text = new TextComponentString("\u00bb");
+        TextComponentString text = new TextComponentString("»");
         text.getStyle().setColor(TextFormatting.GOLD);
 
         TextComponentString textMid = new TextComponentString(" ToDos\n");
         textMid.getStyle().setColor(TextFormatting.DARK_PURPLE);
         text.appendSibling(textMid);
 
-        TextComponentString doneComponent = new TextComponentString("[\u2713] ");
+        TextComponentString doneComponent = new TextComponentString("[✓] ");
         doneComponent.getStyle().setColor(TextFormatting.GREEN);
 
         TextComponentString doneHoverText = new TextComponentString("Makiere den Eintrag als erledigt");
         doneHoverText.getStyle().setColor(TextFormatting.GREEN);
         doneComponent.getStyle().setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, doneHoverText));
 
-        TextComponentString deleteComponent = new TextComponentString("[\u2717]\n");
+        TextComponentString deleteComponent = new TextComponentString("[✗]\n");
         deleteComponent.getStyle().setColor(TextFormatting.RED);
 
-        TextComponentString deleteHoverText = new TextComponentString("L\u00f6sche den Eintrag");
+        TextComponentString deleteHoverText = new TextComponentString("Lösche den Eintrag");
         deleteHoverText.getStyle().setColor(TextFormatting.RED);
         deleteComponent.getStyle().setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, deleteHoverText));
 

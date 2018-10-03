@@ -37,7 +37,7 @@ public class CheckActiveMembersCommand implements CommandExecutor {
         new Thread(() -> {
             Message.MessageBuilder builder = Message.builder();
 
-            builder.of("\u00bb ").color(TextFormatting.GOLD).advance();
+            builder.of("» ").color(TextFormatting.GOLD).advance();
             builder.of("Aktive Spieler in den Fraktionen\n").color(TextFormatting.DARK_PURPLE).advance();
 
             for (Faction faction : Faction.values()) {
@@ -97,7 +97,7 @@ public class CheckActiveMembersCommand implements CommandExecutor {
             return;
         }
 
-        if (currentTime - memberlistShown > 200L || !message.startsWith(" \u00bb ")) return;
+        if (currentTime - memberlistShown > 200L || !message.startsWith(" » ")) return;
 
         boolean inactive = !message.endsWith("AFK") && !message.endsWith("Nicht im Dienst");
         MEMBER_MAP.merge(inactive, 1, (a, b) -> a + b);

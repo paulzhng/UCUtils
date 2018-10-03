@@ -52,6 +52,6 @@ public class MoveHereCommand implements CommandExecutor {
         }
 
         TSClientQuery.exec("clientmove cid=" + myChannelIDOptional.get() + " " + stringJoiner);
-        Main.MINECRAFT.player.sendMessage(TextUtils.simpleMessage("Die Aktion wurde erfolgreich ausgef\u00fchrt.", TextFormatting.GREEN));
+        Main.MINECRAFT.player.sendMessage(TextUtils.simpleMessage("Die Aktion wurde erfolgreich ausgeführt.", TextFormatting.GREEN));
     }
 }

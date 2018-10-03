@@ -37,7 +37,7 @@ public class DistanceCommand implements CommandExecutor {
 
         int distance = (int) p.getPosition().getDistance(x, y, z);
 
-        TextComponentString text = new TextComponentString("Die Distanz zu der Position betr\u00e4gt: ");
+        TextComponentString text = new TextComponentString("Die Distanz zu der Position beträgt: ");
         text.getStyle().setColor(TextFormatting.AQUA);
 
         TextComponentString distanceComponent = new TextComponentString(distance + " Meter");

@@ -55,7 +55,7 @@ public class DrugPriceCommand implements CommandExecutor, TabCompletion {
                         .of(drug.getName()).color(TextFormatting.RED).advance()
                         .of(" zu ").color(TextFormatting.AQUA).advance()
                         .of(price + "$ ").color(TextFormatting.RED).advance()
-                        .of("ge\u00e4ndert.").color(TextFormatting.AQUA).advance().build().toTextComponent());
+                        .of("geändert.").color(TextFormatting.AQUA).advance().build().toTextComponent());
                 break;
             default:
                 return false;
@@ -86,7 +86,7 @@ public class DrugPriceCommand implements CommandExecutor, TabCompletion {
     private void sendDrugPrices(EntityPlayerSP p) {
         Message.MessageBuilder builder = Message.builder();
 
-        builder.of("\u00bb ").color(TextFormatting.GOLD).advance().of("Eingestellte Drogenpreise\n").color(TextFormatting.DARK_PURPLE).advance();
+        builder.of("» ").color(TextFormatting.GOLD).advance().of("Eingestellte Drogenpreise\n").color(TextFormatting.DARK_PURPLE).advance();
         for (Drug drug : DrugUtil.DRUGS) {
             builder.of("  * " + drug.getName()).color(TextFormatting.GRAY).advance()
                     .of(": ").color(TextFormatting.DARK_GRAY).advance()

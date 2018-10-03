@@ -29,7 +29,7 @@ public class InfoCommand implements CommandExecutor {
     }
 
     private ITextComponent constructText(String text, String command) {
-        TextComponentString prefix = new TextComponentString("\n \u00bb ");
+        TextComponentString prefix = new TextComponentString("\n » ");
         prefix.getStyle().setColor(TextFormatting.RED);
 
         TextComponentString textComponent = new TextComponentString(text);

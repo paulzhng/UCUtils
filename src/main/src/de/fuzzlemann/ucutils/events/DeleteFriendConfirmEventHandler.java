@@ -43,12 +43,12 @@ public class DeleteFriendConfirmEventHandler {
         Message.MessageBuilder builder = Message.builder();
 
         builder.messageParts(prefixComponents)
-                .of(" Best\u00e4tige, dass du die Freundschaft mit " + name + " beenden willst.\n").color(TextFormatting.GOLD).advance()
+                .of(" Bestätige, dass du die Freundschaft mit " + name + " beenden willst.\n").color(TextFormatting.GOLD).advance()
                 .messageParts(prefixComponents)
                 .of(" [").color(TextFormatting.GRAY).advance()
-                .of("Best\u00e4tigen").color(TextFormatting.GREEN)
+                .of("Bestätigen").color(TextFormatting.GREEN)
                 .clickEvent(ClickEvent.Action.RUN_COMMAND, "/friend delete " + name + " confirm")
-                .hoverEvent(HoverEvent.Action.SHOW_TEXT, Message.builder().of("Best\u00e4tigen").color(TextFormatting.GREEN).build()).advance()
+                .hoverEvent(HoverEvent.Action.SHOW_TEXT, Message.builder().of("Bestätigen").color(TextFormatting.GREEN).build()).advance()
                 .of("]").color(TextFormatting.GRAY).advance();
 
         Main.MINECRAFT.player.sendMessage(builder.build().toTextComponent());

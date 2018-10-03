@@ -37,7 +37,7 @@ public class ASUCommand implements CommandExecutor, TabCompletion {
         }
 
         if (Math.abs(variation) > 10) {
-            TextUtils.error("Die Variation darf nicht gr\u00f6\u00dfer als 10 Wanteds sein.");
+            TextUtils.error("Die Variation darf nicht größer als 10 Wanteds sein.");
             return true;
         }
 
@@ -108,7 +108,7 @@ public class ASUCommand implements CommandExecutor, TabCompletion {
     private enum Flag {
         TRIED("-v", "Versuchte/r/s ", "", "x/2"),
         SUBSIDY("-b", "Beihilfe bei der/dem ", "", "x-10"),
-        DRIVERS_LICENSE_WITHDRAWAL("-fsa", "", " + F\u00fchrerscheinabnahme", "x");
+        DRIVERS_LICENSE_WITHDRAWAL("-fsa", "", " + Führerscheinabnahme", "x");
 
         private final String flagArgument;
         private final String prependReason;

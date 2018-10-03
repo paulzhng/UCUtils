@@ -15,7 +15,7 @@ import java.util.regex.Pattern;
 @SideOnly(Side.CLIENT)
 public class TextUtils {
 
-    private static final Pattern STRIP_COLOR_PATTERN = Pattern.compile("(?i)\u00a7[0-9A-FK-OR]");
+    private static final Pattern STRIP_COLOR_PATTERN = Pattern.compile("(?i)§[0-9A-FK-OR]");
     private static final Pattern STRIP_PREFIX_PATTERN = Pattern.compile("\\[[0-9A-Za-z]+]");
 
     public static void error(String message) {

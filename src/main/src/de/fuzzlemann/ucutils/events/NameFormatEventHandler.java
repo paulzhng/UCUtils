@@ -28,18 +28,18 @@ public class NameFormatEventHandler {
     private static final Pattern WANTEDS_GIVEN_PATTERN = Pattern.compile("^HQ: (?:\\[UC])*([a-zA-Z0-9_]+)'s momentanes WantedLevel: (\\d+)$");
     private static final Pattern WANTEDS_DELETED_PATTERN = Pattern.compile("^HQ: (?:\\[UC])*([a-zA-Z0-9_]+) wurde von (?:\\[UC])*[a-zA-Z0-9_]+ eingesperrt.$" +
             //"|(?:^(?:Beamter|Agent) (?:\\[UC])*[a-zA-Z0-9_]+ hat (?:\\[UC])*([a-zA-Z0-9_]+) getötet!$)" + //TODO ADD WHEN KILL FIX
-            "|^HQ: .+ (?:\\[UC])*[a-zA-Z0-9_]+ hat (?:\\[UC])*([a-zA-Z0-9_]+)(?:'s)*(?: seine| ihre)* Akten gel\u00f6scht, over.$");
+            "|^HQ: .+ (?:\\[UC])*[a-zA-Z0-9_]+ hat (?:\\[UC])*([a-zA-Z0-9_]+)(?:'s)*(?: seine| ihre)* Akten gelöscht, over.$");
     private static long wantedsShown;
     //--------------------- Hits ---------------------\\
     private static final List<String> HITLIST = new ArrayList<>();
     private static final Pattern CONTRACT_SET_PATTERN = Pattern.compile("^\\[Contract] Es wurde ein Kopfgeld auf (?:\\[UC])*([a-zA-Z0-9_]+) \\(\\d+\\$\\) ausgesetzt.$");
-    private static final Pattern CONTRACT_REMOVED_PATTERN = Pattern.compile("(?:^\\[Contract] (?:\\[UC])*[a-zA-Z0-9_]+ hat (?:\\[UC])*([a-zA-Z0-9_]+) von der Contract Liste gel\u00f6scht. \\[-\\d+]$)" +
-            "|(?:^\\[Contract] (?:\\[UC])*[a-zA-Z0-9_]+ hat (?:\\[UC])*([a-zA-Z0-9_]+) get\u00f6tet. Kopfgeld: \\d+\\$)");
+    private static final Pattern CONTRACT_REMOVED_PATTERN = Pattern.compile("(?:^\\[Contract] (?:\\[UC])*[a-zA-Z0-9_]+ hat (?:\\[UC])*([a-zA-Z0-9_]+) von der Contract Liste gelöscht. \\[-\\d+]$)" +
+            "|(?:^\\[Contract] (?:\\[UC])*[a-zA-Z0-9_]+ hat (?:\\[UC])*([a-zA-Z0-9_]+) getötet. Kopfgeld: \\d+\\$)");
     private static long hitlistShown;
     //--------------------- Blacklist ---------------------\\
     private static final List<String> BLACKLIST = new ArrayList<>();
     private static final Pattern BLACKLIST_ADDED_PATTERN = Pattern.compile("^\\[Blacklist] (?:\\[UC])*([a-zA-Z0-9_]+) wurde von (?:\\[UC])*[a-zA-Z0-9_]+ auf die Blacklist gesetzt!$");
-    private static final Pattern BLACKLIST_REMOVED_PATTERN = Pattern.compile("^\\[Blacklist] (?:\\[UC])*([a-zA-Z0-9_]+) wurde von (?:\\[UC])*[a-zA-Z0-9_]+ von der Blacklist gel\u00f6scht!$");
+    private static final Pattern BLACKLIST_REMOVED_PATTERN = Pattern.compile("^\\[Blacklist] (?:\\[UC])*([a-zA-Z0-9_]+) wurde von (?:\\[UC])*[a-zA-Z0-9_]+ von der Blacklist gelöscht!$");
     private static long blacklistShown;
 
     private static final Map<String, EntityPlayer> PLAYER_MAP = new HashMap<>();
@@ -54,12 +54,12 @@ public class NameFormatEventHandler {
         PLAYER_MAP.put(userName, p);
 
         //Prevents people who are masked from being detected
-        if (displayName.contains("\u00a7k")) return;
+        if (displayName.contains("§k")) return;
 
         String color = getColor(userName);
         if (color == null) return;
 
-        e.setDisplayname("\u00a7" + color + userName);
+        e.setDisplayname("§" + color + userName);
     }
 
     @SubscribeEvent
@@ -208,7 +208,7 @@ public class NameFormatEventHandler {
             return;
         }
 
-        if (currentTime - blacklistShown > 5000L || !unformattedMessage.startsWith(" \u00bb ")) return;
+        if (currentTime - blacklistShown > 5000L || !unformattedMessage.startsWith(" » ")) return;
 
         //TODO REGEX
         String[] splittedMessage = StringUtils.split(unformattedMessage, " | ");

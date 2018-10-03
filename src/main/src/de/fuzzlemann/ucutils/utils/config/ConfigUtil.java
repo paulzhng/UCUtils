@@ -66,7 +66,7 @@ public class ConfigUtil {
         Property contractFulfilledAnnouncementProperty = config.get(Configuration.CATEGORY_GENERAL,
                 "contractFulfilledAnnouncement",
                 true,
-                "Spielt einen Sound ab, wenn ein Spieler auf der Contractliste get\u00f6tet wird");
+                "Spielt einen Sound ab, wenn ein Spieler auf der Contractliste getötet wird");
         contractFulfilledAnnouncement = contractFulfilledAnnouncementProperty.getBoolean();
 
         Property serviceAnnouncementProperty = config.get(Configuration.CATEGORY_GENERAL,
@@ -78,7 +78,7 @@ public class ConfigUtil {
         Property munitionDisplayProperty = config.get(Configuration.CATEGORY_GENERAL,
                 "munitionDisplay",
                 true,
-                "Die Munition wird angezeigt, wenn man schie\u00dft");
+                "Die Munition wird angezeigt, wenn man schießt");
         munitionDisplay = munitionDisplayProperty.getBoolean();
 
         Property logChatProperty = config.get(Configuration.CATEGORY_GENERAL,
@@ -99,7 +99,7 @@ public class ConfigUtil {
         Property reportGreetingProperty = config.get(Configuration.CATEGORY_GENERAL,
                 "reportGreeting",
                 "",
-                "Die Begr\u00fc\u00dfung, die beim Betreten eines Reports geschrieben wird (Nur als Teammitglied wichtig) (Wenn keine erw\u00fcnscht ist, leer lassen)");
+                "Die Begrüßung, die beim Betreten eines Reports geschrieben wird (Nur als Teammitglied wichtig) (Wenn keine erwünscht ist, leer lassen)");
         reportGreeting = reportGreetingProperty.getString();
     }
 

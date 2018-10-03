@@ -45,16 +45,16 @@ public class TabListSortHandler {
     static class ModifiedComparator implements Comparator<NetworkPlayerInfo> {
 
         private static final List<String> ORDERED_ENTRIES = Arrays.asList(
-                "\u00a71[UC]",
-                "\u00a71",
-                "\u00a79[UC]",
-                "\u00a79",
-                "\u00a74[UC]",
-                "\u00a74",
-                "\u00a76[UC]",
-                "\u00a76",
-                "\u00a78[\u00a7r\u00a79UC\u00a7r\u00a78]\u00a7r\u00a7c",
-                "\u00a78[\u00a7r\u00a76R\u00a7r\u00a78]\u00a7r",
+                "§1[UC]",
+                "§1",
+                "§9[UC]",
+                "§9",
+                "§4[UC]",
+                "§4",
+                "§6[UC]",
+                "§6",
+                "§8[§r§9UC§r§8]§r§c",
+                "§8[§r§6R§r§8]§r",
                 "[UC]"
         );
 

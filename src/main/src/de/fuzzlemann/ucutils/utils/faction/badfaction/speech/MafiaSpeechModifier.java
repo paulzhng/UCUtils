@@ -16,21 +16,21 @@ import java.util.regex.Pattern;
  */
 public class MafiaSpeechModifier implements SpeechModifier {
 
-    private static final Pattern VOCALS_PATTERN = Pattern.compile("[aeiou\u00f6\u00e4\u00fcAEIOU\u00c4\u00dc\u00d6\u00e0\u00e1\u00e8\u00e9\u00ec\u00ed\u00f3\u00f2\u00f9\u00fa\u00c0\u00c1\u00c8\u00c9\u00cc\u00cd\u00d2\u00d3\u00d9\u00da]");
+    private static final Pattern VOCALS_PATTERN = Pattern.compile("[aeiouöäüAEIOUÄÜÖàáèéìíóòùúÀÁÈÉÌÍÒÓÙÚ]");
     private static final Set<String> EXCLUDED = Sets.newHashSet("xd");
     private static final List<Map.Entry<String, String>> REPLACE_IGNORE_CASE = Lists.newArrayList(
             Maps.immutableEntry("guten tag", "buongiorno"),
-            Maps.immutableEntry("tsch\u00fcss", "arrivederci"),
+            Maps.immutableEntry("tschüss", "arrivederci"),
             Maps.immutableEntry("junge", "ragazzo"),
-            Maps.immutableEntry("m\u00e4dchen", "ragazza"),
+            Maps.immutableEntry("mädchen", "ragazza"),
             Maps.immutableEntry("Wollen Sie Drogen", "Vogliono la droga"),
             Maps.immutableEntry("waffen", "stemma"),
             Maps.immutableEntry("Wie geht es dir", "Come stai"),
             Maps.immutableEntry("Guten Abend", "Buona sera"),
-            Maps.immutableEntry("Sch\u00f6nen Abend", "Buona serata")
+            Maps.immutableEntry("Schönen Abend", "Buona serata")
     );
     private static final List<Map.Entry<String, String>> REPLACE_RETAIN_CASE = Lists.newArrayList(
-            Maps.immutableEntry("ja", "s\u00ec"),
+            Maps.immutableEntry("ja", "sì"),
             Maps.immutableEntry("danke", "grazie"),
             Maps.immutableEntry("bitte", "prego")
     );

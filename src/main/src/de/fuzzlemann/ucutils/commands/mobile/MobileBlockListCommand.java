@@ -32,14 +32,14 @@ public class MobileBlockListCommand implements CommandExecutor {
             return true;
         }
 
-        TextComponentString text = new TextComponentString("\u00bb");
+        TextComponentString text = new TextComponentString("»");
         text.getStyle().setColor(TextFormatting.GOLD);
 
         TextComponentString textMid = new TextComponentString(" Geblockte Spieler\n");
         textMid.getStyle().setColor(TextFormatting.DARK_PURPLE);
         text.appendSibling(textMid);
 
-        TextComponentString unblockComponent = new TextComponentString("[\u2717]\n");
+        TextComponentString unblockComponent = new TextComponentString("[✗]\n");
         unblockComponent.getStyle().setColor(TextFormatting.RED);
 
         for (String blockedPlayer : blocked) {

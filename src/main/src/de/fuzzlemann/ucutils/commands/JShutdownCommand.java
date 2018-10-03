@@ -25,7 +25,7 @@ public class JShutdownCommand implements CommandExecutor {
     @SubscribeEvent
     public static void onChat(ClientChatReceivedEvent e) {
         if (!shutdown) return;
-        if (!e.getMessage().getUnformattedText().equals("[Gef\u00e4ngnis] Du bist wieder frei!")) return;
+        if (!e.getMessage().getUnformattedText().equals("[Gefängnis] Du bist wieder frei!")) return;
 
         ForgeUtils.shutdownPC();
     }

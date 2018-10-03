@@ -55,7 +55,7 @@ public class BlacklistPriceCommand implements CommandExecutor, TabCompletion {
                         .of(blacklistReason.getReason()).color(TextFormatting.RED).advance()
                         .of(" zu ").color(TextFormatting.AQUA).advance()
                         .of(price + "$ ").color(TextFormatting.RED).advance()
-                        .of("ge\u00e4ndert.").color(TextFormatting.AQUA).advance().build().toTextComponent());
+                        .of("geändert.").color(TextFormatting.AQUA).advance().build().toTextComponent());
                 break;
             default:
                 return false;
@@ -87,7 +87,7 @@ public class BlacklistPriceCommand implements CommandExecutor, TabCompletion {
     private void sendBlacklistPrices(EntityPlayerSP p) {
         Message.MessageBuilder builder = Message.builder();
 
-        builder.of("\u00bb ").color(TextFormatting.GOLD).advance().of("Eingestellte Blacklistpreise\n").color(TextFormatting.DARK_PURPLE).advance();
+        builder.of("» ").color(TextFormatting.GOLD).advance().of("Eingestellte Blacklistpreise\n").color(TextFormatting.DARK_PURPLE).advance();
         for (BlacklistReason blacklistReason : BlacklistUtil.BLACKLIST_REASONS) {
             builder.of("  * " + blacklistReason.getReason()).color(TextFormatting.GRAY).advance()
                     .of(": ").color(TextFormatting.DARK_GRAY).advance()

@@ -31,7 +31,7 @@ public class AGetPizzaCommand implements CommandExecutor {
         Scoreboard scoreboard = p.getWorldScoreboard();
 
         Score score = scoreboard.getScores().stream()
-                .filter(scorePredicate -> scorePredicate.getPlayerName().equals("\u00a72Pizzen\u00a78: "))
+                .filter(scorePredicate -> scorePredicate.getPlayerName().equals("§2Pizzen§8: "))
                 .findFirst()
                 .orElse(null);
 

@@ -31,12 +31,12 @@ public class ADropDrinkCommand implements CommandExecutor {
         Scoreboard scoreboard = p.getWorldScoreboard();
 
         Score score = scoreboard.getScores().stream()
-                .filter(scorePredicate -> scorePredicate.getPlayerName().equals("\u00a79Getr\u00e4nke\u00a78: "))
+                .filter(scorePredicate -> scorePredicate.getPlayerName().equals("§9Getränke§8: "))
                 .findFirst()
                 .orElse(null);
 
         if (score == null) {
-            TextUtils.error("Du lieferst gerade keine Getr\u00e4nke aus!");
+            TextUtils.error("Du lieferst gerade keine Getränke aus!");
             return true;
         }
 

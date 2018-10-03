@@ -31,8 +31,8 @@ import java.util.regex.Pattern;
 @Mod.EventBusSubscriber
 public class ABuyCommand implements CommandExecutor {
 
-    private static final Pattern BUY_INTERRUPTED_PATTERN = Pattern.compile("^Verk\u00e4ufer: (Tut (uns|mir) Leid|Verzeihung), unser Lager ist derzeit leer\\.$" +
-            "|^Verk\u00e4ufer: Dieses Produkt kostet \\d+\\$\\.$");
+    private static final Pattern BUY_INTERRUPTED_PATTERN = Pattern.compile("^Verkäufer: (Tut (uns|mir) Leid|Verzeihung), unser Lager ist derzeit leer\\.$" +
+            "|^Verkäufer: Dieses Produkt kostet \\d+\\$\\.$");
     private static final Timer TIMER = new Timer();
     private static long lastBuy;
     private static int amount;
@@ -78,7 +78,7 @@ public class ABuyCommand implements CommandExecutor {
 
         NBTTagCompound display = nbt.getCompoundTag("display");
         String lore = display.getTagList("Lore", Constants.NBT.TAG_STRING).getStringTagAt(0);
-        if (!lore.startsWith("\u00a7c") || !lore.endsWith("$")) return;
+        if (!lore.startsWith("§c") || !lore.endsWith("$")) return;
 
         slotIndex = slot.getSlotIndex();
         amountLeft = amount;

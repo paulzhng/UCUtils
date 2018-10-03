@@ -21,7 +21,7 @@ import java.util.Set;
 @Mod.EventBusSubscriber
 public class MunitionEventHandler {
 
-    private static final Set<String> WEAPONS = ImmutableSet.of("\u00a78M4", "\u00a78MP5", "\u00a78Pistole", "\u00a78Jagdflinte");
+    private static final Set<String> WEAPONS = ImmutableSet.of("§8M4", "§8MP5", "§8Pistole", "§8Jagdflinte");
 
     @SubscribeEvent
     public static void onInteract(PlayerInteractEvent e) {
@@ -52,7 +52,7 @@ public class MunitionEventHandler {
         String munitionString = splittedLore[0];
         int munition = Integer.parseInt(munitionString.substring(2));
 
-        return (--munition < 1 ? "\u00a7c0" : "\u00a76" + munition) + "\u00a7b/\u00a76" + splittedLore[1];
+        return (--munition < 1 ? "§c0" : "§6" + munition) + "§b/§6" + splittedLore[1];
     }
 
     private static boolean isWeapon(ItemStack is) {

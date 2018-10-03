@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 public class SendNoobChatCommand implements CommandExecutor, TabCompletion {
 
     @Override
-    @Command(labels = {"sendnoobchat", "sendneulingschat", "snc"}, usage = "/%label% [Antwort-K\u00fcrzel]")
+    @Command(labels = {"sendnoobchat", "sendneulingschat", "snc"}, usage = "/%label% [Antwort-Kürzel]")
     public boolean onCommand(EntityPlayerSP p, String[] args) {
         if (args.length == 0) return false;
 
@@ -25,7 +25,7 @@ public class SendNoobChatCommand implements CommandExecutor, TabCompletion {
         NoobChatAnswer answer = NoobChatManager.getAnswer(key);
 
         if (answer == null) {
-            TextUtils.error("Es wurde keine Antwort mit diesem Antwort-K\u00fcrzel gefunden.");
+            TextUtils.error("Es wurde keine Antwort mit diesem Antwort-Kürzel gefunden.");
             return true;
         }
 

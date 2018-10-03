@@ -55,7 +55,7 @@ public class ChannelActivityCommand implements CommandExecutor {
             List<String> members = new ArrayList<>(MemberActivityEventHandler.MEMBER_LIST);
 
             if (members.isEmpty()) {
-                TextUtils.error("Du hast /memberactivity noch nicht ausgef\u00fchrt.");
+                TextUtils.error("Du hast /memberactivity noch nicht ausgeführt.");
                 return;
             }
 
@@ -75,18 +75,18 @@ public class ChannelActivityCommand implements CommandExecutor {
     private void sendList(List<String> members, EntityPlayerSP p) {
         Message.MessageBuilder builder = Message.builder();
 
-        builder.of("\u00bb ").color(TextFormatting.GOLD).advance().of("Nicht anwesende Fraktionsmitglieder\n").color(TextFormatting.DARK_PURPLE).advance();
+        builder.of("» ").color(TextFormatting.GOLD).advance().of("Nicht anwesende Fraktionsmitglieder\n").color(TextFormatting.DARK_PURPLE).advance();
         for (String member : members) {
             builder.of("  * " + member + "\n").color(TextFormatting.GRAY).advance();
         }
 
-        builder.of(" \u00bb ").color(TextFormatting.GOLD).advance();
-        builder.of("\u27f3")
+        builder.of(" » ").color(TextFormatting.GOLD).advance();
+        builder.of("⟳")
                 .hoverEvent(HoverEvent.Action.SHOW_TEXT, MessagePart.builder().message("Aktualisieren").color(TextFormatting.GOLD).build())
                 .clickEvent(ClickEvent.Action.RUN_COMMAND, "/channelactivity")
                 .color(TextFormatting.DARK_PURPLE).advance();
         builder.add(" ");
-        builder.of("\u2398")
+        builder.of("⎘")
                 .hoverEvent(HoverEvent.Action.SHOW_TEXT, MessagePart.builder().message("Kopieren").color(TextFormatting.GOLD).build())
                 .clickEvent(ClickEvent.Action.RUN_COMMAND, "/channelactivity copy")
                 .color(TextFormatting.DARK_PURPLE).advance();

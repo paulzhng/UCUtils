@@ -27,6 +27,8 @@ lombok {
     sha256 = ""
 }
 
+compileJava.options.encoding = 'UTF-8'
+
 version = "1.12.1-1.5"
 group = "de.fuzzlemann.ucutils"
 archivesBaseName = "ucutils"

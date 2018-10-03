@@ -66,7 +66,7 @@ public class TimerCommand implements CommandExecutor, TabCompletion {
                                 .of(" ist abgelaufen. ").color(TextFormatting.AQUA).advance()
                                 .of(FormatUtils.formatMilliseconds(millis)).color(TextFormatting.RED).advance()
                                 .of(" sind vergangen.").color(TextFormatting.AQUA).advance()
-                                .of(" [\u2713]").color(TextFormatting.GREEN).clickEvent(ClickEvent.Action.RUN_COMMAND, "/timer stopsound").advance();
+                                .of(" [✓]").color(TextFormatting.GREEN).clickEvent(ClickEvent.Action.RUN_COMMAND, "/timer stopsound").advance();
 
                         p.sendMessage(builder2.build().toTextComponent());
                         p.playSound(SoundUtil.TIMER, 1, 1);
@@ -97,7 +97,7 @@ public class TimerCommand implements CommandExecutor, TabCompletion {
                     return true;
                 }
 
-                TextUtils.error("Der Timer wurde gel\u00f6scht.");
+                TextUtils.error("Der Timer wurde gelöscht.");
             case "list":
                 sendTimerList(p);
                 break;
@@ -123,7 +123,7 @@ public class TimerCommand implements CommandExecutor, TabCompletion {
 
         Message.MessageBuilder builder = Message.builder();
 
-        builder.of("\u00bb ").color(TextFormatting.GOLD).advance().of("Timer\n").color(TextFormatting.DARK_PURPLE).advance();
+        builder.of("» ").color(TextFormatting.GOLD).advance().of("Timer\n").color(TextFormatting.DARK_PURPLE).advance();
 
         for (Map.Entry<Integer, Long> entry : timers.entrySet()) {
             int id = entry.getKey();
@@ -134,8 +134,8 @@ public class TimerCommand implements CommandExecutor, TabCompletion {
             builder.of("  * Timer " + id).color(TextFormatting.GRAY).advance()
                     .of(": ").color(TextFormatting.DARK_GRAY).advance()
                     .of(FormatUtils.formatMilliseconds(timeLeft) + " verbleibend").color(TextFormatting.RED).advance()
-                    .of(" [\u2717]").color(TextFormatting.RED).clickEvent(ClickEvent.Action.RUN_COMMAND, "/timer stop " + id)
-                    .hoverEvent(HoverEvent.Action.SHOW_TEXT, MessagePart.builder().message("Den Timer l\u00f6schen").color(TextFormatting.RED).build()).advance();
+                    .of(" [✗]").color(TextFormatting.RED).clickEvent(ClickEvent.Action.RUN_COMMAND, "/timer stop " + id)
+                    .hoverEvent(HoverEvent.Action.SHOW_TEXT, MessagePart.builder().message("Den Timer löschen").color(TextFormatting.RED).build()).advance();
         }
 
         p.sendMessage(builder.build().toTextComponent());

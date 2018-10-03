@@ -26,7 +26,7 @@ public class MemberActivityEventHandler {
     public static final List<String> MEMBER_LIST = new ArrayList<>();
 
     private static final Timer TIMER = new Timer();
-    private static final Pattern MEMBER_ACTIVITY_PATTERN = Pattern.compile("^Member Aktivit\u00e4t der Fraktion: .+$");
+    private static final Pattern MEMBER_ACTIVITY_PATTERN = Pattern.compile("^Member Aktivität der Fraktion: .+$");
     private static long lastMessage;
     private static long shown;
 
@@ -58,7 +58,7 @@ public class MemberActivityEventHandler {
             public void run() {
                 if (lastMessage <= 50L) return;
 
-                Main.MINECRAFT.player.sendMessage(Message.builder().of("\u00bb ").color(TextFormatting.GRAY).advance()
+                Main.MINECRAFT.player.sendMessage(Message.builder().of("» ").color(TextFormatting.GRAY).advance()
                         .of("Memberanzahl: ").color(TextFormatting.DARK_AQUA).advance()
                         .of(String.valueOf(MEMBER_LIST.size())).color(TextFormatting.GREEN).advance().build().toTextComponent());
 

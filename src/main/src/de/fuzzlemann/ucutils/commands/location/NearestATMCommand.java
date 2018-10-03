@@ -38,13 +38,13 @@ public class NearestATMCommand implements CommandExecutor {
 
         assert nearestATM != null;
 
-        TextComponentString text = new TextComponentString("Der n\u00e4heste ATM an dir ist ");
+        TextComponentString text = new TextComponentString("Der näheste ATM an dir ist ");
         text.getStyle().setColor(TextFormatting.AQUA);
 
         TextComponentString atmComponent = new TextComponentString("ATM " + nearestATM.getId());
         atmComponent.getStyle().setColor(TextFormatting.RED);
 
-        TextComponentString blockComponent = new TextComponentString(". Die Distanz zu dem ATM betr\u00e4gt ");
+        TextComponentString blockComponent = new TextComponentString(". Die Distanz zu dem ATM beträgt ");
         blockComponent.getStyle().setColor(TextFormatting.AQUA);
 
         TextComponentString distanceComponent = new TextComponentString((int) nearestDistance + " Meter");

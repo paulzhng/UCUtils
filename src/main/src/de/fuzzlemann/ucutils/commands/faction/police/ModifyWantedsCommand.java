@@ -33,7 +33,7 @@ public class ModifyWantedsCommand implements CommandExecutor, TabCompletion {
             Wanted wanted = WantedManager.getWanteds(player);
 
             if (wanted == null) {
-                TextUtils.error("Du hast /wanteds noch nicht ausgef\u00fchrt.");
+                TextUtils.error("Du hast /wanteds noch nicht ausgeführt.");
                 return;
             }
 
@@ -93,12 +93,12 @@ public class ModifyWantedsCommand implements CommandExecutor, TabCompletion {
 
     private enum Type {
         SURRENDER("s", "", " + Stellung", "x-5"),
-        GOOD_CONDUCT("gf", "", " + Gute F\u00fchrung", "x-5"),
-        BAD_CONDUCT("sf", "", " + Schlechte F\u00fchrung", "x+10"),
-        VERY_BAD_CONDUCT("ssf", "", " + Sehr schlechte F\u00fchrung", "x+15"),
+        GOOD_CONDUCT("gf", "", " + Gute Führung", "x-5"),
+        BAD_CONDUCT("sf", "", " + Schlechte Führung", "x+10"),
+        VERY_BAD_CONDUCT("ssf", "", " + Sehr schlechte Führung", "x+15"),
         DRUG_REMOVAL_10("da10", "", " + Drogenabnahme", "x-10"),
         DRUG_REMOVAL_15("da15", "", " + Drogenabnahme", "x-15"),
-        DRIVERS_LICENSE_WITHDRAWAL("fsa", "", " + F\u00fchrerscheinabnahme", "x");
+        DRIVERS_LICENSE_WITHDRAWAL("fsa", "", " + Führerscheinabnahme", "x");
 
         private final String flagArgument;
         private final String prependReason;
