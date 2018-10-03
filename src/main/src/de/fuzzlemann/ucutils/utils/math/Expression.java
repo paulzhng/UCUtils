@@ -12,7 +12,7 @@ public class Expression {
     private static final String[] TO_REPLACE = new String[]{"PI", "E", "ANS"};
     private static final String[] REPLACER = new String[]{String.valueOf(Math.PI), String.valueOf(Math.E), "0"};
     private static double lastResult;
-    private double result;
+    private double result = Double.NaN;
 
     static {
         DECIMAL_FORMAT.setMaximumFractionDigits(5);
@@ -28,13 +28,15 @@ public class Expression {
     }
 
     public String parse() {
+        if (Double.isNaN(result)) evaluate();
+
         return DECIMAL_FORMAT.format(result);
     }
 
     public double evaluate() {
         replaceVariables();
-
         nextChar();
+
         double x = parseExpression();
         if (pos < expression.length()) {
             throw new ExpressionException("Unexpected character: " + (char) ch);

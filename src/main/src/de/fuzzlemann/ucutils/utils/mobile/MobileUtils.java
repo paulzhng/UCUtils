@@ -63,9 +63,11 @@ public class MobileUtils {
 
         try {
             return future.get();
-        } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
-            return -1;
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new IllegalStateException(e);
+        } catch (ExecutionException e) {
+            throw new IllegalStateException(e);
         }
     }
 

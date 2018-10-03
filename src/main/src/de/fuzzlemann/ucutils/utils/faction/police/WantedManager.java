@@ -103,15 +103,14 @@ public class WantedManager {
         future = new CompletableFuture<>();
         Main.MINECRAFT.player.sendChatMessage("/wantedinfo " + player);
 
-        Wanted wanted;
         try {
-            wanted = future.get();
-        } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
-            return null;
+            return future.get();
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new IllegalStateException(e);
+        } catch (ExecutionException e) {
+            throw new IllegalStateException(e);
         }
-
-        return wanted;
     }
 
     @SubscribeEvent

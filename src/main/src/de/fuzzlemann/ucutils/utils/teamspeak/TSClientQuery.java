@@ -38,8 +38,7 @@ public class TSClientQuery {
     private static String rawExec(String command, boolean auth, boolean tryAgain) {
         if (auth && !connect()) return null;
 
-        if (bufferedReader == null)
-            auth();
+        if (bufferedReader == null) auth();
 
         String result;
         try {

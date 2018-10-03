@@ -71,14 +71,16 @@ public class TimerCommand implements CommandExecutor, TabCompletion {
                         p.sendMessage(builder2.build().toTextComponent());
                         p.playSound(SoundUtil.TIMER, 1, 1);
 
-                        if (currentTimerSound != null) {
-                            currentTimerSound.stop();
+                        Main.MINECRAFT.addScheduledTask(() -> {
+                            if (currentTimerSound != null) {
+                                currentTimerSound.stop();
 
-                            Main.MINECRAFT.getSoundHandler().stop("ucutils:timer", SoundCategory.MASTER);
-                        }
+                                Main.MINECRAFT.getSoundHandler().stop("ucutils:timer", SoundCategory.MASTER);
+                            }
 
-                        currentTimerSound = new TimerSound();
-                        Minecraft.getMinecraft().getSoundHandler().playSound(currentTimerSound);
+                            currentTimerSound = new TimerSound();
+                            Minecraft.getMinecraft().getSoundHandler().playSound(currentTimerSound);
+                        });
                     }
                 }, millis);
                 break;

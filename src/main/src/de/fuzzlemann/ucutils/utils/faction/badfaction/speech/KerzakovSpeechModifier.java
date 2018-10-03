@@ -67,9 +67,4 @@ public class KerzakovSpeechModifier implements SpeechModifier {
 
         return stringJoiner.toString();
     }
-
-    public static void main(String[] args) {
-        System.out.println(new KerzakovSpeechModifier().turnIntoSpeech(new String[]{"Haus"}));
-        System.out.println(new KerzakovSpeechModifier().turnIntoSpeech(new String[]{"hure"}));
-    }
 }

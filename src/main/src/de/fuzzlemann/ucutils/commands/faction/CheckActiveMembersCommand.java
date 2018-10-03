@@ -66,8 +66,10 @@ public class CheckActiveMembersCommand implements CommandExecutor {
 
         try {
             return future.get();
-        } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new IllegalStateException(e);
+        } catch (ExecutionException e) {
             throw new IllegalStateException(e);
         } finally {
             future = null;
