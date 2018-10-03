@@ -73,6 +73,14 @@ public class Message {
             return MessagePart.builder().currentBuilder(this).message(text).advance();
         }
 
+        public MessageBuilder space() {
+            return add(" ");
+        }
+
+        public MessageBuilder newLine() {
+            return add("\n");
+        }
+
         public MessageBuilder messageParts(MessagePart... messageParts) {
             Collections.addAll(this.messageParts, messageParts);
             return this;
