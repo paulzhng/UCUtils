@@ -6,9 +6,9 @@ import de.fuzzlemann.ucutils.commands.faction.CallReinforcementCommand;
 import de.fuzzlemann.ucutils.commands.faction.ChannelActivityCommand;
 import de.fuzzlemann.ucutils.commands.faction.CheckActiveMembersCommand;
 import de.fuzzlemann.ucutils.commands.faction.SchwarzmarktLocationsCommand;
-import de.fuzzlemann.ucutils.commands.faction.badfaction.drug.ASellDrugCommand;
-import de.fuzzlemann.ucutils.commands.faction.badfaction.blacklist.BlacklistPriceCommand;
 import de.fuzzlemann.ucutils.commands.faction.badfaction.blacklist.ASetBlacklistCommand;
+import de.fuzzlemann.ucutils.commands.faction.badfaction.blacklist.BlacklistPriceCommand;
+import de.fuzzlemann.ucutils.commands.faction.badfaction.drug.ASellDrugCommand;
 import de.fuzzlemann.ucutils.commands.faction.badfaction.drug.DrugPriceCommand;
 import de.fuzzlemann.ucutils.commands.faction.badfaction.drug.GiveDrugCommand;
 import de.fuzzlemann.ucutils.commands.faction.badfaction.speech.ToggleKerzakovSpeechCommand;
@@ -28,7 +28,8 @@ import de.fuzzlemann.ucutils.commands.location.DistanceCommand;
 import de.fuzzlemann.ucutils.commands.location.NearestATMCommand;
 import de.fuzzlemann.ucutils.commands.location.NearestJobCommand;
 import de.fuzzlemann.ucutils.commands.mobile.*;
-import de.fuzzlemann.ucutils.commands.supporter.*;
+import de.fuzzlemann.ucutils.commands.supporter.PunishCommand;
+import de.fuzzlemann.ucutils.commands.supporter.SendNoobChatCommand;
 import de.fuzzlemann.ucutils.commands.teamspeak.MoveCommand;
 import de.fuzzlemann.ucutils.commands.teamspeak.MoveHereCommand;
 import de.fuzzlemann.ucutils.commands.teamspeak.MoveToCommand;
@@ -39,9 +40,8 @@ import de.fuzzlemann.ucutils.commands.todo.AddToDoCommand;
 import de.fuzzlemann.ucutils.commands.todo.DoneToDoCommand;
 import de.fuzzlemann.ucutils.commands.todo.RemoveToDoCommand;
 import de.fuzzlemann.ucutils.commands.todo.ToDoListCommand;
+import de.fuzzlemann.ucutils.utils.text.TextUtils;
 import net.minecraft.client.entity.EntityPlayerSP;
-import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -150,13 +150,7 @@ public class CommandHandler {
     }
 
     private static void registerCommand(CommandExecutor commandExecutor, @Nullable TabCompletion tabCompletion) {
-        Command commandAnnotation;
-        try {
-            commandAnnotation = commandExecutor.getClass().getMethod("onCommand", EntityPlayerSP.class, String[].class).getAnnotation(Command.class);
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-            return;
-        }
+        Command commandAnnotation = getCommand(commandExecutor);
 
         String[] labels = commandAnnotation.labels();
 
@@ -171,13 +165,7 @@ public class CommandHandler {
         if (commandExecutor == null) return;
 
         EntityPlayerSP executor = Main.MINECRAFT.player;
-        Command commandAnnotation;
-        try {
-            commandAnnotation = commandExecutor.getClass().getMethod("onCommand", EntityPlayerSP.class, String[].class).getAnnotation(Command.class);
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-            return;
-        }
+        Command commandAnnotation = getCommand(commandExecutor);
 
         if (commandExecutor.onCommand(executor, args)) return;
 
@@ -185,10 +173,15 @@ public class CommandHandler {
         if (!usage.isEmpty()) {
             usage = usage.replace("%label%", label);
 
-            TextComponentString chatComponent = new TextComponentString(usage);
-            chatComponent.getStyle().setColor(TextFormatting.RED);
+            TextUtils.error(usage);
+        }
+    }
 
-            executor.sendMessage(chatComponent);
+    private static Command getCommand(CommandExecutor commandExecutor) {
+        try {
+            return commandExecutor.getClass().getMethod("onCommand", EntityPlayerSP.class, String[].class).getAnnotation(Command.class);
+        } catch (NoSuchMethodException e) {
+            throw new IllegalStateException(e);
         }
     }
 }
