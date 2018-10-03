@@ -98,6 +98,7 @@ public class TimerCommand implements CommandExecutor, TabCompletion {
                 }
 
                 TextUtils.error("Der Timer wurde gelöscht.");
+                break;
             case "list":
                 sendTimerList(p);
                 break;
