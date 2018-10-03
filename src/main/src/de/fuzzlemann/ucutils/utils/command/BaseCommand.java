@@ -13,9 +13,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Collections;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * @author Fuzzlemann
@@ -64,7 +62,10 @@ class BaseCommand extends CommandBase implements IClientCommand {
         if (tabCompletion != null) {
             List<String> tabCompletions = tabCompletion.getTabCompletions(Main.MINECRAFT.player, args);
 
-            if (!tabCompletions.isEmpty()) return tabCompletions;
+            if (!tabCompletions.isEmpty()) {
+                Collections.sort(tabCompletions);
+                return tabCompletions;
+            }
         }
 
         List<String> players = ForgeUtils.getOnlinePlayers();
@@ -74,13 +75,6 @@ class BaseCommand extends CommandBase implements IClientCommand {
         if (input.isEmpty()) return players;
 
         players.removeIf(playerName -> !playerName.toLowerCase().startsWith(input));
-
-        Set<String> setItems = new LinkedHashSet<>(players);
-        players.clear();
-        players.addAll(setItems);
-
-        Collections.sort(players);
-
         return players;
     }
 }

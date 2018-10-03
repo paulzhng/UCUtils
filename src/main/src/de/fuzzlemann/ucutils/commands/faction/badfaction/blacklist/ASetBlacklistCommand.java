@@ -58,8 +58,6 @@ public class ASetBlacklistCommand implements CommandExecutor, TabCompletion {
         if (reason.isEmpty()) return blacklistReasons;
 
         blacklistReasons.removeIf(blacklistReason -> !blacklistReason.toLowerCase().startsWith(reason));
-        Collections.sort(blacklistReasons);
-
         return blacklistReasons;
     }
 }

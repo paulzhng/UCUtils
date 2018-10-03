@@ -87,8 +87,6 @@ public class ASUCommand implements CommandExecutor, TabCompletion {
         if (reason.isEmpty()) return wantedReasons;
 
         wantedReasons.removeIf(wantedReason -> !wantedReason.toLowerCase().startsWith(reason));
-
-        Collections.sort(wantedReasons);
         return wantedReasons;
     }
 

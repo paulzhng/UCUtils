@@ -42,7 +42,6 @@ public class SendNoobChatCommand implements CommandExecutor, TabCompletion {
         List<String> answerKeys = NoobChatManager.getAnswerKeys()
                 .stream()
                 .map(answerKey -> answerKey.replace(' ', '-'))
-                .sorted()
                 .collect(Collectors.toList());
 
         if (input.isEmpty()) return answerKeys;

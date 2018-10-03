@@ -58,8 +58,6 @@ public class PunishCommand implements CommandExecutor, TabCompletion {
         if (input.isEmpty()) return violationReasons;
 
         violationReasons.removeIf(violationReason -> !violationReason.toLowerCase().startsWith(input));
-
-        Collections.sort(violationReasons);
         return violationReasons;
     }
 }

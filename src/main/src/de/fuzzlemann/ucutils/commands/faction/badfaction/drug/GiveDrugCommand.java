@@ -59,8 +59,6 @@ public class GiveDrugCommand implements CommandExecutor, TabCompletion {
         if (drug.isEmpty()) return drugNames;
 
         drugNames.removeIf(drugName -> !drugName.toLowerCase().startsWith(drug));
-
-        Collections.sort(drugNames);
         return drugNames;
     }
 }

@@ -80,7 +80,6 @@ public class BlacklistPriceCommand implements CommandExecutor, TabCompletion {
 
         drugNames.removeIf(drugName -> !drugName.toLowerCase().startsWith(drug));
 
-        Collections.sort(drugNames);
         return drugNames;
     }
 

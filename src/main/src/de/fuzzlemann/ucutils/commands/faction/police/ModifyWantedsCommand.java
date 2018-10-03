@@ -86,8 +86,6 @@ public class ModifyWantedsCommand implements CommandExecutor, TabCompletion {
         if (type.isEmpty()) return wantedReasons;
 
         wantedReasons.removeIf(wantedReason -> !wantedReason.toLowerCase().startsWith(type));
-
-        Collections.sort(wantedReasons);
         return wantedReasons;
     }
 
