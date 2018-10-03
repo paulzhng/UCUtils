@@ -43,7 +43,6 @@ public class ADropDrinkCommand implements CommandExecutor {
         int amount = score.getScorePoints();
 
         started.set(true);
-
         timer.scheduleAtFixedRate(new TimerTask() {
             private int i;
 

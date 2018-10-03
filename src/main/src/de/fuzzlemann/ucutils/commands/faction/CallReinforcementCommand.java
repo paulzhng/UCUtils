@@ -55,7 +55,7 @@ public class CallReinforcementCommand implements CommandExecutor {
                     .messageParts(NavigationUtil.getNavigationMessage(posX, posY, posZ).getMessageParts())
                     .of(" | ").color(TextFormatting.GRAY).advance()
                     .of("Unterwegs")
-                    .hoverEvent(HoverEvent.Action.SHOW_TEXT, MessagePart.builder().message("Bescheid geben, dass man unterwegs ist").color(TextFormatting.RED).build())
+                    .hoverEvent(HoverEvent.Action.SHOW_TEXT, MessagePart.simpleMessagePart("Bescheid geben, dass man unterwegs ist", TextFormatting.RED))
                     .clickEvent(ClickEvent.Action.RUN_COMMAND, "/reinforcement ontheway " + name + " " + posX + " " + posY + " " + posZ + (dChat ? " -d" : ""))
                     .color(TextFormatting.RED).advance().build();
 

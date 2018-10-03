@@ -82,12 +82,12 @@ public class ChannelActivityCommand implements CommandExecutor {
 
         builder.of(" » ").color(TextFormatting.GOLD).advance();
         builder.of("⟳")
-                .hoverEvent(HoverEvent.Action.SHOW_TEXT, MessagePart.builder().message("Aktualisieren").color(TextFormatting.GOLD).build())
+                .hoverEvent(HoverEvent.Action.SHOW_TEXT, MessagePart.simpleMessagePart("Aktualisieren", TextFormatting.GOLD))
                 .clickEvent(ClickEvent.Action.RUN_COMMAND, "/channelactivity")
                 .color(TextFormatting.DARK_PURPLE).advance();
         builder.add(" ");
         builder.of("⎘")
-                .hoverEvent(HoverEvent.Action.SHOW_TEXT, MessagePart.builder().message("Kopieren").color(TextFormatting.GOLD).build())
+                .hoverEvent(HoverEvent.Action.SHOW_TEXT, MessagePart.simpleMessagePart("Kopieren", TextFormatting.GOLD))
                 .clickEvent(ClickEvent.Action.RUN_COMMAND, "/channelactivity copy")
                 .color(TextFormatting.DARK_PURPLE).advance();
 

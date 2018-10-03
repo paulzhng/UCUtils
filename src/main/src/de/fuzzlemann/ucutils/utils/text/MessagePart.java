@@ -25,6 +25,10 @@ public class MessagePart {
         return new MessagePartBuilder();
     }
 
+    public static MessagePart simpleMessagePart(String message, TextFormatting color) {
+        return MessagePart.builder().message(message).color(color).build();
+    }
+
     public String getMessage() {
         return message;
     }

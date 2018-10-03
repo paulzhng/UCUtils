@@ -1,11 +1,12 @@
 package de.fuzzlemann.ucutils.events;
 
 import de.fuzzlemann.ucutils.Main;
-import de.fuzzlemann.ucutils.utils.sound.SoundUtil;
 import de.fuzzlemann.ucutils.utils.config.ConfigUtil;
+import de.fuzzlemann.ucutils.utils.sound.SoundUtil;
+import de.fuzzlemann.ucutils.utils.text.Message;
+import de.fuzzlemann.ucutils.utils.text.MessagePart;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.event.ClickEvent;
 import net.minecraft.util.text.event.HoverEvent;
@@ -100,33 +101,21 @@ public class NotificationEventHandler {
     }
 
     private static void modifyFriendJoin(ITextComponent message, String friendName) {
-        TextComponentString callComponent = new TextComponentString(" [☎]");
-        callComponent.getStyle().setColor(TextFormatting.DARK_GREEN);
+        Message.MessageBuilder builder = Message.builder();
 
-        TextComponentString callHoverText = new TextComponentString("Rufe " + friendName + " an");
-        callHoverText.getStyle().setColor(TextFormatting.DARK_GREEN);
+        builder.of(" ").advance()
+                .of("[☎]").color(TextFormatting.DARK_GREEN)
+                .hoverEvent(HoverEvent.Action.SHOW_TEXT, MessagePart.simpleMessagePart("Rufe " + friendName + " an", TextFormatting.DARK_GREEN))
+                .clickEvent(ClickEvent.Action.RUN_COMMAND, "/acall " + friendName).advance()
+                .of(" ").advance()
+                .of("[✉]").color(TextFormatting.GREEN)
+                .hoverEvent(HoverEvent.Action.SHOW_TEXT, MessagePart.simpleMessagePart("Schreibe eine SMS an " + friendName, TextFormatting.GREEN))
+                .clickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/asms " + friendName + " ").advance()
+                .of(" ").advance()
+                .of("[✗]").color(TextFormatting.RED)
+                .hoverEvent(HoverEvent.Action.SHOW_TEXT, MessagePart.simpleMessagePart("Lösche " + friendName + " als Freund", TextFormatting.RED))
+                .clickEvent(ClickEvent.Action.RUN_COMMAND, "/friend delete " + friendName).advance();
 
-        callComponent.getStyle().setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, callHoverText));
-        callComponent.getStyle().setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/acall " + friendName));
-
-        TextComponentString smsComponent = new TextComponentString("[✉]");
-        smsComponent.getStyle().setColor(TextFormatting.GREEN);
-
-        TextComponentString smsHoverText = new TextComponentString("Schreibe eine SMS an " + friendName);
-        smsHoverText.getStyle().setColor(TextFormatting.GREEN);
-
-        smsComponent.getStyle().setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, smsHoverText));
-        smsComponent.getStyle().setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/asms " + friendName + " "));
-
-        TextComponentString deleteComponent = new TextComponentString("[✗]");
-        deleteComponent.getStyle().setColor(TextFormatting.RED);
-
-        TextComponentString deleteHoverText = new TextComponentString("Lösche " + friendName + " als Freund");
-        deleteHoverText.getStyle().setColor(TextFormatting.RED);
-
-        deleteComponent.getStyle().setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, deleteHoverText));
-        deleteComponent.getStyle().setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/friend delete " + friendName));
-
-        message.appendSibling(callComponent).appendSibling(smsComponent).appendSibling(deleteComponent);
+        message.appendSibling(builder.build().toTextComponent());
     }
 }

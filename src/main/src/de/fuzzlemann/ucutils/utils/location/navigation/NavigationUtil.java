@@ -79,7 +79,7 @@ public class NavigationUtil {
         return builder.of("Route anzeigen")
                 .color(TextFormatting.RED)
                 .clickEvent(ClickEvent.Action.RUN_COMMAND, naviCommand)
-                .hoverEvent(HoverEvent.Action.SHOW_TEXT, MessagePart.builder().message("Route anzeigen").color(TextFormatting.RED).build())
+                .hoverEvent(HoverEvent.Action.SHOW_TEXT, MessagePart.simpleMessagePart("Route anzeigen", TextFormatting.RED))
                 .advance()
                 .build();
     }
