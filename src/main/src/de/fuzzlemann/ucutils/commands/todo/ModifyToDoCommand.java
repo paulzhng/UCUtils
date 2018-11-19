@@ -7,19 +7,18 @@ import de.fuzzlemann.ucutils.utils.todo.ToDo;
 import de.fuzzlemann.ucutils.utils.todo.ToDoManager;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.Arrays;
 
 /**
  * @author Fuzzlemann
  */
-@SideOnly(Side.CLIENT)
-public class DoneToDoCommand implements CommandExecutor {
+public class ModifyToDoCommand implements CommandExecutor {
 
     @Override
-    @Command(labels = "donetodo", usage = "/%label% [ID]")
+    @Command(labels = "modifytodo", usage = "/%label% [ID] [ToDo]")
     public boolean onCommand(EntityPlayerSP p, String[] args) {
-        if (args.length == 0) return false;
+        if (args.length < 2) return false;
 
         int id;
         try {
@@ -35,10 +34,12 @@ public class DoneToDoCommand implements CommandExecutor {
             return true;
         }
 
-        toDo.setDone(true);
+        String message = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
+
+        toDo.setMessage(message);
         toDo.save();
 
-        p.sendMessage(TextUtils.simpleMessage("Du hast die ToDo als erledigt makiert.", TextFormatting.AQUA));
+        p.sendMessage(TextUtils.simpleMessage("Du hast die ToDo-Nachricht geändert.", TextFormatting.AQUA));
         return true;
     }
 }

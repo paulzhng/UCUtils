@@ -21,8 +21,6 @@ public class NearestATMCommand implements CommandExecutor {
     @Override
     @Command(labels = "nearestatm")
     public boolean onCommand(EntityPlayerSP p, String[] args) {
-        if (ATM.values().length == 0) return false;
-
         BlockPos pos = p.getPosition();
 
         ATM nearestATM = null;

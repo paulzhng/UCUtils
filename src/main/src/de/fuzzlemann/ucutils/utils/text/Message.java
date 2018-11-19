@@ -1,11 +1,6 @@
 package de.fuzzlemann.ucutils.utils.text;
 
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.Style;
-import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.event.ClickEvent;
-import net.minecraft.util.text.event.HoverEvent;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -35,22 +30,7 @@ public class Message {
         ITextComponent textComponent = null;
 
         for (MessagePart messagePart : messageParts) {
-            ITextComponent messageComponent = new TextComponentString(messagePart.getMessage());
-
-            Style style = messageComponent.getStyle();
-
-            TextFormatting color = messagePart.getColor();
-            ClickEvent clickEvent = messagePart.getClickEvent();
-            HoverEvent hoverEvent = messagePart.getHoverEvent();
-
-            if (color != null)
-                style.setColor(color);
-
-            if (clickEvent != null)
-                style.setClickEvent(clickEvent);
-
-            if (hoverEvent != null)
-                style.setHoverEvent(hoverEvent);
+            ITextComponent messageComponent = messagePart.toTextComponent();
 
             if (textComponent == null) {
                 textComponent = messageComponent;

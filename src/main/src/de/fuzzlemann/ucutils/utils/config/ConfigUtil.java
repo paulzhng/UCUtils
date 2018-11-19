@@ -27,6 +27,7 @@ public class ConfigUtil {
     public static boolean inviteAnnouncement = false;
     public static boolean bombAnnouncement = true;
     public static boolean munitionDisplay = true;
+    public static boolean bombTimerDisplay = true;
     public static boolean logChat = true;
     public static String reportGreeting = "";
 
@@ -80,6 +81,12 @@ public class ConfigUtil {
                 true,
                 "Die Munition wird angezeigt, wenn man schießt");
         munitionDisplay = munitionDisplayProperty.getBoolean();
+
+        Property bombTimerDisplayProperty = config.get(Configuration.CATEGORY_GENERAL,
+                "bombTimerDisplayProperty",
+                true,
+                "Die Zeit seit dem Legen der Bombe wird angezeigt");
+        bombTimerDisplay = bombTimerDisplayProperty.getBoolean();
 
         Property logChatProperty = config.get(Configuration.CATEGORY_GENERAL,
                 "logChat",

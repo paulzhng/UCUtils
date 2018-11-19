@@ -13,6 +13,7 @@ import de.fuzzlemann.ucutils.utils.punishment.PunishManager;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.event.FMLFingerprintViolationEvent;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -26,7 +27,7 @@ import java.io.IOException;
  */
 
 @SideOnly(Side.CLIENT)
-@Mod(name = Main.NAME, modid = Main.MOD_ID, version = Main.VERSION, clientSideOnly = true, guiFactory = Main.GUI_FACTORY)
+@Mod(name = Main.NAME, modid = Main.MOD_ID, version = Main.VERSION, clientSideOnly = true, guiFactory = Main.GUI_FACTORY, certificateFingerprint = Main.CERTIFICATE_FINGERPRINT)
 public class Main {
 
     public static final Minecraft MINECRAFT = Minecraft.getMinecraft();
@@ -36,6 +37,12 @@ public class Main {
 
     static final String NAME = "UC Utils";
     static final String GUI_FACTORY = "de.fuzzlemann.ucutils.utils.config.GuiFactoryUCUtils";
+    static final String CERTIFICATE_FINGERPRINT = "d3c444c8828b6fe0d86675d009f6c057d4bf25f1";
+
+    @Mod.EventHandler
+    public void onFingerprintViolation(FMLFingerprintViolationEvent e) {
+        System.out.println("Invalid fingerprint detected! The mod may have been tampered with. (expected: " + e.getExpectedFingerprint() + "; keys found: " + e.getFingerprints() + ")");
+    }
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent e) {

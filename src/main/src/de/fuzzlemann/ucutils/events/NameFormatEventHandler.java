@@ -27,7 +27,7 @@ public class NameFormatEventHandler {
     public static final Map<String, Integer> WANTED_MAP = new HashMap<>();
     private static final Pattern WANTEDS_GIVEN_PATTERN = Pattern.compile("^HQ: (?:\\[UC])*([a-zA-Z0-9_]+)'s momentanes WantedLevel: (\\d+)$");
     private static final Pattern WANTEDS_DELETED_PATTERN = Pattern.compile("^HQ: (?:\\[UC])*([a-zA-Z0-9_]+) wurde von (?:\\[UC])*[a-zA-Z0-9_]+ eingesperrt.$" +
-            //"|(?:^(?:Beamter|Agent) (?:\\[UC])*[a-zA-Z0-9_]+ hat (?:\\[UC])*([a-zA-Z0-9_]+) getötet!$)" + //TODO ADD WHEN KILL FIX
+            "|^.+ (?:\\[UC])*[a-zA-Z0-9_]+ hat (?:\\[UC])*([a-zA-Z0-9_]+) getötet!$" +
             "|^HQ: .+ (?:\\[UC])*[a-zA-Z0-9_]+ hat (?:\\[UC])*([a-zA-Z0-9_]+)(?:'s)*(?: seine| ihre)* Akten gelöscht, over.$");
     private static long wantedsShown;
     //--------------------- Hits ---------------------\\

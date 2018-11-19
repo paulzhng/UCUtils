@@ -7,14 +7,13 @@ import java.util.concurrent.ThreadLocalRandom;
  */
 public class ToDo {
 
-    private final String message;
+    private String message;
     private final long created;
     private final int id;
     private boolean done;
 
     public ToDo(String message) {
         this.message = message;
-        this.done = false;
         this.created = System.currentTimeMillis();
         this.id = ThreadLocalRandom.current().nextInt(0, 100000);
     }
@@ -23,8 +22,16 @@ public class ToDo {
         return message;
     }
 
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
     public long getCreated() {
         return created;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public boolean isDone() {
@@ -33,10 +40,6 @@ public class ToDo {
 
     public void setDone(boolean done) {
         this.done = done;
-    }
-
-    public int getId() {
-        return id;
     }
 
     public void delete() {

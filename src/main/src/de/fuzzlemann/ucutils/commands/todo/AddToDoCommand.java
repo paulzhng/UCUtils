@@ -2,9 +2,10 @@ package de.fuzzlemann.ucutils.commands.todo;
 
 import de.fuzzlemann.ucutils.utils.command.Command;
 import de.fuzzlemann.ucutils.utils.command.CommandExecutor;
+import de.fuzzlemann.ucutils.utils.text.Message;
 import de.fuzzlemann.ucutils.utils.todo.ToDo;
 import net.minecraft.client.entity.EntityPlayerSP;
-import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -25,13 +26,12 @@ public class AddToDoCommand implements CommandExecutor {
         ToDo toDo = new ToDo(message);
         toDo.add();
 
-        TextComponentString text = new TextComponentString("Du hast eine ToDo erstellt. ToDo: ");
-        text.getStyle().setColor(TextFormatting.AQUA);
+        ITextComponent text = Message.builder()
+                .of("Du hast eine ToDo erstellt. ToDo: ").color(TextFormatting.AQUA).advance()
+                .of(message).color(TextFormatting.RED).advance()
+                .build().toTextComponent();
 
-        TextComponentString toDoText = new TextComponentString(message);
-        toDoText.getStyle().setColor(TextFormatting.RED);
-
-        p.sendMessage(text.appendSibling(toDoText));
+        p.sendMessage(text);
         return true;
     }
 }

@@ -1,5 +1,8 @@
 package de.fuzzlemann.ucutils.utils.text;
 
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.Style;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.event.ClickEvent;
 import net.minecraft.util.text.event.HoverEvent;
@@ -43,6 +46,22 @@ public class MessagePart {
 
     public ClickEvent getClickEvent() {
         return clickEvent;
+    }
+
+    public ITextComponent toTextComponent() {
+        ITextComponent messageComponent = new TextComponentString(message);
+        Style style = messageComponent.getStyle();
+
+        if (color != null)
+            style.setColor(color);
+
+        if (clickEvent != null)
+            style.setClickEvent(clickEvent);
+
+        if (hoverEvent != null)
+            style.setHoverEvent(hoverEvent);
+
+        return messageComponent;
     }
 
     public static final class MessagePartBuilder {

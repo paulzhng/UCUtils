@@ -36,10 +36,7 @@ import de.fuzzlemann.ucutils.commands.teamspeak.MoveToCommand;
 import de.fuzzlemann.ucutils.commands.time.ClockCommand;
 import de.fuzzlemann.ucutils.commands.time.StopWatchCommand;
 import de.fuzzlemann.ucutils.commands.time.TimerCommand;
-import de.fuzzlemann.ucutils.commands.todo.AddToDoCommand;
-import de.fuzzlemann.ucutils.commands.todo.DoneToDoCommand;
-import de.fuzzlemann.ucutils.commands.todo.RemoveToDoCommand;
-import de.fuzzlemann.ucutils.commands.todo.ToDoListCommand;
+import de.fuzzlemann.ucutils.commands.todo.*;
 import de.fuzzlemann.ucutils.utils.text.TextUtils;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraftforge.client.ClientCommandHandler;
@@ -59,6 +56,8 @@ public class CommandHandler {
     private static final Map<String, CommandExecutor> COMMANDS = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
 
     public static void registerAllCommands() {
+        registerCommand(new TestCommand());
+
         registerCommand(new ClearChatCommand());
         registerCommand(new InternetTestCommand());
         registerCommand(new RefreshDataCommand());
@@ -82,6 +81,7 @@ public class CommandHandler {
         registerCommand(new AddToDoCommand());
         registerCommand(new DoneToDoCommand());
         registerCommand(new RemoveToDoCommand());
+        registerCommand(new ModifyToDoCommand());
 
         registerCommand(new NearestJobCommand());
         registerCommand(new NearestATMCommand());

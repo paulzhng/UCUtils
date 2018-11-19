@@ -9,7 +9,6 @@ buildscript {
     }
 
     dependencies {
-        classpath "io.franzbecker:gradle-lombok:1.10"
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
     }
 }
@@ -19,14 +18,7 @@ plugins {
     id "org.sonarqube" version "2.6"
 }
 
-apply plugin: 'io.franzbecker.gradle-lombok'
 apply plugin: 'net.minecraftforge.gradle.forge'
-apply plugin: 'signing'
-
-lombok {
-    version = "1.16.4"
-    sha256 = ""
-}
 
 compileJava.options.encoding = 'UTF-8'
 
@@ -66,3 +58,19 @@ processResources {
         exclude 'mcmod.info'
     }
 }
+
+task signJar(type: SignJar, dependsOn: reobfJar) {
+
+    onlyIf {
+        project.hasProperty('keyStore')
+    }
+
+    keyStore = project.findProperty('keyStore')
+    alias = project.findProperty('keyStoreAlias')
+    storePass = project.findProperty('keyStorePass')
+    keyPass = project.findProperty('keyStoreKeyPass')
+    inputFile = jar.archivePath
+    outputFile = jar.archivePath
+}
+
+build.dependsOn signJar
