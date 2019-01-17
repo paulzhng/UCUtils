@@ -5,8 +5,11 @@ import de.fuzzlemann.ucutils.utils.command.Command;
 import de.fuzzlemann.ucutils.utils.command.CommandExecutor;
 import de.fuzzlemann.ucutils.utils.faction.Faction;
 import de.fuzzlemann.ucutils.utils.text.Message;
+import de.fuzzlemann.ucutils.utils.text.MessagePart;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.event.ClickEvent;
+import net.minecraft.util.text.event.HoverEvent;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -48,7 +51,10 @@ public class CheckActiveMembersCommand implements CommandExecutor {
 
                 builder.of(" * ").color(TextFormatting.GOLD).advance();
                 builder.of(faction.getFactionInfo().getFullName() + ": ")
-                        .color(TextFormatting.GRAY).advance();
+                        .color(TextFormatting.GRAY)
+                        .clickEvent(ClickEvent.Action.RUN_COMMAND, "/memberinfo " + faction.getFactionKey())
+                        .hoverEvent(HoverEvent.Action.SHOW_TEXT, MessagePart.simpleMessagePart("/memberinfo ausführen", TextFormatting.GRAY))
+                        .advance();
 
                 builder.of(String.valueOf(activeMembers)).color(TextFormatting.DARK_GREEN).advance();
                 builder.of("/").color(TextFormatting.GRAY).advance();

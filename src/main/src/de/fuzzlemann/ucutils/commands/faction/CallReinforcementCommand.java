@@ -29,6 +29,8 @@ public class CallReinforcementCommand implements CommandExecutor {
     private static final Pattern REINFORCEMENT_PATTERN = Pattern.compile("^(.+ ((?:\\[UC])*[a-zA-Z0-9_]+)): Benötige Verstärkung! -> X: (-*\\d+) \\| Y: (-*\\d+) \\| Z: (-*\\d+)$");
     private static final Pattern ON_THE_WAY_PATTERN = Pattern.compile("^(.+ (?:\\[UC])*[a-zA-Z0-9_]+): ((?:\\[UC])*[a-zA-Z0-9_]+), ich bin zu deinem Verstärkungsruf unterwegs! \\((\\d+) Meter entfernt\\)$");
 
+    private static ReinforcementType lastReinforcement;
+
     @SubscribeEvent
     public static void onChatReceived(ClientChatReceivedEvent e) {
         EntityPlayerSP p = Main.MINECRAFT.player;
@@ -47,8 +49,13 @@ public class CallReinforcementCommand implements CommandExecutor {
 
             boolean dChat = fullName.startsWith("FBI ") || fullName.startsWith("Polizei ") || fullName.startsWith("Rettungsdienst ");
 
-            Message message = Message.builder()
-                    .of(fullName).color(TextFormatting.DARK_GREEN).advance()
+            Message.MessageBuilder builder = Message.builder();
+
+            if (lastReinforcement != null && name.equals(lastReinforcement.getIssuer()) && System.currentTimeMillis() - lastReinforcement.getTime() < 1000) {
+                builder.of(lastReinforcement.getType().getMessage()).color(TextFormatting.RED).advance().space();
+            }
+
+            Message message = builder.of(fullName).color(TextFormatting.DARK_GREEN).advance()
                     .of(" benötigt Unterstützung bei X: " + posX + " | Y: " + posY + " | Z: " + posZ + "! (" + distance + " Meter entfernt)").color(TextFormatting.GREEN).advance().build();
 
             Message message2 = Message.builder()
@@ -78,21 +85,33 @@ public class CallReinforcementCommand implements CommandExecutor {
 
             p.sendMessage(message.toTextComponent());
             e.setCanceled(true);
+            return;
+        }
+
+        for (Type type : Type.values()) {
+            Pattern pattern = type.getPattern();
+            if (pattern == null) continue;
+
+            Matcher matcher = pattern.matcher(msg);
+            if (!matcher.find()) continue;
+
+            String name = matcher.group(1);
+
+            lastReinforcement = new ReinforcementType(name, type);
+            e.setCanceled(true);
         }
     }
 
     @Override
     @Command(labels = {"reinforcement", "callreinforcement", "verstärkung"})
     public boolean onCommand(EntityPlayerSP p, String[] args) {
-        String type;
+        String chatType;
         if (args.length != 0) {
-            switch (args[0].toLowerCase()) {
-                case "-d":
-                    type = "d";
-                    break;
+            String argument = args[0].toLowerCase();
+            switch (argument) {
                 case "ontheway":
                     if (args.length < 5) {
-                        type = "f";
+                        chatType = "f";
                         break;
                     }
 
@@ -106,7 +125,7 @@ public class CallReinforcementCommand implements CommandExecutor {
                         y = Integer.parseInt(args[3]);
                         z = Integer.parseInt(args[4]);
                     } catch (Exception e) {
-                        type = "f";
+                        chatType = "f";
                         break;
                     }
 
@@ -120,17 +139,94 @@ public class CallReinforcementCommand implements CommandExecutor {
                     p.sendChatMessage(message);
                     return true;
                 default:
-                    type = "f";
+                    Type foundType = null;
+                    for (Type t : Type.values()) {
+                        if (t.getArgument().equalsIgnoreCase(argument)) {
+                            foundType = t;
+                            break;
+                        }
+                    }
+
+                    if (foundType == null) {
+                        chatType = "f";
+                        break;
+                    }
+
+                    chatType = foundType.getChatType();
+
+                    if (foundType.getMessage() != null)
+                        p.sendChatMessage("/" + chatType + " " + foundType.getMessage());
             }
         } else {
-            type = "f";
+            chatType = "f";
         }
 
         int posX = (int) p.posX;
         int posY = (int) p.posY;
         int posZ = (int) p.posZ;
 
-        p.sendChatMessage("/" + type + " Benötige Verstärkung! -> X: " + posX + " | Y: " + posY + " | Z: " + posZ);
+        p.sendChatMessage("/" + chatType + " Benötige Verstärkung! -> X: " + posX + " | Y: " + posY + " | Z: " + posZ);
         return true;
+    }
+
+    private static class ReinforcementType {
+        private final String issuer;
+        private final Type type;
+        private final long time;
+
+        public ReinforcementType(String issuer, Type type) {
+            this.issuer = issuer;
+            this.type = type;
+            this.time = System.currentTimeMillis();
+        }
+
+        public String getIssuer() {
+            return issuer;
+        }
+
+        public Type getType() {
+            return type;
+        }
+
+        public long getTime() {
+            return time;
+        }
+    }
+
+    private enum Type {
+        D_CHAT("-d", "d", null),
+        EMERGENCY("-e", "f", "Dringend!"),
+        EMERGENCY_D("-ed", "d", "Dringend!"),
+        MEDIC("-m", "d", "Medic benötigt!"),
+        CORPSE_GUARDING("-lb", "d", "Leichenbewachung!");
+
+        private final String argument;
+        private final String chatType;
+        private final String message;
+        private final Pattern pattern;
+
+        Type(String argument, String chatType, String message) {
+            this.argument = argument;
+            this.chatType = chatType;
+            this.message = message;
+
+            this.pattern = message != null ? Pattern.compile("^.+ ((?:\\[UC])*[a-zA-Z0-9_]+): " + message + "$") : null;
+        }
+
+        public String getArgument() {
+            return argument;
+        }
+
+        public String getChatType() {
+            return chatType;
+        }
+
+        public String getMessage() {
+            return message;
+        }
+
+        public Pattern getPattern() {
+            return pattern;
+        }
     }
 }

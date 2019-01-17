@@ -68,10 +68,7 @@ public class MedicalLicenseHandler {
         String message = textComponent.getUnformattedText();
 
         Matcher showInvMatcher = SHOW_INV_PATTERN.matcher(message);
-        if (showInvMatcher.find()) {
-            lastName = showInvMatcher.group(1);
-        }
-
+        if (showInvMatcher.find()) lastName = showInvMatcher.group(1);
         if (lastName == null) return;
 
         Matcher marijuanaMatcher = MARIJUANA_PATTERN.matcher(message);
@@ -82,7 +79,7 @@ public class MedicalLicenseHandler {
 
         int amount = Integer.parseInt(amountString);
 
-        boolean allowed = amount <= 12 && hasMedicalLicense(lastName);
+        boolean allowed = amount == 0 || amount <= 12 && hasMedicalLicense(lastName);
 
         Message msg;
         if (allowed) {

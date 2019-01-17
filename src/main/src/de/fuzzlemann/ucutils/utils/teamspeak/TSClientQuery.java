@@ -38,26 +38,28 @@ public class TSClientQuery {
     private static String rawExec(String command, boolean auth, boolean tryAgain) {
         if (auth && !connect()) return null;
 
-        if (bufferedReader == null) auth();
+        if (bufferedReader == null) connect();
 
         String result;
         try {
-            while (bufferedReader.ready()) bufferedReader.readLine();
+            while (bufferedReader.ready()) {
+                System.out.println("dump:         " + bufferedReader.readLine());
+            }
+
             printWriter.println(command);
 
             result = bufferedReader.readLine();
-            System.out.println("command = " + command);
-            System.out.println("result = " + result);
+
+            System.out.println("command:      " + command);
+            System.out.println("result:       -> " + result);
             if (tryAgain && result != null && result.equals("error id=1796 msg=currently\\snot\\spossible")) {
                 auth();
                 return rawExec(command, auth, false);
             }
+        } catch (SocketException e) {
+            connect(false);
+            return rawExec(command, auth, false);
         } catch (IOException e) {
-            if (e instanceof SocketException) {
-                connect(false);
-                return rawExec(command, auth, false);
-            }
-
             e.printStackTrace();
             return null;
         }
