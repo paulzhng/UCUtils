@@ -20,6 +20,7 @@ public class RefreshDataCommand implements CommandExecutor {
     public boolean onCommand(EntityPlayerSP p, String[] args) {
         Main.refreshData();
         p.sendMessage(TextUtils.simpleMessage("Alle Daten wurden erneuert.", TextFormatting.GREEN));
+
         return true;
     }
 }

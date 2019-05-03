@@ -7,6 +7,7 @@ import de.fuzzlemann.ucutils.utils.location.navigation.NavigationUtil;
 import de.fuzzlemann.ucutils.utils.text.Message;
 import de.fuzzlemann.ucutils.utils.text.MessagePart;
 import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.event.ClickEvent;
 import net.minecraft.util.text.event.HoverEvent;
@@ -34,7 +35,8 @@ public class CallReinforcementCommand implements CommandExecutor {
     @SubscribeEvent
     public static void onChatReceived(ClientChatReceivedEvent e) {
         EntityPlayerSP p = Main.MINECRAFT.player;
-        String msg = e.getMessage().getUnformattedText();
+        ITextComponent messageComponent = e.getMessage();
+        String msg = messageComponent.getUnformattedText();
 
         Matcher reinforcementMatcher = REINFORCEMENT_PATTERN.matcher(msg);
         if (reinforcementMatcher.find()) {
@@ -47,7 +49,7 @@ public class CallReinforcementCommand implements CommandExecutor {
 
             int distance = (int) p.getPosition().getDistance(posX, posY, posZ);
 
-            boolean dChat = fullName.startsWith("FBI ") || fullName.startsWith("Polizei ") || fullName.startsWith("Rettungsdienst ");
+            boolean dChat = messageComponent.getSiblings().get(0).getStyle().getColor() == TextFormatting.RED;
 
             Message.MessageBuilder builder = Message.builder();
 

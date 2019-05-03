@@ -1,20 +1,15 @@
 package de.fuzzlemann.ucutils.utils.faction.police;
 
 import de.fuzzlemann.ucutils.utils.ForgeUtils;
+import de.fuzzlemann.ucutils.utils.api.APIUtils;
 import de.fuzzlemann.ucutils.utils.text.Message;
-import de.fuzzlemann.ucutils.utils.text.MessagePart;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.event.HoverEvent;
 import net.minecraftforge.client.event.ClientChatEvent;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import org.apache.commons.io.IOUtils;
 
-import java.io.IOException;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -87,7 +82,6 @@ public class MedicalLicenseHandler {
                     .space()
                     .of("(Erlaubt)")
                     .color(TextFormatting.GREEN)
-                    .hoverEvent(HoverEvent.Action.SHOW_TEXT, MessagePart.simpleMessagePart("Die Person besitzt eine medizinische Marihuanalizenz", TextFormatting.GREEN))
                     .advance().build();
         } else {
             msg = Message.builder().space().of("(Nicht erlaubt)").color(TextFormatting.RED).advance().build();
@@ -99,9 +93,10 @@ public class MedicalLicenseHandler {
 
     public static boolean hasMedicalLicense(String playerName) {
         try {
-            URL url = new URL("http://fuzzlemann.de/medicallicense.php?username=" + playerName);
-            return Boolean.valueOf(IOUtils.toString(url, StandardCharsets.UTF_8));
-        } catch (IOException e) {
+            String response = APIUtils.post("http://tomcat.fuzzlemann.de/factiononline/checkmedicallicense", "name", playerName);
+            return Boolean.valueOf(response);
+        } catch (Exception e) {
+            e.printStackTrace();
             return false;
         }
     }

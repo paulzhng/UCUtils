@@ -24,9 +24,9 @@ public class SchwarzmarktLocationsCommand implements CommandExecutor {
     private static final List<Map.Entry<String, BlockPos>> BLACK_MARKET_LIST = Lists.newArrayList(
             Maps.immutableEntry("Containerhalle", new BlockPos(-100, 69, -447)),
             Maps.immutableEntry("Lagerhalle", new BlockPos(-70, 69, 529)),
-            Maps.immutableEntry("Alte Scheune", new BlockPos(522, 69, 566)),
-            Maps.immutableEntry("Frachtschiff", new BlockPos(-436, 69, -12)),
-            Maps.immutableEntry("Flughafen", new BlockPos(-78, 64, 637))
+            Maps.immutableEntry("Alte Scheune", new BlockPos(552, 66, 566)),
+            Maps.immutableEntry("Frachtschiff", new BlockPos(-436, 74, -12)),
+            Maps.immutableEntry("Flughafen", new BlockPos(-78, 63, 637))
     );
 
     @Override

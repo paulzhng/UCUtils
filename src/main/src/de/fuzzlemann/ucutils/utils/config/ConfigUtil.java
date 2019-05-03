@@ -1,7 +1,7 @@
 package de.fuzzlemann.ucutils.utils.config;
 
 import de.fuzzlemann.ucutils.Main;
-import de.fuzzlemann.ucutils.utils.log.ChatLogger;
+import de.fuzzlemann.ucutils.utils.chatlog.ChatLogger;
 import de.fuzzlemann.ucutils.utils.teamspeak.TSClientQuery;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
@@ -19,6 +19,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class ConfigUtil {
 
     public static Configuration config;
+    public static Property apiKeyProperty;
     public static boolean blockResourcePackReminder = false;
     public static boolean reportAnnouncement = true;
     public static boolean contractAnnouncement = true;
@@ -29,6 +30,8 @@ public class ConfigUtil {
     public static boolean munitionDisplay = true;
     public static boolean bombTimerDisplay = true;
     public static boolean logChat = true;
+    public static boolean showHausBans = false;
+    public static String apiKey = "";
     public static String reportGreeting = "";
 
     public static void syncConfig() {
@@ -94,7 +97,7 @@ public class ConfigUtil {
                 "Der Chat wird geloggt und im Minecraft-Order unter /chatlogs gespeichert");
         logChat = logChatProperty.getBoolean();
 
-        if (logChat)
+        if (logChat && ChatLogger.instance == null)
             ChatLogger.instance = new ChatLogger();
 
         Property tsApiKeyProperty = config.get(Configuration.CATEGORY_GENERAL,
@@ -103,11 +106,23 @@ public class ConfigUtil {
                 "Der TS API Key (TeamSpeak ALT + P -> Erweiterungen -> ClientQuery -> Einstellungen -> API Key).");
         TSClientQuery.apiKey = tsApiKeyProperty.getString();
 
+        apiKeyProperty = config.get(Configuration.CATEGORY_GENERAL,
+                "apiKey",
+                "",
+                "Der API Key (vom fuzzlemann.de-Panel; siehe Account-Einstellungen).");
+        apiKey = apiKeyProperty.getString();
+
         Property reportGreetingProperty = config.get(Configuration.CATEGORY_GENERAL,
                 "reportGreeting",
                 "",
                 "Die Begrüßung, die beim Betreten eines Reports geschrieben wird (Nur als Teammitglied wichtig) (Wenn keine erwünscht ist, leer lassen)");
         reportGreeting = reportGreetingProperty.getString();
+
+        Property showHouseBansProperty = config.get(Configuration.CATEGORY_GENERAL,
+                "showHouseBans",
+                false,
+                "Ob Personen, die im Krankenhaus ein Hausverbot haben, einen gelben Namen haben sollen");
+        showHausBans = showHouseBansProperty.getBoolean();
     }
 
     @SubscribeEvent
@@ -115,7 +130,7 @@ public class ConfigUtil {
         if (config.hasChanged())
             config.save();
 
-        if (e.getModID().equals(Main.MOD_ID))
+        if (e == null || e.getModID().equals(Main.MOD_ID))
             syncConfig();
     }
 }

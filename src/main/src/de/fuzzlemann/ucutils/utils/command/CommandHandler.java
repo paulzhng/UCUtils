@@ -2,10 +2,7 @@ package de.fuzzlemann.ucutils.utils.command;
 
 import de.fuzzlemann.ucutils.Main;
 import de.fuzzlemann.ucutils.commands.*;
-import de.fuzzlemann.ucutils.commands.faction.CallReinforcementCommand;
-import de.fuzzlemann.ucutils.commands.faction.ChannelActivityCommand;
-import de.fuzzlemann.ucutils.commands.faction.CheckActiveMembersCommand;
-import de.fuzzlemann.ucutils.commands.faction.SchwarzmarktLocationsCommand;
+import de.fuzzlemann.ucutils.commands.faction.*;
 import de.fuzzlemann.ucutils.commands.faction.badfaction.blacklist.ASetBlacklistCommand;
 import de.fuzzlemann.ucutils.commands.faction.badfaction.blacklist.BlacklistPriceCommand;
 import de.fuzzlemann.ucutils.commands.faction.badfaction.drug.ASellDrugCommand;
@@ -56,7 +53,7 @@ public class CommandHandler {
     private static final Map<String, CommandExecutor> COMMANDS = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
 
     public static void registerAllCommands() {
-        registerCommand(new TestCommand());
+        registerCommand(new GenerateAuthLinkCommand());
 
         registerCommand(new ClearChatCommand());
         registerCommand(new InternetTestCommand());
@@ -96,12 +93,13 @@ public class CommandHandler {
         registerCommand(new ADropDrinkCommand());
         registerCommand(new AGetPizzaCommand());
 
-        registerCommand(new JShutdownCommand());
-        registerCommand(new FShutdownCommand());
+        registerCommand(new ShutdownJailCommand());
+        registerCommand(new ShutdownFriedhofCommand());
 
         registerCommand(new CheckActiveMembersCommand());
         registerCommand(new ChannelActivityCommand());
         registerCommand(new CallReinforcementCommand());
+        registerCommand(new ShareLocationCommand());
 
         registerCommand(new ToggleMafiaSpeechCommand());
         registerCommand(new ToggleKerzakovSpeechCommand());
@@ -110,6 +108,7 @@ public class CommandHandler {
         registerCommand(new SchwarzmarktLocationsCommand());
 
         registerCommand(new CheckMedicalLicenseCommand());
+        registerCommand(new CheckHouseBanCommand());
 
         registerCommand(new MoveHereCommand());
         registerCommand(new MoveCommand());

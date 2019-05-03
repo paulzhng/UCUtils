@@ -34,14 +34,11 @@ public class ASetBlacklistCommand implements CommandExecutor, TabCompletion {
             return true;
         }
 
-        giveWanteds(p, blacklistReason.getReason(), players);
-        return true;
-    }
-
-    private void giveWanteds(EntityPlayerSP issuer, String reason, List<String> players) {
         for (String player : players) {
-            issuer.sendChatMessage("/bl set " + player + " " + reason);
+            p.sendChatMessage("/bl set " + player + " 100 " + blacklistReason.getPrice() + " " + blacklistReason.getReason());
         }
+
+        return true;
     }
 
     @Override

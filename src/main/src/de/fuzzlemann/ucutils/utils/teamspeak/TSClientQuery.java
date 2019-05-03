@@ -43,15 +43,13 @@ public class TSClientQuery {
         String result;
         try {
             while (bufferedReader.ready()) {
-                System.out.println("dump:         " + bufferedReader.readLine());
+                bufferedReader.readLine();
             }
 
             printWriter.println(command);
 
             result = bufferedReader.readLine();
 
-            System.out.println("command:      " + command);
-            System.out.println("result:       -> " + result);
             if (tryAgain && result != null && result.equals("error id=1796 msg=currently\\snot\\spossible")) {
                 auth();
                 return rawExec(command, auth, false);

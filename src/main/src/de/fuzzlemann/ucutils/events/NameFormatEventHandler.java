@@ -1,5 +1,7 @@
 package de.fuzzlemann.ucutils.events;
 
+import de.fuzzlemann.ucutils.utils.config.ConfigUtil;
+import de.fuzzlemann.ucutils.utils.faction.HouseBanHandler;
 import de.fuzzlemann.ucutils.utils.text.TextUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.scoreboard.ScorePlayerTeam;
@@ -30,8 +32,8 @@ public class NameFormatEventHandler {
             "|^.+ (?:\\[UC])*[a-zA-Z0-9_]+ hat (?:\\[UC])*([a-zA-Z0-9_]+) getötet!$" +
             "|^HQ: .+ (?:\\[UC])*[a-zA-Z0-9_]+ hat (?:\\[UC])*([a-zA-Z0-9_]+)(?:'s)*(?: seine| ihre)* Akten gelöscht, over.$");
     private static long wantedsShown;
-    //--------------------- Hits ---------------------\\
-    private static final List<String> HITLIST = new ArrayList<>();
+    //--------------------- Contracts ---------------------\\
+    private static final List<String> CONTRACT_LIST = new ArrayList<>();
     private static final Pattern CONTRACT_SET_PATTERN = Pattern.compile("^\\[Contract] Es wurde ein Kopfgeld auf (?:\\[UC])*([a-zA-Z0-9_]+) \\(\\d+\\$\\) ausgesetzt.$");
     private static final Pattern CONTRACT_REMOVED_PATTERN = Pattern.compile("(?:^\\[Contract] (?:\\[UC])*[a-zA-Z0-9_]+ hat (?:\\[UC])*([a-zA-Z0-9_]+) von der Contract Liste gelöscht. \\[-\\d+]$)" +
             "|(?:^\\[Contract] (?:\\[UC])*[a-zA-Z0-9_]+ hat (?:\\[UC])*([a-zA-Z0-9_]+) getötet. Kopfgeld: \\d+\\$)");
@@ -56,10 +58,10 @@ public class NameFormatEventHandler {
         //Prevents people who are masked from being detected
         if (displayName.contains("§k")) return;
 
-        String color = getColor(userName);
+        String color = getPrefix(userName);
         if (color == null) return;
 
-        e.setDisplayname("§" + color + userName);
+        e.setDisplayname(color + userName);
     }
 
     @SubscribeEvent
@@ -140,7 +142,7 @@ public class NameFormatEventHandler {
         long currentTime = System.currentTimeMillis();
 
         if (unformattedMessage.equals("=~=~=~Contracts~=~=~=")) {
-            HITLIST.clear();
+            CONTRACT_LIST.clear();
             hitlistShown = currentTime;
 
             refreshAllDisplayNames();
@@ -154,7 +156,7 @@ public class NameFormatEventHandler {
         String[] splittedMessage = StringUtils.split(unformattedMessage, " ");
         String name = TextUtils.stripPrefix(splittedMessage[1]);
 
-        HITLIST.add(name);
+        CONTRACT_LIST.add(name);
         refreshDisplayName(name);
     }
 
@@ -167,7 +169,7 @@ public class NameFormatEventHandler {
         if (matcher.find()) {
             String name = matcher.group(1);
 
-            HITLIST.add(name);
+            CONTRACT_LIST.add(name);
             refreshDisplayName(name);
         }
     }
@@ -189,7 +191,7 @@ public class NameFormatEventHandler {
             break;
         }
 
-        HITLIST.remove(name);
+        CONTRACT_LIST.remove(name);
         refreshDisplayName(name);
     }
 
@@ -246,24 +248,26 @@ public class NameFormatEventHandler {
         }
     }
 
-    private static String getColor(String userName) {
+    private static String getPrefix(String userName) {
         Integer wanteds = WANTED_MAP.get(userName);
         if (wanteds != null) {
             if (wanteds == 1) {
-                return "2";
+                return "§2";
             } else if (wanteds < 15) {
-                return "a";
+                return "§a";
             } else if (wanteds < 25) {
-                return "e";
+                return "§e";
             } else if (wanteds < 50) {
-                return "6";
+                return "§6";
             } else if (wanteds < 60) {
-                return "c";
+                return "§c";
             } else {
-                return "4";
+                return "§4";
             }
-        } else if (BLACKLIST.contains(userName) || HITLIST.contains(userName)) {
-            return "4";
+        } else if (BLACKLIST.contains(userName) || CONTRACT_LIST.contains(userName)) {
+            return "§4";
+        } else if (ConfigUtil.showHausBans && HouseBanHandler.HOUSE_BANS.contains(userName)) {
+            return "§8[§cHV§8] §f";
         }
 
         return null;

@@ -16,6 +16,8 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -26,6 +28,7 @@ import java.util.regex.Pattern;
 @SideOnly(Side.CLIENT)
 public class NotificationEventHandler {
 
+    private static final Timer TIMER = new Timer();
     private static final Pattern RESOURCEPACK_PATTERN = Pattern.compile("^Wir empfehlen dir unser Resourcepack zu nutzen.$|" +
             "^Unter http://unicacity.de/dl/UnicaCity[_a-zA-Z\\d]+.zip kannst du es dir herunterladen.$");
     private static final Pattern UNINVITE_PATTERN = Pattern.compile("^(?:\\[UC])*[a-zA-Z0-9_]+ wurde von (?:\\[UC])*[a-zA-Z0-9_]+ aus der Fraktion geschmissen.$");
@@ -35,8 +38,8 @@ public class NotificationEventHandler {
             "^Es liegt ein neuer Report von [a-zA-Z0-9_]+ vor! Thema: [a-zA-Z]+$");
     private static final Pattern REPORT_ACCEPTED_PATTERN = Pattern.compile("^\\[Report] Du hast den Report von [a-zA-Z0-9_]+ \\[Level \\d+] angenommen! Thema: [a-zA-Z]+$");
     private static final Pattern BOMB_PLACED_PATTERN = Pattern.compile("^News: ACHTUNG! Es wurde eine Bombe in der Nähe von .+ gefunden!$");
-    private static final Pattern SERVICE_ANNOUNCEMENT_PATTERN = Pattern.compile("^HQ: Achtung! Ein Notruf von (?:\\[UC])*[a-zA-Z0-9_]+ \\(.+\\), over.$|" +
-            "^Ein Notruf von (?:\\[UC])*[a-zA-Z0-9_]+ \\(.+\\).$");
+    private static final Pattern SERVICE_ANNOUNCEMENT_PATTERN = Pattern.compile("^HQ: Achtung! Ein Notruf von (?:\\[UC])*[a-zA-Z0-9_]+ \\(.+\\): \".+\"$|" +
+            "^Ein Notruf von (?:\\[UC])*[a-zA-Z0-9_]+ \\(.+\\): \".+\"$");
 
     @SubscribeEvent
     public static void onChatReceived(ClientChatReceivedEvent e) {
@@ -96,7 +99,12 @@ public class NotificationEventHandler {
         }
 
         if (!ConfigUtil.reportGreeting.isEmpty() && REPORT_ACCEPTED_PATTERN.matcher(unformattedText).find()) {
-            p.sendChatMessage(ConfigUtil.reportGreeting);
+            TIMER.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    p.sendChatMessage(ConfigUtil.reportGreeting);
+                }
+            }, 1000L);
         }
     }
 

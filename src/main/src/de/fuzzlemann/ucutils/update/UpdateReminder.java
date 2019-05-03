@@ -33,8 +33,10 @@ public class UpdateReminder {
 
     @SubscribeEvent
     public static void onJoinWorld(EntityJoinWorldEvent e) {
-        if (!updateNeeded) return;
         if (!connected) return;
+        connected = false;
+
+        if (!updateNeeded) return;
 
         TextComponentString text = new TextComponentString("Es ist ein neues Update von UCUtils verfügbar!");
         text.getStyle().setColor(TextFormatting.RED);
@@ -46,7 +48,6 @@ public class UpdateReminder {
         text.getStyle().setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://fuzzlemann.de/UCUtils.jar"));
 
         Main.MINECRAFT.player.sendMessage(text);
-        connected = false;
     }
 
     public static void updateUpdateNeeded() throws IOException {

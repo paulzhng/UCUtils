@@ -8,6 +8,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -19,21 +20,23 @@ import java.util.Set;
  */
 @SideOnly(Side.CLIENT)
 @Mod.EventBusSubscriber
-public class MunitionEventHandler {
+public class WeaponClickEventHandler {
 
     private static final Set<String> WEAPONS = ImmutableSet.of("§8M4", "§8MP5", "§8Pistole", "§8Jagdflinte");
 
-    @SubscribeEvent
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void onInteract(PlayerInteractEvent e) {
         if (!ConfigUtil.munitionDisplay) return;
-        if (!(e instanceof PlayerInteractEvent.RightClickItem)) return;
+        if (!(e instanceof PlayerInteractEvent.RightClickItem || e instanceof PlayerInteractEvent.RightClickBlock || e instanceof PlayerInteractEvent.EntityInteractSpecific))
+            return;
 
-        handleMunitionDisplay(e.getItemStack());
+        ItemStack is = e.getItemStack();
+        if (!isWeapon(is)) return;
+
+        handleMunitionDisplay(is);
     }
 
     private static void handleMunitionDisplay(ItemStack is) {
-        if (!isWeapon(is)) return;
-
         String text = getText(is);
         if (text == null) return;
 
@@ -48,14 +51,19 @@ public class MunitionEventHandler {
 
         String lore = display.getTagList("Lore", Constants.NBT.TAG_STRING).getStringTagAt(0);
         String[] splittedLore = lore.split("/");
+        if (splittedLore.length != 2) return null;
 
         String munitionString = splittedLore[0];
+        if (munitionString.length() < 2) return null;
+
         int munition = Integer.parseInt(munitionString.substring(2));
 
         return (--munition < 1 ? "§c0" : "§6" + munition) + "§b/§6" + splittedLore[1];
     }
 
     private static boolean isWeapon(ItemStack is) {
+        if (is == null) return false;
+
         return WEAPONS.contains(is.getDisplayName());
     }
 }

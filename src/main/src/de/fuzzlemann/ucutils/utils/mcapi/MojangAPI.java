@@ -11,7 +11,6 @@ import org.apache.commons.io.IOUtils;
 
 import javax.annotation.Nonnull;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -77,11 +76,7 @@ public class MojangAPI {
     }
 
     public static String getUUID(String currentName) {
-        try {
-            return UUID_CACHE.get(currentName);
-        } catch (Exception e) {
-            return null;
-        }
+        return UUID_CACHE.getUnchecked(currentName);
     }
 
     private static String getUncachedUUID(String currentName) {
@@ -93,23 +88,14 @@ public class MojangAPI {
     }
 
     private static JsonElement getJsonElement(String urlString) {
-        URL url;
         try {
-            url = new URL(urlString);
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-            return null;
-        }
+            URL url = new URL(urlString);
 
-        String content;
-        try {
-            content = IOUtils.toString(url, StandardCharsets.UTF_8);
+            String content = IOUtils.toString(url, StandardCharsets.UTF_8);
+            return new JsonParser().parse(content);
         } catch (IOException e) {
             e.printStackTrace();
             return null;
         }
-
-        return new JsonParser().parse(content);
     }
-
 }

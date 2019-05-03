@@ -24,7 +24,7 @@ public class BombTimerEventHandler {
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("mm:ss");
     private static final Pattern BOMB_PLACED_PATTERN = Pattern.compile("^News: ACHTUNG! Es wurde eine Bombe in der Nähe von .+ gefunden!$");
     private static final Pattern BOMB_REMOVED_PATTERN = Pattern.compile("News: Die Bombe konnte (?:nicht|erfolgreich) entschärft werden!");
-    public static long bombPlaced = -1;
+    private static long bombPlaced = -1;
 
     @SubscribeEvent
     public static void onChatReceived(ClientChatReceivedEvent e) {
@@ -45,10 +45,10 @@ public class BombTimerEventHandler {
     @SubscribeEvent
     public static void onTick(TickEvent.RenderTickEvent e) {
         if (!ConfigUtil.bombTimerDisplay) return;
+        if (bombPlaced == -1) return;
 
         long timeDifference = System.currentTimeMillis() - bombPlaced;
 
-        if (timeDifference == -1) return;
         if (timeDifference > TimeUnit.MINUTES.toMillis(15)) {
             bombPlaced = -1;
             return;
@@ -67,11 +67,12 @@ public class BombTimerEventHandler {
         int titleWidth = fontRender.getStringWidth("Bomben-Timer");
         int timeWidth = fontRender.getStringWidth(timeString);
 
-        int x = (width / 2);
+        int x = width / 2;
 
         fontRender.drawStringWithShadow("Bomben-Timer", (float) (x - titleWidth / 2.0), (int) (height * 0.05 - 10), 0x009999);
         fontRender.drawStringWithShadow(timeString, (int) (x - timeWidth / 2.0), (int) (height * 0.05), 0x990000);
     }
+
     private static String formatTime(long time) {
         return DATE_FORMAT.format(new Date(time));
     }

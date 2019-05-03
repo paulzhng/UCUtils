@@ -41,7 +41,7 @@ public class WantedManager {
     public static void fillWantedList() throws IOException {
         WANTED_LIST.clear();
 
-        URL url = new URL("http://fuzzlemann.de/wanteds.html");
+        URL url = new URL("http://tomcat.fuzzlemann.de/factiononline/wantedreasons");
         String result = IOUtils.toString(url, StandardCharsets.UTF_8);
 
         String[] wantedStrings = result.split("<>");

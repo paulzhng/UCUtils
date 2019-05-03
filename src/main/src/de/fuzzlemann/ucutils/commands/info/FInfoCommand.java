@@ -32,7 +32,7 @@ public class FInfoCommand implements CommandExecutor {
             return true;
         }
 
-        Faction faction = Faction.getFactionEnum(args[0]);
+        Faction faction = Faction.getFactionEnum(String.join(" ", args));
 
         if (faction == null) {
             TextUtils.error("Die Fraktion wurde nicht gefunden");

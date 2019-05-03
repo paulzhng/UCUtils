@@ -1,21 +1,13 @@
 package de.fuzzlemann.ucutils.utils;
 
 import de.fuzzlemann.ucutils.Main;
+import de.fuzzlemann.ucutils.utils.api.APIUtils;
 import de.fuzzlemann.ucutils.utils.io.JsonManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.Session;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.message.BasicNameValuePair;
+import net.minecraftforge.fml.common.Loader;
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 /**
@@ -36,24 +28,17 @@ public class AnalyticsUtil {
         String minecraftVersion = Main.MINECRAFT.getVersion();
         String javaVersion = System.getProperty("java.version");
 
-        try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
-            HttpPost httpPost = new HttpPost("http://analytics.fuzzlemann.de/submit.php");
+        String mods = String.join(", ", Loader.instance().getIndexedModList().keySet());
 
-            httpPost.setHeader("User-Agent", "UCUtils");
-
-            List<NameValuePair> params = new ArrayList<>();
-            params.add(new BasicNameValuePair("analyticsID", getAnalyticsID()));
-            params.add(new BasicNameValuePair("uuid", uuid));
-            params.add(new BasicNameValuePair("name", name));
-            params.add(new BasicNameValuePair("version", version));
-            params.add(new BasicNameValuePair("minecraftVersion", minecraftVersion));
-            params.add(new BasicNameValuePair("javaVersion", javaVersion));
-
-            httpPost.setEntity(new UrlEncodedFormEntity(params, StandardCharsets.UTF_8));
-            httpClient.execute(httpPost);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        APIUtils.post("http://analytics.fuzzlemann.de/submit.php",
+                "analyticsID", getAnalyticsID(),
+                "uuid", uuid,
+                "name", name,
+                "version", version,
+                "minecraftVersion", minecraftVersion,
+                "javaVersion", javaVersion,
+                "mods", mods
+        );
     }
 
     private static String getAnalyticsID() {

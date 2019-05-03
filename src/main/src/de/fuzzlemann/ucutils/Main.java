@@ -2,9 +2,12 @@ package de.fuzzlemann.ucutils;
 
 import de.fuzzlemann.ucutils.update.UpdateReminder;
 import de.fuzzlemann.ucutils.utils.AnalyticsUtil;
-import de.fuzzlemann.ucutils.utils.TabListSortHandler;
+import de.fuzzlemann.ucutils.utils.tablist.TabListSortHandler;
+import de.fuzzlemann.ucutils.utils.api.APIUtils;
+import de.fuzzlemann.ucutils.utils.cape.CapeUtil;
 import de.fuzzlemann.ucutils.utils.command.CommandHandler;
 import de.fuzzlemann.ucutils.utils.config.ConfigUtil;
+import de.fuzzlemann.ucutils.utils.faction.HouseBanHandler;
 import de.fuzzlemann.ucutils.utils.faction.badfaction.blacklist.BlacklistUtil;
 import de.fuzzlemann.ucutils.utils.faction.badfaction.drug.DrugUtil;
 import de.fuzzlemann.ucutils.utils.faction.police.WantedManager;
@@ -33,7 +36,7 @@ public class Main {
     public static final Minecraft MINECRAFT = Minecraft.getMinecraft();
 
     public static final String MOD_ID = "ucutils";
-    public static final String VERSION = "1.12.1-1.5";
+    public static final String VERSION = "1.12.1-1.6";
 
     static final String NAME = "UC Utils";
     static final String GUI_FACTORY = "de.fuzzlemann.ucutils.utils.config.GuiFactoryUCUtils";
@@ -56,31 +59,33 @@ public class Main {
     }
 
     @Mod.EventHandler
-    public void postInit(FMLPostInitializationEvent e) throws NoSuchFieldException, IllegalAccessException {
+    public void postInit(FMLPostInitializationEvent e) {
         new Thread(Main::refreshData).start();
         new Thread(AnalyticsUtil::sendStartupAnalytics).start();
 
         TabListSortHandler.initTablistSort();
+        CapeUtil.init();
     }
 
     public static void refreshData() {
         try {
             UpdateReminder.updateUpdateNeeded();
-        } catch (IOException exc) {
+        } catch (IOException e) {
+            e.printStackTrace();
             UpdateReminder.updateNeeded = false;
         }
 
-        try {
-            WantedManager.fillWantedList();
-        } catch (IOException exc) {
-            WantedManager.readSavedWantedList();
-        }
+        APIUtils.loadAPIKey();
 
         try {
+            WantedManager.fillWantedList();
+            HouseBanHandler.fillHouseBanList();
             PunishManager.fillViolationList();
             NoobChatManager.fillNoobChatAnswerList();
-        } catch (IOException e1) {
-            e1.printStackTrace();
+            CapeUtil.loadCapes();
+        } catch (IOException e) {
+            e.printStackTrace();
+            WantedManager.readSavedWantedList();
         }
 
         DrugUtil.loadDrugs();

@@ -1,7 +1,8 @@
-package de.fuzzlemann.ucutils.utils.log;
+package de.fuzzlemann.ucutils.utils.chatlog;
 
 import de.fuzzlemann.ucutils.Main;
 import de.fuzzlemann.ucutils.utils.config.ConfigUtil;
+import net.minecraft.network.NetworkManager;
 import net.minecraftforge.client.event.ClientChatEvent;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -27,22 +28,32 @@ import java.util.logging.Logger;
 @SideOnly(Side.CLIENT)
 public class ChatLogger {
 
-    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
     public static ChatLogger instance;
-    private Logger logger;
+    private final SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+    private final ChatLogConsumer consumer;
+    private final Logger logger;
 
     public ChatLogger() {
         File directory = new File(Main.MINECRAFT.mcDataDir, "chatlogs");
 
         deleteTempFiles(directory);
         FileHandler fileHandler = createChatLog(directory);
-        if (fileHandler == null) return;
+        if (fileHandler == null) {
+            logger = null;
+            consumer = null;
+            return;
+        }
 
         logger = Logger.getLogger("ChatLogger");
         logger.addHandler(fileHandler);
-        fileHandler.setFormatter(new ChatLogFormatter());
+
+        consumer = new ChatLogConsumer(this);
 
         log("------------ Chat Log ------------");
+    }
+
+    Logger getLogger() {
+        return logger;
     }
 
     private void deleteTempFiles(File directory) {
@@ -75,41 +86,55 @@ public class ChatLogger {
             return null;
         }
 
+        fileHandler.setFormatter(new ChatLogFormatter());
+
         return fileHandler;
     }
 
     private void log(String message) {
-        logger.info(message + "\n");
+        if (!ConfigUtil.logChat || consumer == null) return;
+
+        consumer.log(message + "\n");
     }
 
     @SubscribeEvent
     public static void onChat(ClientChatEvent e) {
-        if (ConfigUtil.logChat)
-            instance.log("[SELF] " + e.getOriginalMessage());
+        if (instance == null) return;
+
+        instance.log("[SELF] " + e.getOriginalMessage());
     }
 
     @SubscribeEvent
     public static void onReceiveChat(ClientChatReceivedEvent e) {
-        if (ConfigUtil.logChat)
-            instance.log("[CHAT] " + e.getMessage().getUnformattedText());
+        if (instance == null) return;
+
+        instance.log("[CHAT] " + e.getMessage().getUnformattedText());
     }
 
     @SubscribeEvent
     public static void onClientConnect(FMLNetworkEvent.ClientConnectedToServerEvent e) {
-        if (ConfigUtil.logChat)
-            instance.log("---- Connected to " + e.getManager().getRemoteAddress() + " ----");
+        if (instance == null) return;
+
+        NetworkManager manager = e.getManager();
+        String address = manager.isLocalChannel() ? "local world" : manager.getRemoteAddress().toString();
+
+        instance.log("---- Connected to " + address + " ----");
     }
 
     @SubscribeEvent
     public static void onClientConnect(FMLNetworkEvent.ClientDisconnectionFromServerEvent e) {
-        if (ConfigUtil.logChat)
-            instance.log("---- Disconnected from " + e.getManager().getRemoteAddress() + " ----");
+        if (instance == null) return;
+
+        NetworkManager manager = e.getManager();
+        String address = manager.isLocalChannel() ? "local world" : manager.getRemoteAddress().toString();
+
+        instance.log("---- Disconnected from " + address + " ----");
     }
 
-    private static class ChatLogFormatter extends Formatter {
+    private class ChatLogFormatter extends Formatter {
         @Override
         public String format(LogRecord record) {
-            return DATE_FORMAT.format(new Date()) + " | " + record.getMessage();
+            return dateFormat.format(new Date()) + " | " + record.getMessage();
         }
     }
 }
