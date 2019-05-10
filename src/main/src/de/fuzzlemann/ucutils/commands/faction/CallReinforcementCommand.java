@@ -17,6 +17,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -49,7 +50,10 @@ public class CallReinforcementCommand implements CommandExecutor {
 
             int distance = (int) p.getPosition().getDistance(posX, posY, posZ);
 
-            boolean dChat = messageComponent.getSiblings().get(0).getStyle().getColor() == TextFormatting.RED;
+            List<ITextComponent> siblings = messageComponent.getSiblings();
+            if (siblings.size() != 3) return;
+
+            boolean dChat = siblings.get(0).getStyle().getColor() == TextFormatting.RED && siblings.get(2).getStyle().getColor() == TextFormatting.RED;
 
             Message.MessageBuilder builder = Message.builder();
 

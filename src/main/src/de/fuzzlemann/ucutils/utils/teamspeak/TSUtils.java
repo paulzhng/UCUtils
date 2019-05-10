@@ -1,6 +1,5 @@
 package de.fuzzlemann.ucutils.utils.teamspeak;
 
-import de.fuzzlemann.ucutils.utils.mcapi.MojangAPI;
 import de.fuzzlemann.ucutils.utils.text.TextUtils;
 
 import java.util.*;
@@ -36,12 +35,7 @@ public class TSUtils {
     public static List<Map<String, String>> getClientsByName(List<String> minecraftNames) {
         List<Map<String, String>> clients = new ArrayList<>();
 
-        List<String> names = new ArrayList<>();
-        for (String arg : minecraftNames) {
-            names.addAll(MojangAPI.getEarlierNames(arg));
-        }
-
-        if (names.isEmpty()) return clients;
+        if (minecraftNames.isEmpty()) return clients;
 
         for (Map<String, String> map : getAllClientsWithParameters()) {
             String clientIDString = map.get("clid");
@@ -53,7 +47,7 @@ public class TSUtils {
             String description = result.get("client_description");
 
             if (description == null) continue;
-            if (!names.contains(TextUtils.stripPrefix(description))) continue;
+            if (!minecraftNames.contains(TextUtils.stripPrefix(description))) continue;
 
             clients.add(map);
         }

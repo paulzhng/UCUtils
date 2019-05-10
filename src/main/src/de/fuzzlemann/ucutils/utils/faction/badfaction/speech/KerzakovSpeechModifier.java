@@ -9,7 +9,7 @@ import java.util.StringJoiner;
 
 /**
  * @author Fuzzlemann
- */
+ */L
 public class KerzakovSpeechModifier implements SpeechModifier {
 
     private static final List<Map.Entry<String, String>> REPLACE_IGNORE_CASE = Lists.newArrayList(

@@ -11,7 +11,7 @@ import java.util.Collection;
  */
 public class DefaultCapeInitializor implements ICapeInitializor {
     @Override
-    public void init() throws Exception {
+    public void init() {
         Main.MINECRAFT.gameSettings.setModelPartEnabled(EnumPlayerModelParts.CAPE, true);
 
         Collection<RenderPlayer> layers = Main.MINECRAFT.getRenderManager().getSkinMap().values();

@@ -2,7 +2,6 @@ package de.fuzzlemann.ucutils;
 
 import de.fuzzlemann.ucutils.update.UpdateReminder;
 import de.fuzzlemann.ucutils.utils.AnalyticsUtil;
-import de.fuzzlemann.ucutils.utils.tablist.TabListSortHandler;
 import de.fuzzlemann.ucutils.utils.api.APIUtils;
 import de.fuzzlemann.ucutils.utils.cape.CapeUtil;
 import de.fuzzlemann.ucutils.utils.command.CommandHandler;
@@ -13,6 +12,7 @@ import de.fuzzlemann.ucutils.utils.faction.badfaction.drug.DrugUtil;
 import de.fuzzlemann.ucutils.utils.faction.police.WantedManager;
 import de.fuzzlemann.ucutils.utils.noobchat.NoobChatManager;
 import de.fuzzlemann.ucutils.utils.punishment.PunishManager;
+import de.fuzzlemann.ucutils.utils.tablist.TabListSortHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.Mod;
@@ -60,14 +60,14 @@ public class Main {
 
     @Mod.EventHandler
     public void postInit(FMLPostInitializationEvent e) {
-        new Thread(Main::refreshData).start();
+        new Thread(Main::loadData).start();
         new Thread(AnalyticsUtil::sendStartupAnalytics).start();
 
-        TabListSortHandler.initTablistSort();
+        TabListSortHandler.init();
         CapeUtil.init();
     }
 
-    public static void refreshData() {
+    public static void loadData() {
         try {
             UpdateReminder.updateUpdateNeeded();
         } catch (IOException e) {

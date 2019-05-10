@@ -22,15 +22,19 @@ import java.util.concurrent.TimeUnit;
  */
 public class MojangAPI {
 
+    public static void main(String[] args) {
+        System.out.println(getEarlierNames("ChiaraHatWPS"));
+        System.out.println(getEarlierNames("ChiaraHatWPS"));
+        System.out.println(getEarlierNames("ChiaraHatWPS"));
+        System.out.println(getEarlierNames("ChiaraHatWPS"));
+    }
+
     private static final LoadingCache<String, String> UUID_CACHE = CacheBuilder.newBuilder()
             .build(new CacheLoader<String, String>() {
                 @Override
                 public String load(@Nonnull String name) {
                     String uuid = getUncachedUUID(name);
-
-                    if (uuid == null) {
-                        throw new NullPointerException();
-                    }
+                    if (uuid == null) throw new NullPointerException("uuid is null");
 
                     return uuid;
                 }

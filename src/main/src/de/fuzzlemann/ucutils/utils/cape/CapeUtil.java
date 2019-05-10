@@ -29,14 +29,14 @@ public class CapeUtil {
 
     public static void init() {
         for (Class<? extends ICapeInitializor> capeInitializor : CAPE_INITIALIZORS) {
-            System.out.println("Trying to use " + capeInitializor.getName() + " as cape initializor...");
+            System.out.println("Trying to load " + capeInitializor.getName() + " as cape initializor...");
 
             try {
                 capeInitializor.newInstance().init();
                 System.out.println("Initialized " + capeInitializor.getName() + " as cape initializor.");
                 break;
             } catch (Exception | NoClassDefFoundError e) {
-                System.out.println("Couldn't use " + capeInitializor.getName() + " as cape initializor.");
+                System.out.println("Couldn't load " + capeInitializor.getName() + " as cape initializor.");
             }
         }
     }
@@ -83,7 +83,7 @@ public class CapeUtil {
 
     }
 
-    public static ResourceLocation getCape(String uuid) {
+    static ResourceLocation getCape(String uuid) {
         String capeType = CAPES.get(uuid);
         if (capeType == null) return null;
 

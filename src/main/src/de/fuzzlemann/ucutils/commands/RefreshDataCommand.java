@@ -18,9 +18,8 @@ public class RefreshDataCommand implements CommandExecutor {
     @Override
     @Command(labels = "refreshdata")
     public boolean onCommand(EntityPlayerSP p, String[] args) {
-        Main.refreshData();
+        Main.loadData();
         p.sendMessage(TextUtils.simpleMessage("Alle Daten wurden erneuert.", TextFormatting.GREEN));
-
         return true;
     }
 }

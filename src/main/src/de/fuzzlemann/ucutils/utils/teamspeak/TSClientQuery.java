@@ -46,9 +46,11 @@ public class TSClientQuery {
                 bufferedReader.readLine();
             }
 
+            System.out.println("command: " + command);
             printWriter.println(command);
 
             result = bufferedReader.readLine();
+            System.out.println("result: " + result);
 
             if (tryAgain && result != null && result.equals("error id=1796 msg=currently\\snot\\spossible")) {
                 auth();

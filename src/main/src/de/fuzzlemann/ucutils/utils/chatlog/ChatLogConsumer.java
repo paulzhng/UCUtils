@@ -1,5 +1,7 @@
 package de.fuzzlemann.ucutils.utils.chatlog;
 
+import de.fuzzlemann.ucutils.utils.config.ConfigUtil;
+
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -15,12 +17,21 @@ class ChatLogConsumer {
         this.chatLogger = chatLogger;
         new Thread(() -> {
             while (true) {
-                String message = queue.poll();
-                if (message == null) continue;
+                if (!ConfigUtil.logChat) continue;
 
-                this.chatLogger.getLogger().info(message);
+                String message;
+                while ((message = queue.poll()) != null) {
+                    this.chatLogger.getLogger().info(message);
+                }
+
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                    Thread.currentThread().interrupt();
+                }
             }
-        }).start();
+        }, "UCUtils-ChatLogConsumer").start();
     }
 
     void log(String message) {

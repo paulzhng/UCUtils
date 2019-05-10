@@ -1,6 +1,7 @@
 package de.fuzzlemann.ucutils.utils.cape;
 
 import de.fuzzlemann.ucutils.Main;
+import net.labymod.core.CoreAdapter;
 import net.labymod.core.LabyModCore;
 import net.labymod.core_implementation.mc112.RenderPlayerImplementation;
 import net.minecraft.client.renderer.entity.RenderPlayer;
@@ -18,10 +19,12 @@ public class LabyModCapeInitializor implements ICapeInitializor {
     public void init() throws Exception {
         Main.MINECRAFT.gameSettings.setModelPartEnabled(EnumPlayerModelParts.CAPE, true);
 
-        Field field = LabyModCore.getCoreAdapter().getClass().getDeclaredField("renderPlayerImpl");
+        CoreAdapter coreAdapter = LabyModCore.getCoreAdapter();
+
+        Field field = coreAdapter.getClass().getDeclaredField("renderPlayerImpl");
         field.setAccessible(true);
 
-        field.set(LabyModCore.getCoreAdapter(), new LabyModRenderPlayerImpl());
+        field.set(coreAdapter, new LabyModRenderPlayerImpl());
     }
 
     public class LabyModRenderPlayerImpl extends RenderPlayerImplementation {

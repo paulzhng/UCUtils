@@ -5,5 +5,4 @@ package de.fuzzlemann.ucutils.utils.cape;
  */
 public interface ICapeInitializor {
     void init() throws Exception;
-
 }

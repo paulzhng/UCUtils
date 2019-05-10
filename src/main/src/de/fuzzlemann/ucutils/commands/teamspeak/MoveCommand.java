@@ -34,12 +34,12 @@ public class MoveCommand implements CommandExecutor {
                 moved.addAll(MojangAPI.getEarlierNames(args[i]));
             }
 
-            move(moved, args[args.length - 1]);
+            move(moved, MojangAPI.getEarlierNames(args[args.length - 1]));
         }).start();
         return true;
     }
 
-    private static void move(List<String> moved, String moveTo) {
+    private static void move(List<String> moved, List<String> moveTo) {
         List<Map<String, String>> clientsMoved = TSUtils.getClientsByName(moved);
         List<Map<String, String>> clientsMoveTo = TSUtils.getClientsByName(moveTo);
 

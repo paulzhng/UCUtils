@@ -108,7 +108,7 @@ public class CheckActiveMembersCommand implements CommandExecutor {
         if (currentTime - memberlistShown > 200L || !message.startsWith(" » ")) return;
 
         boolean inactive = !message.endsWith("AFK") && !message.endsWith("Nicht im Dienst");
-        MEMBER_MAP.merge(inactive, 1, (a, b) -> a + b);
+        MEMBER_MAP.merge(inactive, 1, Integer::sum);
 
         e.setCanceled(true);
     }
