@@ -14,7 +14,7 @@ import java.util.regex.Pattern;
 /**
  * @author Fuzzlemann
  */
-public class MafiaSpeechModifier implements SpeechModifier {
+public class CosaNostraSpeechModifier implements SpeechModifier {
 
     private static final Pattern VOCALS_PATTERN = Pattern.compile("[aeiouöäüAEIOUÄÜÖàáèéìíóòùúÀÁÈÉÌÍÒÓÙÚ]");
     private static final Set<String> EXCLUDED = Sets.newHashSet("xd");
@@ -38,14 +38,9 @@ public class MafiaSpeechModifier implements SpeechModifier {
     @Override
     public String turnIntoSpeech(String[] words) {
         String fullString = String.join(" ", words);
-        for (Map.Entry<String, String> entry : REPLACE_IGNORE_CASE) {
-            String toReplace = entry.getKey();
-            String replaceTo = entry.getValue();
-
-            fullString = fullString.replaceAll("(?i)" + toReplace, replaceTo);
-        }
-
+        fullString = SpeechModifyUtil.replaceIgnoreCase(fullString, REPLACE_IGNORE_CASE);
         words = fullString.split(" ");
+
         StringJoiner stringJoiner = new StringJoiner(" ");
 
         for (String word : words) {

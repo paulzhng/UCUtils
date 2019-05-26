@@ -1,11 +1,3 @@
-# eclipse
-bin
-*.launch
-.settings
-.metadata
-.classpath
-.project
-
 # idea
 out
 *.ipr
@@ -18,11 +10,10 @@ build
 .gradle
 
 # other
-eclipse
 run
-src/server/
 gradle.properties
 gradle/
 gradlew.bat
 logs/
 sonarqube.bat
+libs/

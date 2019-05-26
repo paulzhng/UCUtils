@@ -4,7 +4,7 @@ import de.fuzzlemann.ucutils.utils.command.Command;
 import de.fuzzlemann.ucutils.utils.command.CommandExecutor;
 import de.fuzzlemann.ucutils.utils.faction.badfaction.speech.SpeechModifier;
 import de.fuzzlemann.ucutils.utils.faction.badfaction.speech.SpeechModifyUtil;
-import de.fuzzlemann.ucutils.utils.faction.badfaction.speech.TriadenSpeechModifier;
+import de.fuzzlemann.ucutils.utils.faction.badfaction.speech.TriadsSpeechModifier;
 import de.fuzzlemann.ucutils.utils.text.TextUtils;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.util.text.ITextComponent;
@@ -23,7 +23,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class ToggleTriadenSpeechCommand implements CommandExecutor {
 
     private static boolean activated;
-    private static final SpeechModifier MODIFIER = new TriadenSpeechModifier();
+    private static final SpeechModifier MODIFIER = new TriadsSpeechModifier();
 
     @Override
     @Command(labels = {"toggletriadenspeech", "togtriadenspeech", "toggletriaden", "togtriaden"})

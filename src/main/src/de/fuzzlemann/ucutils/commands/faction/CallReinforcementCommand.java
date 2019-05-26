@@ -204,7 +204,8 @@ public class CallReinforcementCommand implements CommandExecutor {
         EMERGENCY("-e", "f", "Dringend!"),
         EMERGENCY_D("-ed", "d", "Dringend!"),
         MEDIC("-m", "d", "Medic benötigt!"),
-        CORPSE_GUARDING("-lb", "d", "Leichenbewachung!");
+        CORPSE_GUARDING("-lb", "d", "Leichenbewachung!"),
+        DRUG_REMOVAL("-da", "d", "Drogenabnahme!"),;
 
         private final String argument;
         private final String chatType;

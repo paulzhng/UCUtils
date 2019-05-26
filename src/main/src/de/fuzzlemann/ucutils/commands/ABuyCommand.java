@@ -34,19 +34,22 @@ public class ABuyCommand implements CommandExecutor {
     private static final Pattern BUY_INTERRUPTED_PATTERN = Pattern.compile("^Verkäufer: (Tut (uns|mir) Leid|Verzeihung), unser Lager ist derzeit leer\\.$" +
             "|^Verkäufer: Dieses Produkt kostet \\d+\\$\\.$");
     private static final Timer TIMER = new Timer();
+    private static int delay = 10;
     private static long lastBuy;
     private static int amount;
     private static int amountLeft;
     private static int slotIndex;
 
     @Override
-    @Command(labels = "abuy", usage = "/%label% [Menge]")
+    @Command(labels = "abuy", usage = "/%label% [Menge] (Delay [nur bei schlechteren PCs nötig])")
     public boolean onCommand(EntityPlayerSP p, String[] args) {
         if (args.length == 0) return false;
 
         int tempAmount;
+        int tempDelay = 10;
         try {
             tempAmount = Integer.parseInt(args[0]);
+            if (args.length > 1) tempDelay = Integer.parseInt(args[1]);
         } catch (NumberFormatException exc) {
             return false;
         }
@@ -54,6 +57,7 @@ public class ABuyCommand implements CommandExecutor {
         if (tempAmount <= 1) return false;
 
         amount = tempAmount;
+        delay = tempDelay;
 
         p.sendMessage(TextUtils.simpleMessage("Die Menge wurde erfolgreich eingestellt.", TextFormatting.GREEN));
         return true;
@@ -105,7 +109,7 @@ public class ABuyCommand implements CommandExecutor {
                     slotIndex = 0;
                 }
             }
-        }, 10);
+        }, delay);
     }
 
     @SubscribeEvent

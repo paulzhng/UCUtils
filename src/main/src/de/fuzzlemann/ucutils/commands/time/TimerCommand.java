@@ -138,7 +138,8 @@ public class TimerCommand implements CommandExecutor, TabCompletion {
                     .of(": ").color(TextFormatting.DARK_GRAY).advance()
                     .of(FormatUtils.formatMilliseconds(timeLeft) + " verbleibend").color(TextFormatting.RED).advance()
                     .of(" [✗]").color(TextFormatting.RED).clickEvent(ClickEvent.Action.RUN_COMMAND, "/timer stop " + id)
-                    .hoverEvent(HoverEvent.Action.SHOW_TEXT, MessagePart.simpleMessagePart("Den Timer löschen", TextFormatting.RED)).advance();
+                    .hoverEvent(HoverEvent.Action.SHOW_TEXT, MessagePart.simpleMessagePart("Den Timer löschen", TextFormatting.RED)).advance()
+                    .newLine();
         }
 
         p.sendMessage(builder.build().toTextComponent());

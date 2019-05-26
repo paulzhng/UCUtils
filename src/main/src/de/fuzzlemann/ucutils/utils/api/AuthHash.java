@@ -15,6 +15,10 @@ import java.util.StringJoiner;
 public class AuthHash {
 
     private static final SecureRandom RANDOM = new SecureRandom();
+    private final String username;
+    private final long currentTime;
+    private final long randomLong;
+    private final String hash;
 
     public AuthHash() {
         username = Main.MINECRAFT.getSession().getUsername();
@@ -22,11 +26,6 @@ public class AuthHash {
         randomLong = RANDOM.nextLong();
         hash = hash(username + currentTime + randomLong);
     }
-
-    private final String username;
-    private final long currentTime;
-    private final long randomLong;
-    private final String hash;
 
     private static String hash(String str) {
         try {

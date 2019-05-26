@@ -47,6 +47,17 @@ public class SpeechModifyUtil {
         return modifier.turnIntoSpeech(splitted);
     }
 
+    public static String replaceIgnoreCase(String toReplaceString, List<Map.Entry<String, String>> replaceMap) {
+        for (Map.Entry<String, String> entry : replaceMap) {
+            String toReplace = entry.getKey();
+            String replaceTo = entry.getValue();
+
+            toReplaceString = toReplaceString.replaceAll("(?i)" + toReplace, replaceTo);
+        }
+
+        return toReplaceString;
+    }
+
     public static String replaceRetainingCase(String toReplaceString, List<Map.Entry<String, String>> replaceMap) {
         for (Map.Entry<String, String> entry : replaceMap) {
             String toReplace = entry.getKey();

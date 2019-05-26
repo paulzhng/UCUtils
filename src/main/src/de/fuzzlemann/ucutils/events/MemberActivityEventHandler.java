@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -27,6 +28,7 @@ public class MemberActivityEventHandler {
 
     private static final Timer TIMER = new Timer();
     private static final Pattern MEMBER_ACTIVITY_PATTERN = Pattern.compile("^Member Aktivität der Fraktion: .+$");
+    private static final Pattern MEMBER_PATTERN = Pattern.compile("^ {2}- ([a-zA-Z0-9_]+): \\d{2}\\.\\d{2}\\.\\d{2} \\d{2}:\\d{2}:\\d{2} \\((?:-)*\\d+\\)$");
     private static long lastMessage;
     private static long shown;
 
@@ -42,15 +44,12 @@ public class MemberActivityEventHandler {
             return;
         }
 
-        if (currentTime - shown > 500L || !unformattedMessage.startsWith("  - ") || !unformattedMessage.contains("("))
-            return;
+        Matcher matcher = MEMBER_PATTERN.matcher(unformattedMessage);
+        if (currentTime - shown > 500L || !matcher.find()) return;
 
         lastMessage = currentTime;
 
-        //TODO REGEX
-        String name = unformattedMessage.substring(4, unformattedMessage.length() - 1);
-        name = name.split(":")[0];
-
+        String name = matcher.group(1);
         MEMBER_LIST.add(name);
 
         TIMER.schedule(new TimerTask() {

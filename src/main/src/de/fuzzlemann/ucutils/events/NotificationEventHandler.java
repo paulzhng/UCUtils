@@ -81,6 +81,7 @@ public class NotificationEventHandler {
             return;
         }
 
+        //TODO REGEX
         if (ConfigUtil.contractFulfilledAnnouncement
                 && unformattedText.startsWith("[Contract] ")
                 && unformattedText.contains(" getötet. Kopfgeld: ")) {
@@ -88,6 +89,7 @@ public class NotificationEventHandler {
             return;
         }
 
+        //TODO REGEX
         if (ConfigUtil.contractAnnouncement && unformattedText.startsWith("[Contract] Es wurde ein Kopfgeld auf")) {
             p.playSound(SoundUtil.CONTRACT_PLACED, 1, 1);
             return;

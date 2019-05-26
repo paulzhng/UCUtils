@@ -1,5 +1,6 @@
 package de.fuzzlemann.ucutils;
 
+import de.fuzzlemann.ucutils.commands.UpdateCommand;
 import de.fuzzlemann.ucutils.update.UpdateReminder;
 import de.fuzzlemann.ucutils.utils.AnalyticsUtil;
 import de.fuzzlemann.ucutils.utils.api.APIUtils;
@@ -49,6 +50,8 @@ public class Main {
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent e) {
+        UpdateCommand.modFile = e.getSourceFile();
+
         ConfigUtil.config = new Configuration(e.getSuggestedConfigurationFile());
         ConfigUtil.syncConfig();
     }

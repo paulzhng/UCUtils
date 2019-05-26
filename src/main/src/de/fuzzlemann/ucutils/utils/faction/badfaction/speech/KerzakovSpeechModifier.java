@@ -9,7 +9,7 @@ import java.util.StringJoiner;
 
 /**
  * @author Fuzzlemann
- */L
+ */
 public class KerzakovSpeechModifier implements SpeechModifier {
 
     private static final List<Map.Entry<String, String>> REPLACE_IGNORE_CASE = Lists.newArrayList(
@@ -41,14 +41,9 @@ public class KerzakovSpeechModifier implements SpeechModifier {
     @Override
     public String turnIntoSpeech(String[] words) {
         String fullString = String.join(" ", words);
-        for (Map.Entry<String, String> entry : REPLACE_IGNORE_CASE) {
-            String toReplace = entry.getKey();
-            String replaceTo = entry.getValue();
-
-            fullString = fullString.replaceAll("(?i)" + toReplace, replaceTo);
-        }
-
+        fullString = SpeechModifyUtil.replaceIgnoreCase(fullString, REPLACE_IGNORE_CASE);
         words = fullString.split(" ");
+
         StringJoiner stringJoiner = new StringJoiner(" ");
 
         for (String word : words) {

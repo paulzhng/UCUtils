@@ -34,13 +34,15 @@ public class ShareLocationCommand implements CommandExecutor {
 
     @SubscribeEvent
     public static void onChatReceived(ClientChatReceivedEvent e) {
-        EntityPlayerSP p = Main.MINECRAFT.player;
-        String playerName = p.getName();
         ITextComponent messageComponent = e.getMessage();
         String msg = messageComponent.getUnformattedText();
 
         Matcher shareLocationMatcher = SHARE_LOCATION_PATTERN.matcher(msg);
         if (!shareLocationMatcher.find()) return;
+
+        EntityPlayerSP p = Main.MINECRAFT.player;
+        String playerName = p.getName();
+
         e.setCanceled(true);
 
         String names = shareLocationMatcher.group(2);

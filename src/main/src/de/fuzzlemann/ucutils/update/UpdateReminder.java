@@ -1,7 +1,8 @@
 package de.fuzzlemann.ucutils.update;
 
 import de.fuzzlemann.ucutils.Main;
-import net.minecraft.util.text.TextComponentString;
+import de.fuzzlemann.ucutils.utils.text.Message;
+import de.fuzzlemann.ucutils.utils.text.MessagePart;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.event.ClickEvent;
 import net.minecraft.util.text.event.HoverEvent;
@@ -38,16 +39,20 @@ public class UpdateReminder {
 
         if (!updateNeeded) return;
 
-        TextComponentString text = new TextComponentString("Es ist ein neues Update von UCUtils verfügbar!");
-        text.getStyle().setColor(TextFormatting.RED);
+        Message message = Message.builder()
+                .of("Es ist ein neues Update von UCUtils verfügbar!").color(TextFormatting.RED).advance()
+                .newLine()
+                .of("Du kannst das Update ").color(TextFormatting.RED).advance()
+                .of("hier").color(TextFormatting.RED)
+                .hoverEvent(HoverEvent.Action.SHOW_TEXT, MessagePart.simpleMessagePart("Download", TextFormatting.GREEN))
+                .clickEvent(ClickEvent.Action.OPEN_URL, "https://fuzzlemann.de/UCUtils.jar").advance()
+                .of(" herunterladen oder mittels ").color(TextFormatting.RED).advance()
+                .of("/updateucutils").color(TextFormatting.RED)
+                .hoverEvent(HoverEvent.Action.SHOW_TEXT, MessagePart.simpleMessagePart("Ausführen", TextFormatting.GREEN))
+                .clickEvent(ClickEvent.Action.RUN_COMMAND, "/updateucutils").advance()
+                .of("direkt updaten.").color(TextFormatting.RED).advance().build();
 
-        TextComponentString hoverText = new TextComponentString("Download");
-        hoverText.getStyle().setColor(TextFormatting.GREEN);
-
-        text.getStyle().setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, hoverText));
-        text.getStyle().setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://fuzzlemann.de/UCUtils.jar"));
-
-        Main.MINECRAFT.player.sendMessage(text);
+        Main.MINECRAFT.player.sendMessage(message.toTextComponent());
     }
 
     public static void updateUpdateNeeded() throws IOException {

@@ -25,6 +25,7 @@ import de.fuzzlemann.ucutils.commands.location.DistanceCommand;
 import de.fuzzlemann.ucutils.commands.location.NearestATMCommand;
 import de.fuzzlemann.ucutils.commands.location.NearestJobCommand;
 import de.fuzzlemann.ucutils.commands.mobile.*;
+import de.fuzzlemann.ucutils.commands.supporter.AutoNCCommand;
 import de.fuzzlemann.ucutils.commands.supporter.PunishCommand;
 import de.fuzzlemann.ucutils.commands.supporter.SendNoobChatCommand;
 import de.fuzzlemann.ucutils.commands.teamspeak.MoveCommand;
@@ -142,6 +143,9 @@ public class CommandHandler {
         registerCommand(sendNoobChatCommand, sendNoobChatCommand);
 
         registerCommand(new ABuyCommand());
+        registerCommand(new AutoNCCommand());
+
+        registerCommand(new UpdateCommand());
     }
 
     private static void registerCommand(CommandExecutor commandExecutor) {

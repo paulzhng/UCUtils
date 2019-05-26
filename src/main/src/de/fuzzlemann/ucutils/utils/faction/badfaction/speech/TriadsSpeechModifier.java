@@ -5,7 +5,7 @@ import java.util.StringJoiner;
 /**
  * @author Fuzzlemann
  */
-public class TriadenSpeechModifier implements SpeechModifier {
+public class TriadsSpeechModifier implements SpeechModifier {
 
     @Override
     public String turnIntoSpeech(String[] words) {

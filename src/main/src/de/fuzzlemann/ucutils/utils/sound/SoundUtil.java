@@ -21,4 +21,8 @@ public class SoundUtil {
         ResourceLocation loc = new ResourceLocation("ucutils", name);
         return new SoundEvent(loc);
     }
+
+    public static SoundEvent getSoundEvent(String name) {
+        return SoundEvent.REGISTRY.getObject(new ResourceLocation(name));
+    }
 }

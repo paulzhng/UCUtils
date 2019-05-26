@@ -2,7 +2,7 @@ package de.fuzzlemann.ucutils.commands.faction.badfaction.speech;
 
 import de.fuzzlemann.ucutils.utils.command.Command;
 import de.fuzzlemann.ucutils.utils.command.CommandExecutor;
-import de.fuzzlemann.ucutils.utils.faction.badfaction.speech.MafiaSpeechModifier;
+import de.fuzzlemann.ucutils.utils.faction.badfaction.speech.CosaNostraSpeechModifier;
 import de.fuzzlemann.ucutils.utils.faction.badfaction.speech.SpeechModifier;
 import de.fuzzlemann.ucutils.utils.faction.badfaction.speech.SpeechModifyUtil;
 import de.fuzzlemann.ucutils.utils.text.TextUtils;
@@ -23,7 +23,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class ToggleMafiaSpeechCommand implements CommandExecutor {
 
     private static boolean activated;
-    private static final SpeechModifier MODIFIER = new MafiaSpeechModifier();
+    private static final SpeechModifier MODIFIER = new CosaNostraSpeechModifier();
 
     @Override
     @Command(labels = {"togglemafiaspeech", "togmafiaspeech", "togglemafia", "togmafia"})
