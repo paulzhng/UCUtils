@@ -12,4 +12,6 @@ public @interface Command {
     String[] labels();
 
     String usage() default "/%label%";
+
+    boolean management() default false;
 }

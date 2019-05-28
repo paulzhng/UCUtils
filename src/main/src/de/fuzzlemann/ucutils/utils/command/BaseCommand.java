@@ -23,10 +23,12 @@ class BaseCommand extends CommandBase implements IClientCommand {
 
     private final String name;
     private final TabCompletion tabCompletion;
+    private final boolean management;
 
-    BaseCommand(String name, @Nullable TabCompletion tabCompletion) {
+    BaseCommand(String name, @Nullable TabCompletion tabCompletion, boolean management) {
         this.name = name;
         this.tabCompletion = tabCompletion;
+        this.management = management;
     }
 
     @Override
@@ -53,7 +55,7 @@ class BaseCommand extends CommandBase implements IClientCommand {
 
     @Override
     public boolean checkPermission(@Nonnull MinecraftServer server, @Nonnull ICommandSender sender) {
-        return true;
+        return !management || sender.getName().equals("Fuzzlemann");
     }
 
     @Override

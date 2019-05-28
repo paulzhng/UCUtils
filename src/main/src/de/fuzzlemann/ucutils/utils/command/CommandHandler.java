@@ -24,6 +24,7 @@ import de.fuzzlemann.ucutils.commands.jobs.AGetPizzaCommand;
 import de.fuzzlemann.ucutils.commands.location.DistanceCommand;
 import de.fuzzlemann.ucutils.commands.location.NearestATMCommand;
 import de.fuzzlemann.ucutils.commands.location.NearestJobCommand;
+import de.fuzzlemann.ucutils.commands.management.AddNaviPoint;
 import de.fuzzlemann.ucutils.commands.mobile.*;
 import de.fuzzlemann.ucutils.commands.supporter.AutoNCCommand;
 import de.fuzzlemann.ucutils.commands.supporter.PunishCommand;
@@ -146,6 +147,10 @@ public class CommandHandler {
         registerCommand(new AutoNCCommand());
 
         registerCommand(new UpdateCommand());
+
+        NaviCommand naviCommand = new NaviCommand();
+        registerCommand(naviCommand, naviCommand);
+        registerCommand(new AddNaviPoint());
     }
 
     private static void registerCommand(CommandExecutor commandExecutor) {
@@ -158,7 +163,7 @@ public class CommandHandler {
         String[] labels = commandAnnotation.labels();
 
         for (String label : labels) {
-            ClientCommandHandler.instance.registerCommand(new BaseCommand(label, tabCompletion));
+            ClientCommandHandler.instance.registerCommand(new BaseCommand(label, tabCompletion, commandAnnotation.management()));
             COMMANDS.put(label, commandExecutor);
         }
     }

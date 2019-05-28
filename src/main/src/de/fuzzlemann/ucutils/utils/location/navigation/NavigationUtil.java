@@ -1,5 +1,10 @@
 package de.fuzzlemann.ucutils.utils.location.navigation;
 
+import com.google.common.reflect.TypeToken;
+import com.google.gson.Gson;
+import de.fuzzlemann.ucutils.common.CustomNaviPoint;
+import de.fuzzlemann.ucutils.utils.ForgeUtils;
+import de.fuzzlemann.ucutils.utils.api.APIUtils;
 import de.fuzzlemann.ucutils.utils.text.Message;
 import de.fuzzlemann.ucutils.utils.text.MessagePart;
 import net.minecraft.util.math.BlockPos;
@@ -8,10 +13,32 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.event.ClickEvent;
 import net.minecraft.util.text.event.HoverEvent;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author Fuzzlemann
  */
 public class NavigationUtil {
+
+    public static final List<CustomNaviPoint> NAVI_POINTS = new ArrayList<>();
+
+    public static void fillNaviPoints() {
+        String json = APIUtils.get("http://tomcat.fuzzlemann.de/factiononline/navipoints");
+
+        Gson gson = new Gson();
+        List<CustomNaviPoint> naviPoints = gson.fromJson(json, new TypeToken<List<CustomNaviPoint>>() {
+        }.getType());
+
+        NAVI_POINTS.clear();
+        NAVI_POINTS.addAll(naviPoints);
+    }
+
+    public static CustomNaviPoint getNaviPoint(String input) {
+        input = input.replace('-', ' ');
+
+        return ForgeUtils.getMostMatchingL(NAVI_POINTS, input, CustomNaviPoint::getNames);
+    }
 
     public static ITextComponent getNavigationText(String naviPoint) {
         return getNavigationMessage(naviPoint).toTextComponent();

@@ -11,6 +11,7 @@ import de.fuzzlemann.ucutils.utils.faction.HouseBanHandler;
 import de.fuzzlemann.ucutils.utils.faction.badfaction.blacklist.BlacklistUtil;
 import de.fuzzlemann.ucutils.utils.faction.badfaction.drug.DrugUtil;
 import de.fuzzlemann.ucutils.utils.faction.police.WantedManager;
+import de.fuzzlemann.ucutils.utils.location.navigation.NavigationUtil;
 import de.fuzzlemann.ucutils.utils.noobchat.NoobChatManager;
 import de.fuzzlemann.ucutils.utils.punishment.PunishManager;
 import de.fuzzlemann.ucutils.utils.tablist.TabListSortHandler;
@@ -85,6 +86,7 @@ public class Main {
             HouseBanHandler.fillHouseBanList();
             PunishManager.fillViolationList();
             NoobChatManager.fillNoobChatAnswerList();
+            NavigationUtil.fillNaviPoints();
             CapeUtil.loadCapes();
         } catch (IOException e) {
             e.printStackTrace();
