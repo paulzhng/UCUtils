@@ -1,5 +1,6 @@
 package de.fuzzlemann.ucutils.utils.text;
 
+import de.fuzzlemann.ucutils.Main;
 import net.minecraft.util.text.ITextComponent;
 
 import java.util.ArrayList;
@@ -43,6 +44,9 @@ public class Message {
     }
 
     public static final class MessageBuilder {
+        private MessageBuilder() {
+        }
+
         private final List<MessagePart> messageParts = new ArrayList<>();
 
         public MessagePart.MessagePartBuilder of(String text) {
@@ -69,6 +73,10 @@ public class Message {
         public MessageBuilder messageParts(Collection<MessagePart> messageParts) {
             this.messageParts.addAll(messageParts);
             return this;
+        }
+
+        public void send() {
+            Main.MINECRAFT.player.sendMessage(build().toTextComponent());
         }
 
         public Message build() {

@@ -79,23 +79,11 @@ public class ShareLocationCommand implements CommandExecutor {
         Set<String> playerNames = new LinkedHashSet<>();
         for (int i = 0; i < args.length; i++) {
             if (dChat && i == args.length - 1) continue;
-            String argument = args[i].toLowerCase();
+            String argument = args[i];
 
-            int delta = Integer.MAX_VALUE;
-            String foundPlayer = null;
-            for (String playerName : onlinePlayers) {
-                if (!playerName.toLowerCase().startsWith(argument)) continue;
-
-                int curDelta = Math.abs(playerName.length() - argument.length());
-                if (curDelta < delta) {
-                    foundPlayer = playerName;
-                    delta = curDelta;
-                }
-
-                if (curDelta == 0) break;
-            }
-
+            String foundPlayer = ForgeUtils.getMostMatching(onlinePlayers, argument);
             if (foundPlayer == null) continue;
+
             playerNames.add(foundPlayer);
         }
 

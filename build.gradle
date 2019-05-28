@@ -27,8 +27,14 @@ version = "1.12.1-1.6"
 group = "de.fuzzlemann.ucutils"
 archivesBaseName = "ucutils"
 
+configurations {
+    shade
+    compile.extendsFrom shade
+}
+
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    provided fileTree(dir: 'libs', include: ['*.jar'])
+    shade fileTree(dir: '../UCUtils_common/target', include: ['*.jar'])
 }
 
 compileJava {
@@ -65,7 +71,6 @@ processResources {
 }
 
 task signJar(type: SignJar, dependsOn: reobfJar) {
-
     onlyIf {
         project.hasProperty('keyStore')
     }
@@ -76,6 +81,14 @@ task signJar(type: SignJar, dependsOn: reobfJar) {
     keyPass = project.findProperty('keyStoreKeyPass')
     inputFile = jar.archivePath
     outputFile = jar.archivePath
+}
+
+jar {
+    configurations.shade.each { dep ->
+        from(project.zipTree(dep)){
+            exclude 'META-INF', 'META-INF/**'
+        }
+    }
 }
 
 build.dependsOn signJar

@@ -31,26 +31,11 @@ public class MedicalLicenseHandler {
         if (message.startsWith("/")) {
             if (splitted.length < 2) return;
 
-            String command = splitted[0].toLowerCase();
+            String command = splitted[0];
             if (!command.equalsIgnoreCase("/frisk")) return;
 
-            String lowerNameString = splitted[1].toLowerCase();
-            String foundName = null;
-
-            int delta = Integer.MAX_VALUE;
-
-            for (String playerName : ForgeUtils.getOnlinePlayers()) {
-                String nameLowerCase = playerName.toLowerCase();
-                if (!nameLowerCase.startsWith(lowerNameString)) continue;
-
-                int curDelta = Math.abs(nameLowerCase.length() - lowerNameString.length());
-                if (curDelta < delta) {
-                    foundName = playerName;
-                    delta = curDelta;
-                }
-
-                if (curDelta == 0) break;
-            }
+            String nameString = splitted[1];
+            String foundName = ForgeUtils.getMostMatchingPlayer(nameString);
 
             if (foundName == null) return;
             lastName = foundName;

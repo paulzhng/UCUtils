@@ -2,6 +2,7 @@ package de.fuzzlemann.ucutils.utils.faction.police;
 
 import de.fuzzlemann.ucutils.Main;
 import de.fuzzlemann.ucutils.events.NameFormatEventHandler;
+import de.fuzzlemann.ucutils.utils.ForgeUtils;
 import de.fuzzlemann.ucutils.utils.io.JsonManager;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -74,29 +75,7 @@ public class WantedManager {
     }
 
     public static WantedReason getWantedReason(String reason) {
-        for (WantedReason wanted : WANTED_LIST) {
-            if (wanted.getReason().equalsIgnoreCase(reason)) return wanted;
-        }
-
-        WantedReason foundWanted = null;
-        String lowerReason = reason.toLowerCase();
-
-        int delta = Integer.MAX_VALUE;
-
-        for (WantedReason wanted : WANTED_LIST) {
-            String wantedReason = wanted.getReason().toLowerCase();
-            if (!wantedReason.startsWith(lowerReason)) continue;
-
-            int curDelta = Math.abs(wantedReason.length() - lowerReason.length());
-            if (curDelta < delta) {
-                foundWanted = wanted;
-                delta = curDelta;
-            }
-
-            if (curDelta == 0) break;
-        }
-
-        return foundWanted;
+        return ForgeUtils.getMostMatching(WANTED_LIST, reason, WantedReason::getReason);
     }
 
     public static Wanted getWanteds(String player) {

@@ -27,7 +27,7 @@ public class EventNotificationEventHandler {
 
         new Thread(() -> {
             try {
-                String response = APIUtils.post("http://tomcat.fuzzlemann.de/factiononline/checkevents", "apiKey", ConfigUtil.apiKey);
+                String response = APIUtils.postAuthenticated("http://tomcat.fuzzlemann.de/factiononline/checkevents");
                 if (response == null || response.isEmpty()) return;
 
                 JsonElement responseElement = new JsonParser().parse(response);
