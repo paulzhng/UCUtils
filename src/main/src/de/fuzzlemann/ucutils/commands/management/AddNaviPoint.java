@@ -8,6 +8,7 @@ import de.fuzzlemann.ucutils.utils.text.TextUtils;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.util.math.BlockPos;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -39,11 +40,15 @@ public class AddNaviPoint implements CommandExecutor {
             y = pos.getY();
             z = pos.getZ();
 
-            from = 1;
+            from = 0;
         }
 
         String[] names = Arrays.copyOfRange(args, from, args.length);
-        List<String> nameList = Arrays.asList(names);
+        List<String> nameList = new ArrayList<>();
+        for (String name : names) {
+            name = name.replace('-', ' ');
+            nameList.add(name);
+        }
 
         CustomNaviPoint naviPoint = new CustomNaviPoint(nameList, x, y, z);
         boolean response = Boolean.valueOf(APIUtils.postAuthenticated(

@@ -7,6 +7,5 @@ import net.minecraft.client.entity.EntityPlayerSP;
  */
 public interface CommandExecutor {
 
-    @Command(labels = "")
     boolean onCommand(EntityPlayerSP p, String[] args);
 }

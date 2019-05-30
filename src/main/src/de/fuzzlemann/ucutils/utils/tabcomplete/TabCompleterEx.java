@@ -1,7 +1,6 @@
 package de.fuzzlemann.ucutils.utils.tabcomplete;
 
 import de.fuzzlemann.ucutils.Main;
-import de.fuzzlemann.ucutils.utils.text.TextUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiChat;
 import net.minecraft.client.gui.GuiTextField;
@@ -60,8 +59,6 @@ public class TabCompleterEx extends GuiChat.ChatTabCompleter {
     }
 
     private void requestCompletions(String prefix) {
-        TextUtils.error(prefix);
-
         if (prefix.length() >= 1) {
             ClientCommandHandler.instance.autoComplete(prefix);
 
@@ -71,7 +68,11 @@ public class TabCompleterEx extends GuiChat.ChatTabCompleter {
                 String command = splitted[0].toLowerCase();
                 if (TabCompleterHandler.EXCLUDED_SERVER.contains(command)) {
                     this.requestedCompletions = true;
-                    setCompletions();
+                    if (splitted.length == 1 && !prefix.endsWith(" ")) {
+                        setCompletions(splitted[0]);
+                    } else {
+                        setCompletions();
+                    }
                     return;
                 }
             }

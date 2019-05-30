@@ -1,49 +1,16 @@
 package de.fuzzlemann.ucutils.utils.command;
 
 import de.fuzzlemann.ucutils.Main;
-import de.fuzzlemann.ucutils.commands.*;
-import de.fuzzlemann.ucutils.commands.faction.*;
-import de.fuzzlemann.ucutils.commands.faction.badfaction.blacklist.ASetBlacklistCommand;
-import de.fuzzlemann.ucutils.commands.faction.badfaction.blacklist.BlacklistPriceCommand;
-import de.fuzzlemann.ucutils.commands.faction.badfaction.drug.ASellDrugCommand;
-import de.fuzzlemann.ucutils.commands.faction.badfaction.drug.DrugPriceCommand;
-import de.fuzzlemann.ucutils.commands.faction.badfaction.drug.GiveDrugCommand;
-import de.fuzzlemann.ucutils.commands.faction.badfaction.speech.ToggleKerzakovSpeechCommand;
-import de.fuzzlemann.ucutils.commands.faction.badfaction.speech.ToggleMafiaSpeechCommand;
-import de.fuzzlemann.ucutils.commands.faction.badfaction.speech.ToggleTriadenSpeechCommand;
-import de.fuzzlemann.ucutils.commands.faction.police.ASUCommand;
-import de.fuzzlemann.ucutils.commands.faction.police.CheckMedicalLicenseCommand;
-import de.fuzzlemann.ucutils.commands.faction.police.ModifyWantedsCommand;
-import de.fuzzlemann.ucutils.commands.info.CInfoCommand;
-import de.fuzzlemann.ucutils.commands.info.FCInfoCommand;
-import de.fuzzlemann.ucutils.commands.info.FInfoCommand;
-import de.fuzzlemann.ucutils.commands.info.InfoCommand;
-import de.fuzzlemann.ucutils.commands.jobs.ADropDrinkCommand;
-import de.fuzzlemann.ucutils.commands.jobs.ADropTransportCommand;
-import de.fuzzlemann.ucutils.commands.jobs.AGetPizzaCommand;
-import de.fuzzlemann.ucutils.commands.location.DistanceCommand;
-import de.fuzzlemann.ucutils.commands.location.NearestATMCommand;
-import de.fuzzlemann.ucutils.commands.location.NearestJobCommand;
-import de.fuzzlemann.ucutils.commands.management.AddNaviPoint;
-import de.fuzzlemann.ucutils.commands.mobile.*;
-import de.fuzzlemann.ucutils.commands.supporter.AutoNCCommand;
-import de.fuzzlemann.ucutils.commands.supporter.PunishCommand;
-import de.fuzzlemann.ucutils.commands.supporter.SendNoobChatCommand;
-import de.fuzzlemann.ucutils.commands.teamspeak.MoveCommand;
-import de.fuzzlemann.ucutils.commands.teamspeak.MoveHereCommand;
-import de.fuzzlemann.ucutils.commands.teamspeak.MoveToCommand;
-import de.fuzzlemann.ucutils.commands.time.ClockCommand;
-import de.fuzzlemann.ucutils.commands.time.StopWatchCommand;
-import de.fuzzlemann.ucutils.commands.time.TimerCommand;
-import de.fuzzlemann.ucutils.commands.todo.*;
 import de.fuzzlemann.ucutils.utils.text.TextUtils;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraftforge.client.ClientCommandHandler;
+import net.minecraftforge.fml.common.discovery.ASMDataTable;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 
 /**
@@ -54,103 +21,22 @@ public class CommandHandler {
 
     private static final Map<String, CommandExecutor> COMMANDS = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
 
-    public static void registerAllCommands() {
-        registerCommand(new GenerateAuthLinkCommand());
+    public static void registerAllCommands(ASMDataTable asmDataTable) {
+        Set<ASMDataTable.ASMData> asmDataSet = asmDataTable.getAll(Command.class.getCanonicalName());
+        for (ASMDataTable.ASMData asmData : asmDataSet) {
+            try {
+                Class<?> clazz = Class.forName(asmData.getClassName());
 
-        registerCommand(new ClearChatCommand());
-        registerCommand(new InternetTestCommand());
-        registerCommand(new RefreshDataCommand());
-        registerCommand(new CalculateCommand());
-
-        registerCommand(new StopWatchCommand());
-        registerCommand(new ClockCommand());
-
-        TimerCommand timerCommand = new TimerCommand();
-        registerCommand(timerCommand, timerCommand);
-
-        registerCommand(new ASMSCommand());
-        registerCommand(new ACallCommand());
-
-        registerCommand(new ReplyCommand());
-        registerCommand(new MobileBlockCommand());
-        registerCommand(new MobileBlockListCommand());
-        registerCommand(new DoNotDisturbCommand());
-
-        registerCommand(new ToDoListCommand());
-        registerCommand(new AddToDoCommand());
-        registerCommand(new DoneToDoCommand());
-        registerCommand(new RemoveToDoCommand());
-        registerCommand(new ModifyToDoCommand());
-
-        registerCommand(new NearestJobCommand());
-        registerCommand(new NearestATMCommand());
-        registerCommand(new DistanceCommand());
-
-        registerCommand(new CInfoCommand());
-        registerCommand(new FCInfoCommand());
-        registerCommand(new FInfoCommand());
-        registerCommand(new InfoCommand());
-
-        registerCommand(new ADropTransportCommand());
-        registerCommand(new ADropDrinkCommand());
-        registerCommand(new AGetPizzaCommand());
-
-        registerCommand(new ShutdownJailCommand());
-        registerCommand(new ShutdownFriedhofCommand());
-
-        registerCommand(new CheckActiveMembersCommand());
-        registerCommand(new ChannelActivityCommand());
-        registerCommand(new CallReinforcementCommand());
-        registerCommand(new ShareLocationCommand());
-
-        registerCommand(new ToggleMafiaSpeechCommand());
-        registerCommand(new ToggleKerzakovSpeechCommand());
-        registerCommand(new ToggleTriadenSpeechCommand());
-
-        registerCommand(new SchwarzmarktLocationsCommand());
-
-        registerCommand(new CheckMedicalLicenseCommand());
-        registerCommand(new CheckHouseBanCommand());
-
-        registerCommand(new MoveHereCommand());
-        registerCommand(new MoveCommand());
-        registerCommand(new MoveToCommand());
-
-        ASUCommand asuCommand = new ASUCommand();
-        registerCommand(asuCommand, asuCommand);
-
-        ModifyWantedsCommand modifyWantedsCommand = new ModifyWantedsCommand();
-        registerCommand(modifyWantedsCommand, modifyWantedsCommand);
-
-        ASellDrugCommand aSellDrugCommand = new ASellDrugCommand();
-        registerCommand(aSellDrugCommand, aSellDrugCommand);
-
-        DrugPriceCommand drugPriceCommand = new DrugPriceCommand();
-        registerCommand(drugPriceCommand, drugPriceCommand);
-
-        GiveDrugCommand giveDrugCommand = new GiveDrugCommand();
-        registerCommand(giveDrugCommand, giveDrugCommand);
-
-        ASetBlacklistCommand aSetBlacklistCommand = new ASetBlacklistCommand();
-        registerCommand(aSetBlacklistCommand, aSetBlacklistCommand);
-
-        BlacklistPriceCommand blacklistPriceCommand = new BlacklistPriceCommand();
-        registerCommand(blacklistPriceCommand, blacklistPriceCommand);
-
-        PunishCommand punishCommand = new PunishCommand();
-        registerCommand(punishCommand, punishCommand);
-
-        SendNoobChatCommand sendNoobChatCommand = new SendNoobChatCommand();
-        registerCommand(sendNoobChatCommand, sendNoobChatCommand);
-
-        registerCommand(new ABuyCommand());
-        registerCommand(new AutoNCCommand());
-
-        registerCommand(new UpdateCommand());
-
-        NaviCommand naviCommand = new NaviCommand();
-        registerCommand(naviCommand, naviCommand);
-        registerCommand(new AddNaviPoint());
+                CommandExecutor command = (CommandExecutor) clazz.newInstance();
+                if (command instanceof TabCompletion) {
+                    registerCommand(command, (TabCompletion) command);
+                } else {
+                    registerCommand(command);
+                }
+            } catch (ClassNotFoundException | IllegalAccessException | InstantiationException e) {
+                throw new IllegalStateException(e); //should not happen
+            }
+        }
     }
 
     private static void registerCommand(CommandExecutor commandExecutor) {

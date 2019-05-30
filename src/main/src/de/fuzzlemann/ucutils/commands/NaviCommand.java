@@ -12,9 +12,14 @@ import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Timer;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import java.util.regex.Pattern;
 
 /**
@@ -23,7 +28,7 @@ import java.util.regex.Pattern;
 @Mod.EventBusSubscriber
 public class NaviCommand implements CommandExecutor, TabCompletion {
 
-    private static final Pattern NAVI_DELETED_PATTERN = Pattern.compile("\\[Navi] Du hast deine Route gelöscht.");
+    private static final Pattern NAVI_DELETED_PATTERN = Pattern.compile("^\\[Navi] Du hast deine Route gelöscht.$");
     private static final Timer TIMER = new Timer();
     private static CompletableFuture<Boolean> future;
     private static long lastCommand;
@@ -47,28 +52,29 @@ public class NaviCommand implements CommandExecutor, TabCompletion {
 
         p.sendChatMessage("/navi " + naviPoint.getX() + "/" + naviPoint.getY() + "/" + naviPoint.getZ());
 
-        TIMER.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                try {
-                    if (future == null) return;
+        new Thread(() -> {
+            if (future == null) return;
 
-                    Boolean bool = future.get();
-                    if (bool != null && !bool) return;
-
-                    Message.builder()
-                            .of("[").color(TextFormatting.DARK_GRAY).advance()
-                            .of("Navi").color(TextFormatting.YELLOW).advance()
-                            .of("]").color(TextFormatting.DARK_GRAY).advance()
-                            .of(" Dir wird nun die Route zum Punkt ").color(TextFormatting.GOLD).advance()
-                            .of(naviPoint.getNames().get(0)).color(TextFormatting.GOLD).bold().advance()
-                            .of(" angezeigt.").color(TextFormatting.GOLD).advance()
-                            .send();
-                } catch (InterruptedException | ExecutionException e) {
-                    e.printStackTrace();
-                }
+            try {
+                Boolean bool = future.get(500, TimeUnit.MILLISECONDS);
+                if (bool != null && !bool) return;
+            } catch (InterruptedException | ExecutionException e) {
+                e.printStackTrace();
+            } catch (TimeoutException ignored) {
             }
-        }, 500);
+
+            Message.builder()
+                    .of("[").color(TextFormatting.DARK_GRAY).advance()
+                    .of("Navi").color(TextFormatting.YELLOW).advance()
+                    .of("]").color(TextFormatting.DARK_GRAY).advance()
+                    .of(" Dir wird nun die Route zum Punkt ").color(TextFormatting.GOLD).advance()
+                    .of(naviPoint.getNames().get(0)).color(TextFormatting.GOLD).bold().advance()
+                    .of(" angezeigt.").color(TextFormatting.GOLD).advance()
+                    .send();
+
+            future = null;
+        }).start();
+
         return true;
     }
 
@@ -97,7 +103,7 @@ public class NaviCommand implements CommandExecutor, TabCompletion {
     public static void onChatReceived(ClientChatReceivedEvent e) {
         if (System.currentTimeMillis() - lastCommand > 500) {
             if (future != null) {
-                future.complete(false);
+                future.complete(true);
                 future = null;
             }
 

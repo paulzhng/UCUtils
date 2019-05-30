@@ -55,11 +55,13 @@ public class Main {
 
         ConfigUtil.config = new Configuration(e.getSuggestedConfigurationFile());
         ConfigUtil.syncConfig();
+
+        CommandHandler.registerAllCommands(e.getAsmData());
     }
 
     @Mod.EventHandler
     public void init(FMLInitializationEvent e) {
-        CommandHandler.registerAllCommands();
+        //CommandHandler.registerAllCommands();
     }
 
     @Mod.EventHandler

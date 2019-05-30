@@ -13,6 +13,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
+import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.common.Mod;
@@ -90,7 +91,7 @@ public class ABuyCommand implements CommandExecutor {
     }
 
     @SubscribeEvent
-    public static void onGuiScreen(GuiScreenEvent e) {
+    public static void onGuiOpen(GuiOpenEvent e) {
         if (amountLeft == 0) return;
         if (!(e.getGui() instanceof GuiContainer)) return;
 
