@@ -2,20 +2,19 @@ package de.fuzzlemann.ucutils.utils.faction.police;
 
 import de.fuzzlemann.ucutils.Main;
 import de.fuzzlemann.ucutils.events.NameFormatEventHandler;
+import de.fuzzlemann.ucutils.utils.data.DataLoader;
 import de.fuzzlemann.ucutils.utils.ForgeUtils;
+import de.fuzzlemann.ucutils.utils.api.APIUtils;
+import de.fuzzlemann.ucutils.utils.data.DataModule;
 import de.fuzzlemann.ucutils.utils.io.JsonManager;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringEscapeUtils;
 
 import java.io.File;
-import java.io.IOException;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -29,7 +28,8 @@ import java.util.stream.Collectors;
  */
 @SideOnly(Side.CLIENT)
 @Mod.EventBusSubscriber
-public class WantedManager {
+@DataModule(value = "Wanteds", hasFallback = true)
+public class WantedManager implements DataLoader {
 
     private static final File WANTED_FILE = new File(JsonManager.DIRECTORY, "wanteds.storage");
     private static final List<WantedReason> WANTED_LIST = new ArrayList<>();
@@ -38,35 +38,6 @@ public class WantedManager {
 
     private static boolean blockNextMessage;
     private static CompletableFuture<Wanted> future;
-
-    public static void fillWantedList() throws IOException {
-        WANTED_LIST.clear();
-
-        URL url = new URL("http://tomcat.fuzzlemann.de/factiononline/wantedreasons");
-        String result = IOUtils.toString(url, StandardCharsets.UTF_8);
-
-        String[] wantedStrings = result.split("<>");
-
-        for (String wantedString : wantedStrings) {
-            String[] splittedWantedString = wantedString.split(";");
-
-            String reason = StringEscapeUtils.unescapeJava(splittedWantedString[0]);
-            int wanteds = Integer.parseInt(splittedWantedString[1]);
-
-            WANTED_LIST.add(new WantedReason(reason, wanteds));
-        }
-
-        JsonManager.writeList(WANTED_FILE, WANTED_LIST);
-    }
-
-    public static void readSavedWantedList() {
-        WANTED_LIST.clear();
-
-        WANTED_LIST.addAll(JsonManager.loadObjects(WANTED_FILE, WantedReason.class)
-                .stream()
-                .map(object -> (WantedReason) object)
-                .collect(Collectors.toList()));
-    }
 
     public static List<String> getWantedReasons() {
         return WANTED_LIST.stream()
@@ -129,5 +100,35 @@ public class WantedManager {
 
         blockNextMessage = true;
         e.setCanceled(true);
+    }
+
+    @Override
+    public void load() {
+        WANTED_LIST.clear();
+
+        String result = APIUtils.get("http://tomcat.fuzzlemann.de/factiononline/wantedreasons");
+
+        String[] wantedStrings = result.split("<>");
+
+        for (String wantedString : wantedStrings) {
+            String[] splittedWantedString = wantedString.split(";");
+
+            String reason = StringEscapeUtils.unescapeJava(splittedWantedString[0]);
+            int wanteds = Integer.parseInt(splittedWantedString[1]);
+
+            WANTED_LIST.add(new WantedReason(reason, wanteds));
+        }
+
+        JsonManager.writeList(WANTED_FILE, WANTED_LIST);
+    }
+
+    @Override
+    public void fallbackLoading() {
+        WANTED_LIST.clear();
+
+        WANTED_LIST.addAll(JsonManager.loadObjects(WANTED_FILE, WantedReason.class)
+                .stream()
+                .map(object -> (WantedReason) object)
+                .collect(Collectors.toList()));
     }
 }

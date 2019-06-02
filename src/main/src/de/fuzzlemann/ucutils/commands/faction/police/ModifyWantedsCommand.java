@@ -21,44 +21,43 @@ import java.util.stream.Collectors;
 public class ModifyWantedsCommand implements CommandExecutor, TabCompletion {
 
     @Override
-    @Command(labels = {"modifywanteds", "mw"}, usage = "/%label% [Spieler] [GF/SF/SSF/S/DA5/DA10/DA15/FSA]")
+    @Command(labels = {"modifywanteds", "mw"}, usage = "/%label% [Spieler] [GF/SF/SSF/S/DA5/DA10/DA15/FSA]", async = true)
     public boolean onCommand(EntityPlayerSP p, String[] args) {
         if (args.length < 2) return false;
 
         Set<Type> types = getTypes(args);
         if (types.isEmpty()) return false;
 
-        new Thread(() -> {
-            String player = args[0];
-            Wanted wanted = WantedManager.getWanteds(player);
+        String player = args[0];
+        Wanted wanted = WantedManager.getWanteds(player);
 
-            if (wanted == null) {
-                TextUtils.error("Du hast /wanteds noch nicht ausgeführt.");
-                return;
+        if (wanted == null) {
+            TextUtils.error("Du hast /wanteds noch nicht ausgeführt.");
+            return true;
+        }
+
+        String wantedReason = wanted.getReason();
+        int wantedAmount = wanted.getAmount();
+
+        for (Type flag : types) {
+            if (wantedReason.contains(flag.postponeReason)) continue;
+
+            if (flag == Type.VERY_BAD_CONDUCT && wantedReason.contains(Type.BAD_CONDUCT.postponeReason)) {
+                wantedReason = wantedReason.replace(Type.BAD_CONDUCT.postponeReason, "");
+                wantedAmount -= 10;
             }
 
-            String wantedReason = wanted.getReason();
-            int wantedAmount = wanted.getAmount();
+            wantedReason = flag.modifyReason(wantedReason);
+            wantedAmount = flag.modifyWanteds(wantedAmount);
+        }
 
-            for (Type flag : types) {
-                if (wantedReason.contains(flag.postponeReason)) continue;
+        if (wanted.getAmount() > wantedAmount)
+            p.sendChatMessage("/clear " + player + " .");
 
-                if (flag == Type.VERY_BAD_CONDUCT && wantedReason.contains(Type.BAD_CONDUCT.postponeReason)) {
-                    wantedReason = wantedReason.replace(Type.BAD_CONDUCT.postponeReason, "");
-                    wantedAmount -= 10;
-                }
+        if (wantedAmount > 69)
+            wantedAmount = 69;
 
-                wantedReason = flag.modifyReason(wantedReason);
-                wantedAmount = flag.modifyWanteds(wantedAmount);
-            }
-
-            if (wanted.getAmount() > wantedAmount)
-                p.sendChatMessage("/clear " + player + " .");
-
-            if (wantedAmount > 69)
-                wantedAmount = 69;
-            p.sendChatMessage("/su " + wantedAmount + " " + player + " " + wantedReason);
-        }).start();
+        p.sendChatMessage("/su " + wantedAmount + " " + player + " " + wantedReason);
         return true;
     }
 
@@ -78,15 +77,9 @@ public class ModifyWantedsCommand implements CommandExecutor, TabCompletion {
     public List<String> getTabCompletions(EntityPlayerSP p, String[] args) {
         if (args.length == 1) return Collections.emptyList();
 
-        String type = args[args.length - 1].toLowerCase();
-        List<String> wantedReasons = Arrays.stream(Type.values())
+        return Arrays.stream(Type.values())
                 .map(t -> t.flagArgument)
                 .collect(Collectors.toList());
-
-        if (type.isEmpty()) return wantedReasons;
-
-        wantedReasons.removeIf(wantedReason -> !wantedReason.toLowerCase().startsWith(type));
-        return wantedReasons;
     }
 
     private enum Type {

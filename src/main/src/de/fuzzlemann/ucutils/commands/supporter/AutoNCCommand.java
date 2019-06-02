@@ -45,7 +45,8 @@ public class AutoNCCommand implements CommandExecutor {
     public boolean onCommand(EntityPlayerSP p, String[] args) {
         if (args.length == 0) {
             enabled = !enabled;
-            Message message = Message.builder()
+
+            Message.builder()
                     .of("[").color(TextFormatting.DARK_GRAY).advance()
                     .of("Auto-NC").color(TextFormatting.AQUA).advance()
                     .of("]").color(TextFormatting.DARK_GRAY).advance()
@@ -54,9 +55,7 @@ public class AutoNCCommand implements CommandExecutor {
                     .of(":").color(TextFormatting.GRAY).advance()
                     .space()
                     .of(enabled ? "aktiviert" : "deaktiviert").color(enabled ? TextFormatting.GREEN : TextFormatting.RED).advance()
-                    .build();
-
-            p.sendMessage(message.toTextComponent());
+                    .send();
             return true;
         }
 
@@ -101,7 +100,7 @@ public class AutoNCCommand implements CommandExecutor {
             time = System.currentTimeMillis();
             ANSWER_MAP.put(++i, result);
 
-            Message message = Message.builder()
+            Message.builder()
                     .of("[").color(TextFormatting.DARK_GRAY).advance()
                     .of("Auto-NC").color(TextFormatting.AQUA).advance()
                     .of("]").color(TextFormatting.DARK_GRAY).advance()
@@ -117,9 +116,8 @@ public class AutoNCCommand implements CommandExecutor {
                     .clickEvent(ClickEvent.Action.RUN_COMMAND, "/autonc " + i)
                     .hoverEvent(HoverEvent.Action.SHOW_TEXT, Message.builder().of("Bestätigen").color(TextFormatting.GREEN).build()).advance()
                     .of("]").color(TextFormatting.GRAY).advance()
-                    .build();
+                    .send();
 
-            Main.MINECRAFT.player.sendMessage(message.toTextComponent());
             Main.MINECRAFT.player.playSound(Objects.requireNonNull(SoundUtil.getSoundEvent("block.note.pling")), 1, 1);
         }).start();
     }

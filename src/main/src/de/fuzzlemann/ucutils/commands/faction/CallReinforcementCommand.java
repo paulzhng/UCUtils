@@ -61,19 +61,16 @@ public class CallReinforcementCommand implements CommandExecutor {
                 builder.of(lastReinforcement.getType().getMessage()).color(TextFormatting.RED).advance().space();
             }
 
-            Message message = builder.of(fullName).color(TextFormatting.DARK_GREEN).advance()
-                    .of(" benötigt Unterstützung bei X: " + posX + " | Y: " + posY + " | Z: " + posZ + "! (" + distance + " Meter entfernt)").color(TextFormatting.GREEN).advance().build();
-
-            Message message2 = Message.builder()
+            builder.of(fullName).color(TextFormatting.DARK_GREEN).advance()
+                    .of(" benötigt Unterstützung bei X: " + posX + " | Y: " + posY + " | Z: " + posZ + "! (" + distance + " Meter entfernt)").color(TextFormatting.GREEN).advance()
+                    .newLine()
                     .messageParts(NavigationUtil.getNavigationMessage(posX, posY, posZ).getMessageParts())
                     .of(" | ").color(TextFormatting.GRAY).advance()
                     .of("Unterwegs")
                     .hoverEvent(HoverEvent.Action.SHOW_TEXT, MessagePart.simpleMessagePart("Bescheid geben, dass man unterwegs ist", TextFormatting.RED))
                     .clickEvent(ClickEvent.Action.RUN_COMMAND, "/reinforcement ontheway " + name + " " + posX + " " + posY + " " + posZ + (dChat ? " -d" : ""))
-                    .color(TextFormatting.RED).advance().build();
-
-            p.sendMessage(message.toTextComponent());
-            p.sendMessage(message2.toTextComponent());
+                    .color(TextFormatting.RED).advance()
+                    .send();
 
             e.setCanceled(true);
             return;
@@ -85,11 +82,11 @@ public class CallReinforcementCommand implements CommandExecutor {
             String reinforcementSenderName = onTheWayMatcher.group(2);
             String distance = onTheWayMatcher.group(3);
 
-            Message message = Message.builder()
+            Message.builder()
                     .of(senderFullName).color(TextFormatting.DARK_GREEN).advance()
-                    .of(" kommt zum Verstärkungsruf von " + reinforcementSenderName + "! (" + distance + " Meter entfernt)").color(TextFormatting.GREEN).advance().build();
+                    .of(" kommt zum Verstärkungsruf von " + reinforcementSenderName + "! (" + distance + " Meter entfernt)").color(TextFormatting.GREEN).advance()
+                    .send();
 
-            p.sendMessage(message.toTextComponent());
             e.setCanceled(true);
             return;
         }
@@ -201,11 +198,13 @@ public class CallReinforcementCommand implements CommandExecutor {
 
     private enum Type {
         D_CHAT("-d", "d", null),
+        RAM("-r", "f", "Rammen!"),
         EMERGENCY("-e", "f", "Dringend!"),
         EMERGENCY_D("-ed", "d", "Dringend!"),
         MEDIC("-m", "d", "Medic benötigt!"),
         CORPSE_GUARDING("-lb", "d", "Leichenbewachung!"),
-        DRUG_REMOVAL("-da", "d", "Drogenabnahme!"),;
+        DRUG_REMOVAL("-da", "d", "Drogenabnahme!"),
+        PLANT("-p", "d", "Plant!");
 
         private final String argument;
         private final String chatType;

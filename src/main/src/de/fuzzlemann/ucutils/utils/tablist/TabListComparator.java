@@ -13,7 +13,7 @@ import java.util.List;
  * @author Fuzzlemann
  */
 @SideOnly(Side.CLIENT)
-class TablistComparator implements Comparator<NetworkPlayerInfo> {
+class TabListComparator implements Comparator<NetworkPlayerInfo> {
 
     private static final List<String> ORDERED_ENTRIES = Arrays.asList(
             "§1[UC]",

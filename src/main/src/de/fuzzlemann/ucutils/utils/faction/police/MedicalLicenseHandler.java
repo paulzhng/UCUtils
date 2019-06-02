@@ -1,6 +1,7 @@
 package de.fuzzlemann.ucutils.utils.faction.police;
 
 import de.fuzzlemann.ucutils.utils.ForgeUtils;
+import de.fuzzlemann.ucutils.utils.Logger;
 import de.fuzzlemann.ucutils.utils.api.APIUtils;
 import de.fuzzlemann.ucutils.utils.text.Message;
 import net.minecraft.util.text.ITextComponent;
@@ -81,7 +82,7 @@ public class MedicalLicenseHandler {
             String response = APIUtils.post("http://tomcat.fuzzlemann.de/factiononline/checkmedicallicense", "name", playerName);
             return Boolean.valueOf(response);
         } catch (Exception e) {
-            e.printStackTrace();
+            Logger.LOGGER.catching(e);
             return false;
         }
     }

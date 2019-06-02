@@ -1,6 +1,5 @@
 package de.fuzzlemann.ucutils.events;
 
-import de.fuzzlemann.ucutils.Main;
 import de.fuzzlemann.ucutils.utils.text.Message;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
@@ -57,9 +56,11 @@ public class MemberActivityEventHandler {
             public void run() {
                 if (lastMessage <= 50L) return;
 
-                Main.MINECRAFT.player.sendMessage(Message.builder().of("» ").color(TextFormatting.GRAY).advance()
+                Message.builder()
+                        .of("» ").color(TextFormatting.GRAY).advance()
                         .of("Memberanzahl: ").color(TextFormatting.DARK_AQUA).advance()
-                        .of(String.valueOf(MEMBER_LIST.size())).color(TextFormatting.GREEN).advance().build().toTextComponent());
+                        .of(String.valueOf(MEMBER_LIST.size())).color(TextFormatting.GREEN).advance()
+                        .send();
 
                 lastMessage = 0;
                 shown = 0;

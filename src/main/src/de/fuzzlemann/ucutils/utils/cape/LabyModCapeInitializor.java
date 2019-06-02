@@ -1,6 +1,9 @@
 package de.fuzzlemann.ucutils.utils.cape;
 
 import de.fuzzlemann.ucutils.Main;
+import de.fuzzlemann.ucutils.utils.initializor.IInitializor;
+import de.fuzzlemann.ucutils.utils.initializor.InitMode;
+import de.fuzzlemann.ucutils.utils.initializor.Initializor;
 import net.labymod.core.CoreAdapter;
 import net.labymod.core.LabyModCore;
 import net.labymod.core_implementation.mc112.RenderPlayerImplementation;
@@ -14,7 +17,8 @@ import java.util.Arrays;
 /**
  * @author Fuzzlemann
  */
-public class LabyModCapeInitializor implements ICapeInitializor {
+@Initializor(value = "Cape", initMode = InitMode.LABY_MOD)
+public class LabyModCapeInitializor implements IInitializor {
     @Override
     public void init() throws Exception {
         Main.MINECRAFT.gameSettings.setModelPartEnabled(EnumPlayerModelParts.CAPE, true);

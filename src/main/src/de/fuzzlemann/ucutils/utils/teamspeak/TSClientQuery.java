@@ -1,5 +1,7 @@
 package de.fuzzlemann.ucutils.utils.teamspeak;
 
+import de.fuzzlemann.ucutils.utils.Logger;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -46,11 +48,8 @@ public class TSClientQuery {
                 bufferedReader.readLine();
             }
 
-            System.out.println("command: " + command);
             printWriter.println(command);
-
             result = bufferedReader.readLine();
-            System.out.println("result: " + result);
 
             if (tryAgain && result != null && result.equals("error id=1796 msg=currently\\snot\\spossible")) {
                 auth();
@@ -60,7 +59,7 @@ public class TSClientQuery {
             connect(false);
             return rawExec(command, auth, false);
         } catch (IOException e) {
-            e.printStackTrace();
+            Logger.LOGGER.catching(e);
             return null;
         }
 
@@ -85,7 +84,7 @@ public class TSClientQuery {
 
             while (bufferedReader.ready()) bufferedReader.readLine();
         } catch (IOException e) {
-            e.printStackTrace();
+            Logger.LOGGER.catching(e);
             return false;
         }
 

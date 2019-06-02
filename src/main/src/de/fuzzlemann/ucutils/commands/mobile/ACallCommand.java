@@ -14,18 +14,15 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class ACallCommand implements CommandExecutor {
 
     @Override
-    @Command(labels = "acall", usage = "/%label% [Spieler]")
+    @Command(labels = "acall", usage = "/%label% [Spieler]", async = true)
     public boolean onCommand(EntityPlayerSP p, String[] args) {
         if (args.length == 0) return false;
+        String player = args[0];
 
-        new Thread(() -> {
-            String player = args[0];
+        int number = MobileUtils.getNumber(p, player);
+        if (number == -1) return true;
 
-            int number = MobileUtils.getNumber(p, player);
-            if (number == -1) return;
-
-            p.sendChatMessage("/call " + number);
-        }).start();
+        p.sendChatMessage("/call " + number);
         return true;
     }
 }

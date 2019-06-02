@@ -1,6 +1,7 @@
-package de.fuzzlemann.ucutils.commands;
+package de.fuzzlemann.ucutils.commands.location;
 
 import de.fuzzlemann.ucutils.common.CustomNaviPoint;
+import de.fuzzlemann.ucutils.utils.Logger;
 import de.fuzzlemann.ucutils.utils.command.Command;
 import de.fuzzlemann.ucutils.utils.command.CommandExecutor;
 import de.fuzzlemann.ucutils.utils.command.TabCompletion;
@@ -13,9 +14,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Timer;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -29,7 +28,6 @@ import java.util.regex.Pattern;
 public class NaviCommand implements CommandExecutor, TabCompletion {
 
     private static final Pattern NAVI_DELETED_PATTERN = Pattern.compile("^\\[Navi] Du hast deine Route gelöscht.$");
-    private static final Timer TIMER = new Timer();
     private static CompletableFuture<Boolean> future;
     private static long lastCommand;
 
@@ -53,13 +51,13 @@ public class NaviCommand implements CommandExecutor, TabCompletion {
         p.sendChatMessage("/navi " + naviPoint.getX() + "/" + naviPoint.getY() + "/" + naviPoint.getZ());
 
         new Thread(() -> {
-            if (future == null) return;
-
             try {
-                Boolean bool = future.get(500, TimeUnit.MILLISECONDS);
+                Boolean bool = future.get(300, TimeUnit.MILLISECONDS);
                 if (bool != null && !bool) return;
             } catch (InterruptedException | ExecutionException e) {
-                e.printStackTrace();
+                Logger.LOGGER.catching(e);
+                future = null;
+                return;
             } catch (TimeoutException ignored) {
             }
 
@@ -84,17 +82,12 @@ public class NaviCommand implements CommandExecutor, TabCompletion {
 
     @Override
     public List<String> getTabCompletions(EntityPlayerSP p, String[] args) {
-        String input = args[args.length - 1];
+        if (args.length != 1) return null;
 
         List<String> naviPointNames = new ArrayList<>();
         for (CustomNaviPoint naviPoint : NavigationUtil.NAVI_POINTS) {
-            for (String name : naviPoint.getNames()) {
-                naviPointNames.add(name.replace(' ', '-'));
-            }
+            naviPointNames.addAll(naviPoint.getNames());
         }
-
-        naviPointNames.removeIf(naviPoint -> !naviPoint.toLowerCase().startsWith(input));
-        Collections.sort(naviPointNames);
 
         return naviPointNames;
     }

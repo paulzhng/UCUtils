@@ -58,11 +58,12 @@ public class ShareLocationCommand implements CommandExecutor {
 
         int distance = (int) p.getPosition().getDistance(posX, posY, posZ);
 
-        Message message = Message.builder().of(fullName).color(TextFormatting.DARK_GREEN).advance()
-                .of(" hat seine Position mit dir geteilt! -> X: " + posX + " | Y: " + posY + " | Z: " + posZ + " (" + distance + " Meter entfernt)").color(TextFormatting.GREEN).advance().build();
-
-        p.sendMessage(message.toTextComponent());
-        p.sendMessage(NavigationUtil.getNavigationMessage(posX, posY, posZ).toTextComponent());
+        Message.builder()
+                .of(fullName).color(TextFormatting.DARK_GREEN).advance()
+                .of(" hat seine Position mit dir geteilt! -> X: " + posX + " | Y: " + posY + " | Z: " + posZ + " (" + distance + " Meter entfernt)").color(TextFormatting.GREEN).advance()
+                .newLine()
+                .messageParts(NavigationUtil.getNavigationMessage(posX, posY, posZ).getMessageParts())
+                .send();
 
         e.setCanceled(true);
     }
@@ -88,7 +89,7 @@ public class ShareLocationCommand implements CommandExecutor {
         }
 
         if (playerNames.isEmpty()) {
-            TextUtils.error("Spieler nicht gefunden.");
+            TextUtils.error("Der Spieler wurde nicht gefunden.");
             return true;
         }
 
@@ -102,13 +103,12 @@ public class ShareLocationCommand implements CommandExecutor {
         String fullCommand = command + " Positionsteilung für " + playerString + "! -> X: " + posX + " | Y: " + posY + " | Z: " + posZ;
         p.sendChatMessage(fullCommand);
 
-        Message message = Message.builder()
-                .of("Du").color(TextFormatting.DARK_GREEN).advance()
-                .space()
-                .of("hast deine Position mit " + playerString + " geteilt.").color(TextFormatting.GREEN).advance()
-                .build();
-
-        p.sendMessage(message.toTextComponent());
+        Message.builder()
+                .prefix()
+                .of("Du hast deine Position mit ").color(TextFormatting.GRAY).advance()
+                .of(playerString).color(TextFormatting.BLUE).advance()
+                .of(" geteilt.").color(TextFormatting.GRAY).advance()
+                .send();
         return true;
     }
 }

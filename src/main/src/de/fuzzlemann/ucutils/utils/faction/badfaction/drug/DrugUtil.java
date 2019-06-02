@@ -1,5 +1,7 @@
 package de.fuzzlemann.ucutils.utils.faction.badfaction.drug;
 
+import de.fuzzlemann.ucutils.utils.data.DataLoader;
+import de.fuzzlemann.ucutils.utils.data.DataModule;
 import de.fuzzlemann.ucutils.utils.io.JsonManager;
 
 import java.io.File;
@@ -10,32 +12,11 @@ import java.util.stream.Collectors;
 /**
  * @author Fuzzlemann
  */
-public class DrugUtil {
+@DataModule(value = "Drugs", local = true)
+public class DrugUtil implements DataLoader {
 
     public static final List<Drug> DRUGS = new ArrayList<>();
     private static final File DRUG_PRICE_FILE = new File(JsonManager.DIRECTORY, "drugprices.storage");
-
-    public static void loadDrugs() {
-        DRUGS.clear();
-
-        List<Drug> drugs = JsonManager.loadObjects(DRUG_PRICE_FILE, Drug.class)
-                .stream()
-                .map(object -> (Drug) object)
-                .distinct()
-                .collect(Collectors.toList());
-
-        addDrug(new Drug("Kokain", new String[]{"Koks"}, true), drugs);
-        addDrug(new Drug("Marihuana", new String[]{"Gras", "Weed", "Hanf"}, true), drugs);
-        addDrug(new Drug("Opium", new String[]{}, true), drugs);
-        addDrug(new Drug("Methamphetamin", new String[]{"Meth", "Speed", "Crystal"}, true), drugs);
-        addDrug(new Drug("LSD", new String[]{"Acid"}, true), drugs);
-        addDrug(new Drug("Medizin", new String[]{"Med"}, false), drugs);
-        addDrug(new Drug("Schwarzpulver", new String[]{}, false), drugs);
-        addDrug(new Drug("Eisen", new String[]{"Iron"}, false), drugs);
-        addDrug(new Drug("Masken", new String[]{"Maske", "Mask", "Masks"}, false), drugs);
-
-        DRUGS.addAll(drugs);
-    }
 
     public static void savePrices() {
         JsonManager.writeList(DRUG_PRICE_FILE, DRUGS);
@@ -57,5 +38,28 @@ public class DrugUtil {
         }
 
         return null;
+    }
+
+    @Override
+    public void load() {
+        DRUGS.clear();
+
+        List<Drug> drugs = JsonManager.loadObjects(DRUG_PRICE_FILE, Drug.class)
+                .stream()
+                .map(object -> (Drug) object)
+                .distinct()
+                .collect(Collectors.toList());
+
+        addDrug(new Drug("Kokain", new String[]{"Koks"}, true), drugs);
+        addDrug(new Drug("Marihuana", new String[]{"Gras", "Weed", "Hanf"}, true), drugs);
+        addDrug(new Drug("Opium", new String[]{}, true), drugs);
+        addDrug(new Drug("Methamphetamin", new String[]{"Meth", "Speed", "Crystal"}, true), drugs);
+        addDrug(new Drug("LSD", new String[]{"Acid"}, true), drugs);
+        addDrug(new Drug("Medizin", new String[]{"Med"}, false), drugs);
+        addDrug(new Drug("Schwarzpulver", new String[]{}, false), drugs);
+        addDrug(new Drug("Eisen", new String[]{"Iron"}, false), drugs);
+        addDrug(new Drug("Masken", new String[]{"Maske", "Mask", "Masks"}, false), drugs);
+
+        DRUGS.addAll(drugs);
     }
 }

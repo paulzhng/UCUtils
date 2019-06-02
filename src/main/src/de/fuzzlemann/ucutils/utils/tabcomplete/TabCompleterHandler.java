@@ -1,6 +1,7 @@
 package de.fuzzlemann.ucutils.utils.tabcomplete;
 
 import com.google.common.collect.ImmutableSet;
+import de.fuzzlemann.ucutils.utils.ReflectionUtil;
 import net.minecraft.client.gui.GuiChat;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.util.TabCompleter;
@@ -8,7 +9,6 @@ import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-import java.lang.reflect.Field;
 import java.util.Set;
 
 /**
@@ -19,34 +19,14 @@ public class TabCompleterHandler {
 
     static final Set<String> EXCLUDED_SERVER = ImmutableSet.of("/navi");
 
-    public static boolean initTabComplete(GuiChat chat) {
-        try {
-            Field inputField = null;
-            Field tabCompleterField = null;
+    private static void initTabComplete(GuiChat chat) {
+        GuiTextField guiTextField = ReflectionUtil.getValue(chat, GuiTextField.class);
+        TabCompleter tabCompleter = ReflectionUtil.getValue(chat, TabCompleter.class);
 
-            for (Field f : GuiChat.class.getDeclaredFields()) {
-                if (f.getType().equals(GuiTextField.class)) inputField = f;
-                if (f.getType().equals(TabCompleter.class)) tabCompleterField = f;
-            }
+        if (tabCompleter instanceof TabCompleterEx) return;
 
-            if (inputField == null || tabCompleterField == null) return false;
-
-            inputField.setAccessible(true);
-            GuiTextField guiTextField = (GuiTextField) inputField.get(chat);
-
-            tabCompleterField.setAccessible(true);
-
-            TabCompleter currentTabCompleter = (TabCompleter) tabCompleterField.get(chat);
-            if (currentTabCompleter instanceof TabCompleterEx) return false;
-
-            TabCompleterEx tabCompleter = new TabCompleterEx(guiTextField);
-            tabCompleterField.set(chat, tabCompleter);
-            return true;
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
-
-        return false;
+        TabCompleterEx tabCompleterEx = new TabCompleterEx(guiTextField);
+        ReflectionUtil.setValue(chat, TabCompleter.class, tabCompleterEx);
     }
 
     @SubscribeEvent

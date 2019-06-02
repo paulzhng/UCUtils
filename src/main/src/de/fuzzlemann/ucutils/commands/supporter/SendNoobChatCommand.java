@@ -9,7 +9,6 @@ import de.fuzzlemann.ucutils.utils.text.TextUtils;
 import net.minecraft.client.entity.EntityPlayerSP;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * @author Fuzzlemann
@@ -38,16 +37,8 @@ public class SendNoobChatCommand implements CommandExecutor, TabCompletion {
 
     @Override
     public List<String> getTabCompletions(EntityPlayerSP p, String[] args) {
-        String input = args[args.length - 1].toLowerCase();
-        List<String> answerKeys = NoobChatManager.getAnswerKeys()
-                .stream()
-                .map(answerKey -> answerKey.replace(' ', '-'))
-                .collect(Collectors.toList());
+        if (args.length != 1) return null;
 
-        if (input.isEmpty()) return answerKeys;
-
-        answerKeys.removeIf(answerKey -> !answerKey.toLowerCase().startsWith(input));
-
-        return answerKeys;
+        return NoobChatManager.getAnswerKeys();
     }
 }

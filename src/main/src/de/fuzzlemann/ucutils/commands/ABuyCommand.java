@@ -3,7 +3,7 @@ package de.fuzzlemann.ucutils.commands;
 import de.fuzzlemann.ucutils.Main;
 import de.fuzzlemann.ucutils.utils.command.Command;
 import de.fuzzlemann.ucutils.utils.command.CommandExecutor;
-import de.fuzzlemann.ucutils.utils.text.TextUtils;
+import de.fuzzlemann.ucutils.utils.text.Message;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.inventory.ClickType;
@@ -59,7 +59,15 @@ public class ABuyCommand implements CommandExecutor {
         amount = tempAmount;
         delay = tempDelay;
 
-        p.sendMessage(TextUtils.simpleMessage("Die Menge wurde erfolgreich eingestellt.", TextFormatting.GREEN));
+        Message.builder()
+                .prefix()
+                .of("Die Menge für ABuy wurde erfolgreich eingestellt.").color(TextFormatting.GRAY).advance()
+                .newLine()
+                .info()
+                .of("Um das gewünschte Produkt zu kaufen, klicke nun mit ").color(TextFormatting.WHITE).advance()
+                .of("'b'").color(TextFormatting.GOLD).advance()
+                .of(" auf das Item im Shop.").color(TextFormatting.WHITE).advance()
+                .send();
         return true;
     }
 

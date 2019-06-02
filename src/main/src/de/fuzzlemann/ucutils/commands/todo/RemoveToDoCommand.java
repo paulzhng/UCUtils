@@ -6,7 +6,6 @@ import de.fuzzlemann.ucutils.utils.text.TextUtils;
 import de.fuzzlemann.ucutils.utils.todo.ToDo;
 import de.fuzzlemann.ucutils.utils.todo.ToDoManager;
 import net.minecraft.client.entity.EntityPlayerSP;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -37,7 +36,7 @@ public class RemoveToDoCommand implements CommandExecutor {
 
         toDo.delete();
 
-        p.sendMessage(TextUtils.simpleMessage("Du hast die ToDo entfernt.", TextFormatting.AQUA));
+        TextUtils.simplePrefixMessage("Du hast die ToDo entfernt.");
         return true;
     }
 }

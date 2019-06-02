@@ -7,12 +7,10 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.SetMultimap;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
-import org.apache.commons.io.IOUtils;
+import de.fuzzlemann.ucutils.utils.Logger;
+import de.fuzzlemann.ucutils.utils.api.APIUtils;
 
 import javax.annotation.Nonnull;
-import java.io.IOException;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -21,13 +19,6 @@ import java.util.concurrent.TimeUnit;
  * @author Fuzzlemann
  */
 public class MojangAPI {
-
-    public static void main(String[] args) {
-        System.out.println(getEarlierNames("ChiaraHatWPS"));
-        System.out.println(getEarlierNames("ChiaraHatWPS"));
-        System.out.println(getEarlierNames("ChiaraHatWPS"));
-        System.out.println(getEarlierNames("ChiaraHatWPS"));
-    }
 
     private static final LoadingCache<String, String> UUID_CACHE = CacheBuilder.newBuilder()
             .build(new CacheLoader<String, String>() {
@@ -93,12 +84,10 @@ public class MojangAPI {
 
     private static JsonElement getJsonElement(String urlString) {
         try {
-            URL url = new URL(urlString);
-
-            String content = IOUtils.toString(url, StandardCharsets.UTF_8);
+            String content = APIUtils.get(urlString);
             return new JsonParser().parse(content);
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            Logger.LOGGER.catching(e);
             return null;
         }
     }

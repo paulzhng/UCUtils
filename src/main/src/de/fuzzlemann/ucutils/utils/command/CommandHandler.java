@@ -45,7 +45,6 @@ public class CommandHandler {
 
     private static void registerCommand(CommandExecutor commandExecutor, @Nullable TabCompletion tabCompletion) {
         Command commandAnnotation = getCommand(commandExecutor);
-
         String[] labels = commandAnnotation.labels();
 
         for (String label : labels) {
@@ -61,13 +60,21 @@ public class CommandHandler {
         EntityPlayerSP executor = Main.MINECRAFT.player;
         Command commandAnnotation = getCommand(commandExecutor);
 
-        if (commandExecutor.onCommand(executor, args)) return;
+        Runnable commandRunnable = () -> {
+            if (commandExecutor.onCommand(executor, args)) return;
 
-        String usage = commandAnnotation.usage();
-        if (!usage.isEmpty()) {
-            usage = usage.replace("%label%", label);
+            String usage = commandAnnotation.usage();
+            if (!usage.isEmpty()) {
+                usage = usage.replace("%label%", label);
 
-            TextUtils.error(usage);
+                TextUtils.error(usage);
+            }
+        };
+
+        if (commandAnnotation.async()) {
+            new Thread(commandRunnable).start();
+        } else {
+            commandRunnable.run();
         }
     }
 

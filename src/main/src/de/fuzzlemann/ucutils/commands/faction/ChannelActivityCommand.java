@@ -2,6 +2,7 @@ package de.fuzzlemann.ucutils.commands.faction;
 
 import com.google.common.collect.Multimap;
 import de.fuzzlemann.ucutils.events.MemberActivityEventHandler;
+import de.fuzzlemann.ucutils.utils.Logger;
 import de.fuzzlemann.ucutils.utils.command.Command;
 import de.fuzzlemann.ucutils.utils.command.CommandExecutor;
 import de.fuzzlemann.ucutils.utils.mcapi.MojangAPI;
@@ -33,65 +34,66 @@ import java.util.Map;
 public class ChannelActivityCommand implements CommandExecutor {
 
     @Override
-    @Command(labels = "channelactivity")
+    @Command(labels = "channelactivity", async = true)
     public boolean onCommand(EntityPlayerSP p, String[] args) {
-        new Thread(() -> {
-            List<String> players;
-            try {
-                players = getPlayersInChannel(true);
-            } catch (NullPointerException exc) {
-                exc.printStackTrace();
-                TextUtils.error("Du hast dein API Key noch nicht oder falsch gesetzt.");
-                return;
-            }
+        List<String> players;
+        try {
+            players = getPlayersInChannel(true);
+        } catch (NullPointerException e) {
+            Logger.LOGGER.catching(e);
+            TextUtils.error("Du hast dein API Key noch nicht oder falsch gesetzt.");
+            return true;
+        }
 
-            if (players.isEmpty()) {
-                TextUtils.error("Du bist nicht im TeamSpeak online.");
-                return;
-            }
+        if (players.isEmpty()) {
+            TextUtils.error("Du bist nicht im TeamSpeak online.");
+            return true;
+        }
 
-            if (!players.contains(p.getName())) players.add(p.getName());
+        if (!players.contains(p.getName())) players.add(p.getName());
 
-            List<String> members = new ArrayList<>(MemberActivityEventHandler.MEMBER_LIST);
+        List<String> members = new ArrayList<>(MemberActivityEventHandler.MEMBER_LIST);
 
-            if (members.isEmpty()) {
-                TextUtils.error("Du hast /memberactivity noch nicht ausgeführt.");
-                return;
-            }
+        if (members.isEmpty()) {
+            TextUtils.error("Du hast /memberactivity noch nicht ausgeführt.");
+            return true;
+        }
 
-            members.removeAll(players);
-            removeEarlierNames(players, members);
+        members.removeAll(players);
+        removeEarlierNames(players, members);
 
-            if (args.length != 0 && args[0].equalsIgnoreCase("copy")) {
-                copyList(members);
-                p.sendMessage(TextUtils.simpleMessage("Du hast die Liste von nicht-anwesenden Spielern kopiert.", TextFormatting.GREEN));
-            } else {
-                sendList(members, p);
-            }
-        }).start();
+        if (args.length != 0 && args[0].equalsIgnoreCase("copy")) {
+            copyList(members);
+            TextUtils.simplePrefixMessage("Du hast die Liste von nicht-anwesenden Spielern kopiert.");
+        } else {
+            sendList(members);
+        }
+
         return true;
     }
 
-    private void sendList(List<String> members, EntityPlayerSP p) {
+    private void sendList(List<String> members) {
         Message.MessageBuilder builder = Message.builder();
 
-        builder.of("» ").color(TextFormatting.GOLD).advance().of("Nicht anwesende Fraktionsmitglieder\n").color(TextFormatting.DARK_PURPLE).advance();
+        builder.of("» ").color(TextFormatting.DARK_GRAY).advance()
+                .of("Nicht anwesende Fraktionsmitglieder\n").color(TextFormatting.DARK_AQUA).advance();
         for (String member : members) {
-            builder.of("  * " + member + "\n").color(TextFormatting.GRAY).advance();
+            builder.of("  * ").color(TextFormatting.DARK_GRAY).advance()
+                    .of(member + "\n").color(TextFormatting.GRAY).advance();
         }
 
-        builder.of(" » ").color(TextFormatting.GOLD).advance()
+        builder.of(" » ").color(TextFormatting.DARK_GRAY).advance()
                 .of("⟳")
-                .hoverEvent(HoverEvent.Action.SHOW_TEXT, MessagePart.simpleMessagePart("Aktualisieren", TextFormatting.GOLD))
+                .hoverEvent(HoverEvent.Action.SHOW_TEXT, MessagePart.simpleMessagePart("Aktualisieren", TextFormatting.DARK_AQUA))
                 .clickEvent(ClickEvent.Action.RUN_COMMAND, "/channelactivity")
                 .color(TextFormatting.DARK_PURPLE).advance()
                 .space()
                 .of("⎘")
-                .hoverEvent(HoverEvent.Action.SHOW_TEXT, MessagePart.simpleMessagePart("Kopieren", TextFormatting.GOLD))
+                .hoverEvent(HoverEvent.Action.SHOW_TEXT, MessagePart.simpleMessagePart("Kopieren", TextFormatting.DARK_AQUA))
                 .clickEvent(ClickEvent.Action.RUN_COMMAND, "/channelactivity copy")
                 .color(TextFormatting.DARK_PURPLE).advance();
 
-        p.sendMessage(builder.build().toTextComponent());
+        builder.send();
     }
 
     private void copyList(List<String> members) {

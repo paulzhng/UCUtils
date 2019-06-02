@@ -35,34 +35,31 @@ public class CheckActiveMembersCommand implements CommandExecutor {
     private static CompletableFuture<Map<Boolean, Integer>> future;
 
     @Override
-    @Command(labels = "checkactivemembers")
+    @Command(labels = "checkactivemembers", async = true)
     public boolean onCommand(EntityPlayerSP p, String[] args) {
-        new Thread(() -> {
-            Message.MessageBuilder builder = Message.builder();
+        Message.MessageBuilder builder = Message.builder();
 
-            builder.of("» ").color(TextFormatting.GOLD).advance();
-            builder.of("Aktive Spieler in den Fraktionen\n").color(TextFormatting.DARK_PURPLE).advance();
+        builder.of("» ").color(TextFormatting.DARK_GRAY).advance()
+                .of("Aktive Spieler in den Fraktionen\n").color(TextFormatting.DARK_AQUA).advance();
 
-            for (Faction faction : Faction.values()) {
-                Map<Boolean, Integer> members = getMembers(faction);
+        for (Faction faction : Faction.values()) {
+            Map<Boolean, Integer> members = getMembers(faction);
 
-                int activeMembers = members.get(true);
-                int inactiveMembers = members.get(false);
+            int activeMembers = members.get(true);
+            int inactiveMembers = members.get(false);
 
-                builder.of(" * ").color(TextFormatting.GOLD).advance();
-                builder.of(faction.getFactionInfo().getFullName() + ": ")
-                        .color(TextFormatting.GRAY)
-                        .clickEvent(ClickEvent.Action.RUN_COMMAND, "/memberinfo " + faction.getFactionKey())
-                        .hoverEvent(HoverEvent.Action.SHOW_TEXT, MessagePart.simpleMessagePart("/memberinfo ausführen", TextFormatting.GRAY))
-                        .advance();
+            builder.of(" * ").color(TextFormatting.DARK_GRAY).advance()
+                    .of(faction.getFactionInfo().getFullName() + ": ").color(TextFormatting.GRAY)
+                    .clickEvent(ClickEvent.Action.RUN_COMMAND, "/memberinfo " + faction.getFactionKey())
+                    .hoverEvent(HoverEvent.Action.SHOW_TEXT, MessagePart.simpleMessagePart("/memberinfo ausführen", TextFormatting.GRAY))
+                    .advance();
 
-                builder.of(String.valueOf(activeMembers)).color(TextFormatting.DARK_GREEN).advance();
-                builder.of("/").color(TextFormatting.GRAY).advance();
-                builder.of((inactiveMembers + activeMembers) + "\n").color(TextFormatting.GREEN).advance();
-            }
+            builder.of(String.valueOf(activeMembers)).color(TextFormatting.DARK_GREEN).advance();
+            builder.of("/").color(TextFormatting.GRAY).advance();
+            builder.of((inactiveMembers + activeMembers) + "\n").color(TextFormatting.GREEN).advance();
+        }
 
-            p.sendMessage(builder.build().toTextComponent());
-        }).start();
+        builder.send();
         return true;
     }
 

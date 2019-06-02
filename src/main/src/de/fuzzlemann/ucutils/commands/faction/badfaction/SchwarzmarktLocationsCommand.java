@@ -1,4 +1,4 @@
-package de.fuzzlemann.ucutils.commands.faction;
+package de.fuzzlemann.ucutils.commands.faction.badfaction;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -34,21 +34,20 @@ public class SchwarzmarktLocationsCommand implements CommandExecutor {
     public boolean onCommand(EntityPlayerSP p, String[] args) {
         Message.MessageBuilder builder = Message.builder();
 
-        builder.of("» ").color(TextFormatting.GOLD).advance().of("Positionen der möglichen Schwarzmärkte\n").color(TextFormatting.DARK_PURPLE).advance();
+        builder.of("» ").color(TextFormatting.DARK_GRAY).advance()
+                .of("Positionen aller möglichen Schwarzmärkte\n").color(TextFormatting.DARK_AQUA).advance();
 
         for (Map.Entry<String, BlockPos> entry : BLACK_MARKET_LIST) {
             String blackMarketName = entry.getKey();
             BlockPos blockPos = entry.getValue();
 
-            builder.of("  * " + blackMarketName).color(TextFormatting.GRAY).advance()
-                    .of(": ").color(TextFormatting.DARK_GRAY).advance()
-                    .of("X: " + blockPos.getX() + " Y: " + blockPos.getY() + " Z: " + blockPos.getZ()).color(TextFormatting.RED).advance()
-                    .of(" (").color(TextFormatting.GRAY).advance()
+            builder.of("  * ").color(TextFormatting.DARK_GRAY).advance()
+                    .of(blackMarketName + ": ").color(TextFormatting.GRAY).advance()
                     .messageParts(NavigationUtil.getRawNavigationMessage(blockPos).getMessageParts())
-                    .of(")\n").color(TextFormatting.GRAY).advance();
+                    .newLine();
         }
 
-        p.sendMessage(builder.build().toTextComponent());
+        builder.send();
         return true;
     }
 }

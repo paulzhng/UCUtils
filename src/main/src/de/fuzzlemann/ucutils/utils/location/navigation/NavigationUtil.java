@@ -3,8 +3,10 @@ package de.fuzzlemann.ucutils.utils.location.navigation;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 import de.fuzzlemann.ucutils.common.CustomNaviPoint;
+import de.fuzzlemann.ucutils.utils.data.DataLoader;
 import de.fuzzlemann.ucutils.utils.ForgeUtils;
 import de.fuzzlemann.ucutils.utils.api.APIUtils;
+import de.fuzzlemann.ucutils.utils.data.DataModule;
 import de.fuzzlemann.ucutils.utils.text.Message;
 import de.fuzzlemann.ucutils.utils.text.MessagePart;
 import net.minecraft.util.math.BlockPos;
@@ -19,20 +21,10 @@ import java.util.List;
 /**
  * @author Fuzzlemann
  */
-public class NavigationUtil {
+@DataModule("Navigation")
+public class NavigationUtil implements DataLoader {
 
     public static final List<CustomNaviPoint> NAVI_POINTS = new ArrayList<>();
-
-    public static void fillNaviPoints() {
-        String json = APIUtils.get("http://tomcat.fuzzlemann.de/factiononline/navipoints");
-
-        Gson gson = new Gson();
-        List<CustomNaviPoint> naviPoints = gson.fromJson(json, new TypeToken<List<CustomNaviPoint>>() {
-        }.getType());
-
-        NAVI_POINTS.clear();
-        NAVI_POINTS.addAll(naviPoints);
-    }
 
     public static CustomNaviPoint getNaviPoint(String input) {
         input = input.replace('-', ' ');
@@ -109,5 +101,18 @@ public class NavigationUtil {
                 .hoverEvent(HoverEvent.Action.SHOW_TEXT, MessagePart.simpleMessagePart("Route anzeigen", TextFormatting.RED))
                 .advance()
                 .build();
+    }
+
+    @Override
+    public void load() {
+        String json = APIUtils.get("http://tomcat.fuzzlemann.de/factiononline/navipoints");
+
+        Gson gson = new Gson();
+        //noinspection UnstableApiUsage
+        List<CustomNaviPoint> naviPoints = gson.fromJson(json, new TypeToken<List<CustomNaviPoint>>() {
+        }.getType());
+
+        NAVI_POINTS.clear();
+        NAVI_POINTS.addAll(naviPoints);
     }
 }

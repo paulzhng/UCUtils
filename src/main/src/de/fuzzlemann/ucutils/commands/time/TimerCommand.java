@@ -12,7 +12,6 @@ import de.fuzzlemann.ucutils.utils.text.MessagePart;
 import de.fuzzlemann.ucutils.utils.text.TextUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
-import net.minecraft.util.SoundCategory;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.event.ClickEvent;
 import net.minecraft.util.text.event.HoverEvent;
@@ -26,10 +25,10 @@ import java.util.*;
  */
 @SideOnly(Side.CLIENT)
 public class TimerCommand implements CommandExecutor, TabCompletion {
-    private TimerSound currentTimerSound;
     private final Timer timer = new Timer();
     private final Map<Integer, Long> timers = new HashMap<>();
-    private int timerID = 0;
+    private TimerSound currentTimerSound;
+    private int timerID;
 
     @Override
     @Command(labels = "timer", usage = "/%label% [list/start/stop] (Zeit/ID)")
@@ -45,13 +44,12 @@ public class TimerCommand implements CommandExecutor, TabCompletion {
 
                 int currentTimerID = ++timerID;
 
-                Message.MessageBuilder builder = Message.builder();
-
-                builder.of("Der Timer ").color(TextFormatting.AQUA).advance()
-                        .of(String.valueOf(currentTimerID)).color(TextFormatting.RED).advance()
-                        .of(" wurde gestartet.").color(TextFormatting.AQUA).advance();
-
-                p.sendMessage(builder.build().toTextComponent());
+                Message.builder()
+                        .prefix()
+                        .of("Der Timer ").color(TextFormatting.GRAY).advance()
+                        .of("#" + currentTimerID).color(TextFormatting.RED).advance()
+                        .of(" wurde gestartet.").color(TextFormatting.GRAY).advance()
+                        .send();
 
                 timers.put(currentTimerID, System.currentTimeMillis() + millis);
                 timer.schedule(new TimerTask() {
@@ -59,23 +57,21 @@ public class TimerCommand implements CommandExecutor, TabCompletion {
                     public void run() {
                         if (timers.remove(currentTimerID) == null) return;
 
-                        Message.MessageBuilder builder2 = Message.builder();
+                        Message.builder()
+                                .prefix()
+                                .of("Der Timer ").color(TextFormatting.GRAY).advance()
+                                .of("#" + currentTimerID).color(TextFormatting.RED).advance()
+                                .of(" ist abgelaufen. Vergangene Zeit: ").color(TextFormatting.GRAY).advance()
+                                .messageParts(FormatUtils.formatMillisecondsToMessage(millis))
+                                .of(".").color(TextFormatting.GRAY).advance()
+                                .of(" [✓]").color(TextFormatting.GREEN).clickEvent(ClickEvent.Action.RUN_COMMAND, "/timer stopsound").advance()
+                                .send();
 
-                        builder2.of("Der Timer ").color(TextFormatting.AQUA).advance()
-                                .of(String.valueOf(currentTimerID)).color(TextFormatting.RED).advance()
-                                .of(" ist abgelaufen. ").color(TextFormatting.AQUA).advance()
-                                .of(FormatUtils.formatMilliseconds(millis)).color(TextFormatting.RED).advance()
-                                .of(" sind vergangen.").color(TextFormatting.AQUA).advance()
-                                .of(" [✓]").color(TextFormatting.GREEN).clickEvent(ClickEvent.Action.RUN_COMMAND, "/timer stopsound").advance();
-
-                        p.sendMessage(builder2.build().toTextComponent());
                         p.playSound(SoundUtil.TIMER, 1, 1);
 
                         Main.MINECRAFT.addScheduledTask(() -> {
                             if (currentTimerSound != null) {
                                 currentTimerSound.stop();
-
-                                Main.MINECRAFT.getSoundHandler().stop("ucutils:timer", SoundCategory.MASTER);
                             }
 
                             currentTimerSound = new TimerSound();
@@ -102,14 +98,12 @@ public class TimerCommand implements CommandExecutor, TabCompletion {
                 TextUtils.error("Der Timer wurde gelöscht.");
                 break;
             case "list":
-                sendTimerList(p);
+                sendTimerList();
                 break;
             case "stopsound":
                 if (currentTimerSound != null) {
                     currentTimerSound.stop();
                 }
-
-                Main.MINECRAFT.getSoundHandler().stop("ucutils:timer", SoundCategory.MASTER);
                 break;
             default:
                 return false;
@@ -118,7 +112,7 @@ public class TimerCommand implements CommandExecutor, TabCompletion {
         return true;
     }
 
-    private void sendTimerList(EntityPlayerSP p) {
+    private void sendTimerList() {
         if (timers.isEmpty()) {
             TextUtils.error("Es ist derzeit kein Timer aktiv.");
             return;
@@ -126,7 +120,8 @@ public class TimerCommand implements CommandExecutor, TabCompletion {
 
         Message.MessageBuilder builder = Message.builder();
 
-        builder.of("» ").color(TextFormatting.GOLD).advance().of("Timer\n").color(TextFormatting.DARK_PURPLE).advance();
+        builder.of("» ").color(TextFormatting.DARK_GRAY).advance()
+                .of("Timer\n").color(TextFormatting.DARK_AQUA).advance();
 
         for (Map.Entry<Integer, Long> entry : timers.entrySet()) {
             int id = entry.getKey();
@@ -134,21 +129,23 @@ public class TimerCommand implements CommandExecutor, TabCompletion {
 
             long timeLeft = time - System.currentTimeMillis();
 
-            builder.of("  * Timer " + id).color(TextFormatting.GRAY).advance()
-                    .of(": ").color(TextFormatting.DARK_GRAY).advance()
-                    .of(FormatUtils.formatMilliseconds(timeLeft) + " verbleibend").color(TextFormatting.RED).advance()
+            builder.of("  * ").color(TextFormatting.DARK_GRAY).advance()
+                    .of("#" + id).color(TextFormatting.GRAY).advance()
+                    .of(": ").color(TextFormatting.GRAY).advance()
+                    .messageParts(FormatUtils.formatMillisecondsToMessage(timeLeft))
+                    .of(" verbleibend").color(TextFormatting.GRAY).advance()
                     .of(" [✗]").color(TextFormatting.RED).clickEvent(ClickEvent.Action.RUN_COMMAND, "/timer stop " + id)
                     .hoverEvent(HoverEvent.Action.SHOW_TEXT, MessagePart.simpleMessagePart("Den Timer löschen", TextFormatting.RED)).advance()
                     .newLine();
         }
 
-        p.sendMessage(builder.build().toTextComponent());
+        builder.send();
     }
 
     @Override
     public List<String> getTabCompletions(EntityPlayerSP p, String[] args) {
         if (args.length == 1) return Arrays.asList("list", "start", "stop");
 
-        return Collections.emptyList();
+        return null;
     }
 }

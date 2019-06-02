@@ -16,20 +16,17 @@ import java.util.Arrays;
 public class ASMSCommand implements CommandExecutor {
 
     @Override
-    @Command(labels = "asms", usage = "/%label% [Spieler] [Nachricht]")
+    @Command(labels = "asms", usage = "/%label% [Spieler] [Nachricht]", async = true)
     public boolean onCommand(EntityPlayerSP p, String[] args) {
         if (args.length < 2) return false;
 
-        new Thread(() -> {
-            String player = args[0];
-            String message = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
+        String player = args[0];
+        String message = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
 
-            int number = MobileUtils.getNumber(p, player);
-            if (number == -1) return;
+        int number = MobileUtils.getNumber(p, player);
+        if (number == -1) return true;
 
-            p.sendChatMessage("/sms " + number + " " + message);
-        }).start();
-
+        p.sendChatMessage("/sms " + number + " " + message);
         return true;
     }
 }

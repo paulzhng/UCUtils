@@ -3,8 +3,8 @@ package de.fuzzlemann.ucutils.commands.mobile;
 import de.fuzzlemann.ucutils.utils.command.Command;
 import de.fuzzlemann.ucutils.utils.command.CommandExecutor;
 import de.fuzzlemann.ucutils.utils.mobile.MobileUtils;
+import de.fuzzlemann.ucutils.utils.text.Message;
 import net.minecraft.client.entity.EntityPlayerSP;
-import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -24,29 +24,21 @@ public class MobileBlockCommand implements CommandExecutor {
         if (MobileUtils.isBlocked(block)) {
             MobileUtils.unblock(block);
 
-            TextComponentString text = new TextComponentString("Du hast ");
-            text.getStyle().setColor(TextFormatting.AQUA);
-
-            TextComponentString blocked = new TextComponentString(block);
-            blocked.getStyle().setColor(TextFormatting.RED);
-
-            TextComponentString textEnd = new TextComponentString(" entblockt.");
-            textEnd.getStyle().setColor(TextFormatting.AQUA);
-
-            p.sendMessage(text.appendSibling(blocked).appendSibling(textEnd));
+            Message.builder()
+                    .prefix()
+                    .of("Du hast ").color(TextFormatting.GRAY).advance()
+                    .of(block).color(TextFormatting.BLUE).advance()
+                    .of(" entblockt.").color(TextFormatting.GRAY).advance()
+                    .send();
         } else {
             MobileUtils.block(block);
 
-            TextComponentString text = new TextComponentString("Du hast ");
-            text.getStyle().setColor(TextFormatting.AQUA);
-
-            TextComponentString blocked = new TextComponentString(block);
-            blocked.getStyle().setColor(TextFormatting.RED);
-
-            TextComponentString textEnd = new TextComponentString(" blockiert.");
-            textEnd.getStyle().setColor(TextFormatting.AQUA);
-
-            p.sendMessage(text.appendSibling(blocked).appendSibling(textEnd));
+            Message.builder()
+                    .prefix()
+                    .of("Du hast ").color(TextFormatting.GRAY).advance()
+                    .of(block).color(TextFormatting.BLUE).advance()
+                    .of(" blockiert.").color(TextFormatting.GRAY).advance()
+                    .send();
         }
         return true;
     }

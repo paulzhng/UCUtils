@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * @author Fuzzlemann
  */
-public class AddNaviPoint implements CommandExecutor {
+public class AddNaviPointCommand implements CommandExecutor {
 
     @Override
     @Command(labels = "addnavipoint", usage = "/%label% [x] [y] [z] [Namen...]", management = true)

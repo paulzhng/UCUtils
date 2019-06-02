@@ -12,6 +12,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -61,22 +62,35 @@ class BaseCommand extends CommandBase implements IClientCommand {
     @Override
     @Nonnull
     public List<String> getTabCompletions(@Nonnull MinecraftServer server, @Nonnull ICommandSender sender, @Nonnull String[] args, @Nullable BlockPos targetPos) {
-        if (tabCompletion != null) {
-            List<String> tabCompletions = tabCompletion.getTabCompletions(Main.MINECRAFT.player, args);
+        String input = args[args.length - 1].toLowerCase();
 
-            if (!tabCompletions.isEmpty()) {
-                Collections.sort(tabCompletions);
-                return tabCompletions;
+        List<String> tabCompletions;
+        if (tabCompletion != null) {
+            List<String> returnedTabCompletions = tabCompletion.getTabCompletions(Main.MINECRAFT.player, args);
+
+            if (returnedTabCompletions != null) {
+                tabCompletions = new ArrayList<>(returnedTabCompletions); //prevent UnsupportedOperationException when an immutable list is returned
+
+                if (tabCompletions.isEmpty()) tabCompletions = ForgeUtils.getOnlinePlayers();
+            } else {
+                tabCompletions = null;
             }
+        } else {
+            tabCompletions = ForgeUtils.getOnlinePlayers();
         }
 
-        List<String> players = ForgeUtils.getOnlinePlayers();
-        if (players.isEmpty()) return players;
+        if (tabCompletions == null) return Collections.emptyList();
 
-        String input = args[args.length - 1].toLowerCase();
-        if (input.isEmpty()) return players;
+        List<String> replacedCompletions = new ArrayList<>();
+        for (String completion : tabCompletions) {
+            replacedCompletions.add(completion.replace(' ', '-'));
+        }
 
-        players.removeIf(playerName -> !playerName.toLowerCase().startsWith(input));
-        return players;
+        if (input.isEmpty()) return replacedCompletions;
+
+        replacedCompletions.removeIf(tabComplete -> !tabComplete.toLowerCase().startsWith(input));
+        Collections.sort(replacedCompletions);
+
+        return replacedCompletions;
     }
 }

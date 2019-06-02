@@ -2,6 +2,7 @@ package de.fuzzlemann.ucutils.utils.text;
 
 import de.fuzzlemann.ucutils.Main;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextFormatting;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -47,7 +48,33 @@ public class Message {
         private MessageBuilder() {
         }
 
+        private static final List<MessagePart> PREFIX_PARTS;
+        private static final List<MessagePart> INFO_PARTS;
+
+        static {
+            PREFIX_PARTS = Message.builder()
+                    .of("UCUtils").color(TextFormatting.DARK_AQUA).advance()
+                    .of(">").color(TextFormatting.DARK_GRAY).advance()
+                    .space()
+                    .build()
+                    .getMessageParts();
+
+            INFO_PARTS = Message.builder()
+                    .of("  Info:").color(TextFormatting.AQUA).advance()
+                    .space()
+                    .build()
+                    .getMessageParts();
+        }
+
         private final List<MessagePart> messageParts = new ArrayList<>();
+
+        public MessageBuilder prefix() {
+            return messageParts(PREFIX_PARTS);
+        }
+
+        public MessageBuilder info() {
+            return messageParts(INFO_PARTS);
+        }
 
         public MessagePart.MessagePartBuilder of(String text) {
             return MessagePart.builder().currentBuilder(this).message(text);

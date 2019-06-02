@@ -3,7 +3,10 @@ package de.fuzzlemann.ucutils.utils.api;
 import com.google.gson.Gson;
 import com.mojang.authlib.exceptions.AuthenticationException;
 import de.fuzzlemann.ucutils.Main;
+import de.fuzzlemann.ucutils.utils.Logger;
 import de.fuzzlemann.ucutils.utils.config.ConfigUtil;
+import de.fuzzlemann.ucutils.utils.data.DataLoader;
+import de.fuzzlemann.ucutils.utils.data.DataModule;
 import net.minecraft.client.Minecraft;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.Validate;
@@ -26,7 +29,8 @@ import java.util.List;
 /**
  * @author Fuzzlemann
  */
-public class APIUtils {
+@DataModule("API-Connection")
+public class APIUtils implements DataLoader {
 
     public static String postAuthenticated(String url, Object... paramArray) {
         Object[] newParams = new Object[paramArray.length + 2];
@@ -65,7 +69,7 @@ public class APIUtils {
                 EntityUtils.consumeQuietly(entity);
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            Logger.LOGGER.catching(e);
             return null;
         }
     }
@@ -85,7 +89,7 @@ public class APIUtils {
         try {
             mc.getSessionService().joinServer(mc.getSession().getProfile(), mc.getSession().getToken(), authHash.getHash());
         } catch (AuthenticationException e) {
-            e.printStackTrace();
+            Logger.LOGGER.catching(e);
             return null;
         }
 
@@ -95,19 +99,21 @@ public class APIUtils {
         return response;
     }
 
-    public static void loadAPIKey() {
+    @Override
+    public void load() {
         Minecraft mc = Main.MINECRAFT;
         AuthHash authHash = new AuthHash();
 
         try {
             mc.getSessionService().joinServer(mc.getSession().getProfile(), mc.getSession().getToken(), authHash.getHash());
         } catch (AuthenticationException e) {
-            e.printStackTrace();
+            Logger.LOGGER.catching(e);
             return;
         }
 
         String response = post("http://tomcat.fuzzlemann.de/factiononline/getapikey", "username", authHash.getUsername(), "hash", authHash.getHash());
         if (response == null || response.isEmpty()) return;
+        if (response.contains(" ")) return; //check for invalid API Keys
 
         ConfigUtil.apiKeyProperty.set(response);
         ConfigUtil.onConfigChange(null);

@@ -58,17 +58,14 @@ public class ASellDrugCommand implements CommandExecutor, TabCompletion {
 
     @Override
     public List<String> getTabCompletions(EntityPlayerSP p, String[] args) {
-        if (args.length != 2) return Collections.emptyList();
+        if (args.length == 1) return Collections.emptyList();
+        if (args.length == 2) {
+            return DrugUtil.DRUGS
+                    .stream()
+                    .map(Drug::getName)
+                    .collect(Collectors.toList());
+        }
 
-        String drug = args[args.length - 1].toLowerCase();
-        List<String> drugNames = DrugUtil.DRUGS
-                .stream()
-                .map(Drug::getName)
-                .collect(Collectors.toList());
-
-        if (drug.isEmpty()) return drugNames;
-
-        drugNames.removeIf(drugName -> !drugName.toLowerCase().startsWith(drug));
-        return drugNames;
+        return null;
     }
 }

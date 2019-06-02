@@ -1,5 +1,6 @@
-package de.fuzzlemann.ucutils.commands.faction;
+package de.fuzzlemann.ucutils.commands.faction.police;
 
+import de.fuzzlemann.ucutils.utils.Logger;
 import de.fuzzlemann.ucutils.utils.api.APIUtils;
 import de.fuzzlemann.ucutils.utils.command.Command;
 import de.fuzzlemann.ucutils.utils.command.CommandExecutor;
@@ -20,13 +21,11 @@ public class CheckHouseBanCommand implements CommandExecutor {
         String playerName = args[0];
         boolean hasHouseBan = hasHouseBan(playerName);
 
-        Message.MessageBuilder builder = Message.builder();
-
-        builder.of(playerName + " besitzt ").color(TextFormatting.AQUA).advance()
-                .of(hasHouseBan ? "ein" : "kein").color(hasHouseBan ? TextFormatting.GREEN : TextFormatting.RED).advance()
-                .of(" Hausverbot.").color(TextFormatting.AQUA).advance();
-
-        p.sendMessage(builder.build().toTextComponent());
+        Message.builder()
+                .prefix()
+                .of(playerName).color(TextFormatting.BLUE).advance()
+                .of(" besitzt " + (hasHouseBan ? "ein" : "kein") + " Hausverbot.").color(TextFormatting.GRAY).advance()
+                .send();
         return true;
     }
 
@@ -35,7 +34,7 @@ public class CheckHouseBanCommand implements CommandExecutor {
             String response = APIUtils.post("http://tomcat.fuzzlemann.de/factiononline/checkhouseban", "name", playerName);
             return Boolean.valueOf(response);
         } catch (Exception e) {
-            e.printStackTrace();
+            Logger.LOGGER.catching(e);
             return false;
         }
     }

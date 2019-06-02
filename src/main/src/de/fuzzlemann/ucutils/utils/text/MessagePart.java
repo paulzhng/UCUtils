@@ -107,8 +107,7 @@ public class MessagePart {
         }
 
         public MessagePartBuilder bold() {
-            bold(true);
-            return this;
+            return bold(true);
         }
 
         public MessagePartBuilder bold(boolean bold) {
@@ -117,8 +116,7 @@ public class MessagePart {
         }
 
         public MessagePartBuilder italic() {
-            italic(true);
-            return this;
+            return italic(true);
         }
 
         public MessagePartBuilder italic(boolean italic) {
@@ -127,8 +125,7 @@ public class MessagePart {
         }
 
         public MessagePartBuilder strikethrough() {
-            strikethrough(true);
-            return this;
+            return strikethrough(true);
         }
 
         public MessagePartBuilder strikethrough(boolean strikethrough) {
@@ -137,8 +134,7 @@ public class MessagePart {
         }
 
         public MessagePartBuilder underlined() {
-            underlined(true);
-            return this;
+            return underlined(true);
         }
 
         public MessagePartBuilder underlined(boolean underlined) {
@@ -147,8 +143,7 @@ public class MessagePart {
         }
 
         public MessagePartBuilder obfuscated() {
-            obfuscated(true);
-            return this;
+            return obfuscated(true);
         }
 
         public MessagePartBuilder obfuscated(boolean obfuscated) {

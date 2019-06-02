@@ -1,7 +1,9 @@
 package de.fuzzlemann.ucutils.commands;
 
+import de.fuzzlemann.ucutils.utils.Logger;
 import de.fuzzlemann.ucutils.utils.command.Command;
 import de.fuzzlemann.ucutils.utils.command.CommandExecutor;
+import de.fuzzlemann.ucutils.utils.text.Message;
 import de.fuzzlemann.ucutils.utils.text.TextUtils;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.util.text.TextFormatting;
@@ -34,24 +36,29 @@ public class UpdateCommand implements CommandExecutor {
         }
 
         if (replace) {
-            p.sendMessage(TextUtils.simpleMessage("Du hast das Update abgebrochen.", TextFormatting.RED));
+            TextUtils.simplePrefixMessage("Das Update wurde abgebrochen.");
             replace = false;
 
             return true;
         }
 
-        p.sendMessage(TextUtils.simpleMessage("Lade die neue Version herunter...", TextFormatting.GREEN));
+        TextUtils.simplePrefixMessage("Die neue Version wird heruntergeladen...");
 
         try {
             downloadJar();
         } catch (IOException e) {
-            e.printStackTrace();
+            Logger.LOGGER.catching(e);
             TextUtils.error("Ein Fehler ist beim Herunterladen der neuen Version aufgetreten.");
             return true;
         }
 
-        p.sendMessage(TextUtils.simpleMessage("Die neue Version wurde erfolgreich heruntergeladen. Damit das Update abgeschlossen werden kann, musst du dein Minecraft neustarten.", TextFormatting.GREEN));
-
+        Message.builder()
+                .prefix()
+                .of("Die neue Version wurde erfolgreich heruntergeladen.").color(TextFormatting.GRAY).advance()
+                .newLine()
+                .info()
+                .of("Zum Abschließen des Updates musst du nun dein Minecraft neustarten.").color(TextFormatting.WHITE).advance()
+                .send();
         replace = true;
 
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
@@ -61,7 +68,7 @@ public class UpdateCommand implements CommandExecutor {
             try {
                 replaceJar();
             } catch (IOException e) {
-                e.printStackTrace();
+                Logger.LOGGER.catching(e);
             }
         }));
         return true;
@@ -86,9 +93,8 @@ public class UpdateCommand implements CommandExecutor {
                 "\ttimeout /T 1 > nul\n" +
                 "\n" +
                 "\t2>nul (\n" +
-                "\t  >>\"%to_file%\" echo off\n" +
+                "\t  move /Y \"%from_file%\" \"%to_file%\"\n" +
                 "\t) && (\n" +
-                "\t\tmove /Y \"%from_file%\" \"%to_file%\"\n" +
                 "\t\techo updated UCUtils\n" +
                 "\t\texit\n" +
                 "\t) || (\n" +
@@ -112,7 +118,7 @@ public class UpdateCommand implements CommandExecutor {
             proc.waitFor();
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
-            e.printStackTrace();
+            Logger.LOGGER.catching(e);
         }
     }
 }

@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 public class ASetBlacklistCommand implements CommandExecutor, TabCompletion {
 
     @Override
-    @Command(labels = {"asetblacklist", "asetbl"}, usage = "/%label% [Spieler(...)] [Grund]")
+    @Command(labels = {"asetblacklist", "asetbl"}, usage = "/%label% [Spieler...] [Grund]")
     public boolean onCommand(EntityPlayerSP p, String[] args) {
         if (args.length < 2) return false;
 
@@ -28,7 +28,6 @@ public class ASetBlacklistCommand implements CommandExecutor, TabCompletion {
         String reason = args[reasonIndex];
 
         BlacklistReason blacklistReason = BlacklistUtil.getBlacklistReason(reason);
-
         if (blacklistReason == null) {
             TextUtils.error("Der Blacklistgrund wurde nicht gefunden.");
             return true;
@@ -45,16 +44,9 @@ public class ASetBlacklistCommand implements CommandExecutor, TabCompletion {
     public List<String> getTabCompletions(EntityPlayerSP p, String[] args) {
         if (args.length != 2) return Collections.emptyList();
 
-        String reason = args[args.length - 1].toLowerCase();
-        List<String> blacklistReasons = BlacklistUtil.BLACKLIST_REASONS
+        return BlacklistUtil.BLACKLIST_REASONS
                 .stream()
                 .map(BlacklistReason::getReason)
-                .map(blacklistReason -> blacklistReason.replace(' ', '-'))
                 .collect(Collectors.toList());
-
-        if (reason.isEmpty()) return blacklistReasons;
-
-        blacklistReasons.removeIf(blacklistReason -> !blacklistReason.toLowerCase().startsWith(reason));
-        return blacklistReasons;
     }
 }

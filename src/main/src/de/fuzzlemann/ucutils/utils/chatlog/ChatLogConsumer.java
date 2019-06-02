@@ -1,5 +1,6 @@
 package de.fuzzlemann.ucutils.utils.chatlog;
 
+import de.fuzzlemann.ucutils.utils.Logger;
 import de.fuzzlemann.ucutils.utils.config.ConfigUtil;
 
 import java.util.concurrent.BlockingQueue;
@@ -27,7 +28,7 @@ class ChatLogConsumer {
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    Logger.LOGGER.catching(e);
                     Thread.currentThread().interrupt();
                 }
             }

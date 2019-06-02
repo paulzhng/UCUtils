@@ -1,6 +1,5 @@
 package de.fuzzlemann.ucutils.commands.teamspeak;
 
-import de.fuzzlemann.ucutils.Main;
 import de.fuzzlemann.ucutils.utils.command.Command;
 import de.fuzzlemann.ucutils.utils.command.CommandExecutor;
 import de.fuzzlemann.ucutils.utils.mcapi.MojangAPI;
@@ -8,7 +7,6 @@ import de.fuzzlemann.ucutils.utils.teamspeak.TSClientQuery;
 import de.fuzzlemann.ucutils.utils.teamspeak.TSUtils;
 import de.fuzzlemann.ucutils.utils.text.TextUtils;
 import net.minecraft.client.entity.EntityPlayerSP;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -24,18 +22,16 @@ import java.util.StringJoiner;
 public class MoveCommand implements CommandExecutor {
 
     @Override
-    @Command(labels = "move", usage = "/%label% [Spieler...] [Ziel]")
+    @Command(labels = "move", usage = "/%label% [Spieler...] [Ziel]", async = true)
     public boolean onCommand(EntityPlayerSP p, String[] args) {
         if (args.length < 2) return false;
 
-        new Thread(() -> {
-            List<String> moved = new ArrayList<>();
-            for (int i = 0; i < args.length - 1; i++) {
-                moved.addAll(MojangAPI.getEarlierNames(args[i]));
-            }
+        List<String> moved = new ArrayList<>();
+        for (int i = 0; i < args.length - 1; i++) {
+            moved.addAll(MojangAPI.getEarlierNames(args[i]));
+        }
 
-            move(moved, MojangAPI.getEarlierNames(args[args.length - 1]));
-        }).start();
+        move(moved, MojangAPI.getEarlierNames(args[args.length - 1]));
         return true;
     }
 
@@ -58,6 +54,6 @@ public class MoveCommand implements CommandExecutor {
 
         TSClientQuery.exec("clientmove cid=" + channelID + " " + stringJoiner);
 
-        Main.MINECRAFT.player.sendMessage(TextUtils.simpleMessage("Die Aktion wurde erfolgreich ausgeführt.", TextFormatting.GREEN));
+        TextUtils.simplePrefixMessage("Du hast die Personen gemoved.");
     }
 }

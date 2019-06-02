@@ -111,9 +111,9 @@ public class NotificationEventHandler {
     }
 
     private static void modifyFriendJoin(ITextComponent message, String friendName) {
-        Message.MessageBuilder builder = Message.builder();
-
-        builder.space().of("[☎]").color(TextFormatting.DARK_GREEN)
+        ITextComponent buttons = Message.builder()
+                .space()
+                .of("[☎]").color(TextFormatting.DARK_GREEN)
                 .hoverEvent(HoverEvent.Action.SHOW_TEXT, MessagePart.simpleMessagePart("Rufe " + friendName + " an", TextFormatting.DARK_GREEN))
                 .clickEvent(ClickEvent.Action.RUN_COMMAND, "/acall " + friendName).advance()
                 .space()
@@ -123,8 +123,9 @@ public class NotificationEventHandler {
                 .space()
                 .of("[✗]").color(TextFormatting.RED)
                 .hoverEvent(HoverEvent.Action.SHOW_TEXT, MessagePart.simpleMessagePart("Lösche " + friendName + " als Freund", TextFormatting.RED))
-                .clickEvent(ClickEvent.Action.RUN_COMMAND, "/friend delete " + friendName).advance();
+                .clickEvent(ClickEvent.Action.RUN_COMMAND, "/friend delete " + friendName).advance()
+                .build().toTextComponent();
 
-        message.appendSibling(builder.build().toTextComponent());
+        message.appendSibling(buttons);
     }
 }

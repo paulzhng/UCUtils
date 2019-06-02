@@ -20,13 +20,11 @@ public class CheckMedicalLicenseCommand implements CommandExecutor {
         String playerName = args[0];
         boolean hasMedicalLicense = MedicalLicenseHandler.hasMedicalLicense(playerName);
 
-        Message.MessageBuilder builder = Message.builder();
-
-        builder.of(playerName + " besitzt ").color(TextFormatting.AQUA).advance()
-                .of(hasMedicalLicense ? "eine" : "keine").color(hasMedicalLicense ? TextFormatting.GREEN : TextFormatting.RED).advance()
-                .of(" medizinische Marihuanalizenz.").color(TextFormatting.AQUA).advance();
-
-        p.sendMessage(builder.build().toTextComponent());
+        Message.builder()
+                .prefix()
+                .of(playerName).color(TextFormatting.BLUE).advance()
+                .of(" besitzt " + (hasMedicalLicense ? "eine" : "kein") + " medizinische Marihuanalizenz.").color(TextFormatting.GRAY).advance()
+                .send();
         return true;
     }
 }

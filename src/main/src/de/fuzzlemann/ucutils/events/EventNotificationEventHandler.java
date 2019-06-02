@@ -3,7 +3,7 @@ package de.fuzzlemann.ucutils.events;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import de.fuzzlemann.ucutils.Main;
+import de.fuzzlemann.ucutils.utils.Logger;
 import de.fuzzlemann.ucutils.utils.api.APIUtils;
 import de.fuzzlemann.ucutils.utils.config.ConfigUtil;
 import de.fuzzlemann.ucutils.utils.text.Message;
@@ -45,9 +45,9 @@ public class EventNotificationEventHandler {
                     builder.of(" | Kommentar: " + comment).advance();
                 }
 
-                Main.MINECRAFT.player.sendMessage(builder.build().toTextComponent());
+                builder.send();
             } catch (Exception exc) {
-                exc.printStackTrace();
+                Logger.LOGGER.catching(exc);
             }
         }).start();
     }

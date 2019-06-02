@@ -12,7 +12,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * @author Fuzzlemann
@@ -21,7 +20,7 @@ import java.util.stream.Collectors;
 public class ASUCommand implements CommandExecutor, TabCompletion {
 
     @Override
-    @Command(labels = "asu", usage = "/%label% [Spieler(...)] [Grund] (Variation) (-v/-b/-fsa)")
+    @Command(labels = "asu", usage = "/%label% [Spieler...] [Grund] (Variation) (-v/-b/-fsa)")
     public boolean onCommand(EntityPlayerSP p, String[] args) {
         if (args.length < 2) return false;
 
@@ -29,7 +28,6 @@ public class ASUCommand implements CommandExecutor, TabCompletion {
         int variationIndex = args.length - 1 - flags.size();
 
         int variation = 0;
-
         try {
             variation = Integer.parseInt(args[variationIndex]);
         } catch (NumberFormatException e) {
@@ -66,8 +64,7 @@ public class ASUCommand implements CommandExecutor, TabCompletion {
     }
 
     private void giveWanteds(EntityPlayerSP issuer, String reason, int amount, List<String> players) {
-        if (amount > 69)
-            amount = 69;
+        amount = Math.min(amount, 69);
 
         for (String player : players) {
             issuer.sendChatMessage("/su " + amount + " " + player + " " + reason);
@@ -78,16 +75,7 @@ public class ASUCommand implements CommandExecutor, TabCompletion {
     public List<String> getTabCompletions(EntityPlayerSP p, String[] args) {
         if (args.length != 2) return Collections.emptyList();
 
-        String reason = args[args.length - 1].toLowerCase();
-        List<String> wantedReasons = WantedManager.getWantedReasons()
-                .stream()
-                .map(wantedReason -> wantedReason.replace(' ', '-'))
-                .collect(Collectors.toList());
-
-        if (reason.isEmpty()) return wantedReasons;
-
-        wantedReasons.removeIf(wantedReason -> !wantedReason.toLowerCase().startsWith(reason));
-        return wantedReasons;
+        return WantedManager.getWantedReasons();
     }
 
     private Set<Flag> getFlags(String[] args) {

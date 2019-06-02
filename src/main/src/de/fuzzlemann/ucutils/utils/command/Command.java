@@ -29,7 +29,7 @@ public @interface Command {
     String usage() default "/%label%";
 
     /**
-     * Shows if this command is destined to only be used for management purposes
+     * Shows if this command is destined to only be used for management purposes.
      * <p>
      * <b>if false:</b> normal command behavior
      * <p>
@@ -38,4 +38,14 @@ public @interface Command {
      * @return if the command is a management one
      */
     boolean management() default false;
+
+    /**
+     * Shows if the command should be executed in a separate {@link Thread}.
+     * <b>if false:</b> normal command behavior
+     * <p>
+     * <b>if true:</b>  command is executed in a separate {@link Thread}
+     *
+     * @return if the command should be executed asynchronously
+     */
+    boolean async() default false;
 }

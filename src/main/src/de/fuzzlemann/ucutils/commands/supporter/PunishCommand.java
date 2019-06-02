@@ -10,7 +10,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * @author Fuzzlemann
@@ -50,14 +49,6 @@ public class PunishCommand implements CommandExecutor, TabCompletion {
     public List<String> getTabCompletions(EntityPlayerSP p, String[] args) {
         if (args.length == 1) return Collections.emptyList();
 
-        String input = args[args.length - 1].toLowerCase();
-        List<String> violationReasons = PunishManager.getViolations().stream()
-                .map(violation -> violation.replace(' ', '-'))
-                .collect(Collectors.toList());
-
-        if (input.isEmpty()) return violationReasons;
-
-        violationReasons.removeIf(violationReason -> !violationReason.toLowerCase().startsWith(input));
-        return violationReasons;
+        return PunishManager.getViolations();
     }
 }

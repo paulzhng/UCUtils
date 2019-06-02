@@ -1,52 +1,42 @@
 package de.fuzzlemann.ucutils.utils.cape;
 
-import com.google.common.collect.ImmutableSet;
 import de.fuzzlemann.ucutils.Main;
+import de.fuzzlemann.ucutils.utils.api.APIUtils;
+import de.fuzzlemann.ucutils.utils.data.DataLoader;
+import de.fuzzlemann.ucutils.utils.data.DataModule;
 import net.minecraft.client.renderer.IImageBuffer;
 import net.minecraft.client.renderer.ThreadDownloadImageData;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.Mod;
-import org.apache.commons.io.IOUtils;
 
 import javax.annotation.Nonnull;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * @author Fuzzlemann
  */
 @Mod.EventBusSubscriber
-public class CapeUtil {
+@DataModule("Cape")
+public class CapeUtil implements DataLoader {
 
-    private static final Set<Class<? extends ICapeInitializor>> CAPE_INITIALIZORS = ImmutableSet.of(LabyModCapeInitializor.class, DefaultCapeInitializor.class);
     private static final Map<String, ResourceLocation> CAPE_TYPES = new HashMap<>();
     private static final Map<String, String> CAPES = new HashMap<>();
 
-    public static void init() {
-        for (Class<? extends ICapeInitializor> capeInitializor : CAPE_INITIALIZORS) {
-            System.out.println("Trying to load " + capeInitializor.getName() + " as cape initializor...");
+    static ResourceLocation getCape(String uuid) {
+        String capeType = CAPES.get(uuid);
+        if (capeType == null) return null;
 
-            try {
-                capeInitializor.newInstance().init();
-                System.out.println("Initialized " + capeInitializor.getName() + " as cape initializor.");
-                break;
-            } catch (Exception | NoClassDefFoundError e) {
-                System.out.println("Couldn't load " + capeInitializor.getName() + " as cape initializor.");
-            }
-        }
+        return CAPE_TYPES.get(capeType);
     }
 
-    public static void loadCapes() throws IOException {
+    @Override
+    public void load() {
         CAPES.clear();
         CAPE_TYPES.clear();
 
-        URL url = new URL("http://tomcat.fuzzlemann.de/factiononline/capes");
-        String result = IOUtils.toString(url, StandardCharsets.UTF_8);
+        String result = APIUtils.get("http://tomcat.fuzzlemann.de/factiononline/capes");
 
         for (String entry : result.split("\\|")) {
             String[] splittedEntry = entry.split(":");
@@ -73,6 +63,7 @@ public class CapeUtil {
             };
 
             String capeURL = "http://fuzzlemann.de/capes/" + capeType + ".png";
+            //noinspection ConstantConditions
             ThreadDownloadImageData capeTexture = new ThreadDownloadImageData(null, capeURL, null, imageBuffer);
             ResourceLocation resourceLocation = new ResourceLocation("cape/" + capeType);
             Main.MINECRAFT.getTextureManager().deleteTexture(resourceLocation);
@@ -80,13 +71,5 @@ public class CapeUtil {
 
             CAPE_TYPES.put(capeType, resourceLocation);
         }
-
-    }
-
-    static ResourceLocation getCape(String uuid) {
-        String capeType = CAPES.get(uuid);
-        if (capeType == null) return null;
-
-        return CAPE_TYPES.get(capeType);
     }
 }

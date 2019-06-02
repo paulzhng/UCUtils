@@ -2,6 +2,7 @@ package de.fuzzlemann.ucutils.commands.todo;
 
 import de.fuzzlemann.ucutils.utils.command.Command;
 import de.fuzzlemann.ucutils.utils.command.CommandExecutor;
+import de.fuzzlemann.ucutils.utils.text.Message;
 import de.fuzzlemann.ucutils.utils.text.TextUtils;
 import de.fuzzlemann.ucutils.utils.todo.ToDo;
 import de.fuzzlemann.ucutils.utils.todo.ToDoManager;
@@ -39,7 +40,12 @@ public class ModifyToDoCommand implements CommandExecutor {
         toDo.setMessage(message);
         toDo.save();
 
-        p.sendMessage(TextUtils.simpleMessage("Du hast die ToDo-Nachricht geändert.", TextFormatting.AQUA));
+        Message.builder()
+                .prefix()
+                .of("Du hast die Nachricht der ToDo auf \"").color(TextFormatting.GRAY).advance()
+                .of(message).color(TextFormatting.BLUE).advance()
+                .of("\" geändert.").color(TextFormatting.GRAY).advance()
+                .send();
         return true;
     }
 }

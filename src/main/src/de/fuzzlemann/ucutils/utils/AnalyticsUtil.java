@@ -47,7 +47,7 @@ public class AnalyticsUtil {
                 return UUID.fromString((String) JsonManager.loadObject(ANALYTICS_STORAGE_FILE, String.class)).toString();
             } catch (Exception e) {
                 if (ANALYTICS_STORAGE_FILE.delete()) {
-                    System.out.println("[UCUtils] " + ANALYTICS_STORAGE_FILE.getAbsoluteFile() + " deleted");
+                    Logger.LOGGER.info("[UCUtils] " + ANALYTICS_STORAGE_FILE.getAbsoluteFile() + " deleted");
                     return getAnalyticsID();
                 }
             }

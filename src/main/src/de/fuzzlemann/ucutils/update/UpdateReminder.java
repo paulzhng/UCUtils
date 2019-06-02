@@ -1,6 +1,9 @@
 package de.fuzzlemann.ucutils.update;
 
 import de.fuzzlemann.ucutils.Main;
+import de.fuzzlemann.ucutils.utils.data.DataLoader;
+import de.fuzzlemann.ucutils.utils.api.APIUtils;
+import de.fuzzlemann.ucutils.utils.data.DataModule;
 import de.fuzzlemann.ucutils.utils.text.Message;
 import de.fuzzlemann.ucutils.utils.text.MessagePart;
 import net.minecraft.util.text.TextFormatting;
@@ -12,19 +15,15 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.apache.commons.io.IOUtils;
-
-import java.io.IOException;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
 
 /**
  * @author Fuzzlemann
  */
 @Mod.EventBusSubscriber
 @SideOnly(Side.CLIENT)
-public class UpdateReminder {
-    public static boolean updateNeeded;
+@DataModule("Update-Reminder")
+public class UpdateReminder implements DataLoader {
+    private static boolean updateNeeded;
     private static boolean connected;
 
     @SubscribeEvent
@@ -39,7 +38,7 @@ public class UpdateReminder {
 
         if (!updateNeeded) return;
 
-        Message message = Message.builder()
+        Message.builder()
                 .of("Es ist ein neues Update von UCUtils verfügbar!").color(TextFormatting.RED).advance()
                 .newLine()
                 .of("Du kannst das Update ").color(TextFormatting.RED).advance()
@@ -50,26 +49,24 @@ public class UpdateReminder {
                 .of("/updateucutils").color(TextFormatting.RED)
                 .hoverEvent(HoverEvent.Action.SHOW_TEXT, MessagePart.simpleMessagePart("Ausführen", TextFormatting.GREEN))
                 .clickEvent(ClickEvent.Action.RUN_COMMAND, "/updateucutils").advance()
-                .of("direkt updaten.").color(TextFormatting.RED).advance().build();
-
-        Main.MINECRAFT.player.sendMessage(message.toTextComponent());
+                .of("direkt updaten.").color(TextFormatting.RED).advance()
+                .send();
     }
 
-    public static void updateUpdateNeeded() throws IOException {
+    @Override
+    public void load() {
         updateNeeded = getCurrentVersion() < getLatestVersion();
     }
 
-    private static int getCurrentVersion() {
+    private int getCurrentVersion() {
         return parseVersion(Main.VERSION);
     }
 
-    private static int getLatestVersion() throws IOException {
-        URL url = new URL("http://fuzzlemann.de/latestversion.html");
-        String result = IOUtils.toString(url, StandardCharsets.UTF_8);
-        return parseVersion(result);
+    private int getLatestVersion() {
+        return parseVersion(APIUtils.get("http://fuzzlemann.de/latestversion.html"));
     }
 
-    private static int parseVersion(String versionString) {
+    private int parseVersion(String versionString) {
         return Integer.parseInt(versionString.split("-")[1].replace(".", ""));
     }
 }

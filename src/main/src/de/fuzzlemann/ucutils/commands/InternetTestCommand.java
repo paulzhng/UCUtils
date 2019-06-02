@@ -1,8 +1,10 @@
 package de.fuzzlemann.ucutils.commands;
 
+import de.fuzzlemann.ucutils.utils.Logger;
 import de.fuzzlemann.ucutils.utils.command.Command;
 import de.fuzzlemann.ucutils.utils.command.CommandExecutor;
 import de.fuzzlemann.ucutils.utils.text.Message;
+import de.fuzzlemann.ucutils.utils.text.TextUtils;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.relauncher.Side;
@@ -24,31 +26,29 @@ public class InternetTestCommand implements CommandExecutor {
     private final List<String> hosts = Arrays.asList("unicacity.de", "fuzzlemann.de", "google.de");
 
     @Override
-    @Command(labels = {"internettest", "inettest"})
+    @Command(labels = {"internettest", "inettest"}, async = true)
     public boolean onCommand(EntityPlayerSP p, String[] args) {
-        new Thread(() -> {
-            Message.MessageBuilder builder = Message.builder();
+        Message.MessageBuilder builder = Message.builder();
 
-            for (int i = 0; i < hosts.size(); i++) {
-                String host = hosts.get(i);
-                String result;
-                try {
-                    result = ping(host);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    return;
-                }
-
-                TextFormatting color = result.equals("Nicht erreichbar") ? TextFormatting.RED : TextFormatting.GOLD;
-
-                builder.of("Ping zu " + host + ": ").color(TextFormatting.AQUA).advance()
-                        .of(result).color(color).advance();
-
-                if (i != hosts.size() - 1) builder.newLine();
+        for (int i = 0; i < hosts.size(); i++) {
+            String host = hosts.get(i);
+            String result;
+            try {
+                result = ping(host);
+            } catch (IOException e) {
+                Logger.LOGGER.catching(e);
+                TextUtils.error("Es ist ein Fehler beim Testen vom Ping aufgetreten.");
+                return true;
             }
 
-            p.sendMessage(builder.build().toTextComponent());
-        }).start();
+            builder.of(host).color(TextFormatting.DARK_AQUA).advance()
+                    .of("> ").color(TextFormatting.DARK_GRAY).advance()
+                    .of(result).color(TextFormatting.BLUE).advance();
+
+            if (i != hosts.size() - 1) builder.newLine();
+        }
+
+        builder.send();
         return true;
     }
 

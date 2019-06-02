@@ -32,18 +32,18 @@ public class ToDoListCommand implements CommandExecutor {
         List<ToDo> toDoList = ToDoManager.getToDoList();
 
         if (toDoList.isEmpty()) {
-            p.sendMessage(TextUtils.simpleMessage("Du hast derzeit keine ToDo-Einträge.", TextFormatting.GREEN));
+            TextUtils.simplePrefixMessage("Deine ToDo-Liste ist derzeit leer.");
             return true;
         }
 
         Message.MessageBuilder builder = Message.builder();
 
-        builder.of("»").color(TextFormatting.GOLD).advance()
-                .of(" ToDos\n").color(TextFormatting.DARK_PURPLE).advance();
+        builder.of("» ").color(TextFormatting.DARK_GRAY).advance()
+                .of("ToDos\n").color(TextFormatting.DARK_AQUA).advance();
 
         for (ToDo toDo : toDoList) {
             builder.space().space()
-                    .of("*").color(TextFormatting.GRAY)
+                    .of("*").color(TextFormatting.DARK_GRAY)
                     .hoverEvent(HoverEvent.Action.SHOW_TEXT, MessagePart.simpleMessagePart("Erstellt am " + dateFormat.format(new Date(toDo.getCreated())), TextFormatting.GRAY)).advance()
                     .space()
                     .of(toDo.getMessage()).color(toDo.isDone() ? TextFormatting.GREEN : TextFormatting.RED)
@@ -53,20 +53,20 @@ public class ToDoListCommand implements CommandExecutor {
             if (!toDo.isDone()) {
                 builder.of("[✓]").color(TextFormatting.GREEN)
                         .hoverEvent(HoverEvent.Action.SHOW_TEXT, MessagePart.simpleMessagePart("Markiere den Eintrag als erledigt", TextFormatting.GREEN))
-                        .clickEvent(ClickEvent.Action.RUN_COMMAND, "/donetodo " + toDo.getId()).advance()
+                        .clickEvent(ClickEvent.Action.RUN_COMMAND, "/donetodo " + toDo.getID()).advance()
                         .space();
             }
 
             builder.of("[✗]").color(TextFormatting.RED)
                     .hoverEvent(HoverEvent.Action.SHOW_TEXT, MessagePart.simpleMessagePart("Lösche den Eintrag", TextFormatting.RED))
-                    .clickEvent(ClickEvent.Action.RUN_COMMAND, "/removetodo " + toDo.getId()).advance()
+                    .clickEvent(ClickEvent.Action.RUN_COMMAND, "/removetodo " + toDo.getID()).advance()
                     .space()
                     .of("[␈]\n").color(TextFormatting.DARK_GRAY)
                     .hoverEvent(HoverEvent.Action.SHOW_TEXT, MessagePart.simpleMessagePart("Verändere den Eintrag", TextFormatting.DARK_GRAY))
-                    .clickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/modifytodo " + toDo.getId() + " " + toDo.getMessage()).advance();
+                    .clickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/modifytodo " + toDo.getID() + " " + toDo.getMessage()).advance();
         }
 
-        p.sendMessage(builder.build().toTextComponent());
+        builder.send();
         return true;
     }
 }

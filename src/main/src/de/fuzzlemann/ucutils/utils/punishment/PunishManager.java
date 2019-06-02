@@ -1,14 +1,13 @@
 package de.fuzzlemann.ucutils.utils.punishment;
 
 import com.google.gson.Gson;
+import de.fuzzlemann.ucutils.utils.data.DataLoader;
+import de.fuzzlemann.ucutils.utils.api.APIUtils;
+import de.fuzzlemann.ucutils.utils.data.DataModule;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.apache.commons.io.IOUtils;
 
-import java.io.IOException;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -18,23 +17,10 @@ import java.util.stream.Collectors;
  */
 @SideOnly(Side.CLIENT)
 @Mod.EventBusSubscriber
-public class PunishManager {
+@DataModule("Violations")
+public class PunishManager implements DataLoader {
 
     private static final List<Violation> VIOLATIONS = new ArrayList<>();
-
-    public static void fillViolationList() throws IOException {
-        VIOLATIONS.clear();
-
-        URL url = new URL("http://fuzzlemann.de/violations.html");
-        String result = IOUtils.toString(url, StandardCharsets.UTF_8);
-
-        String[] jsonList = result.split("\n");
-
-        Gson gson = new Gson();
-        for (String json : jsonList) {
-            VIOLATIONS.add(gson.fromJson(json, Violation.class));
-        }
-    }
 
     public static List<String> getViolations() {
         return VIOLATIONS.stream()
@@ -47,5 +33,18 @@ public class PunishManager {
                 .filter(violation -> violation.getReason().equalsIgnoreCase(reason))
                 .findFirst()
                 .orElse(null);
+    }
+
+    @Override
+    public void load() {
+        VIOLATIONS.clear();
+
+        String result = APIUtils.get("http://fuzzlemann.de/violations.html");
+        String[] jsonList = result.split("\n");
+
+        Gson gson = new Gson();
+        for (String json : jsonList) {
+            VIOLATIONS.add(gson.fromJson(json, Violation.class));
+        }
     }
 }

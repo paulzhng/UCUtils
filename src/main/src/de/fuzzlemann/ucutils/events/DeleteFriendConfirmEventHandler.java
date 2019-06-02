@@ -1,6 +1,5 @@
 package de.fuzzlemann.ucutils.events;
 
-import de.fuzzlemann.ucutils.Main;
 import de.fuzzlemann.ucutils.utils.text.Message;
 import de.fuzzlemann.ucutils.utils.text.MessagePart;
 import net.minecraft.util.text.TextFormatting;
@@ -40,9 +39,7 @@ public class DeleteFriendConfirmEventHandler {
 
         List<MessagePart> prefixComponents = prefixBuilder.build().getMessageParts();
 
-        Message.MessageBuilder builder = Message.builder();
-
-        builder.messageParts(prefixComponents)
+        Message.builder().messageParts(prefixComponents)
                 .of(" Bestätige, dass du die Freundschaft mit " + name + " beenden willst.\n").color(TextFormatting.GOLD).advance()
                 .messageParts(prefixComponents)
                 .space()
@@ -50,9 +47,8 @@ public class DeleteFriendConfirmEventHandler {
                 .of("Bestätigen").color(TextFormatting.GREEN)
                 .clickEvent(ClickEvent.Action.RUN_COMMAND, "/friend delete " + name + " confirm")
                 .hoverEvent(HoverEvent.Action.SHOW_TEXT, Message.builder().of("Bestätigen").color(TextFormatting.GREEN).build()).advance()
-                .of("]").color(TextFormatting.GRAY).advance();
-
-        Main.MINECRAFT.player.sendMessage(builder.build().toTextComponent());
+                .of("]").color(TextFormatting.GRAY).advance()
+                .send();
 
         e.setCanceled(true);
     }

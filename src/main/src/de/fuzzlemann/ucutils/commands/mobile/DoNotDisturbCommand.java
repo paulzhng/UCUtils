@@ -4,8 +4,6 @@ import de.fuzzlemann.ucutils.utils.command.Command;
 import de.fuzzlemann.ucutils.utils.command.CommandExecutor;
 import de.fuzzlemann.ucutils.utils.text.TextUtils;
 import net.minecraft.client.entity.EntityPlayerSP;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.client.event.sound.SoundEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -26,11 +24,11 @@ public class DoNotDisturbCommand implements CommandExecutor {
     public boolean onCommand(EntityPlayerSP p, String[] args) {
         doNotDisturb = !doNotDisturb;
 
-        ITextComponent text = doNotDisturb
-                ? TextUtils.simpleMessage("Du hast den Ton deines Handys ausgeschalten.", TextFormatting.RED)
-                : TextUtils.simpleMessage("Du hast den Ton deines Handys eingeschalten.", TextFormatting.GREEN);
-
-        p.sendMessage(text);
+        if (doNotDisturb) {
+            TextUtils.simplePrefixMessage("Du hast den Ton deines Handys ausgeschalten.");
+        } else {
+            TextUtils.simplePrefixMessage("Du hast den Ton deines Handys eingeschalten.");
+        }
         return true;
     }
 

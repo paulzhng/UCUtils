@@ -45,7 +45,7 @@ public enum ATM {
         this.z = z;
     }
 
-    public int getId() {
+    public int getID() {
         return id;
     }
 

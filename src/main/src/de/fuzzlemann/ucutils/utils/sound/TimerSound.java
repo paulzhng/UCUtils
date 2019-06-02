@@ -17,17 +17,20 @@ public class TimerSound extends MovingSound {
 
     public void stop() {
         this.donePlaying = true;
-
-        this.xPosF = 0;
-        this.yPosF = 0;
-        this.zPosF = 0;
-
-        this.volume = 0;
     }
 
     @Override
     public void update() {
-        if (donePlaying) return;
+        if (donePlaying) {
+            Main.MINECRAFT.getSoundHandler().stopSound(this);
+
+            this.xPosF = 0;
+            this.yPosF = 0;
+            this.zPosF = 0;
+
+            this.volume = 0;
+            return;
+        }
 
         Vec3d vec = Main.MINECRAFT.player.getEntityBoundingBox().getCenter();
 

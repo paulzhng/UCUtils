@@ -13,7 +13,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,14 +29,14 @@ public class DrugPriceCommand implements CommandExecutor, TabCompletion {
 
         switch (args[0].toLowerCase()) {
             case "list":
-                sendDrugPrices(p);
+                sendDrugPrices();
                 break;
             case "setprice":
                 if (args.length < 3) return false;
 
                 Drug drug = DrugUtil.getDrug(args[1]);
                 if (drug == null) {
-                    p.sendMessage(TextUtils.simpleMessage("Die Droge wurde nicht gefunden.", TextFormatting.RED));
+                    TextUtils.error("Die Droge wurde nicht gefunden.");
                     return true;
                 }
 
@@ -51,11 +50,14 @@ public class DrugPriceCommand implements CommandExecutor, TabCompletion {
                 drug.setPrice(price);
                 DrugUtil.savePrices();
 
-                p.sendMessage(Message.builder().of("Du hast den Preis von ").color(TextFormatting.AQUA).advance()
-                        .of(drug.getName()).color(TextFormatting.RED).advance()
-                        .of(" zu ").color(TextFormatting.AQUA).advance()
-                        .of(price + "$ ").color(TextFormatting.RED).advance()
-                        .of("geändert.").color(TextFormatting.AQUA).advance().build().toTextComponent());
+                Message.builder()
+                        .prefix()
+                        .of("Du hast den Preis von ").color(TextFormatting.GRAY).advance()
+                        .of(drug.getName()).color(TextFormatting.BLUE).advance()
+                        .of(" zu ").color(TextFormatting.GRAY).advance()
+                        .of(price + "$").color(TextFormatting.BLUE).advance()
+                        .of(" geändert.").color(TextFormatting.GRAY).advance()
+                        .send();
                 break;
             default:
                 return false;
@@ -67,30 +69,25 @@ public class DrugPriceCommand implements CommandExecutor, TabCompletion {
     @Override
     public List<String> getTabCompletions(EntityPlayerSP p, String[] args) {
         if (args.length != 2) return Arrays.asList("setprice", "list");
-        if (!args[0].equalsIgnoreCase("setprice")) return Collections.emptyList();
+        if (!args[0].equalsIgnoreCase("setprice")) return null;
 
-        String drug = args[args.length - 1].toLowerCase();
-        List<String> drugNames = DrugUtil.DRUGS
+        return DrugUtil.DRUGS
                 .stream()
                 .map(Drug::getName)
                 .collect(Collectors.toList());
-
-        if (drug.isEmpty()) return drugNames;
-
-        drugNames.removeIf(drugName -> !drugName.toLowerCase().startsWith(drug));
-        return drugNames;
     }
 
-    private void sendDrugPrices(EntityPlayerSP p) {
+    private void sendDrugPrices() {
         Message.MessageBuilder builder = Message.builder();
 
-        builder.of("» ").color(TextFormatting.GOLD).advance().of("Eingestellte Drogenpreise\n").color(TextFormatting.DARK_PURPLE).advance();
+        builder.of("» ").color(TextFormatting.DARK_GRAY).advance()
+                .of("Eingestellte Drogenpreise\n").color(TextFormatting.DARK_AQUA).advance();
         for (Drug drug : DrugUtil.DRUGS) {
-            builder.of("  * " + drug.getName()).color(TextFormatting.GRAY).advance()
-                    .of(": ").color(TextFormatting.DARK_GRAY).advance()
-                    .of(drug.getPrice() + "$\n").color(TextFormatting.RED).advance();
+            builder.of("  * ").color(TextFormatting.DARK_GRAY).advance()
+                    .of(drug.getName() + ": ").color(TextFormatting.GRAY).advance()
+                    .of(drug.getPrice() + "$\n").color(TextFormatting.BLUE).advance();
         }
 
-        p.sendMessage(builder.build().toTextComponent());
+        builder.send();
     }
 }

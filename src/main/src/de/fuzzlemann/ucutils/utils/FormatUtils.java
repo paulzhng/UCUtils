@@ -1,12 +1,37 @@
 package de.fuzzlemann.ucutils.utils;
 
+import de.fuzzlemann.ucutils.utils.text.Message;
+import de.fuzzlemann.ucutils.utils.text.MessagePart;
+import net.minecraft.util.text.TextFormatting;
+
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author Fuzzlemann
  */
 public class FormatUtils {
 
-    public static String formatMilliseconds(long ms) {
-        StringBuilder sb = new StringBuilder();
+    public static List<MessagePart> formatMillisecondsToMessage(long ms) {
+        List<String> timeElements = getTimeElements(ms);
+
+        Message.MessageBuilder builder = Message.builder();
+        for (int i = 0; i < timeElements.size(); i++) {
+            String timeElement = timeElements.get(i);
+            builder.of(timeElement).color(TextFormatting.BLUE).advance();
+
+            if (i == timeElements.size() - 1) continue;
+            if (i == timeElements.size() - 2) {
+                builder.of(" und ").color(TextFormatting.GRAY).advance();
+            } else {
+                builder.of(", ").color(TextFormatting.GRAY).advance();
+            }
+        }
+
+        return builder.build().getMessageParts();
+    }
+
+    private static List<String> getTimeElements(long ms) {
         long milliseconds = ms % 1000;
         ms /= 1000;
         long seconds = ms % 60;
@@ -15,30 +40,25 @@ public class FormatUtils {
         ms /= 60;
         long hours = ms % 24;
 
-        if (hours != 0) {
-            sb.append(hours).append(hours == 1 ? " Stunde" : " Stunden");
+        List<String> timeElements = new ArrayList<>();
 
-            if (minutes != 0 || seconds != 0 || milliseconds != 0)
-                sb.append(" ");
+        if (hours != 0) {
+            timeElements.add(hours + (hours == 1 ? " Stunde" : " Stunden"));
         }
 
         if (minutes != 0) {
-            sb.append(minutes).append(minutes == 1 ? " Minute" : " Minuten");
-            if (seconds != 0 || milliseconds != 0)
-                sb.append(" ");
+            timeElements.add(minutes + (minutes == 1 ? " Minute" : " Minuten"));
         }
 
         if (seconds != 0) {
-            sb.append(seconds).append(seconds == 1 ? " Sekunde" : " Sekunden");
-            if (milliseconds != 0)
-                sb.append(" ");
+            timeElements.add(seconds + (seconds == 1 ? " Sekunde" : " Sekunden"));
         }
 
         if (milliseconds != 0) {
-            sb.append(milliseconds).append(milliseconds == 1 ? " Millisekunde" : " Millisekunden");
+            timeElements.add(milliseconds + (milliseconds == 1 ? " Millisekunde" : " Millisekunden"));
         }
 
-        return sb.toString();
+        return timeElements;
     }
 
     public static long toMilliseconds(String[] input) {

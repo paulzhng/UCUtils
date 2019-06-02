@@ -3,6 +3,9 @@ package de.fuzzlemann.ucutils.commands.mobile;
 import de.fuzzlemann.ucutils.utils.command.Command;
 import de.fuzzlemann.ucutils.utils.command.CommandExecutor;
 import de.fuzzlemann.ucutils.utils.mobile.MobileUtils;
+import de.fuzzlemann.ucutils.utils.text.Message;
+import de.fuzzlemann.ucutils.utils.text.MessagePart;
+import de.fuzzlemann.ucutils.utils.text.TextUtils;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
@@ -25,42 +28,29 @@ public class MobileBlockListCommand implements CommandExecutor {
         List<String> blocked = MobileUtils.getBlockedPlayers();
 
         if (blocked.isEmpty()) {
-            TextComponentString text = new TextComponentString("Du hast keinen Spieler blockiert.");
-            text.getStyle().setColor(TextFormatting.GREEN);
-
-            p.sendMessage(text);
+            TextUtils.simplePrefixMessage("Du hast bisher noch keinen Spieler blockiert.");
             return true;
         }
 
-        TextComponentString text = new TextComponentString("»");
-        text.getStyle().setColor(TextFormatting.GOLD);
+        Message.MessageBuilder builder = Message.builder();
 
-        TextComponentString textMid = new TextComponentString(" Geblockte Spieler\n");
-        textMid.getStyle().setColor(TextFormatting.DARK_PURPLE);
-        text.appendSibling(textMid);
+        builder.of("» ").color(TextFormatting.DARK_GRAY).advance()
+                .of("Blockierte Spieler\n").color(TextFormatting.DARK_AQUA).advance();
 
         TextComponentString unblockComponent = new TextComponentString("[✗]\n");
         unblockComponent.getStyle().setColor(TextFormatting.RED);
 
         for (String blockedPlayer : blocked) {
-            TextComponentString blockedComponent = new TextComponentString("  * " + blockedPlayer + " ");
-            blockedComponent.getStyle().setColor(TextFormatting.GRAY);
-
-            TextComponentString hoverText = new TextComponentString(blockedPlayer + " entblocken");
-            hoverText.getStyle().setColor(TextFormatting.GREEN);
-
-            TextComponentString copiedUnblockComponent = unblockComponent.createCopy();
-
-            HoverEvent hoverEvent = new HoverEvent(HoverEvent.Action.SHOW_TEXT, hoverText);
-            copiedUnblockComponent.getStyle().setHoverEvent(hoverEvent);
-
-            ClickEvent clickEvent = new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/mobileblock " + blockedPlayer);
-            copiedUnblockComponent.getStyle().setClickEvent(clickEvent);
-
-            text.appendSibling(blockedComponent).appendSibling(copiedUnblockComponent);
+            builder.of("  * ").color(TextFormatting.DARK_GRAY).advance()
+                    .of(blockedPlayer).color(TextFormatting.GRAY).advance()
+                    .space()
+                    .of("[✗]").color(TextFormatting.RED)
+                    .hoverEvent(HoverEvent.Action.SHOW_TEXT, MessagePart.simpleMessagePart(blockedPlayer + " entblocken", TextFormatting.RED))
+                    .clickEvent(ClickEvent.Action.RUN_COMMAND, "/mobileblock " + blockedPlayer).advance()
+                    .newLine();
         }
 
-        p.sendMessage(text);
+        builder.send();
         return true;
     }
 }

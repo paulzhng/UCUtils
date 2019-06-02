@@ -1,11 +1,14 @@
 package de.fuzzlemann.ucutils.utils;
 
+import com.google.common.collect.Maps;
 import de.fuzzlemann.ucutils.Main;
 import de.fuzzlemann.ucutils.utils.text.TextUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.scoreboard.ScorePlayerTeam;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3i;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.commons.lang3.SystemUtils;
@@ -20,6 +23,72 @@ import java.util.stream.Collectors;
  */
 @SideOnly(Side.CLIENT)
 public class ForgeUtils {
+
+    private static boolean labyMod;
+
+    static {
+        try {
+            Class.forName("net.labymod.main.LabyMod");
+            labyMod = true;
+        } catch (ClassNotFoundException e) {
+            labyMod = false;
+        }
+    }
+
+    public static boolean hasLabyMod() {
+        return labyMod;
+    }
+
+    public static <T> Map.Entry<Double, T> getNearestObject(T[] array, Function<T, BlockPos> blockPosFunction) {
+        return getNearestObject(Arrays.asList(array), blockPosFunction);
+    }
+
+    public static <T> Map.Entry<Double, T> getNearestObject(Iterable<T> iterable, Function<T, BlockPos> blockPosFunction) {
+        return getNearestObject(Main.MINECRAFT.player.getPosition(), iterable, blockPosFunction);
+    }
+
+    public static <T> Map.Entry<Double, T> getNearestObject(T[] array, Function<T, Integer> xFunction, Function<T, Integer> yFunction, Function<T, Integer> zFunction) {
+        return getNearestObject(Arrays.asList(array), xFunction, yFunction, zFunction);
+    }
+
+    public static <T> Map.Entry<Double, T> getNearestObject(Iterable<T> iterable, Function<T, Integer> xFunction, Function<T, Integer> yFunction, Function<T, Integer> zFunction) {
+        return getNearestObject(Main.MINECRAFT.player.getPosition(), iterable, xFunction, yFunction, zFunction);
+    }
+
+    public static <T> Map.Entry<Double, T> getNearestObject(BlockPos blockPos, T[] array, Function<T, BlockPos> blockPosFunction) {
+        return getNearestObject(blockPos, Arrays.asList(array), blockPosFunction);
+    }
+
+    public static <T> Map.Entry<Double, T> getNearestObject(BlockPos blockPos, Iterable<T> iterable, Function<T, BlockPos> blockPosFunction) {
+        Function<T, Integer> xFunction = blockPosFunction.andThen(Vec3i::getX);
+        Function<T, Integer> yFunction = blockPosFunction.andThen(Vec3i::getY);
+        Function<T, Integer> zFunction = blockPosFunction.andThen(Vec3i::getZ);
+
+        return getNearestObject(blockPos, iterable, xFunction, yFunction, zFunction);
+    }
+
+    public static <T> Map.Entry<Double, T> getNearestObject(BlockPos pos, T[] array, Function<T, Integer> xFunction, Function<T, Integer> yFunction, Function<T, Integer> zFunction) {
+        return getNearestObject(pos, Arrays.asList(array), xFunction, yFunction, zFunction);
+    }
+
+    public static <T> Map.Entry<Double, T> getNearestObject(BlockPos pos, Iterable<T> iterable, Function<T, Integer> xFunction, Function<T, Integer> yFunction, Function<T, Integer> zFunction) {
+        T foundT = null;
+        double nearestDistance = Double.MAX_VALUE;
+        for (T t : iterable) {
+            int x = xFunction.apply(t);
+            int y = yFunction.apply(t);
+            int z = zFunction.apply(t);
+
+            double distance = pos.getDistance(x, y, z);
+
+            if (distance < nearestDistance) {
+                nearestDistance = distance;
+                foundT = t;
+            }
+        }
+
+        return Maps.immutableEntry(nearestDistance, foundT);
+    }
 
     public static String getMostMatchingPlayer(String name) {
         return getMostMatching(ForgeUtils.getOnlinePlayers(), name);
@@ -108,8 +177,8 @@ public class ForgeUtils {
 
         try {
             Runtime.getRuntime().exec(shutdownCommand);
-        } catch (IOException e1) {
-            e1.printStackTrace();
+        } catch (IOException e) {
+            Logger.LOGGER.catching(e);
         }
     }
 }

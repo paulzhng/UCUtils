@@ -29,7 +29,6 @@ public class ADropTransportCommand implements CommandExecutor {
         if (started.get()) return true;
 
         Scoreboard scoreboard = p.getWorldScoreboard();
-
         Score score = scoreboard.getScores().stream()
                 .filter(scorePredicate -> {
                     String playerName = scorePredicate.getPlayerName();
@@ -40,7 +39,7 @@ public class ADropTransportCommand implements CommandExecutor {
                 .orElse(null);
 
         if (score == null) {
-            TextUtils.error("Du bist in keinem Transport");
+            TextUtils.error("Du bist derzeit in keinem Transport.");
             return true;
         }
 

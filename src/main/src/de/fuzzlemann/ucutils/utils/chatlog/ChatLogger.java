@@ -63,7 +63,7 @@ public class ChatLogger {
 
         for (File file : files) {
             if (!file.delete())
-                System.out.println("Temporary file " + file.getPath() + " couldn't be deleted!");
+                de.fuzzlemann.ucutils.utils.Logger.LOGGER.info("Temporary file " + file.getPath() + " couldn't be deleted!");
         }
     }
 
@@ -74,15 +74,15 @@ public class ChatLogger {
         try {
             File logFile = new File(directory, "chatlog-" + timeStamp + ".txt");
             if (directory.mkdirs())
-                System.out.println("ChatLog Directory created");
+                de.fuzzlemann.ucutils.utils.Logger.LOGGER.info("ChatLog Directory created");
 
             String path = logFile.getPath();
             if (logFile.createNewFile())
-                System.out.println("ChatLog " + path + " created");
+                de.fuzzlemann.ucutils.utils.Logger.LOGGER.info("ChatLog " + path + " created");
             fileHandler = new FileHandler(path);
         } catch (IOException e) {
             ConfigUtil.logChat = false;
-            e.printStackTrace();
+            de.fuzzlemann.ucutils.utils.Logger.LOGGER.catching(e);
             return null;
         }
 

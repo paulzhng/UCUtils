@@ -2,8 +2,8 @@ package de.fuzzlemann.ucutils.commands.location;
 
 import de.fuzzlemann.ucutils.utils.command.Command;
 import de.fuzzlemann.ucutils.utils.command.CommandExecutor;
+import de.fuzzlemann.ucutils.utils.text.Message;
 import net.minecraft.client.entity.EntityPlayerSP;
-import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -31,19 +31,18 @@ public class DistanceCommand implements CommandExecutor {
             return false;
         }
 
-        if (y == -1) {
-            y = (int) p.posY;
-        }
+        if (y == -1) y = (int) p.posY;
 
         int distance = (int) p.getPosition().getDistance(x, y, z);
 
-        TextComponentString text = new TextComponentString("Die Distanz zu der Position beträgt: ");
-        text.getStyle().setColor(TextFormatting.AQUA);
-
-        TextComponentString distanceComponent = new TextComponentString(distance + " Meter");
-        distanceComponent.getStyle().setColor(TextFormatting.RED);
-
-        p.sendMessage(text.appendSibling(distanceComponent));
+        Message.builder()
+                .prefix()
+                .of("Du bist ").color(TextFormatting.GRAY).advance()
+                .of(distance + " Meter").color(TextFormatting.BLUE).advance()
+                .of(" von den Koordinaten ").color(TextFormatting.GRAY).advance()
+                .of(x + "/" + y + "/" + z).color(TextFormatting.BLUE).advance()
+                .of(" entfernt.").color(TextFormatting.GRAY).advance()
+                .send();
         return true;
     }
 }

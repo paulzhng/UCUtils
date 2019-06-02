@@ -1,5 +1,8 @@
 package de.fuzzlemann.ucutils.utils.faction.badfaction.blacklist;
 
+import de.fuzzlemann.ucutils.utils.ForgeUtils;
+import de.fuzzlemann.ucutils.utils.data.DataLoader;
+import de.fuzzlemann.ucutils.utils.data.DataModule;
 import de.fuzzlemann.ucutils.utils.io.JsonManager;
 
 import java.io.File;
@@ -10,12 +13,29 @@ import java.util.stream.Collectors;
 /**
  * @author Fuzzlemann
  */
-public class BlacklistUtil {
+@DataModule(value = "Blacklist", local = true)
+public class BlacklistUtil implements DataLoader {
 
     public static final List<BlacklistReason> BLACKLIST_REASONS = new ArrayList<>();
     private static final File BLACKLIST_REASON_FILE = new File(JsonManager.DIRECTORY, "blacklistreasons.storage");
 
-    public static void loadBlacklistReasons() {
+    public static void savePrices() {
+        JsonManager.writeList(BLACKLIST_REASON_FILE, BLACKLIST_REASONS);
+    }
+
+    private static void addBlacklistReason(BlacklistReason BlacklistReason, List<BlacklistReason> BlacklistReasons) {
+        if (!BlacklistReasons.contains(BlacklistReason))
+            BlacklistReasons.add(BlacklistReason);
+    }
+
+    public static BlacklistReason getBlacklistReason(String reason) {
+        reason = reason.replace('-', ' ');
+
+        return ForgeUtils.getMostMatching(BLACKLIST_REASONS, reason, BlacklistReason::getReason);
+    }
+
+    @Override
+    public void load() {
         BLACKLIST_REASONS.clear();
 
         List<BlacklistReason> blacklistReasons = JsonManager.loadObjects(BLACKLIST_REASON_FILE, BlacklistReason.class)
@@ -34,23 +54,5 @@ public class BlacklistUtil {
         addBlacklistReason(new BlacklistReason("Fraktionsverrat"), blacklistReasons);
 
         BLACKLIST_REASONS.addAll(blacklistReasons);
-    }
-
-    public static void savePrices() {
-        JsonManager.writeList(BLACKLIST_REASON_FILE, BLACKLIST_REASONS);
-    }
-
-    private static void addBlacklistReason(BlacklistReason BlacklistReason, List<BlacklistReason> BlacklistReasons) {
-        if (!BlacklistReasons.contains(BlacklistReason))
-            BlacklistReasons.add(BlacklistReason);
-    }
-
-    public static BlacklistReason getBlacklistReason(String reason) {
-        String finalReason = reason.replace('-', ' ');
-
-        return BLACKLIST_REASONS.stream()
-                .filter(blacklistReason -> blacklistReason.getReason().equalsIgnoreCase(finalReason))
-                .findFirst()
-                .orElse(null);
     }
 }

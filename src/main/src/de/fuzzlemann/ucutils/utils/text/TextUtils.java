@@ -1,7 +1,5 @@
 package de.fuzzlemann.ucutils.utils.text;
 
-import de.fuzzlemann.ucutils.Main;
-import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -19,11 +17,19 @@ public class TextUtils {
     private static final Pattern STRIP_PREFIX_PATTERN = Pattern.compile("\\[[0-9A-Za-z]+]");
 
     public static void error(String message) {
-        Main.MINECRAFT.player.sendMessage(simpleMessage(message, TextFormatting.RED));
+        simplePrefixMessage(message, TextFormatting.RED);
     }
 
-    public static ITextComponent simpleMessage(String message, TextFormatting color) {
-        return Message.builder().of(message).color(color).advance().build().toTextComponent();
+    public static void simplePrefixMessage(String message) {
+        simplePrefixMessage(message, TextFormatting.GRAY);
+    }
+
+    public static void simplePrefixMessage(String message, TextFormatting color) {
+        Message.builder().prefix().of(message).color(color).advance().send();
+    }
+
+    public static void simpleMessage(String message, TextFormatting color) {
+        Message.builder().of(message).color(color).advance().send();
     }
 
     public static String stripColor(String string) {

@@ -2,6 +2,7 @@ package de.fuzzlemann.ucutils.utils.io;
 
 import com.google.gson.Gson;
 import de.fuzzlemann.ucutils.Main;
+import de.fuzzlemann.ucutils.utils.Logger;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
@@ -37,7 +38,7 @@ public class JsonManager {
         try {
             FileUtils.writeLines(file, StandardCharsets.UTF_8.toString(), jsonList);
         } catch (IOException e) {
-            e.printStackTrace();
+            Logger.LOGGER.catching(e);
         }
     }
 
@@ -55,7 +56,7 @@ public class JsonManager {
         try {
             FileUtils.write(file, gson.toJson(object), StandardCharsets.UTF_8);
         } catch (IOException e) {
-            e.printStackTrace();
+            Logger.LOGGER.catching(e);
         }
     }
 
@@ -80,7 +81,7 @@ public class JsonManager {
                 objectList.add(object);
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            Logger.LOGGER.catching(e);
         }
 
         return objectList;
@@ -102,7 +103,7 @@ public class JsonManager {
         try {
             line = FileUtils.lineIterator(file, StandardCharsets.UTF_8.toString()).nextLine();
         } catch (IOException e) {
-            e.printStackTrace();
+            Logger.LOGGER.catching(e);
         }
 
         return gson.fromJson(line, clazz);
@@ -110,12 +111,12 @@ public class JsonManager {
 
     private static void createFile(File file) {
         if (DIRECTORY.mkdir())
-            System.out.println("[UCUtils] " + DIRECTORY + " created");
+            Logger.LOGGER.info("[UCUtils] " + DIRECTORY + " created");
         try {
             if (file.createNewFile())
-                System.out.println("[UCUtils] " + file.getAbsoluteFile() + " created");
+                Logger.LOGGER.info("[UCUtils] " + file.getAbsoluteFile() + " created");
         } catch (IOException e) {
-            e.printStackTrace();
+            Logger.LOGGER.catching(e);
         }
     }
 }

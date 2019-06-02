@@ -5,7 +5,6 @@ import de.fuzzlemann.ucutils.utils.command.CommandExecutor;
 import de.fuzzlemann.ucutils.utils.text.Message;
 import de.fuzzlemann.ucutils.utils.todo.ToDo;
 import net.minecraft.client.entity.EntityPlayerSP;
-import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -26,12 +25,12 @@ public class AddToDoCommand implements CommandExecutor {
         ToDo toDo = new ToDo(message);
         toDo.add();
 
-        ITextComponent text = Message.builder()
-                .of("Du hast eine ToDo erstellt. ToDo: ").color(TextFormatting.AQUA).advance()
-                .of(message).color(TextFormatting.RED).advance()
-                .build().toTextComponent();
-
-        p.sendMessage(text);
+        Message.builder()
+                .prefix()
+                .of("Du hast ein Element deiner ToDo-Liste hinzugefügt: ").color(TextFormatting.GRAY).advance()
+                .of("\"" + message + "\"").color(TextFormatting.BLUE).advance()
+                .of(".").color(TextFormatting.GRAY).advance()
+                .send();
         return true;
     }
 }

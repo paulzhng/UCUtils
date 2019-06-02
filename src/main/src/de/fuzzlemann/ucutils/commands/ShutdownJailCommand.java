@@ -5,8 +5,6 @@ import de.fuzzlemann.ucutils.utils.command.Command;
 import de.fuzzlemann.ucutils.utils.command.CommandExecutor;
 import de.fuzzlemann.ucutils.utils.text.TextUtils;
 import net.minecraft.client.entity.EntityPlayerSP;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -35,11 +33,12 @@ public class ShutdownJailCommand implements CommandExecutor {
     public boolean onCommand(EntityPlayerSP p, String[] args) {
         shutdown = !shutdown;
 
-        ITextComponent text = shutdown
-                ? TextUtils.simpleMessage("Du hast den Shutdown eingeleitet: Wenn du aus dem Knast bist, wird dein PC heruntergefahren.", TextFormatting.RED)
-                : TextUtils.simpleMessage("Du hast den Shutdown abgebrochen", TextFormatting.GREEN);
+        if (shutdown) {
+            TextUtils.simplePrefixMessage("Der Jail-Shutdown wurde initiiert: Wenn du aus dem Gefängnis entlassen wurdest, wird dein Computer heruntergefahren.");
+        } else {
+            TextUtils.simplePrefixMessage("Der Jail-Shutdown wurde abgebrochen.");
+        }
 
-        p.sendMessage(text);
         return true;
     }
 }
