@@ -12,7 +12,7 @@ import net.minecraft.util.text.TextFormatting;
  */
 public class TestMessageCommand implements CommandExecutor {
     @Override
-    @Command(labels = "testmessage", management = true)
+    @Command(value = "testmessage", management = true)
     public boolean onCommand(EntityPlayerSP p, String[] args) {
         String message = String.join(" ", args);
 

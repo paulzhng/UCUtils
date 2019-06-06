@@ -30,7 +30,7 @@ public class SchwarzmarktLocationsCommand implements CommandExecutor {
     );
 
     @Override
-    @Command(labels = {"schwarzmarktlocations", "schwarzmarktlocs"})
+    @Command({"schwarzmarktlocations", "schwarzmarktlocs"})
     public boolean onCommand(EntityPlayerSP p, String[] args) {
         Message.MessageBuilder builder = Message.builder();
 

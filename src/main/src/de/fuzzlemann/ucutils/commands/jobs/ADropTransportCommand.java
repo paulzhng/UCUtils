@@ -24,7 +24,7 @@ public class ADropTransportCommand implements CommandExecutor {
     private final AtomicBoolean started = new AtomicBoolean();
 
     @Override
-    @Command(labels = "adroptransport")
+    @Command("adroptransport")
     public boolean onCommand(EntityPlayerSP p, String[] args) {
         if (started.get()) return true;
 

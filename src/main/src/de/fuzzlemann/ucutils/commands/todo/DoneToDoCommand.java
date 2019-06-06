@@ -16,17 +16,11 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class DoneToDoCommand implements CommandExecutor {
 
     @Override
-    @Command(labels = "donetodo", usage = "/%label% [ID]")
+    @Command(value = "donetodo", usage = "/%label% [ID]", sendUsageOn = NumberFormatException.class)
     public boolean onCommand(EntityPlayerSP p, String[] args) {
         if (args.length == 0) return false;
 
-        int id;
-        try {
-            id = Integer.parseInt(args[0]);
-        } catch (NumberFormatException e) {
-            return false;
-        }
-
+        int id = Integer.parseInt(args[0]);
         ToDo toDo = ToDoManager.getToDo(id);
 
         if (toDo == null) {

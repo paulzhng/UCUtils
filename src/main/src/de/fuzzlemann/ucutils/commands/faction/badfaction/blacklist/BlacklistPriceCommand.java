@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 public class BlacklistPriceCommand implements CommandExecutor, TabCompletion {
 
     @Override
-    @Command(labels = {"blacklistprice", "blprice", "blp"}, usage = "/%label% [setprice/list] (Grund) (Preis)")
+    @Command(value = {"blacklistprice", "blprice", "blp"}, usage = "/%label% [setprice/list] (Grund) (Preis)", sendUsageOn = NumberFormatException.class)
     public boolean onCommand(EntityPlayerSP p, String[] args) {
         if (args.length == 0) return false;
 
@@ -40,12 +40,7 @@ public class BlacklistPriceCommand implements CommandExecutor, TabCompletion {
                     return true;
                 }
 
-                int price;
-                try {
-                    price = Integer.parseInt(args[2]);
-                } catch (NumberFormatException e) {
-                    return false;
-                }
+                int price = Integer.parseInt(args[2]);
 
                 blacklistReason.setPrice(price);
                 BlacklistUtil.savePrices();

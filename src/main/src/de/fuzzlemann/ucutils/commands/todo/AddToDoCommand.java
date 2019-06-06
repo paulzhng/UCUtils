@@ -16,7 +16,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class AddToDoCommand implements CommandExecutor {
 
     @Override
-    @Command(labels = "addtodo", usage = "/%label% [ToDo]")
+    @Command(value = "addtodo", usage = "/%label% [ToDo]")
     public boolean onCommand(EntityPlayerSP p, String[] args) {
         if (args.length == 0) return false;
 

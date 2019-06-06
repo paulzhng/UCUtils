@@ -18,7 +18,7 @@ import java.util.*;
 public class PunishCommand implements CommandExecutor, TabCompletion {
 
     @Override
-    @Command(labels = "punish", usage = "/%label% [Spieler] [Grund...]")
+    @Command(value = "punish", usage = "/%label% [Spieler] [Grund...]")
     public boolean onCommand(EntityPlayerSP p, String[] args) {
         if (args.length < 2) return false;
 

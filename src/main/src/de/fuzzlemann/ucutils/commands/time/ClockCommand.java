@@ -23,7 +23,7 @@ public class ClockCommand implements CommandExecutor {
     private final SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss 'Uhr'");
 
     @Override
-    @Command(labels = {"clock", "uhrzeit", "uhr"})
+    @Command({"clock", "uhrzeit", "uhr"})
     public boolean onCommand(EntityPlayerSP p, String[] args) {
         Date date = new Date();
 

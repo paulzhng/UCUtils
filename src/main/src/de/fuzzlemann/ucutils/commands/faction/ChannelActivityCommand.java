@@ -34,7 +34,7 @@ import java.util.Map;
 public class ChannelActivityCommand implements CommandExecutor {
 
     @Override
-    @Command(labels = "channelactivity", async = true)
+    @Command(value = "channelactivity", async = true)
     public boolean onCommand(EntityPlayerSP p, String[] args) {
         List<String> players;
         try {

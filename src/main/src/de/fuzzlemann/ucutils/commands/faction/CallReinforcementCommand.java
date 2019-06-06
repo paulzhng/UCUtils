@@ -106,7 +106,7 @@ public class CallReinforcementCommand implements CommandExecutor {
     }
 
     @Override
-    @Command(labels = {"reinforcement", "callreinforcement", "verstärkung"})
+    @Command({"reinforcement", "callreinforcement", "verstärkung"})
     public boolean onCommand(EntityPlayerSP p, String[] args) {
         String chatType;
         if (args.length != 0) {

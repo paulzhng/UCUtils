@@ -16,7 +16,7 @@ import java.util.List;
 public class SendNoobChatCommand implements CommandExecutor, TabCompletion {
 
     @Override
-    @Command(labels = {"sendnoobchat", "sendneulingschat", "snc"}, usage = "/%label% [Antwort-Kürzel]")
+    @Command(value = {"sendnoobchat", "sendneulingschat", "snc"}, usage = "/%label% [Antwort-Kürzel]")
     public boolean onCommand(EntityPlayerSP p, String[] args) {
         if (args.length == 0) return false;
 

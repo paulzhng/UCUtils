@@ -22,7 +22,7 @@ import java.util.Map;
 public class MoveToCommand implements CommandExecutor {
 
     @Override
-    @Command(labels = "moveto", usage = "/%label% [Spieler]", async = true)
+    @Command(value = "moveto", usage = "/%label% [Spieler]", async = true)
     public boolean onCommand(EntityPlayerSP p, String[] args) {
         if (args.length == 0) return false;
 

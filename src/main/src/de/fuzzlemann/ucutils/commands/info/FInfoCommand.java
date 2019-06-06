@@ -17,7 +17,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class FInfoCommand implements CommandExecutor {
 
     @Override
-    @Command(labels = {"finfo", "factioninfo"})
+    @Command({"finfo", "factioninfo"})
     public boolean onCommand(EntityPlayerSP p, String[] args) {
         if (args.length == 0) {
             TextComponentString text = new TextComponentString("");

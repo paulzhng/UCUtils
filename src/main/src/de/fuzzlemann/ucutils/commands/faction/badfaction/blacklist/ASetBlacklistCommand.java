@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 public class ASetBlacklistCommand implements CommandExecutor, TabCompletion {
 
     @Override
-    @Command(labels = {"asetblacklist", "asetbl"}, usage = "/%label% [Spieler...] [Grund]")
+    @Command(value = {"asetblacklist", "asetbl"}, usage = "/%label% [Spieler...] [Grund]")
     public boolean onCommand(EntityPlayerSP p, String[] args) {
         if (args.length < 2) return false;
 

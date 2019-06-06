@@ -25,13 +25,13 @@ public class JsonManager {
      * @param file       The Collection that the list should be written to
      * @param objectList The Collection that should be written to the file
      */
-    public static void writeList(File file, Collection<?> objectList) {
+    public static <T> void writeList(File file, Collection<T> objectList) {
         createFile(file);
 
         Gson gson = new Gson();
         List<String> jsonList = new ArrayList<>();
 
-        for (Object object : objectList) {
+        for (T object : objectList) {
             jsonList.add(gson.toJson(object));
         }
 
@@ -48,7 +48,7 @@ public class JsonManager {
      * @param file   The file that the Object should be written to
      * @param object The Object that should be written to the file
      */
-    public static void writeObject(File file, Object object) {
+    public static <T> void writeObject(File file, T object) {
         createFile(file);
 
         Gson gson = new Gson();
@@ -68,16 +68,16 @@ public class JsonManager {
      * @param clazz The class which the objects corresponds to
      * @return A list of all objects loaded
      */
-    public static List<Object> loadObjects(File file, Class<?> clazz) {
+    public static <T> List<T> loadObjects(File file, Class<T> clazz) {
         createFile(file);
 
-        List<Object> objectList = new ArrayList<>();
+        List<T> objectList = new ArrayList<>();
 
         Gson gson = new Gson();
 
         try {
             for (String line : FileUtils.readLines(file, StandardCharsets.UTF_8)) {
-                Object object = gson.fromJson(line, clazz);
+                T object = gson.fromJson(line, clazz);
                 objectList.add(object);
             }
         } catch (IOException e) {
@@ -94,7 +94,7 @@ public class JsonManager {
      * @param clazz The class which the object corresponds to
      * @return The object that's loaded
      */
-    public static Object loadObject(File file, Class<?> clazz) {
+    public static <T> T loadObject(File file, Class<T> clazz) {
         createFile(file);
 
         Gson gson = new Gson();

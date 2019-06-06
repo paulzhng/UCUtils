@@ -26,7 +26,7 @@ public class InternetTestCommand implements CommandExecutor {
     private final List<String> hosts = Arrays.asList("unicacity.de", "fuzzlemann.de", "google.de");
 
     @Override
-    @Command(labels = {"internettest", "inettest"}, async = true)
+    @Command(value = {"internettest", "inettest"}, async = true)
     public boolean onCommand(EntityPlayerSP p, String[] args) {
         Message.MessageBuilder builder = Message.builder();
 

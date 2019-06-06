@@ -28,7 +28,7 @@ public class UpdateCommand implements CommandExecutor {
     private static boolean replace;
 
     @Override
-    @Command(labels = "updateucutils")
+    @Command("updateucutils")
     public boolean onCommand(EntityPlayerSP p, String[] args) {
         if (!SystemUtils.IS_OS_WINDOWS) {
             TextUtils.error("Dieser Befehl ist nur unter Windows unterstützt.");

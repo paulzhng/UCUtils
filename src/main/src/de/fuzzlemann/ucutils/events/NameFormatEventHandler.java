@@ -65,6 +65,12 @@ public class NameFormatEventHandler {
     }
 
     @SubscribeEvent
+    public static void onStopTracking(PlayerEvent.StopTracking e) {
+        EntityPlayer p = e.getEntityPlayer();
+        PLAYER_MAP.remove(p.getName());
+    }
+
+    @SubscribeEvent
     public static void onWantedsGiven(ClientChatReceivedEvent e) {
         ITextComponent message = e.getMessage();
         String unformattedMessage = message.getUnformattedText();
@@ -287,7 +293,6 @@ public class NameFormatEventHandler {
 
     private static void refreshDisplayName(String userName) {
         EntityPlayer entityPlayer = PLAYER_MAP.get(userName);
-
         if (entityPlayer == null) {
             PLAYER_MAP.remove(userName);
             return;

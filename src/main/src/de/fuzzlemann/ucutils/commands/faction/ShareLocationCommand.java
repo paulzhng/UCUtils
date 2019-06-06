@@ -69,7 +69,7 @@ public class ShareLocationCommand implements CommandExecutor {
     }
 
     @Override
-    @Command(labels = {"sharelocation", "shareloc", "sloc"}, usage = "/sharelocation [Spieler...] (-d)")
+    @Command(value = {"sharelocation", "shareloc", "sloc"}, usage = "/sharelocation [Spieler...] (-d)")
     public boolean onCommand(EntityPlayerSP p, String[] args) {
         if (args.length == 0) return false;
 

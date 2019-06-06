@@ -41,20 +41,15 @@ public class ABuyCommand implements CommandExecutor {
     private static int slotIndex;
 
     @Override
-    @Command(labels = "abuy", usage = "/%label% [Menge] (Delay [nur bei schlechteren PCs nötig])")
+    @Command(value = "abuy", usage = "/%label% [Menge] (Delay [nur bei schlechteren PCs nötig])", sendUsageOn = NumberFormatException.class)
     public boolean onCommand(EntityPlayerSP p, String[] args) {
         if (args.length == 0) return false;
 
-        int tempAmount;
-        int tempDelay = 10;
-        try {
-            tempAmount = Integer.parseInt(args[0]);
-            if (args.length > 1) tempDelay = Integer.parseInt(args[1]);
-        } catch (NumberFormatException exc) {
-            return false;
-        }
-
+        int tempAmount = Integer.parseInt(args[0]);
         if (tempAmount <= 1) return false;
+
+        int tempDelay = args.length > 1 ? Integer.parseInt(args[1]) : 10;
+        if (tempDelay <= 1) return false;
 
         amount = tempAmount;
         delay = tempDelay;

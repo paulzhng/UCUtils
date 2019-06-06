@@ -16,7 +16,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class RefreshDataCommand implements CommandExecutor {
 
     @Override
-    @Command(labels = "refreshdata")
+    @Command("refreshdata")
     public boolean onCommand(EntityPlayerSP p, String[] args) {
         boolean verbose = args.length != 0 && args[0].equalsIgnoreCase("-v");
 

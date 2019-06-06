@@ -22,7 +22,7 @@ import java.util.StringJoiner;
 public class MoveCommand implements CommandExecutor {
 
     @Override
-    @Command(labels = "move", usage = "/%label% [Spieler...] [Ziel]", async = true)
+    @Command(value = "move", usage = "/%label% [Spieler...] [Ziel]", async = true)
     public boolean onCommand(EntityPlayerSP p, String[] args) {
         if (args.length < 2) return false;
 

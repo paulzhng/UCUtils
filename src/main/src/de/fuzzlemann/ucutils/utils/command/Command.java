@@ -17,7 +17,7 @@ public @interface Command {
      *
      * @return the labels which the command are triggered by
      */
-    String[] labels();
+    String[] value();
 
     /**
      * Returns the correct usage of the command ({@code %label%} is substituted with the label of the command the player used).
@@ -27,6 +27,23 @@ public @interface Command {
      * @return the correct usage of the command
      */
     String usage() default "/%label%";
+
+    /**
+     * Returns the usage when these {@link Throwable}s or a subclass of those are thrown.
+     *
+     * @return the {@link Class}es of the {@link Throwable}s
+     */
+    Class<? extends Throwable>[] sendUsageOn() default {};
+
+    /**
+     * Shows if the command should be executed in a separate {@link Thread}.
+     * <b>if false:</b> normal command behavior
+     * <p>
+     * <b>if true:</b>  command is executed in a separate {@link Thread}
+     *
+     * @return if the command should be executed asynchronously
+     */
+    boolean async() default false;
 
     /**
      * Shows if this command is destined to only be used for management purposes.
@@ -39,13 +56,4 @@ public @interface Command {
      */
     boolean management() default false;
 
-    /**
-     * Shows if the command should be executed in a separate {@link Thread}.
-     * <b>if false:</b> normal command behavior
-     * <p>
-     * <b>if true:</b>  command is executed in a separate {@link Thread}
-     *
-     * @return if the command should be executed asynchronously
-     */
-    boolean async() default false;
 }

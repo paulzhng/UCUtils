@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 public class ModifyWantedsCommand implements CommandExecutor, TabCompletion {
 
     @Override
-    @Command(labels = {"modifywanteds", "mw"}, usage = "/%label% [Spieler] [GF/SF/SSF/S/DA5/DA10/DA15/FSA]", async = true)
+    @Command(value = {"modifywanteds", "mw"}, usage = "/%label% [Spieler] [GF/SF/SSF/S/DA5/DA10/DA15/FSA]", async = true)
     public boolean onCommand(EntityPlayerSP p, String[] args) {
         if (args.length < 2) return false;
 

@@ -16,7 +16,7 @@ import java.util.Arrays;
 public class ASMSCommand implements CommandExecutor {
 
     @Override
-    @Command(labels = "asms", usage = "/%label% [Spieler] [Nachricht]", async = true)
+    @Command(value = "asms", usage = "/%label% [Spieler] [Nachricht]", async = true)
     public boolean onCommand(EntityPlayerSP p, String[] args) {
         if (args.length < 2) return false;
 

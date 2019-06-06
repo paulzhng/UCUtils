@@ -20,7 +20,7 @@ import java.util.Map;
 public class NearestATMCommand implements CommandExecutor {
 
     @Override
-    @Command(labels = "nearestatm")
+    @Command("nearestatm")
     public boolean onCommand(EntityPlayerSP p, String[] args) {
         Map.Entry<Double, ATM> nearestATMEntry = ForgeUtils.getNearestObject(ATM.values(), ATM::getX, ATM::getY, ATM::getZ);
         int distance = (int) (double) nearestATMEntry.getKey();

@@ -31,7 +31,7 @@ public class CInfoCommand implements CommandExecutor {
     );
 
     @Override
-    @Command(labels = {"cinfo", "commandinfo"})
+    @Command({"cinfo", "commandinfo"})
     public boolean onCommand(EntityPlayerSP p, String[] args) {
         p.sendMessage(COMMAND_INFO.constructMessage("Wichtige Befehle"));
         return true;

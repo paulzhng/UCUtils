@@ -15,21 +15,13 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class DistanceCommand implements CommandExecutor {
 
     @Override
-    @Command(labels = "distance", usage = "/%label% [X] [Y] [Z]")
+    @Command(value = "distance", usage = "/%label% [X] [Y] [Z]", sendUsageOn = NumberFormatException.class)
     public boolean onCommand(EntityPlayerSP p, String[] args) {
         if (args.length < 3) return false;
 
-        int x;
-        int y;
-        int z;
-
-        try {
-            x = Integer.parseInt(args[0]);
-            y = Integer.parseInt(args[1]);
-            z = Integer.parseInt(args[2]);
-        } catch (NumberFormatException e) {
-            return false;
-        }
+        int x = Integer.parseInt(args[0]);
+        int y = Integer.parseInt(args[1]);
+        int z = Integer.parseInt(args[2]);
 
         if (y == -1) y = (int) p.posY;
 

@@ -19,7 +19,7 @@ public class ToggleKerzakovSpeechCommand extends SpeechBaseCommand {
     }
 
     @Override
-    @Command(labels = {"togglekerzakovspeech", "togkerzakovspeech", "togglekerzakov", "togkerzakov"})
+    @Command(value = {"togglekerzakovspeech", "togkerzakovspeech", "togglekerzakov", "togkerzakov"})
     public boolean onCommand(EntityPlayerSP p, String[] args) {
         return super.onCommand(p, args);
     }

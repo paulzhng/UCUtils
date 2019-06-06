@@ -31,7 +31,7 @@ public class TimerCommand implements CommandExecutor, TabCompletion {
     private int timerID;
 
     @Override
-    @Command(labels = "timer", usage = "/%label% [list/start/stop] (Zeit/ID)")
+    @Command(value = "timer", usage = "/%label% [list/start/stop] (Zeit/ID)", sendUsageOn = NumberFormatException.class)
     public boolean onCommand(EntityPlayerSP p, String[] args) {
         if (args.length == 0) return false;
 
@@ -83,12 +83,7 @@ public class TimerCommand implements CommandExecutor, TabCompletion {
             case "stop":
                 if (args.length < 2) return false;
 
-                int id;
-                try {
-                    id = Integer.parseInt(args[1]);
-                } catch (NumberFormatException e) {
-                    return false;
-                }
+                int id = Integer.parseInt(args[1]);
 
                 if (timers.remove(id) == null) {
                     TextUtils.error("Der Timer wurde nicht gefunden.");
@@ -101,9 +96,7 @@ public class TimerCommand implements CommandExecutor, TabCompletion {
                 sendTimerList();
                 break;
             case "stopsound":
-                if (currentTimerSound != null) {
-                    currentTimerSound.stop();
-                }
+                if (currentTimerSound != null) currentTimerSound.stop();
                 break;
             default:
                 return false;

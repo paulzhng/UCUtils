@@ -45,7 +45,7 @@ public class CommandHandler {
 
     private static void registerCommand(CommandExecutor commandExecutor, @Nullable TabCompletion tabCompletion) {
         Command commandAnnotation = getCommand(commandExecutor);
-        String[] labels = commandAnnotation.labels();
+        String[] labels = commandAnnotation.value();
 
         for (String label : labels) {
             ClientCommandHandler.instance.registerCommand(new BaseCommand(label, tabCompletion, commandAnnotation.management()));
@@ -61,14 +61,24 @@ public class CommandHandler {
         Command commandAnnotation = getCommand(commandExecutor);
 
         Runnable commandRunnable = () -> {
-            if (commandExecutor.onCommand(executor, args)) return;
-
             String usage = commandAnnotation.usage();
-            if (!usage.isEmpty()) {
-                usage = usage.replace("%label%", label);
 
-                TextUtils.error(usage);
+            try {
+                if (commandExecutor.onCommand(executor, args)) return;
+            } catch (Throwable e) {
+                Class<? extends Throwable>[] sendUsageOn = commandAnnotation.sendUsageOn();
+
+                for (Class<? extends Throwable> aClass : sendUsageOn) {
+                    if (aClass.isInstance(e)) {
+                        sendUsage(usage, label);
+                        return;
+                    }
+                }
+
+                throw e;
             }
+
+            sendUsage(usage, label);
         };
 
         if (commandAnnotation.async()) {
@@ -76,6 +86,13 @@ public class CommandHandler {
         } else {
             commandRunnable.run();
         }
+    }
+
+    private static void sendUsage(String usage, String label) {
+        if (usage.isEmpty()) return;
+
+        usage = usage.replace("%label%", label);
+        TextUtils.error(usage);
     }
 
     private static Command getCommand(CommandExecutor commandExecutor) {

@@ -13,7 +13,7 @@ import net.minecraft.util.text.TextFormatting;
 public class CheckMedicalLicenseCommand implements CommandExecutor {
 
     @Override
-    @Command(labels = {"checkmedicallicense", "cml"}, usage = "/%label% [Spieler]")
+    @Command(value = {"checkmedicallicense", "cml"}, usage = "/%label% [Spieler]")
     public boolean onCommand(EntityPlayerSP p, String[] args) {
         if (args.length == 0) return false;
 

@@ -11,7 +11,7 @@ import net.minecraft.client.entity.EntityPlayerSP;
 public class ReplyCommand implements CommandExecutor {
 
     @Override
-    @Command(labels = {"reply", "r"}, usage = "/%label% [Nachricht]")
+    @Command(value = {"reply", "r"}, usage = "/%label% [Nachricht]")
     public boolean onCommand(EntityPlayerSP p, String[] args) {
         if (args.length == 0) return false;
 

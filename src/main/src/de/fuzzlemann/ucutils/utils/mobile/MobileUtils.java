@@ -9,12 +9,12 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 /**
  * @author Fuzzlemann
@@ -24,12 +24,9 @@ import java.util.stream.Collectors;
 public class MobileUtils {
 
     private static final File BLOCKED_FILE = new File(JsonManager.DIRECTORY, "blocked.storage");
-    private static final List<String> BLOCKED_PLAYERS = JsonManager.loadObjects(BLOCKED_FILE, String.class)
-            .stream()
-            .map(object -> (String) object)
-            .collect(Collectors.toList());
-    private static final Pattern SMS_PATTERN = Pattern.compile("Dein Handy klingelt! Eine Nachricht von ([a-zA-Z0-9_]+) \\((\\d+)\\)\\.");
-    private static final Pattern NUMBER_PATTERN = Pattern.compile("Nummer von [a-zA-Z0-9_]+: (\\d+)");
+    private static final List<String> BLOCKED_PLAYERS = new ArrayList<>(JsonManager.loadObjects(BLOCKED_FILE, String.class));
+    private static final Pattern SMS_PATTERN = Pattern.compile("^Dein Handy klingelt! Eine Nachricht von ([a-zA-Z0-9_]+) \\((\\d+)\\)\\.$");
+    private static final Pattern NUMBER_PATTERN = Pattern.compile("^Nummer von [a-zA-Z0-9_]+: (\\d+)$");
 
     private static boolean blockNextMessage;
     private static CompletableFuture<Integer> future;

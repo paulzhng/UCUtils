@@ -20,7 +20,7 @@ import java.util.Map;
 public class NearestJobCommand implements CommandExecutor {
 
     @Override
-    @Command(labels = "nearestjob")
+    @Command("nearestjob")
     public boolean onCommand(EntityPlayerSP p, String[] args) {
         Map.Entry<Double, Job> nearestJobEntry = ForgeUtils.getNearestObject(Job.values(), Job::getX, Job::getY, Job::getZ);
         int distance = (int) (double) nearestJobEntry.getKey();

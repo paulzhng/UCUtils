@@ -14,7 +14,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class ACallCommand implements CommandExecutor {
 
     @Override
-    @Command(labels = "acall", usage = "/%label% [Spieler]", async = true)
+    @Command(value = "acall", usage = "/%label% [Spieler]", async = true)
     public boolean onCommand(EntityPlayerSP p, String[] args) {
         if (args.length == 0) return false;
         String player = args[0];

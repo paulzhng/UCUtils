@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 public class DrugPriceCommand implements CommandExecutor, TabCompletion {
 
     @Override
-    @Command(labels = {"drugprice", "drugprices"}, usage = "/%label% [list/setprice] (Droge) (Preis)")
+    @Command(value = {"drugprice", "drugprices"}, usage = "/%label% [list/setprice] (Droge) (Preis)", sendUsageOn = NumberFormatException.class)
     public boolean onCommand(EntityPlayerSP p, String[] args) {
         if (args.length == 0) return false;
 
@@ -40,12 +40,7 @@ public class DrugPriceCommand implements CommandExecutor, TabCompletion {
                     return true;
                 }
 
-                int price;
-                try {
-                    price = Integer.parseInt(args[2]);
-                } catch (NumberFormatException e) {
-                    return false;
-                }
+                int price = Integer.parseInt(args[2]);
 
                 drug.setPrice(price);
                 DrugUtil.savePrices();

@@ -21,18 +21,14 @@ import java.util.stream.Collectors;
 public class ASellDrugCommand implements CommandExecutor, TabCompletion {
 
     @Override
-    @Command(labels = "aselldrug", usage = "/%label% [Spieler] [Droge] [Menge] (Variation)")
+    @Command(value = "aselldrug", usage = "/%label% [Spieler] [Droge] [Menge] (Variation)", sendUsageOn = NumberFormatException.class)
     public boolean onCommand(EntityPlayerSP p, String[] args) {
         if (args.length < 3) return false;
 
         int variation;
 
         if (args.length == 4) {
-            try {
-                variation = Integer.parseInt(args[3]);
-            } catch (NumberFormatException e) {
-                return false;
-            }
+            variation = Integer.parseInt(args[3]);
         } else {
             variation = 0;
         }
@@ -43,13 +39,7 @@ public class ASellDrugCommand implements CommandExecutor, TabCompletion {
             return true;
         }
 
-        int amount;
-
-        try {
-            amount = Integer.parseInt(args[2]);
-        } catch (NumberFormatException e) {
-            return false;
-        }
+        int amount = Integer.parseInt(args[2]);
 
         int price = amount * (drug.getPrice() + variation);
         p.sendChatMessage("/selldrug " + args[0] + " " + drug.getName() + " " + amount + " " + price);

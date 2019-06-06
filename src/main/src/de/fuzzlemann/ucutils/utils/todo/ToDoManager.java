@@ -3,18 +3,15 @@ package de.fuzzlemann.ucutils.utils.todo;
 import de.fuzzlemann.ucutils.utils.io.JsonManager;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * @author Fuzzlemann
  */
 public class ToDoManager {
     private static final File TO_DO_FILE = new File(JsonManager.DIRECTORY, "toDo.storage");
-    private static final List<ToDo> TO_DO_LIST = JsonManager.loadObjects(TO_DO_FILE, ToDo.class)
-            .stream()
-            .map(object -> (ToDo) object)
-            .collect(Collectors.toList());
+    private static final List<ToDo> TO_DO_LIST = new ArrayList<>(JsonManager.loadObjects(TO_DO_FILE, ToDo.class));
 
     public static ToDo getToDo(int id) {
         return TO_DO_LIST.stream()

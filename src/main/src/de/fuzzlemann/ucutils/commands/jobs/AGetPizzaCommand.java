@@ -24,7 +24,7 @@ public class AGetPizzaCommand implements CommandExecutor {
     private final AtomicBoolean started = new AtomicBoolean();
 
     @Override
-    @Command(labels = "agetpizza")
+    @Command("agetpizza")
     public boolean onCommand(EntityPlayerSP p, String[] args) {
         if (started.get()) return true;
 

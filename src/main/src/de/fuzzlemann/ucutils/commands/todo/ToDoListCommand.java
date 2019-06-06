@@ -27,7 +27,7 @@ public class ToDoListCommand implements CommandExecutor {
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm");
 
     @Override
-    @Command(labels = {"todo", "todolist"})
+    @Command({"todo", "todolist"})
     public boolean onCommand(EntityPlayerSP p, String[] args) {
         List<ToDo> toDoList = ToDoManager.getToDoList();
 

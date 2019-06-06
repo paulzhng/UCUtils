@@ -24,7 +24,7 @@ public class ADropDrinkCommand implements CommandExecutor {
     private final AtomicBoolean started = new AtomicBoolean();
 
     @Override
-    @Command(labels = "adropdrink")
+    @Command("adropdrink")
     public boolean onCommand(EntityPlayerSP p, String[] args) {
         if (started.get()) return true;
 

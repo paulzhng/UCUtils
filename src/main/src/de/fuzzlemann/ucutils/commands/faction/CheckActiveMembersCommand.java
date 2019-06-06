@@ -35,7 +35,7 @@ public class CheckActiveMembersCommand implements CommandExecutor {
     private static CompletableFuture<Map<Boolean, Integer>> future;
 
     @Override
-    @Command(labels = "checkactivemembers", async = true)
+    @Command(value = "checkactivemembers", async = true)
     public boolean onCommand(EntityPlayerSP p, String[] args) {
         Message.MessageBuilder builder = Message.builder();
 

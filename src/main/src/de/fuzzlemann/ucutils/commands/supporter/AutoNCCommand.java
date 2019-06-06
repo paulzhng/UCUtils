@@ -32,7 +32,7 @@ import java.util.regex.Pattern;
 @Mod.EventBusSubscriber
 public class AutoNCCommand implements CommandExecutor {
 
-    private static final Pattern NOOB_CHAT_PATTERN = Pattern.compile("\\[NeulingsChat] (?:\\[UC])*([a-zA-Z0-9_]+): (.+)");
+    private static final Pattern NOOB_CHAT_PATTERN = Pattern.compile("^\\[NeulingsChat] (?:\\[UC])*([a-zA-Z0-9_]+): (.+)$");
     private static final Map<Integer, String> ANSWER_MAP = new HashMap<>();
     private static final Gson GSON = new Gson();
 
@@ -41,7 +41,7 @@ public class AutoNCCommand implements CommandExecutor {
     private static boolean enabled;
 
     @Override
-    @Command(labels = {"autonc", "autonoobchat", "autoneulingschat"})
+    @Command(value = {"autonc", "autonoobchat", "autoneulingschat"}, sendUsageOn = NumberFormatException.class)
     public boolean onCommand(EntityPlayerSP p, String[] args) {
         if (args.length == 0) {
             enabled = !enabled;
@@ -59,12 +59,7 @@ public class AutoNCCommand implements CommandExecutor {
             return true;
         }
 
-        int id;
-        try {
-            id = Integer.parseInt(args[0]);
-        } catch (NumberFormatException e) {
-            return false;
-        }
+        int id = Integer.parseInt(args[0]);
 
         String answer = ANSWER_MAP.get(id);
         if (answer == null) return true;

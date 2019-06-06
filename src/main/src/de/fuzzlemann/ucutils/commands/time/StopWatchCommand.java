@@ -19,7 +19,7 @@ public class StopWatchCommand implements CommandExecutor {
     private long start = -1;
 
     @Override
-    @Command(labels = {"stopwatch", "stoppuhr"})
+    @Command({"stopwatch", "stoppuhr"})
     public boolean onCommand(EntityPlayerSP p, String[] args) {
         if (start == -1) {
             start = System.currentTimeMillis();

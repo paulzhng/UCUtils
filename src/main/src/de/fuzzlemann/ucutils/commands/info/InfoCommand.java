@@ -18,7 +18,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class InfoCommand implements CommandExecutor {
 
     @Override
-    @Command(labels = "info")
+    @Command("info")
     public boolean onCommand(EntityPlayerSP p, String[] args) {
         ITextComponent text = constructText("Fraktionen", "/finfo")
                 .appendSibling(constructText("Wichtige Befehle", "/cinfo"))

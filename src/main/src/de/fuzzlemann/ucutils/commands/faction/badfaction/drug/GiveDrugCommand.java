@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 public class GiveDrugCommand implements CommandExecutor, TabCompletion {
 
     @Override
-    @Command(labels = "givedrug", usage = "/%label% [Spieler] [Droge] [Menge] [-m]")
+    @Command(value = "givedrug", usage = "/%label% [Spieler] [Droge] [Menge] [-m]", sendUsageOn = NumberFormatException.class)
     public boolean onCommand(EntityPlayerSP p, String[] args) {
         if (args.length < 3) return false;
 
@@ -31,13 +31,7 @@ public class GiveDrugCommand implements CommandExecutor, TabCompletion {
             return true;
         }
 
-        int amount;
-
-        try {
-            amount = Integer.parseInt(args[2]);
-        } catch (NumberFormatException e) {
-            return false;
-        }
+        int amount = Integer.parseInt(args[2]);
 
         if (args.length > 3 && args[3].equalsIgnoreCase("-m"))
             p.sendChatMessage("/pay " + args[0] + " 1");
@@ -55,7 +49,7 @@ public class GiveDrugCommand implements CommandExecutor, TabCompletion {
                     .map(Drug::getName)
                     .collect(Collectors.toList());
         }
-        if (args.length == 3) return Collections.singletonList("-m");
+        if (args.length == 4) return Collections.singletonList("-m");
 
         return null;
     }

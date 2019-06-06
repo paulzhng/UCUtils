@@ -32,7 +32,7 @@ public class NaviCommand implements CommandExecutor, TabCompletion {
     private static long lastCommand;
 
     @Override
-    @Command(labels = "navi")
+    @Command("navi")
     public boolean onCommand(EntityPlayerSP p, String[] args) {
         if (args.length == 0) {
             passToServer(p, args);

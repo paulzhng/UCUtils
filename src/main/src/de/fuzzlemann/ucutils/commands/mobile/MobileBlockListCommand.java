@@ -23,7 +23,7 @@ import java.util.List;
 public class MobileBlockListCommand implements CommandExecutor {
 
     @Override
-    @Command(labels = {"mobileblocklist", "blocked", "mobileblocked"})
+    @Command({"mobileblocklist", "blocked", "mobileblocked"})
     public boolean onCommand(EntityPlayerSP p, String[] args) {
         List<String> blocked = MobileUtils.getBlockedPlayers();
 

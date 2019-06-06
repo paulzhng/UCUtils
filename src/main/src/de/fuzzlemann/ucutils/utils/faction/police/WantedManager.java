@@ -2,9 +2,9 @@ package de.fuzzlemann.ucutils.utils.faction.police;
 
 import de.fuzzlemann.ucutils.Main;
 import de.fuzzlemann.ucutils.events.NameFormatEventHandler;
-import de.fuzzlemann.ucutils.utils.data.DataLoader;
 import de.fuzzlemann.ucutils.utils.ForgeUtils;
 import de.fuzzlemann.ucutils.utils.api.APIUtils;
+import de.fuzzlemann.ucutils.utils.data.DataLoader;
 import de.fuzzlemann.ucutils.utils.data.DataModule;
 import de.fuzzlemann.ucutils.utils.io.JsonManager;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
@@ -125,10 +125,6 @@ public class WantedManager implements DataLoader {
     @Override
     public void fallbackLoading() {
         WANTED_LIST.clear();
-
-        WANTED_LIST.addAll(JsonManager.loadObjects(WANTED_FILE, WantedReason.class)
-                .stream()
-                .map(object -> (WantedReason) object)
-                .collect(Collectors.toList()));
+        WANTED_LIST.addAll(new ArrayList<>(JsonManager.loadObjects(WANTED_FILE, WantedReason.class)));
     }
 }

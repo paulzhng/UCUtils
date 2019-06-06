@@ -18,7 +18,7 @@ import java.util.List;
 public class AddNaviPointCommand implements CommandExecutor {
 
     @Override
-    @Command(labels = "addnavipoint", usage = "/%label% [x] [y] [z] [Namen...]", management = true)
+    @Command(value = "addnavipoint", usage = "/%label% [x] [y] [z] [Namen...]", management = true)
     public boolean onCommand(EntityPlayerSP p, String[] args) {
         if (args.length == 0) return false;
 

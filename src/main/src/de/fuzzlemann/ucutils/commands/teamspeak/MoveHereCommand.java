@@ -19,7 +19,7 @@ import java.util.*;
 public class MoveHereCommand implements CommandExecutor {
 
     @Override
-    @Command(labels = "movehere", usage = "/%label% [Spieler...]", async = true)
+    @Command(value = "movehere", usage = "/%label% [Spieler...]", async = true)
     public boolean onCommand(EntityPlayerSP p, String[] args) {
         if (args.length == 0) return false;
 

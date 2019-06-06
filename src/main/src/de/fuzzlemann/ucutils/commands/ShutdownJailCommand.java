@@ -29,7 +29,7 @@ public class ShutdownJailCommand implements CommandExecutor {
     }
 
     @Override
-    @Command(labels = {"shutdownj", "shutdownjail"})
+    @Command(value = {"shutdownj", "shutdownjail"})
     public boolean onCommand(EntityPlayerSP p, String[] args) {
         shutdown = !shutdown;
 

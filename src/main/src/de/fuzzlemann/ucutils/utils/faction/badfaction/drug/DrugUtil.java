@@ -5,9 +5,8 @@ import de.fuzzlemann.ucutils.utils.data.DataModule;
 import de.fuzzlemann.ucutils.utils.io.JsonManager;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author Fuzzlemann
@@ -15,16 +14,11 @@ import java.util.stream.Collectors;
 @DataModule(value = "Drugs", local = true)
 public class DrugUtil implements DataLoader {
 
-    public static final List<Drug> DRUGS = new ArrayList<>();
+    public static final Set<Drug> DRUGS = new HashSet<>();
     private static final File DRUG_PRICE_FILE = new File(JsonManager.DIRECTORY, "drugprices.storage");
 
     public static void savePrices() {
         JsonManager.writeList(DRUG_PRICE_FILE, DRUGS);
-    }
-
-    private static void addDrug(Drug drug, List<Drug> drugs) {
-        if (!drugs.contains(drug))
-            drugs.add(drug);
     }
 
     public static Drug getDrug(String name) {
@@ -44,21 +38,17 @@ public class DrugUtil implements DataLoader {
     public void load() {
         DRUGS.clear();
 
-        List<Drug> drugs = JsonManager.loadObjects(DRUG_PRICE_FILE, Drug.class)
-                .stream()
-                .map(object -> (Drug) object)
-                .distinct()
-                .collect(Collectors.toList());
+        Set<Drug> drugs = new HashSet<>(JsonManager.loadObjects(DRUG_PRICE_FILE, Drug.class));
 
-        addDrug(new Drug("Kokain", new String[]{"Koks"}, true), drugs);
-        addDrug(new Drug("Marihuana", new String[]{"Gras", "Weed", "Hanf"}, true), drugs);
-        addDrug(new Drug("Opium", new String[]{}, true), drugs);
-        addDrug(new Drug("Methamphetamin", new String[]{"Meth", "Speed", "Crystal"}, true), drugs);
-        addDrug(new Drug("LSD", new String[]{"Acid"}, true), drugs);
-        addDrug(new Drug("Medizin", new String[]{"Med"}, false), drugs);
-        addDrug(new Drug("Schwarzpulver", new String[]{}, false), drugs);
-        addDrug(new Drug("Eisen", new String[]{"Iron"}, false), drugs);
-        addDrug(new Drug("Masken", new String[]{"Maske", "Mask", "Masks"}, false), drugs);
+        drugs.add(new Drug("Kokain", new String[]{"Koks"}, true));
+        drugs.add(new Drug("Marihuana", new String[]{"Gras", "Weed", "Hanf"}, true));
+        drugs.add(new Drug("Opium", new String[]{}, true));
+        drugs.add(new Drug("Methamphetamin", new String[]{"Meth", "Speed", "Crystal"}, true));
+        drugs.add(new Drug("LSD", new String[]{"Acid"}, true));
+        drugs.add(new Drug("Medizin", new String[]{"Med"}, false));
+        drugs.add(new Drug("Schwarzpulver", new String[]{}, false));
+        drugs.add(new Drug("Eisen", new String[]{"Iron"}, false));
+        drugs.add(new Drug("Masken", new String[]{"Maske", "Mask", "Masks"}, false));
 
         DRUGS.addAll(drugs);
     }

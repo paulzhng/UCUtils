@@ -20,7 +20,7 @@ public class DoNotDisturbCommand implements CommandExecutor {
     private static boolean doNotDisturb;
 
     @Override
-    @Command(labels = {"donotdisturb", "stumm", "nichtstören"})
+    @Command( {"donotdisturb", "stumm", "nichtstören"})
     public boolean onCommand(EntityPlayerSP p, String[] args) {
         doNotDisturb = !doNotDisturb;
 

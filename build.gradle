@@ -20,8 +20,6 @@ plugins {
 
 apply plugin: 'net.minecraftforge.gradle.forge'
 
-compileJava.options.encoding = 'UTF-8'
-
 version = "1.12.1-1.6"
 group = "de.fuzzlemann.ucutils"
 archivesBaseName = "ucutils"
@@ -38,6 +36,8 @@ dependencies {
 
 compileJava {
     sourceCompatibility = targetCompatibility = '1.8'
+    options.compilerArgs += '-proc:none'
+    options.encoding = 'UTF-8'
 }
 
 minecraft {
@@ -100,10 +100,12 @@ remotes {
     }
 }
 
-task deployRemote(dependsOn: build) << {
-    ssh.run {
-        session(remotes.webServer) {
-            put from: 'build/libs/' + archivesBaseName + '-' + version + '.jar', into: '/var/www/html/UCUtils.jar'
+task deployRemote(dependsOn: build) {
+    doLast {
+        ssh.run {
+            session(remotes.webServer) {
+                put from: 'build/libs/' + archivesBaseName + '-' + version + '.jar', into: '/var/www/html/UCUtils.jar'
+            }
         }
     }
 }

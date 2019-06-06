@@ -17,7 +17,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class CalculateCommand implements CommandExecutor {
 
     @Override
-    @Command(labels = {"calc", "calculate", "rechner"}, usage = "/%label% (Expression)")
+    @Command(value = {"calc", "calculate", "rechner"}, usage = "/%label% (Expression)")
     public boolean onCommand(EntityPlayerSP p, String[] args) {
         if (args.length == 0) return false;
 

@@ -15,7 +15,7 @@ import net.minecraft.util.text.event.ClickEvent;
 public class GenerateAuthLinkCommand implements CommandExecutor {
 
     @Override
-    @Command(labels = "generateauthlink", async = true)
+    @Command(value = "generateauthlink", async = true)
     public boolean onCommand(EntityPlayerSP p, String[] args) {
         String authKey = APIUtils.generateAuthKey();
         if (authKey == null) {

@@ -16,7 +16,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class MobileBlockCommand implements CommandExecutor {
 
     @Override
-    @Command(labels = {"mobileblock", "toggleblock", "block"}, usage = "/%label% [Spielername]")
+    @Command(value = {"mobileblock", "toggleblock", "block"}, usage = "/%label% [Spielername]")
     public boolean onCommand(EntityPlayerSP p, String[] args) {
         if (args.length == 0) return false;
 

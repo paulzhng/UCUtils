@@ -14,7 +14,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class ClearChatCommand implements CommandExecutor {
 
     @Override
-    @Command(labels = "clearchat")
+    @Command("clearchat")
     public boolean onCommand(EntityPlayerSP p, String[] args) {
         Main.MINECRAFT.ingameGUI.getChatGUI().clearChatMessages(false);
         return true;

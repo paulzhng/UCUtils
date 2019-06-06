@@ -19,7 +19,7 @@ public class ToggleMafiaSpeechCommand extends SpeechBaseCommand {
     }
 
     @Override
-    @Command(labels = {"togglemafiaspeech", "togmafiaspeech", "togglemafia", "togmafia"})
+    @Command(value = {"togglemafiaspeech", "togmafiaspeech", "togglemafia", "togmafia"})
     public boolean onCommand(EntityPlayerSP p, String[] args) {
         return super.onCommand(p, args);
     }

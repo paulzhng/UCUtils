@@ -7,8 +7,9 @@ import de.fuzzlemann.ucutils.utils.io.JsonManager;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Set;
 
 /**
  * @author Fuzzlemann
@@ -23,11 +24,6 @@ public class BlacklistUtil implements DataLoader {
         JsonManager.writeList(BLACKLIST_REASON_FILE, BLACKLIST_REASONS);
     }
 
-    private static void addBlacklistReason(BlacklistReason BlacklistReason, List<BlacklistReason> BlacklistReasons) {
-        if (!BlacklistReasons.contains(BlacklistReason))
-            BlacklistReasons.add(BlacklistReason);
-    }
-
     public static BlacklistReason getBlacklistReason(String reason) {
         reason = reason.replace('-', ' ');
 
@@ -38,20 +34,13 @@ public class BlacklistUtil implements DataLoader {
     public void load() {
         BLACKLIST_REASONS.clear();
 
-        List<BlacklistReason> blacklistReasons = JsonManager.loadObjects(BLACKLIST_REASON_FILE, BlacklistReason.class)
-                .stream()
-                .map(object -> (BlacklistReason) object)
-                .distinct()
-                .collect(Collectors.toList());
+        Set<BlacklistReason> blacklistReasons = new HashSet<>(JsonManager.loadObjects(BLACKLIST_REASON_FILE, BlacklistReason.class));
 
-        addBlacklistReason(new BlacklistReason("Mord eines Fraktionsleaders"), blacklistReasons);
-        addBlacklistReason(new BlacklistReason("Verrat von Plantagen"), blacklistReasons);
-        addBlacklistReason(new BlacklistReason("Verrat von illegalen Geschäften"), blacklistReasons);
-        addBlacklistReason(new BlacklistReason("Rufmord an der Fraktion"), blacklistReasons);
-        addBlacklistReason(new BlacklistReason("Operationen im Hoheitsgebiet einer Fraktion"), blacklistReasons);
-        addBlacklistReason(new BlacklistReason("Gangzone"), blacklistReasons);
-        addBlacklistReason(new BlacklistReason("Fraktionsschädigung"), blacklistReasons);
-        addBlacklistReason(new BlacklistReason("Fraktionsverrat"), blacklistReasons);
+        blacklistReasons.add(new BlacklistReason("Leadermord"));
+        blacklistReasons.add(new BlacklistReason("Rufmord"));
+        blacklistReasons.add(new BlacklistReason("Gangzone"));
+        blacklistReasons.add(new BlacklistReason("Fraktionsschädigung"));
+        blacklistReasons.add(new BlacklistReason("Fraktionsverrat"));
 
         BLACKLIST_REASONS.addAll(blacklistReasons);
     }

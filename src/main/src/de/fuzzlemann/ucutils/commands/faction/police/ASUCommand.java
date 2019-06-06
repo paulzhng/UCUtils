@@ -20,7 +20,7 @@ import java.util.*;
 public class ASUCommand implements CommandExecutor, TabCompletion {
 
     @Override
-    @Command(labels = "asu", usage = "/%label% [Spieler...] [Grund] (Variation) (-v/-b/-fsa)")
+    @Command(value = "asu", usage = "/%label% [Spieler...] [Grund] (Variation) (-v/-b/-fsa)")
     public boolean onCommand(EntityPlayerSP p, String[] args) {
         if (args.length < 2) return false;
 

@@ -19,7 +19,7 @@ public class ToggleTriadenSpeechCommand extends SpeechBaseCommand {
     }
 
     @Override
-    @Command(labels = {"toggletriadenspeech", "togtriadenspeech", "toggletriaden", "togtriaden"})
+    @Command({"toggletriadenspeech", "togtriadenspeech", "toggletriaden", "togtriaden"})
     public boolean onCommand(EntityPlayerSP p, String[] args) {
         return super.onCommand(p, args);
     }

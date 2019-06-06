@@ -14,7 +14,7 @@ import net.minecraft.util.text.TextFormatting;
 public class CheckHouseBanCommand implements CommandExecutor {
 
     @Override
-    @Command(labels = {"checkhouseban", "chb"}, usage = "/%label% [Spieler]")
+    @Command(value = {"checkhouseban", "chb"}, usage = "/%label% [Spieler]")
     public boolean onCommand(EntityPlayerSP p, String[] args) {
         if (args.length == 0) return false;
 
@@ -32,7 +32,7 @@ public class CheckHouseBanCommand implements CommandExecutor {
     private boolean hasHouseBan(String playerName) {
         try {
             String response = APIUtils.post("http://tomcat.fuzzlemann.de/factiononline/checkhouseban", "name", playerName);
-            return Boolean.valueOf(response);
+            return Boolean.parseBoolean(response);
         } catch (Exception e) {
             Logger.LOGGER.catching(e);
             return false;

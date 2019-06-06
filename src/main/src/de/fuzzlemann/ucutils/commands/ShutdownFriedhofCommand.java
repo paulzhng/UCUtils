@@ -29,7 +29,7 @@ public class ShutdownFriedhofCommand implements CommandExecutor {
     }
 
     @Override
-    @Command(labels = {"shutdownf", "shutdownfriedhof"})
+    @Command({"shutdownf", "shutdownfriedhof"})
     public boolean onCommand(EntityPlayerSP p, String[] args) {
         shutdown = !shutdown;
 

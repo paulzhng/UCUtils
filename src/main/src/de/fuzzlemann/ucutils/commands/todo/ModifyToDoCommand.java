@@ -17,16 +17,11 @@ import java.util.Arrays;
 public class ModifyToDoCommand implements CommandExecutor {
 
     @Override
-    @Command(labels = "modifytodo", usage = "/%label% [ID] [ToDo]")
+    @Command(value = "modifytodo", usage = "/%label% [ID] [ToDo]", sendUsageOn = NumberFormatException.class)
     public boolean onCommand(EntityPlayerSP p, String[] args) {
         if (args.length < 2) return false;
 
-        int id;
-        try {
-            id = Integer.parseInt(args[0]);
-        } catch (NumberFormatException e) {
-            return false;
-        }
+        int id = Integer.parseInt(args[0]);
 
         ToDo toDo = ToDoManager.getToDo(id);
 
