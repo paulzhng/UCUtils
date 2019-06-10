@@ -32,6 +32,15 @@ configurations {
 dependencies {
     provided fileTree(dir: 'libs', include: ['*.jar'])
     shade fileTree(dir: '../UCUtils_common/target', include: ['*.jar'])
+
+    testImplementation 'org.reflections:reflections:0.9.11'
+    testImplementation 'org.mockito:mockito-junit-jupiter:2.28.2'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.5.0-RC1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.5.0-RC1'
+}
+
+test {
+    useJUnitPlatform()
 }
 
 compileJava {
@@ -49,7 +58,12 @@ minecraft {
 sourceSets {
     main {
         java {
-            srcDirs('src/main/src')
+            srcDirs('src/main/java')
+        }
+    }
+    test {
+        java {
+            srcDirs('src/test/java')
         }
     }
 }
@@ -66,6 +80,10 @@ processResources {
 
     from(sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'
+    }
+
+    ant.replaceregexp(match: /\d+L; \/\/updated by gradle/, replace: new Date().toTimestamp().getTime() + "L; //updated by gradle", flags: 'g', byline: true) {
+        fileset(dir: 'src/main/java/de/fuzzlemann/ucutils/commands', includes: 'UCUtilsCommand.java')
     }
 }
 
@@ -114,6 +132,10 @@ task deployLocal(type: Exec, dependsOn: build) {
     commandLine = ['cmd', '/c', 'start', '\"\"', 'replaceLocal.bat']
 }
 
-tasks.matching {it.name == 'check'}.all {
+tasks.matching {
+    Task task = (Task) it
+    String taskName = task.name
+    taskName == 'check' || taskName == 'test' || taskName == 'testClasses'
+}.all {
     enabled = false
 }
