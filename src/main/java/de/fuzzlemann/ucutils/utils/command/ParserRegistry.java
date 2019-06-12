@@ -1,10 +1,9 @@
 package de.fuzzlemann.ucutils.utils.command;
 
+import de.fuzzlemann.ucutils.utils.ReflectionUtil;
 import de.fuzzlemann.ucutils.utils.command.api.ParameterParser;
 import de.fuzzlemann.ucutils.utils.house.HouseParser;
 
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,16 +19,7 @@ class ParserRegistry {
     }
 
     static void registerParser(Class<? extends ParameterParser<?, ?>> parserClass) {
-        ParameterizedType parameterizedType = (ParameterizedType) parserClass.getGenericInterfaces()[0];
-        Type objectType = parameterizedType.getActualTypeArguments()[1];
-        String className = objectType.getTypeName();
-
-        Class<?> objectClass;
-        try {
-            objectClass = Class.forName(className);
-        } catch (ClassNotFoundException e) {
-            throw new IllegalStateException(e); //should not happen
-        }
+        Class<?> objectClass = ReflectionUtil.getGenericParameter(parserClass, 0, 1);
 
         PARSER_REGISTRY.put(objectClass, parserClass);
     }

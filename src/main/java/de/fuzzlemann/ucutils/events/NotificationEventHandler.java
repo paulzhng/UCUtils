@@ -2,7 +2,7 @@ package de.fuzzlemann.ucutils.events;
 
 import de.fuzzlemann.ucutils.utils.abstraction.AbstractionHandler;
 import de.fuzzlemann.ucutils.utils.abstraction.UPlayer;
-import de.fuzzlemann.ucutils.utils.config.ConfigUtil;
+import de.fuzzlemann.ucutils.config.UCUtilsConfig;
 import de.fuzzlemann.ucutils.utils.sound.SoundUtil;
 import de.fuzzlemann.ucutils.utils.text.Message;
 import de.fuzzlemann.ucutils.utils.text.MessagePart;
@@ -54,14 +54,14 @@ public class NotificationEventHandler {
             return;
         }
 
-        if (ConfigUtil.blockResourcePackReminder && RESOURCEPACK_PATTERN.matcher(unformattedText).find()) {
+        if (UCUtilsConfig.blockResourcePackReminder && RESOURCEPACK_PATTERN.matcher(unformattedText).find()) {
             e.setCanceled(true);
             return;
         }
 
         UPlayer p = AbstractionHandler.getInstance().getPlayer();
 
-        if (ConfigUtil.inviteAnnouncement) {
+        if (UCUtilsConfig.inviteAnnouncement) {
             if (INVITE_PATTERN.matcher(unformattedText).find()) {
                 p.playSound(SoundUtil.PLAYER_INVITED, 1, 1);
                 return;
@@ -71,18 +71,18 @@ public class NotificationEventHandler {
             }
         }
 
-        if (ConfigUtil.reportAnnouncement && REPORT_RECEIVED_PATTERN.matcher(unformattedText).find()) {
+        if (UCUtilsConfig.reportAnnouncement && REPORT_RECEIVED_PATTERN.matcher(unformattedText).find()) {
             p.playSound(SoundUtil.REPORT_RECEIVED, 3, 1);
             return;
         }
 
-        if (ConfigUtil.bombAnnouncement && BOMB_PLACED_PATTERN.matcher(unformattedText).find()) {
+        if (UCUtilsConfig.bombAnnouncement && BOMB_PLACED_PATTERN.matcher(unformattedText).find()) {
             p.playSound(SoundUtil.BOMB_PLACED, 0.15F, 1);
             return;
         }
 
         //TODO REGEX
-        if (ConfigUtil.contractFulfilledAnnouncement
+        if (UCUtilsConfig.contractFulfilledAnnouncement
                 && unformattedText.startsWith("[Contract] ")
                 && unformattedText.contains(" getötet. Kopfgeld: ")) {
             p.playSound(SoundUtil.CONTRACT_FULFILLED, 1, 1);
@@ -90,21 +90,21 @@ public class NotificationEventHandler {
         }
 
         //TODO REGEX
-        if (ConfigUtil.contractAnnouncement && unformattedText.startsWith("[Contract] Es wurde ein Kopfgeld auf")) {
+        if (UCUtilsConfig.contractAnnouncement && unformattedText.startsWith("[Contract] Es wurde ein Kopfgeld auf")) {
             p.playSound(SoundUtil.CONTRACT_PLACED, 1, 1);
             return;
         }
 
-        if (ConfigUtil.serviceAnnouncement && SERVICE_ANNOUNCEMENT_PATTERN.matcher(unformattedText).find()) {
+        if (UCUtilsConfig.serviceAnnouncement && SERVICE_ANNOUNCEMENT_PATTERN.matcher(unformattedText).find()) {
             p.playSound(SoundUtil.SERVICE_RECEIVED, 1, 1);
             return;
         }
 
-        if (!ConfigUtil.reportGreeting.isEmpty() && REPORT_ACCEPTED_PATTERN.matcher(unformattedText).find()) {
+        if (!UCUtilsConfig.reportGreeting.isEmpty() && REPORT_ACCEPTED_PATTERN.matcher(unformattedText).find()) {
             TIMER.schedule(new TimerTask() {
                 @Override
                 public void run() {
-                    p.sendChatMessage(ConfigUtil.reportGreeting);
+                    p.sendChatMessage(UCUtilsConfig.reportGreeting);
                 }
             }, 1000L);
         }

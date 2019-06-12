@@ -2,7 +2,7 @@ package de.fuzzlemann.ucutils.events;
 
 import com.google.common.collect.ImmutableSet;
 import de.fuzzlemann.ucutils.Main;
-import de.fuzzlemann.ucutils.utils.config.ConfigUtil;
+import de.fuzzlemann.ucutils.config.UCUtilsConfig;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.Constants;
@@ -26,7 +26,7 @@ public class WeaponClickEventHandler {
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void onInteract(PlayerInteractEvent e) {
-        if (!ConfigUtil.munitionDisplay) return;
+        if (!UCUtilsConfig.munitionDisplay) return;
         if (!(e instanceof PlayerInteractEvent.RightClickItem || e instanceof PlayerInteractEvent.RightClickBlock || e instanceof PlayerInteractEvent.EntityInteractSpecific))
             return;
 

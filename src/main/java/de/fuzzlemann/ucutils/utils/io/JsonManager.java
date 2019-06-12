@@ -110,10 +110,10 @@ public class JsonManager {
 
     private static void createFile(File file) {
         if (DIRECTORY.mkdir())
-            Logger.LOGGER.info("[UCUtils] " + DIRECTORY + " created");
+            Logger.LOGGER.info(DIRECTORY + " created");
         try {
             if (file.createNewFile())
-                Logger.LOGGER.info("[UCUtils] " + file.getAbsoluteFile() + " created");
+                Logger.LOGGER.info(file.getAbsoluteFile() + " created");
         } catch (IOException e) {
             Logger.LOGGER.catching(e);
         }

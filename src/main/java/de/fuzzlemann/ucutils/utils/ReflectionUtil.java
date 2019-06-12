@@ -3,11 +3,25 @@ package de.fuzzlemann.ucutils.utils;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 
 /**
  * @author Fuzzlemann
  */
 public class ReflectionUtil {
+
+    public static Class<?> getGenericParameter(Class<?> clazz, int interfaceIndex, int typeIndex) {
+        ParameterizedType parameterizedType = (ParameterizedType) clazz.getGenericInterfaces()[interfaceIndex];
+        Type objectType = parameterizedType.getActualTypeArguments()[typeIndex];
+        String className = objectType.getTypeName();
+
+        try {
+            return Class.forName(className);
+        } catch (ClassNotFoundException e) {
+            throw new IllegalStateException(e); //should not happen
+        }
+    }
 
     public static <T> T getAnnotation(Annotation[] annotations, Class<? extends T> annotationType) {
         for (Annotation annotation : annotations) {

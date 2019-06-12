@@ -5,7 +5,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import de.fuzzlemann.ucutils.utils.Logger;
 import de.fuzzlemann.ucutils.utils.api.APIUtils;
-import de.fuzzlemann.ucutils.utils.config.ConfigUtil;
+import de.fuzzlemann.ucutils.config.UCUtilsConfig;
 import de.fuzzlemann.ucutils.utils.text.Message;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
@@ -20,7 +20,7 @@ public class EventNotificationEventHandler {
 
     @SubscribeEvent
     public static void onUnicaJoin(ClientChatReceivedEvent e) {
-        if (ConfigUtil.apiKey.isEmpty()) return;
+        if (UCUtilsConfig.apiKey.isEmpty()) return;
 
         String unformattedText = e.getMessage().getUnformattedText();
         if (!unformattedText.equals("Willkommen zurück!")) return;

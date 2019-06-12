@@ -83,7 +83,7 @@ class CommandIssuer {
 
         //Executes the command in an separate thread when stated
         if (commandAnnotation.async() && !throwException) {
-            new Thread(commandRunnable).start(); //asynchronous
+            new Thread(commandRunnable, "UCUtils-CommandThread-" + label).start(); //asynchronous
         } else {
             commandRunnable.run(); //synchronous
         }

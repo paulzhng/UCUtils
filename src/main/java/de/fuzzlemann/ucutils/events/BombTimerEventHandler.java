@@ -1,7 +1,7 @@
 package de.fuzzlemann.ucutils.events;
 
 import de.fuzzlemann.ucutils.Main;
-import de.fuzzlemann.ucutils.utils.config.ConfigUtil;
+import de.fuzzlemann.ucutils.config.UCUtilsConfig;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.ScaledResolution;
@@ -28,7 +28,7 @@ public class BombTimerEventHandler {
 
     @SubscribeEvent
     public static void onChatReceived(ClientChatReceivedEvent e) {
-        if (!ConfigUtil.bombTimerDisplay) return;
+        if (!UCUtilsConfig.bombTimerDisplay) return;
 
         String message = e.getMessage().getUnformattedText();
 
@@ -44,7 +44,7 @@ public class BombTimerEventHandler {
 
     @SubscribeEvent
     public static void onTick(TickEvent.RenderTickEvent e) {
-        if (!ConfigUtil.bombTimerDisplay) return;
+        if (!UCUtilsConfig.bombTimerDisplay) return;
         if (bombPlaced == -1) return;
 
         long timeDifference = System.currentTimeMillis() - bombPlaced;

@@ -23,11 +23,14 @@
  * THE SOFTWARE.
  * #L%
  */
-package de.fuzzlemann.ucutils.utils.teamspeak;
+package de.fuzzlemann.ucutils.teamspeak;
 
 import java.util.*;
 
-public final class ResultParser {
+/**
+ * @author Bert De Geyter, Roger Baumgartner
+ */
+public class ResponseParser {
 
     public static Map<String, String> parse(String raw) {
         StringTokenizer st = new StringTokenizer(raw, " ", false);
@@ -46,15 +49,16 @@ public final class ResultParser {
                 options.put(key, value);
             }
         }
+
         return options;
     }
 
-    public static List<Map<String, String>> parseMap(String rawResponse) {
-        String[] rawMaps = rawResponse.split("\\|");
+    public static List<Map<String, String>> parseMap(String raw) {
+        String[] rawMaps = raw.split("\\|");
         List<Map<String, String>> result = new ArrayList<>();
 
         for (String rawMap : rawMaps) {
-            result.add(ResultParser.parse(rawMap));
+            result.add(ResponseParser.parse(rawMap));
         }
 
         return result;

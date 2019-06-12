@@ -5,8 +5,8 @@ package de.fuzzlemann.ucutils.utils.data;
  */
 public interface DataLoader {
 
-    void load();
+    void load() throws Exception;
 
-    default void fallbackLoading() {
+    default void fallbackLoading() throws Exception {
     }
 }

@@ -1,6 +1,6 @@
 package de.fuzzlemann.ucutils.events;
 
-import de.fuzzlemann.ucutils.utils.config.ConfigUtil;
+import de.fuzzlemann.ucutils.config.UCUtilsConfig;
 import de.fuzzlemann.ucutils.utils.faction.HouseBanHandler;
 import de.fuzzlemann.ucutils.utils.text.TextUtils;
 import net.minecraft.entity.player.EntityPlayer;
@@ -271,7 +271,7 @@ public class NameFormatEventHandler {
             }
         } else if (BLACKLIST.contains(userName) || CONTRACT_LIST.contains(userName)) {
             return "§4";
-        } else if (ConfigUtil.showHausBans && HouseBanHandler.HOUSE_BANS.contains(userName)) {
+        } else if (UCUtilsConfig.showHouseBans && HouseBanHandler.HOUSE_BANS.contains(userName)) {
             return "§8[§cHV§8] §f";
         }
 

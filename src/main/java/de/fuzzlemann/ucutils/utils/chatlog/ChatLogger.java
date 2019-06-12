@@ -1,6 +1,6 @@
 package de.fuzzlemann.ucutils.utils.chatlog;
 
-import de.fuzzlemann.ucutils.utils.config.ConfigUtil;
+import de.fuzzlemann.ucutils.config.UCUtilsConfig;
 import de.fuzzlemann.ucutils.utils.io.FileManager;
 import net.minecraft.network.NetworkManager;
 import net.minecraftforge.client.event.ClientChatEvent;
@@ -115,7 +115,7 @@ public class ChatLogger {
                 de.fuzzlemann.ucutils.utils.Logger.LOGGER.info("ChatLog " + path + " created");
             fileHandler = new FileHandler(path);
         } catch (IOException e) {
-            ConfigUtil.logChat = false;
+            UCUtilsConfig.logChat = false;
             de.fuzzlemann.ucutils.utils.Logger.LOGGER.catching(e);
             return null;
         }
@@ -126,7 +126,7 @@ public class ChatLogger {
     }
 
     private void log(String message) {
-        if (!ConfigUtil.logChat || consumer == null) return;
+        if (!UCUtilsConfig.logChat || consumer == null) return;
 
         consumer.log(message + "\n");
     }

@@ -8,7 +8,7 @@ import de.fuzzlemann.ucutils.utils.abstraction.AbstractionHandler;
 import de.fuzzlemann.ucutils.utils.api.APIUtils;
 import de.fuzzlemann.ucutils.utils.command.api.Command;
 import de.fuzzlemann.ucutils.utils.command.api.CommandParam;
-import de.fuzzlemann.ucutils.utils.config.ConfigUtil;
+import de.fuzzlemann.ucutils.config.UCUtilsConfig;
 import de.fuzzlemann.ucutils.utils.sound.SoundUtil;
 import de.fuzzlemann.ucutils.utils.text.Message;
 import net.minecraft.util.text.TextFormatting;
@@ -45,7 +45,7 @@ public class AutoNCCommand {
     private static int i;
     private static boolean enabled;
 
-    @Command(value = {"autonc", "autonoobchat", "autoneulingschat"}, usage = "/%label% (ID)", sendUsageOn = NumberFormatException.class)
+    @Command(value = {"autonc", "autonoobchat", "autoneulingschat"}, usage = "/%label% (ID)")
     public boolean onCommand(@CommandParam(required = false, defaultValue = CommandParam.NULL) Integer id) {
         if (id == null) {
             enabled = !enabled;
@@ -75,21 +75,21 @@ public class AutoNCCommand {
     @SubscribeEvent
     public static void onChatReceived(ClientChatReceivedEvent e) {
         if (!enabled) return;
-        if (ConfigUtil.apiKey.isEmpty()) return;
+        if (UCUtilsConfig.apiKey.isEmpty()) return;
 
         String text = e.getMessage().getUnformattedText();
         Matcher matcher = NOOB_CHAT_PATTERN.matcher(text);
         if (!matcher.find()) return;
 
-        if (PREVIOUS_NOOB_CHAT_CONTENT.asMap().containsValue(text)) return;
-        PREVIOUS_NOOB_CHAT_CONTENT.put(System.currentTimeMillis(), text);
+        String name = matcher.group(1);
+        String ncMessage = matcher.group(2);
+
+        if (PREVIOUS_NOOB_CHAT_CONTENT.asMap().containsValue(ncMessage)) return;
+        PREVIOUS_NOOB_CHAT_CONTENT.put(System.currentTimeMillis(), ncMessage);
 
         new Thread(() -> {
-            String name = matcher.group(1);
-            String ncMessage = matcher.group(2);
-
             UNiiCAResponse response = GSON.fromJson(APIUtils.post("http://tomcat.fuzzlemann.de/factiononline/uniica",
-                    "apiKey", ConfigUtil.apiKey,
+                    "apiKey", UCUtilsConfig.apiKey,
                     "text", ncMessage), UNiiCAResponse.class);
 
             String action = response.getAction();
@@ -119,7 +119,7 @@ public class AutoNCCommand {
                     .of("]").color(TextFormatting.GRAY).advance()
                     .send();
 
-            AbstractionHandler.getInstance().getPlayer().playSound(Objects.requireNonNull(SoundUtil.getSoundEvent("block.note.pling")), 1, 1);
+            Main.MINECRAFT.addScheduledTask(() -> AbstractionHandler.getInstance().getPlayer().playSound(Objects.requireNonNull(SoundUtil.getSoundEvent("block.note.pling")), 1, 1));
         }).start();
     }
 

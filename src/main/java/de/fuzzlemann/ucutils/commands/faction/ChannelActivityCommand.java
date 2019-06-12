@@ -2,13 +2,14 @@ package de.fuzzlemann.ucutils.commands.faction;
 
 import com.google.common.collect.Multimap;
 import de.fuzzlemann.ucutils.events.MemberActivityEventHandler;
-import de.fuzzlemann.ucutils.utils.Logger;
+import de.fuzzlemann.ucutils.teamspeak.TSUtils;
+import de.fuzzlemann.ucutils.teamspeak.commands.ChannelClientListCommand;
+import de.fuzzlemann.ucutils.teamspeak.commands.ClientVariableCommand;
+import de.fuzzlemann.ucutils.teamspeak.objects.Client;
 import de.fuzzlemann.ucutils.utils.abstraction.UPlayer;
 import de.fuzzlemann.ucutils.utils.command.api.Command;
 import de.fuzzlemann.ucutils.utils.command.api.CommandParam;
 import de.fuzzlemann.ucutils.utils.mcapi.MojangAPI;
-import de.fuzzlemann.ucutils.utils.teamspeak.ResultParser;
-import de.fuzzlemann.ucutils.utils.teamspeak.TSClientQuery;
 import de.fuzzlemann.ucutils.utils.text.Message;
 import de.fuzzlemann.ucutils.utils.text.MessagePart;
 import de.fuzzlemann.ucutils.utils.text.TextUtils;
@@ -17,7 +18,6 @@ import net.minecraft.util.text.event.ClickEvent;
 import net.minecraft.util.text.event.HoverEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.apache.commons.lang3.StringUtils;
 
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
@@ -25,7 +25,6 @@ import java.awt.datatransfer.StringSelection;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author Fuzzlemann
@@ -35,15 +34,7 @@ public class ChannelActivityCommand {
 
     @Command(value = "channelactivity", async = true)
     public boolean onCommand(UPlayer p, @CommandParam(required = false, requiredValue = "copy") boolean copy) {
-        List<String> players;
-        try {
-            players = getPlayersInChannel(true);
-        } catch (NullPointerException e) {
-            Logger.LOGGER.catching(e);
-            TextUtils.error("Du hast dein API Key noch nicht oder falsch gesetzt.");
-            return true;
-        }
-
+        List<String> players = getPlayersInChannel();
         if (players.isEmpty()) {
             TextUtils.error("Du bist nicht im TeamSpeak online.");
             return true;
@@ -119,32 +110,18 @@ public class ChannelActivityCommand {
         }
     }
 
-    private List<String> getPlayersInChannel(boolean retry) {
-        Map<String, String> whoAmIResult = TSClientQuery.exec("whoami");
-        String cid = whoAmIResult.get("cid");
+    private List<String> getPlayersInChannel() {
+        ChannelClientListCommand.Response channelClientListCommandResponse = new ChannelClientListCommand(TSUtils.getMyClientID()).execute().getResponse();
+        if (!channelClientListCommandResponse.succeeded()) return Collections.emptyList();
 
-        if (cid == null && retry) {
-            TSClientQuery.connect();
-            return getPlayersInChannel(false);
-        }
-
-        String channelClientListResult = TSClientQuery.rawExec("channelclientlist cid=" + cid, false);
-        if (channelClientListResult == null) return Collections.emptyList();
-
-        List<String> clientIDs = new ArrayList<>();
-        for (String channelClient : StringUtils.split(channelClientListResult, "|")) {
-            Map<String, String> channelClientOptions = ResultParser.parse(channelClient);
-
-            clientIDs.add(channelClientOptions.get("clid"));
-        }
-
+        List<Client> clients = channelClientListCommandResponse.getClients();
         List<String> descriptions = new ArrayList<>();
-        for (String clientID : clientIDs) {
-            Map<String, String> clientVariableResult = TSClientQuery.exec("clientvariable client_description clid=" + clientID);
+        for (Client client : clients) {
+            ClientVariableCommand.Response clientVariableCommandResponse = new ClientVariableCommand(client).execute().getResponse();
+            String minecraftName = clientVariableCommandResponse.getMinecraftName();
 
-            String description = clientVariableResult.get("client_description");
-            if (description != null)
-                descriptions.add(TextUtils.stripPrefix(description));
+            if (minecraftName == null) continue;
+            descriptions.add(minecraftName);
         }
 
         return descriptions;
