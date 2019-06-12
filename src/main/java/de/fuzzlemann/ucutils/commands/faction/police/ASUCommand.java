@@ -1,12 +1,12 @@
 package de.fuzzlemann.ucutils.commands.faction.police;
 
+import de.fuzzlemann.ucutils.utils.abstraction.UPlayer;
 import de.fuzzlemann.ucutils.utils.command.api.Command;
 import de.fuzzlemann.ucutils.utils.command.api.TabCompletion;
 import de.fuzzlemann.ucutils.utils.faction.police.WantedManager;
 import de.fuzzlemann.ucutils.utils.faction.police.WantedReason;
 import de.fuzzlemann.ucutils.utils.math.Expression;
 import de.fuzzlemann.ucutils.utils.text.TextUtils;
-import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -19,7 +19,7 @@ import java.util.*;
 public class ASUCommand implements TabCompletion {
 
     @Command(value = "asu", usage = "/%label% [Spieler...] [Grund] (Variation) (-v/-b/-fsa)")
-    public boolean onCommand(EntityPlayerSP p, String[] args) {
+    public boolean onCommand(UPlayer p, String[] args) {
         if (args.length < 2) return false;
 
         Set<Flag> flags = getFlags(args);
@@ -61,7 +61,7 @@ public class ASUCommand implements TabCompletion {
         return true;
     }
 
-    private void giveWanteds(EntityPlayerSP issuer, String reason, int amount, List<String> players) {
+    private void giveWanteds(UPlayer issuer, String reason, int amount, List<String> players) {
         amount = Math.min(amount, 69);
 
         for (String player : players) {
@@ -70,7 +70,7 @@ public class ASUCommand implements TabCompletion {
     }
 
     @Override
-    public List<String> getTabCompletions(EntityPlayerSP p, String[] args) {
+    public List<String> getTabCompletions(UPlayer p, String[] args) {
         if (args.length != 2) return Collections.emptyList();
 
         return WantedManager.getWantedReasons();

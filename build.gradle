@@ -82,9 +82,13 @@ processResources {
         exclude 'mcmod.info'
     }
 
-    ant.replaceregexp(match: /\d+L; \/\/updated by gradle/, replace: new Date().toTimestamp().getTime() + "L; //updated by gradle", flags: 'g', byline: true) {
-        fileset(dir: 'src/main/java/de/fuzzlemann/ucutils/commands', includes: 'UCUtilsCommand.java')
-    }
+    ant.replaceregexp(
+            file: './src/main/java/de/fuzzlemann/ucutils/commands/UCUtilsCommand.java',
+            match: /\d+L; \/\/updated by gradle/,
+            replace: new Date().toTimestamp().getTime() + "L; //updated by gradle",
+            flags: 'g',
+            byline: true
+    )
 }
 
 task signJar(type: SignJar, dependsOn: reobfJar) {
@@ -132,10 +136,11 @@ task deployLocal(type: Exec, dependsOn: build) {
     commandLine = ['cmd', '/c', 'start', '\"\"', 'replaceLocal.bat']
 }
 
+List<String> deactivatedTasks = Arrays.asList('check', 'sourceTestJava', 'compileTestJava', 'processTestResources', 'test', 'testClasses');
 tasks.matching {
     Task task = (Task) it
     String taskName = task.name
-    taskName == 'check' || taskName == 'test' || taskName == 'testClasses'
+    deactivatedTasks.contains(taskName)
 }.all {
     enabled = false
 }

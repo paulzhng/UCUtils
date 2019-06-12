@@ -27,10 +27,10 @@ public class Main {
 
     public static final Minecraft MINECRAFT = Minecraft.getMinecraft();
 
+    public static final String NAME = "UC Utils";
     public static final String MOD_ID = "ucutils";
     public static final String VERSION = "1.12.1-1.6";
 
-    static final String NAME = "UC Utils";
     static final String GUI_FACTORY = "de.fuzzlemann.ucutils.utils.config.GuiFactoryUCUtils";
     static final String CERTIFICATE_FINGERPRINT = "d3c444c8828b6fe0d86675d009f6c057d4bf25f1";
 

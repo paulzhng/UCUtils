@@ -1,11 +1,11 @@
 package de.fuzzlemann.ucutils.events;
 
-import de.fuzzlemann.ucutils.Main;
+import de.fuzzlemann.ucutils.utils.abstraction.AbstractionHandler;
+import de.fuzzlemann.ucutils.utils.abstraction.UPlayer;
 import de.fuzzlemann.ucutils.utils.config.ConfigUtil;
 import de.fuzzlemann.ucutils.utils.sound.SoundUtil;
 import de.fuzzlemann.ucutils.utils.text.Message;
 import de.fuzzlemann.ucutils.utils.text.MessagePart;
-import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.event.ClickEvent;
@@ -59,7 +59,7 @@ public class NotificationEventHandler {
             return;
         }
 
-        EntityPlayerSP p = Main.MINECRAFT.player;
+        UPlayer p = AbstractionHandler.getInstance().getPlayer();
 
         if (ConfigUtil.inviteAnnouncement) {
             if (INVITE_PATTERN.matcher(unformattedText).find()) {

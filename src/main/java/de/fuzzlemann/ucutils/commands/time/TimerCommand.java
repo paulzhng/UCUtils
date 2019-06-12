@@ -2,6 +2,7 @@ package de.fuzzlemann.ucutils.commands.time;
 
 import de.fuzzlemann.ucutils.Main;
 import de.fuzzlemann.ucutils.utils.FormatUtils;
+import de.fuzzlemann.ucutils.utils.abstraction.UPlayer;
 import de.fuzzlemann.ucutils.utils.command.api.Command;
 import de.fuzzlemann.ucutils.utils.command.api.CommandParam;
 import de.fuzzlemann.ucutils.utils.command.api.TabCompletion;
@@ -10,7 +11,6 @@ import de.fuzzlemann.ucutils.utils.sound.TimerSound;
 import de.fuzzlemann.ucutils.utils.text.Message;
 import de.fuzzlemann.ucutils.utils.text.MessagePart;
 import de.fuzzlemann.ucutils.utils.text.TextUtils;
-import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.event.ClickEvent;
 import net.minecraft.util.text.event.HoverEvent;
@@ -30,7 +30,7 @@ public class TimerCommand implements TabCompletion {
     private int timerID;
 
     @Command(value = "timer", usage = "/%label% [list/start/stop] (Zeit/ID)", sendUsageOn = NumberFormatException.class)
-    public boolean onCommand(EntityPlayerSP p,
+    public boolean onCommand(UPlayer p,
                              String argument,
                              @CommandParam(required = false, defaultValue = CommandParam.NULL) Integer id,
                              @CommandParam(required = false, defaultValue = CommandParam.NULL) String time) {
@@ -133,7 +133,7 @@ public class TimerCommand implements TabCompletion {
     }
 
     @Override
-    public List<String> getTabCompletions(EntityPlayerSP p, String[] args) {
+    public List<String> getTabCompletions(UPlayer p, String[] args) {
         if (args.length == 1) return Arrays.asList("list", "start", "stop");
 
         return null;

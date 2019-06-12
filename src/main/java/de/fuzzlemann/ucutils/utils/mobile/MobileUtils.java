@@ -1,7 +1,7 @@
 package de.fuzzlemann.ucutils.utils.mobile;
 
+import de.fuzzlemann.ucutils.utils.abstraction.UPlayer;
 import de.fuzzlemann.ucutils.utils.io.JsonManager;
-import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -54,7 +54,7 @@ public class MobileUtils {
         new Thread(() -> JsonManager.writeList(BLOCKED_FILE, BLOCKED_PLAYERS)).start();
     }
 
-    public static int getNumber(EntityPlayerSP p, String numberPlayer) {
+    public static int getNumber(UPlayer p, String numberPlayer) {
         future = new CompletableFuture<>();
         p.sendChatMessage("/nummer " + numberPlayer);
 

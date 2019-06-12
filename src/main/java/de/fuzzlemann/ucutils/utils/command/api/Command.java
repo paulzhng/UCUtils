@@ -20,7 +20,7 @@ public @interface Command {
     /**
      * Returns the correct usage of the command ({@code %label%} is substituted with the label of the command the player used).
      * <p>
-     * The usage is send to the player if {@code false} is returned by onCommand(EntityPlayerSP, ...)
+     * The usage is send to the player if {@code false} is returned by onCommand(UPlayer, ...)
      *
      * @return the correct usage of the command
      */

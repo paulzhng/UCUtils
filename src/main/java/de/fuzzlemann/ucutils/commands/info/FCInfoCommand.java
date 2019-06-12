@@ -1,10 +1,10 @@
 package de.fuzzlemann.ucutils.commands.info;
 
+import de.fuzzlemann.ucutils.utils.abstraction.UPlayer;
 import de.fuzzlemann.ucutils.utils.command.api.Command;
 import de.fuzzlemann.ucutils.utils.command.api.CommandParam;
 import de.fuzzlemann.ucutils.utils.faction.Faction;
 import de.fuzzlemann.ucutils.utils.info.FactionInfo;
-import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -16,7 +16,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class FCInfoCommand {
 
     @Command({"fcinfo", "factioncommandinfo", "fcommandinfo", "factioncinfo"})
-    public boolean onCommand(EntityPlayerSP p, @CommandParam(joinStart = true, required = false, defaultValue = CommandParam.NULL) Faction faction) {
+    public boolean onCommand(UPlayer p, @CommandParam(joinStart = true, required = false, defaultValue = CommandParam.NULL) Faction faction) {
         if (faction != null) {
             p.sendMessage(faction.getFactionInfo().constructCommandHelpMessage());
             return true;
@@ -32,6 +32,5 @@ public class FCInfoCommand {
 
         p.sendMessage(text);
         return true;
-
     }
 }

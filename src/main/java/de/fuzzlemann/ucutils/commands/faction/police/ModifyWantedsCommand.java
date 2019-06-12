@@ -1,5 +1,6 @@
 package de.fuzzlemann.ucutils.commands.faction.police;
 
+import de.fuzzlemann.ucutils.utils.abstraction.UPlayer;
 import de.fuzzlemann.ucutils.utils.command.api.Command;
 import de.fuzzlemann.ucutils.utils.command.api.CommandParam;
 import de.fuzzlemann.ucutils.utils.command.api.ParameterParser;
@@ -8,7 +9,6 @@ import de.fuzzlemann.ucutils.utils.faction.police.Wanted;
 import de.fuzzlemann.ucutils.utils.faction.police.WantedManager;
 import de.fuzzlemann.ucutils.utils.math.Expression;
 import de.fuzzlemann.ucutils.utils.text.TextUtils;
-import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 public class ModifyWantedsCommand implements TabCompletion {
 
     @Command(value = {"modifywanteds", "mw"}, usage = "/%label% [Spieler] [GF/SF/SSF/S/DA5/DA10/DA15/FSA]", async = true)
-    public boolean onCommand(EntityPlayerSP p, String target, @CommandParam(arrayStart = true) Type[] types) {
+    public boolean onCommand(UPlayer p, String target, @CommandParam(arrayStart = true) Type[] types) {
         Wanted wanted = WantedManager.getWanteds(target);
         if (wanted == null) {
             TextUtils.error("Du hast /wanteds noch nicht ausgeführt.");
@@ -57,7 +57,7 @@ public class ModifyWantedsCommand implements TabCompletion {
     }
 
     @Override
-    public List<String> getTabCompletions(EntityPlayerSP p, String[] args) {
+    public List<String> getTabCompletions(UPlayer p, String[] args) {
         if (args.length == 1) return Collections.emptyList();
 
         return Arrays.stream(Type.values())

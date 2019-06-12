@@ -1,8 +1,8 @@
 package de.fuzzlemann.ucutils.commands.jobs;
 
+import de.fuzzlemann.ucutils.utils.abstraction.UPlayer;
 import de.fuzzlemann.ucutils.utils.command.api.Command;
 import de.fuzzlemann.ucutils.utils.text.TextUtils;
-import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.scoreboard.Score;
 import net.minecraft.scoreboard.Scoreboard;
 import net.minecraftforge.fml.relauncher.Side;
@@ -23,7 +23,7 @@ public class AGetPizzaCommand {
     private final AtomicBoolean started = new AtomicBoolean();
 
     @Command("agetpizza")
-    public boolean onCommand(EntityPlayerSP p) {
+    public boolean onCommand(UPlayer p) {
         if (started.get()) return true;
 
         Scoreboard scoreboard = p.getWorldScoreboard();

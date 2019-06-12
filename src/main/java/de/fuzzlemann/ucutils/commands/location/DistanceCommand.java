@@ -1,8 +1,8 @@
 package de.fuzzlemann.ucutils.commands.location;
 
+import de.fuzzlemann.ucutils.utils.abstraction.UPlayer;
 import de.fuzzlemann.ucutils.utils.command.api.Command;
 import de.fuzzlemann.ucutils.utils.text.Message;
-import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -14,8 +14,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class DistanceCommand {
 
     @Command(value = "distance", usage = "/%label% [X] [Y] [Z]")
-    public boolean onCommand(EntityPlayerSP p, int x, int y, int z) {
-        if (y == -1) y = (int) p.posY;
+    public boolean onCommand(UPlayer p, int x, int y, int z) {
+        if (y == -1) y = p.getPosition().getY();
         int distance = (int) p.getPosition().getDistance(x, y, z);
 
         Message.builder()

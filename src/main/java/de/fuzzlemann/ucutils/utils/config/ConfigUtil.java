@@ -103,7 +103,7 @@ public class ConfigUtil {
         Property tsApiKeyProperty = config.get(Configuration.CATEGORY_GENERAL,
                 "tsApiKey",
                 "",
-                "Der TS API Key (TeamSpeak ALT + P -> Erweiterungen -> ClientQuery -> Einstellungen -> API Key).");
+                "Der TS API Key (TeamSpeak ALT + P -> Erweiterungen -> ClientQuery -> Einstellungen -> API Key)");
         TSClientQuery.apiKey = tsApiKeyProperty.getString();
 
         apiKeyProperty = config.get(Configuration.CATEGORY_GENERAL,

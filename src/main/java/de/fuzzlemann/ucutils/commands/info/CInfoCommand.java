@@ -1,9 +1,9 @@
 package de.fuzzlemann.ucutils.commands.info;
 
+import de.fuzzlemann.ucutils.utils.abstraction.UPlayer;
 import de.fuzzlemann.ucutils.utils.command.api.Command;
 import de.fuzzlemann.ucutils.utils.info.CommandDescription;
 import de.fuzzlemann.ucutils.utils.info.CommandInfo;
-import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -30,7 +30,7 @@ public class CInfoCommand {
     );
 
     @Command({"cinfo", "commandinfo"})
-    public boolean onCommand(EntityPlayerSP p) {
+    public boolean onCommand(UPlayer p) {
         p.sendMessage(COMMAND_INFO.constructMessage("Wichtige Befehle"));
         return true;
     }

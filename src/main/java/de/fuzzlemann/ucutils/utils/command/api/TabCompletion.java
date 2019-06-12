@@ -1,7 +1,7 @@
 package de.fuzzlemann.ucutils.utils.command.api;
 
+import de.fuzzlemann.ucutils.utils.abstraction.UPlayer;
 import jline.internal.Nullable;
-import net.minecraft.client.entity.EntityPlayerSP;
 
 import java.util.List;
 
@@ -11,5 +11,5 @@ import java.util.List;
 public interface TabCompletion {
 
     @Nullable
-    List<String> getTabCompletions(EntityPlayerSP p, String[] args);
+    List<String> getTabCompletions(UPlayer p, String[] args);
 }

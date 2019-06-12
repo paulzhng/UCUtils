@@ -1,13 +1,14 @@
 package de.fuzzlemann.ucutils.commands.faction;
 
-import de.fuzzlemann.ucutils.Main;
+import de.fuzzlemann.ucutils.utils.abstraction.AbstractionHandler;
+import de.fuzzlemann.ucutils.utils.abstraction.UPlayer;
 import de.fuzzlemann.ucutils.utils.command.api.Command;
 import de.fuzzlemann.ucutils.utils.command.api.CommandParam;
 import de.fuzzlemann.ucutils.utils.command.api.ParameterParser;
 import de.fuzzlemann.ucutils.utils.location.navigation.NavigationUtil;
 import de.fuzzlemann.ucutils.utils.text.Message;
 import de.fuzzlemann.ucutils.utils.text.MessagePart;
-import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.event.ClickEvent;
@@ -37,7 +38,7 @@ public class CallReinforcementCommand {
 
     @SubscribeEvent
     public static void onChatReceived(ClientChatReceivedEvent e) {
-        EntityPlayerSP p = Main.MINECRAFT.player;
+        UPlayer p = AbstractionHandler.getInstance().getPlayer();
         ITextComponent messageComponent = e.getMessage();
         String msg = messageComponent.getUnformattedText();
 
@@ -108,7 +109,7 @@ public class CallReinforcementCommand {
     }
 
     @Command({"reinforcement", "callreinforcement", "verstärkung"})
-    public boolean onCommand(EntityPlayerSP p,
+    public boolean onCommand(UPlayer p,
                              @CommandParam(required = false, defaultValue = CommandParam.NULL) Type firstType,
                              @CommandParam(required = false, requiredValue = "ontheway") boolean onTheWay,
                              @CommandParam(required = false, defaultValue = CommandParam.NULL) String name,
@@ -127,9 +128,10 @@ public class CallReinforcementCommand {
             return true;
         }
 
-        int posX = (int) p.posX;
-        int posY = (int) p.posY;
-        int posZ = (int) p.posZ;
+        BlockPos position = p.getPosition();
+        int posX = position.getX();
+        int posY = position.getY();
+        int posZ = position.getZ();
 
         if (type.getMessage() != null)
             p.sendChatMessage("/" + chatType + " " + type.getMessage());

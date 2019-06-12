@@ -1,13 +1,14 @@
 package de.fuzzlemann.ucutils.utils.text;
 
 import com.google.common.annotations.VisibleForTesting;
-import de.fuzzlemann.ucutils.Main;
-import de.fuzzlemann.ucutils.utils.ForgeUtils;
-import de.fuzzlemann.ucutils.utils.Logger;
+import de.fuzzlemann.ucutils.utils.abstraction.AbstractionHandler;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * @author Fuzzlemann
@@ -105,14 +106,7 @@ public class Message {
         }
 
         public void send() {
-            ITextComponent text = build().toTextComponent();
-
-            if (ForgeUtils.isTest()) {
-                Logger.LOGGER.info("MESSAGE: " + text.getUnformattedText());
-                return;
-            }
-
-            Main.MINECRAFT.player.sendMessage(text);
+            AbstractionHandler.getInstance().getPlayer().sendMessage(build().toTextComponent());
         }
 
         public Message build() {

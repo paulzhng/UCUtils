@@ -1,8 +1,8 @@
 package de.fuzzlemann.ucutils.utils.faction.police;
 
-import de.fuzzlemann.ucutils.Main;
 import de.fuzzlemann.ucutils.events.NameFormatEventHandler;
 import de.fuzzlemann.ucutils.utils.ForgeUtils;
+import de.fuzzlemann.ucutils.utils.abstraction.AbstractionHandler;
 import de.fuzzlemann.ucutils.utils.api.APIUtils;
 import de.fuzzlemann.ucutils.utils.data.DataLoader;
 import de.fuzzlemann.ucutils.utils.data.DataModule;
@@ -51,7 +51,7 @@ public class WantedManager implements DataLoader {
 
     public static Wanted getWanteds(String player) {
         future = new CompletableFuture<>();
-        Main.MINECRAFT.player.sendChatMessage("/wantedinfo " + player);
+        AbstractionHandler.getInstance().getPlayer().sendChatMessage("/wantedinfo " + player);
 
         try {
             return future.get();

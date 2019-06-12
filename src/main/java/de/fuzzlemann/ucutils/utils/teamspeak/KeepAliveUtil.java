@@ -1,7 +1,7 @@
 package de.fuzzlemann.ucutils.utils.teamspeak;
 
-import java.util.Timer;
-import java.util.TimerTask;
+import de.fuzzlemann.ucutils.utils.Logger;
+
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -16,13 +16,16 @@ public class KeepAliveUtil {
         started = true;
 
         new Thread(() -> {
-            Timer timer = new Timer();
-            timer.scheduleAtFixedRate(new TimerTask() {
-                @Override
-                public void run() {
-                    TSClientQuery.rawExec("whoami", false);
+            while (true) {
+                TSClientQuery.rawExec("whoami", false);
+
+                try {
+                    Thread.sleep(TimeUnit.MINUTES.toMillis(1));
+                } catch (InterruptedException e) {
+                    Logger.LOGGER.catching(e);
+                    Thread.currentThread().interrupt();
                 }
-            }, 0, TimeUnit.MINUTES.toMillis(1));
-        }).start();
+            }
+        }, "UCUtils-KeepAliveTimer").start();
     }
 }

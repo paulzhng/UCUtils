@@ -3,6 +3,7 @@ package de.fuzzlemann.ucutils.commands.faction;
 import com.google.common.collect.Multimap;
 import de.fuzzlemann.ucutils.events.MemberActivityEventHandler;
 import de.fuzzlemann.ucutils.utils.Logger;
+import de.fuzzlemann.ucutils.utils.abstraction.UPlayer;
 import de.fuzzlemann.ucutils.utils.command.api.Command;
 import de.fuzzlemann.ucutils.utils.command.api.CommandParam;
 import de.fuzzlemann.ucutils.utils.mcapi.MojangAPI;
@@ -11,7 +12,6 @@ import de.fuzzlemann.ucutils.utils.teamspeak.TSClientQuery;
 import de.fuzzlemann.ucutils.utils.text.Message;
 import de.fuzzlemann.ucutils.utils.text.MessagePart;
 import de.fuzzlemann.ucutils.utils.text.TextUtils;
-import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.event.ClickEvent;
 import net.minecraft.util.text.event.HoverEvent;
@@ -34,7 +34,7 @@ import java.util.Map;
 public class ChannelActivityCommand {
 
     @Command(value = "channelactivity", async = true)
-    public boolean onCommand(EntityPlayerSP p, @CommandParam(required = false, requiredValue = "copy") boolean copy) {
+    public boolean onCommand(UPlayer p, @CommandParam(required = false, requiredValue = "copy") boolean copy) {
         List<String> players;
         try {
             players = getPlayersInChannel(true);

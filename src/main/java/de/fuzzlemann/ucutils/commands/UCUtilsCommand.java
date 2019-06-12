@@ -17,7 +17,7 @@ import java.util.Date;
 public class UCUtilsCommand {
 
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
-    private final long compileTime = 1560192367180L; //updated by gradle
+    private final long compileTime = 1560328503227L; //updated by gradle
     private final String formattedTime = dateFormat.format(new Date(compileTime));
 
     @Command("ucutils")

@@ -1,6 +1,11 @@
 package de.fuzzlemann.ucutils.utils.command;
 
+import de.fuzzlemann.ucutils.commands.UpdateCommand;
+import de.fuzzlemann.ucutils.commands.faction.CheckActiveMembersCommand;
+import de.fuzzlemann.ucutils.utils.abstraction.AbstractionHandler;
+import de.fuzzlemann.ucutils.utils.abstraction.TestPlayer;
 import de.fuzzlemann.ucutils.utils.command.api.Command;
+import de.fuzzlemann.ucutils.utils.io.FileManager;
 import net.minecraftforge.fml.common.discovery.ASMDataTable;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -11,6 +16,7 @@ import org.reflections.scanners.MethodAnnotationsScanner;
 import org.reflections.util.ClasspathHelper;
 import org.reflections.util.ConfigurationBuilder;
 
+import java.io.File;
 import java.lang.reflect.Method;
 import java.util.HashSet;
 import java.util.Set;
@@ -27,6 +33,9 @@ public class CommandTest {
 
     @BeforeAll
     static void setUp() {
+        UpdateCommand.modFile = new File(FileManager.MC_DIRECTORY, "ucutils.jar");
+
+        AbstractionHandler.getInstance().setPlayerImplementation(TestPlayer.class);
         ASMDataTable asmDataTable = mock(ASMDataTable.class);
 
         Set<ASMDataTable.ASMData> asmDataSet = new HashSet<>();
@@ -37,6 +46,10 @@ public class CommandTest {
         Set<Method> methodsAnnotatedWith = reflections.getMethodsAnnotatedWith(Command.class);
         for (Method method : methodsAnnotatedWith) {
             Class<?> commandClass = method.getDeclaringClass();
+
+            if (commandClass.getPackage().getName().startsWith("de.fuzzlemann.ucutils.commands.teamspeak")) continue;
+            if (commandClass == CheckActiveMembersCommand.class) continue;
+            ;
 
             ASMDataTable.ASMData asmData = mock(ASMDataTable.ASMData.class);
             when(asmData.getClassName()).thenReturn(commandClass.getCanonicalName());
@@ -57,7 +70,7 @@ public class CommandTest {
     @Test
     void testNoDirectException() {
         for (String label : CommandRegistry.COMMAND_REGISTRY.keySet()) {
-            CommandIssuer.issueCommand(label, new String[]{});
+            CommandIssuer.issueCommand(label, new String[]{}, true);
         }
     }
 }

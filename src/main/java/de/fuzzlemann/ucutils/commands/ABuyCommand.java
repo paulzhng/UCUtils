@@ -1,6 +1,7 @@
 package de.fuzzlemann.ucutils.commands;
 
 import de.fuzzlemann.ucutils.Main;
+import de.fuzzlemann.ucutils.utils.abstraction.AbstractionHandler;
 import de.fuzzlemann.ucutils.utils.command.api.Command;
 import de.fuzzlemann.ucutils.utils.command.api.CommandParam;
 import de.fuzzlemann.ucutils.utils.text.Message;
@@ -38,6 +39,26 @@ public class ABuyCommand {
     private static int amount;
     private static int amountLeft;
     private static int slotIndex;
+
+    @Command(value = "abuy", usage = "/%label% [Menge] (Delay [nur bei schlechteren PCs nötig])")
+    public boolean onCommand(int tempAmount, @CommandParam(required = false, defaultValue = "10") int tempDelay) {
+        if (tempAmount <= 1) return false;
+        if (tempDelay <= 1) return false;
+
+        amount = tempAmount;
+        delay = tempDelay;
+
+        Message.builder()
+                .prefix()
+                .of("Die Menge für ABuy wurde erfolgreich eingestellt.").color(TextFormatting.GRAY).advance()
+                .newLine()
+                .info()
+                .of("Um das gewünschte Produkt zu kaufen, klicke nun mit ").color(TextFormatting.WHITE).advance()
+                .of("'b'").color(TextFormatting.GOLD).advance()
+                .of(" auf das Item im Shop.").color(TextFormatting.WHITE).advance()
+                .send();
+        return true;
+    }
 
     @SubscribeEvent
     public static void onKeyboardClickEvent(GuiScreenEvent.KeyboardInputEvent e) {
@@ -103,30 +124,10 @@ public class ABuyCommand {
         --amountLeft;
         lastBuy = System.currentTimeMillis();
 
-        Container container = Main.MINECRAFT.player.openContainer;
+        Container container = AbstractionHandler.getInstance().getPlayer().getOpenContainer();
         Main.MINECRAFT.playerController.windowClick(container.windowId, slotIndex, 0, ClickType.QUICK_MOVE, Main.MINECRAFT.player);
 
         container.detectAndSendChanges();
-        Main.MINECRAFT.player.inventoryContainer.detectAndSendChanges();
-    }
-
-    @Command(value = "abuy", usage = "/%label% [Menge] (Delay [nur bei schlechteren PCs nötig])")
-    public boolean onCommand(int tempAmount, @CommandParam(required = false, defaultValue = "10") int tempDelay) {
-        if (tempAmount <= 1) return false;
-        if (tempDelay <= 1) return false;
-
-        amount = tempAmount;
-        delay = tempDelay;
-
-        Message.builder()
-                .prefix()
-                .of("Die Menge für ABuy wurde erfolgreich eingestellt.").color(TextFormatting.GRAY).advance()
-                .newLine()
-                .info()
-                .of("Um das gewünschte Produkt zu kaufen, klicke nun mit ").color(TextFormatting.WHITE).advance()
-                .of("'b'").color(TextFormatting.GOLD).advance()
-                .of(" auf das Item im Shop.").color(TextFormatting.WHITE).advance()
-                .send();
-        return true;
+        AbstractionHandler.getInstance().getPlayer().getInventoryContainer().detectAndSendChanges();
     }
 }

@@ -4,6 +4,7 @@ import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.gson.Gson;
 import de.fuzzlemann.ucutils.Main;
+import de.fuzzlemann.ucutils.utils.abstraction.AbstractionHandler;
 import de.fuzzlemann.ucutils.utils.api.APIUtils;
 import de.fuzzlemann.ucutils.utils.command.api.Command;
 import de.fuzzlemann.ucutils.utils.command.api.CommandParam;
@@ -118,7 +119,7 @@ public class AutoNCCommand {
                     .of("]").color(TextFormatting.GRAY).advance()
                     .send();
 
-            Main.MINECRAFT.player.playSound(Objects.requireNonNull(SoundUtil.getSoundEvent("block.note.pling")), 1, 1);
+            AbstractionHandler.getInstance().getPlayer().playSound(Objects.requireNonNull(SoundUtil.getSoundEvent("block.note.pling")), 1, 1);
         }).start();
     }
 
@@ -169,7 +170,7 @@ public class AutoNCCommand {
         }
 
         for (String subMessage : subMessages) {
-            Main.MINECRAFT.player.sendChatMessage("/nc " + subMessage);
+            AbstractionHandler.getInstance().getPlayer().sendChatMessage("/nc " + subMessage);
         }
     }
 

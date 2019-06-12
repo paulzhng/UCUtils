@@ -1,11 +1,11 @@
 package de.fuzzlemann.ucutils.commands.supporter;
 
+import de.fuzzlemann.ucutils.utils.abstraction.UPlayer;
 import de.fuzzlemann.ucutils.utils.command.api.Command;
 import de.fuzzlemann.ucutils.utils.command.api.CommandParam;
 import de.fuzzlemann.ucutils.utils.command.api.TabCompletion;
 import de.fuzzlemann.ucutils.utils.punishment.PunishManager;
 import de.fuzzlemann.ucutils.utils.punishment.Violation;
-import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -19,7 +19,7 @@ import java.util.List;
 public class PunishCommand implements TabCompletion {
 
     @Command(value = "punish", usage = "/%label% [Spieler] [Grund...]")
-    public boolean onCommand(EntityPlayerSP p, String target, @CommandParam(arrayStart = true) Violation[] violations) {
+    public boolean onCommand(UPlayer p, String target, @CommandParam(arrayStart = true) Violation[] violations) {
         Violation violation = Violation.combineViolations(violations);
         for (String commands : violation.getCommands(target)) {
             p.sendChatMessage(commands);
@@ -29,7 +29,7 @@ public class PunishCommand implements TabCompletion {
     }
 
     @Override
-    public List<String> getTabCompletions(EntityPlayerSP p, String[] args) {
+    public List<String> getTabCompletions(UPlayer p, String[] args) {
         if (args.length == 1) return Collections.emptyList();
 
         return PunishManager.getViolations();

@@ -1,6 +1,6 @@
 package de.fuzzlemann.ucutils.commands.faction;
 
-import de.fuzzlemann.ucutils.Main;
+import de.fuzzlemann.ucutils.utils.abstraction.AbstractionHandler;
 import de.fuzzlemann.ucutils.utils.command.api.Command;
 import de.fuzzlemann.ucutils.utils.faction.Faction;
 import de.fuzzlemann.ucutils.utils.text.Message;
@@ -93,7 +93,7 @@ public class CheckActiveMembersCommand {
 
     private Map<Boolean, Integer> getMembers(Faction faction) {
         future = new CompletableFuture<>();
-        Main.MINECRAFT.player.sendChatMessage("/memberinfo " + faction.getFactionKey());
+        AbstractionHandler.getInstance().getPlayer().sendChatMessage("/memberinfo " + faction.getFactionKey());
 
         try {
             return future.get();

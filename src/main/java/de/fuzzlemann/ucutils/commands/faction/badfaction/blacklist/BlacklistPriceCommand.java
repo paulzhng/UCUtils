@@ -1,5 +1,6 @@
 package de.fuzzlemann.ucutils.commands.faction.badfaction.blacklist;
 
+import de.fuzzlemann.ucutils.utils.abstraction.UPlayer;
 import de.fuzzlemann.ucutils.utils.command.api.Command;
 import de.fuzzlemann.ucutils.utils.command.api.CommandParam;
 import de.fuzzlemann.ucutils.utils.command.api.TabCompletion;
@@ -7,7 +8,6 @@ import de.fuzzlemann.ucutils.utils.faction.badfaction.blacklist.BlacklistReason;
 import de.fuzzlemann.ucutils.utils.faction.badfaction.blacklist.BlacklistUtil;
 import de.fuzzlemann.ucutils.utils.text.Message;
 import de.fuzzlemann.ucutils.utils.text.TextUtils;
-import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -58,7 +58,7 @@ public class BlacklistPriceCommand implements TabCompletion {
     }
 
     @Override
-    public List<String> getTabCompletions(EntityPlayerSP p, String[] args) {
+    public List<String> getTabCompletions(UPlayer p, String[] args) {
         if (args.length == 1) return Arrays.asList("setprice", "list");
         if (!args[0].equalsIgnoreCase("setprice")) return null;
         if (args.length == 2) {

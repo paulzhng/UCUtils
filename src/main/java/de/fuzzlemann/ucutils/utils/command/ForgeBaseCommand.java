@@ -1,7 +1,7 @@
 package de.fuzzlemann.ucutils.utils.command;
 
-import de.fuzzlemann.ucutils.Main;
 import de.fuzzlemann.ucutils.utils.ForgeUtils;
+import de.fuzzlemann.ucutils.utils.abstraction.AbstractionHandler;
 import de.fuzzlemann.ucutils.utils.command.api.TabCompletion;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
@@ -69,7 +69,7 @@ class ForgeBaseCommand extends CommandBase implements IClientCommand {
 
         List<String> tabCompletions;
         if (tabCompletion != null) {
-            List<String> returnedTabCompletions = tabCompletion.getTabCompletions(Main.MINECRAFT.player, args);
+            List<String> returnedTabCompletions = tabCompletion.getTabCompletions(AbstractionHandler.getInstance().getPlayer(), args);
 
             if (returnedTabCompletions != null) {
                 tabCompletions = new ArrayList<>(returnedTabCompletions); //prevent UnsupportedOperationException when an immutable list is returned

@@ -1,7 +1,9 @@
 package de.fuzzlemann.ucutils.utils;
 
 import com.google.common.collect.Maps;
+import com.mojang.text2speech.Narrator;
 import de.fuzzlemann.ucutils.Main;
+import de.fuzzlemann.ucutils.utils.abstraction.AbstractionHandler;
 import de.fuzzlemann.ucutils.utils.text.TextUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.NetHandlerPlayClient;
@@ -56,7 +58,7 @@ public class ForgeUtils {
     }
 
     public static <T> Map.Entry<Double, T> getNearestObject(Iterable<T> iterable, Function<T, BlockPos> blockPosFunction) {
-        return getNearestObject(Main.MINECRAFT.player.getPosition(), iterable, blockPosFunction);
+        return getNearestObject(AbstractionHandler.getInstance().getPlayer().getPosition(), iterable, blockPosFunction);
     }
 
     public static <T> Map.Entry<Double, T> getNearestObject(T[] array, Function<T, Integer> xFunction, Function<T, Integer> yFunction, Function<T, Integer> zFunction) {
@@ -64,7 +66,7 @@ public class ForgeUtils {
     }
 
     public static <T> Map.Entry<Double, T> getNearestObject(Iterable<T> iterable, Function<T, Integer> xFunction, Function<T, Integer> yFunction, Function<T, Integer> zFunction) {
-        return getNearestObject(Main.MINECRAFT.player.getPosition(), iterable, xFunction, yFunction, zFunction);
+        return getNearestObject(AbstractionHandler.getInstance().getPlayer().getPosition(), iterable, xFunction, yFunction, zFunction);
     }
 
     public static <T> Map.Entry<Double, T> getNearestObject(BlockPos blockPos, T[] array, Function<T, BlockPos> blockPosFunction) {

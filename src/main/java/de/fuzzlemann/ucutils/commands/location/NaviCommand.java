@@ -2,12 +2,12 @@ package de.fuzzlemann.ucutils.commands.location;
 
 import de.fuzzlemann.ucutils.common.CustomNaviPoint;
 import de.fuzzlemann.ucutils.utils.Logger;
+import de.fuzzlemann.ucutils.utils.abstraction.UPlayer;
 import de.fuzzlemann.ucutils.utils.command.api.Command;
 import de.fuzzlemann.ucutils.utils.command.api.CommandParam;
 import de.fuzzlemann.ucutils.utils.command.api.TabCompletion;
 import de.fuzzlemann.ucutils.utils.location.navigation.NavigationUtil;
 import de.fuzzlemann.ucutils.utils.text.Message;
-import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -50,7 +50,7 @@ public class NaviCommand implements TabCompletion {
     }
 
     @Command("navi")
-    public boolean onCommand(EntityPlayerSP p, @CommandParam(required = false) String argument) {
+    public boolean onCommand(UPlayer p, @CommandParam(required = false) String argument) {
         if (argument.isEmpty()) {
             passToServer(p, argument);
             return true;
@@ -93,12 +93,12 @@ public class NaviCommand implements TabCompletion {
         return true;
     }
 
-    private void passToServer(EntityPlayerSP p, String argument) {
+    private void passToServer(UPlayer p, String argument) {
         p.sendChatMessage("/navi " + argument);
     }
 
     @Override
-    public List<String> getTabCompletions(EntityPlayerSP p, String[] args) {
+    public List<String> getTabCompletions(UPlayer p, String[] args) {
         if (args.length != 1) return null;
 
         List<String> naviPointNames = new ArrayList<>();

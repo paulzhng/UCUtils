@@ -1,11 +1,11 @@
 package de.fuzzlemann.ucutils.commands.faction.badfaction.blacklist;
 
+import de.fuzzlemann.ucutils.utils.abstraction.UPlayer;
 import de.fuzzlemann.ucutils.utils.command.api.Command;
 import de.fuzzlemann.ucutils.utils.command.api.CommandParam;
 import de.fuzzlemann.ucutils.utils.command.api.TabCompletion;
 import de.fuzzlemann.ucutils.utils.faction.badfaction.blacklist.BlacklistReason;
 import de.fuzzlemann.ucutils.utils.faction.badfaction.blacklist.BlacklistUtil;
-import net.minecraft.client.entity.EntityPlayerSP;
 
 import java.util.Collections;
 import java.util.List;
@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 public class ASetBlacklistCommand implements TabCompletion {
 
     @Command(value = {"asetblacklist", "asetbl"}, usage = "/%label% [Spieler...] [Grund]")
-    public boolean onCommand(EntityPlayerSP p, @CommandParam(arrayStart = true) String[] targets, BlacklistReason reason) {
+    public boolean onCommand(UPlayer p, @CommandParam(arrayStart = true) String[] targets, BlacklistReason reason) {
         for (String player : targets) {
             p.sendChatMessage("/bl set " + player + " 100 " + reason.getPrice() + " " + reason.getReason());
         }
@@ -26,7 +26,7 @@ public class ASetBlacklistCommand implements TabCompletion {
     }
 
     @Override
-    public List<String> getTabCompletions(EntityPlayerSP p, String[] args) {
+    public List<String> getTabCompletions(UPlayer p, String[] args) {
         if (args.length != 2) return Collections.emptyList();
 
         return BlacklistUtil.BLACKLIST_REASONS

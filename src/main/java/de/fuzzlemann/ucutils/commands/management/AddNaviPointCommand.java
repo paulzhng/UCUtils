@@ -1,11 +1,11 @@
 package de.fuzzlemann.ucutils.commands.management;
 
 import de.fuzzlemann.ucutils.common.CustomNaviPoint;
+import de.fuzzlemann.ucutils.utils.abstraction.UPlayer;
 import de.fuzzlemann.ucutils.utils.api.APIUtils;
 import de.fuzzlemann.ucutils.utils.command.api.Command;
 import de.fuzzlemann.ucutils.utils.command.api.CommandParam;
 import de.fuzzlemann.ucutils.utils.text.TextUtils;
-import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.util.math.BlockPos;
 
 import java.util.ArrayList;
@@ -17,7 +17,7 @@ import java.util.List;
 public class AddNaviPointCommand {
 
     @Command(value = "addnavipoint", usage = "/%label% (x) (y) (z) [Namen...]", management = true)
-    public boolean onCommand(EntityPlayerSP p,
+    public boolean onCommand(UPlayer p,
                              @CommandParam(required = false, defaultValue = CommandParam.NULL) Integer x,
                              @CommandParam(required = false, defaultValue = CommandParam.NULL) Integer y,
                              @CommandParam(required = false, defaultValue = CommandParam.NULL) Integer z,

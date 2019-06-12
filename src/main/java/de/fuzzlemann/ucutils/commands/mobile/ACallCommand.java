@@ -1,8 +1,8 @@
 package de.fuzzlemann.ucutils.commands.mobile;
 
+import de.fuzzlemann.ucutils.utils.abstraction.UPlayer;
 import de.fuzzlemann.ucutils.utils.command.api.Command;
 import de.fuzzlemann.ucutils.utils.mobile.MobileUtils;
-import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -13,7 +13,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class ACallCommand {
 
     @Command(value = "acall", usage = "/%label% [Spieler]", async = true)
-    public boolean onCommand(EntityPlayerSP p, String target) {
+    public boolean onCommand(UPlayer p, String target) {
         int number = MobileUtils.getNumber(p, target);
         if (number == -1) return true;
 

@@ -2,15 +2,15 @@ package de.fuzzlemann.ucutils.utils.command;
 
 import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.ListMultimap;
-import de.fuzzlemann.ucutils.Main;
 import de.fuzzlemann.ucutils.utils.Logger;
 import de.fuzzlemann.ucutils.utils.ReflectionUtil;
+import de.fuzzlemann.ucutils.utils.abstraction.AbstractionHandler;
+import de.fuzzlemann.ucutils.utils.abstraction.UPlayer;
 import de.fuzzlemann.ucutils.utils.command.api.Command;
 import de.fuzzlemann.ucutils.utils.command.api.CommandParam;
 import de.fuzzlemann.ucutils.utils.command.exceptions.ArgumentException;
 import de.fuzzlemann.ucutils.utils.command.exceptions.DeclarationException;
 import de.fuzzlemann.ucutils.utils.text.TextUtils;
-import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.commons.lang3.ClassUtils;
@@ -36,8 +36,22 @@ class CommandIssuer {
      *
      * @param label the label the command was issued with
      * @param args  the arguments which were given with the command
+     * @see #issueCommand(String, String[], boolean)
      */
     static void issueCommand(String label, String[] args) {
+        issueCommand(label, args, false);
+    }
+
+    /**
+     * Issues the command associated with the {@code label}.
+     *
+     * @param label          the label the command was issued with
+     * @param args           the arguments which were given with the command
+     * @param throwException {@code true}, if an exception on error should be thrown, {@code false}, when the error-handling should be done by the method itself.
+     *                       When this is enabled, asynchronous execution is disabled by default. This should mostly be used for testing.
+     * @see #issueCommand(String, String[])
+     */
+    static void issueCommand(String label, String[] args, boolean throwException) {
         Object command = CommandRegistry.COMMAND_REGISTRY.get(label);
         Method onCommand = getOnCommand(command);
         Command commandAnnotation = getCommand(onCommand);
@@ -51,6 +65,8 @@ class CommandIssuer {
                 if (!executeCommand(command, onCommand, args))
                     sendUsage(usage, label);
             } catch (Throwable e) { //check if the throwable is expected; if so, send the usage
+                if (throwException) throw e;
+
                 Class<? extends Throwable>[] sendUsageOn = commandAnnotation.sendUsageOn();
 
                 for (Class<? extends Throwable> clazz : sendUsageOn) {
@@ -66,7 +82,7 @@ class CommandIssuer {
         };
 
         //Executes the command in an separate thread when stated
-        if (commandAnnotation.async()) {
+        if (commandAnnotation.async() && !throwException) {
             new Thread(commandRunnable).start(); //asynchronous
         } else {
             commandRunnable.run(); //synchronous
@@ -88,9 +104,9 @@ class CommandIssuer {
     /**
      * Parses the arguments and passes them on to the command.
      *
-     * @param command the command executor associated with the command
-     * @param onCommand       the method where the logic of the command is located in
-     * @param args            the arguments which were given
+     * @param command   the command executor associated with the command
+     * @param onCommand the method where the logic of the command is located in
+     * @param args      the arguments which were given
      * @return {@code true}, if the execution of the command was successful; {@code false}, if the arguments ({@code args}) were not given correctly
      */
     private static boolean executeCommand(Object command, Method onCommand, String[] args) {
@@ -106,11 +122,11 @@ class CommandIssuer {
         }
 
         Object[] checkedParameters;
-        if (hasPlayerParam(onCommand)) { //checks if EntityPlayerSP should be passed on to the command
-            // the EntityPlayerSP parameter *must* always be the first one, so when it is present, the other parameters
-            // are getting moved one to the right and the EntityPlayerSP is inserted at the start of the (new) array
+        if (hasPlayerParam(onCommand)) { //checks if UPlayer should be passed on to the command
+            // the UPLayer parameter *must* always be the first one, so when it is present, the other parameters
+            // are getting moved one to the right and the UPlayer is inserted at the start of the (new) array
             checkedParameters = new Object[parameters.length + 1];
-            checkedParameters[0] = Main.MINECRAFT.player;
+            checkedParameters[0] = AbstractionHandler.getInstance().getPlayer();
             System.arraycopy(parameters, 0, checkedParameters, 1, parameters.length); //Content of the previous array is inserted in the new array at index 1
         } else {
             checkedParameters = parameters; //no player param present -> use previous array
@@ -136,35 +152,33 @@ class CommandIssuer {
         if (parameterTypes.length == 0)
             return false; //when no arguments are present, no String[] can be passed onto the method
 
+        boolean containsNonAnnotatedStringArray = false;
         for (Class<?> parameterType : parameterTypes) {
-            if (!parameterType.isAssignableFrom(String[].class)) { //checks if the parameter type is a String[]
-                if (parameterType.isAssignableFrom(EntityPlayerSP.class)) {
-                    continue; //EntityPlayerSP can be another valid parameter type
-                } else {
-                    return false; //no other parameter types except EntityPlayerSP and String[] can be defined when using default usage
-                }
-
+            if (parameterType.isAssignableFrom(String[].class) && !parameterType.isAnnotationPresent(CommandParam.class)) { //checks if the parameter type is a String[]
+                containsNonAnnotatedStringArray = true;
+                continue;
             }
 
-            if (parameterType.isAnnotationPresent(CommandParam.class))
-                return false; //annotation is present -> no raw arguments
+            if (!parameterType.isAssignableFrom(UPlayer.class)) { //UPlayer can be another valid parameter type
+                return false; //no other parameter types except UPlayer and String[] can be defined when using default usage
+            }
         }
 
-        return true;
+        return containsNonAnnotatedStringArray;
     }
 
     /**
-     * Checks if {@code onCommand} has {@link EntityPlayerSP} as its first parameter.
+     * Checks if {@code onCommand} has {@link UPlayer} as its first parameter.
      *
      * @param onCommand the {@link Method} which is checked
-     * @return if {@code onCommand} has {@link EntityPlayerSP} as its first parameter
+     * @return if {@code onCommand} has {@link UPlayer} as its first parameter
      */
     private static boolean hasPlayerParam(Method onCommand) {
         Class<?>[] parameterTypes = onCommand.getParameterTypes();
         if (parameterTypes.length == 0)
-            return false; //no parameters at all -> EntityPlayerSP cannot be the first parameter
+            return false; //no parameters at all -> UPLayer cannot be the first parameter
 
-        return parameterTypes[0].isAssignableFrom(EntityPlayerSP.class);
+        return parameterTypes[0].isAssignableFrom(UPlayer.class);
     }
 
     /**
@@ -321,7 +335,7 @@ class CommandIssuer {
             Class<?> parameterType = parameterTypes[i];
             Annotation[] annotations = parameterAnnotations[i];
 
-            if (ClassUtils.isAssignable(parameterType, EntityPlayerSP.class)) continue;
+            if (parameterType == UPlayer.class) continue;
 
             CommandParam commandParam = ReflectionUtil.getAnnotation(annotations, CommandParam.class);
             if (commandParam == null) commandParam = DefaultCommandParamSupplier.COMMAND_PARAM;

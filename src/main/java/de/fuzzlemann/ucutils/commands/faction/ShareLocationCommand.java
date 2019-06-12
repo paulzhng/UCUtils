@@ -1,13 +1,14 @@
 package de.fuzzlemann.ucutils.commands.faction;
 
-import de.fuzzlemann.ucutils.Main;
 import de.fuzzlemann.ucutils.utils.ForgeUtils;
+import de.fuzzlemann.ucutils.utils.abstraction.AbstractionHandler;
+import de.fuzzlemann.ucutils.utils.abstraction.UPlayer;
 import de.fuzzlemann.ucutils.utils.command.api.Command;
 import de.fuzzlemann.ucutils.utils.command.api.CommandParam;
 import de.fuzzlemann.ucutils.utils.location.navigation.NavigationUtil;
 import de.fuzzlemann.ucutils.utils.text.Message;
 import de.fuzzlemann.ucutils.utils.text.TextUtils;
-import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
@@ -40,7 +41,7 @@ public class ShareLocationCommand {
         Matcher shareLocationMatcher = SHARE_LOCATION_PATTERN.matcher(msg);
         if (!shareLocationMatcher.find()) return;
 
-        EntityPlayerSP p = Main.MINECRAFT.player;
+        UPlayer p = AbstractionHandler.getInstance().getPlayer();
         String playerName = p.getName();
 
         e.setCanceled(true);
@@ -69,7 +70,7 @@ public class ShareLocationCommand {
     }
 
     @Command(value = {"sharelocation", "shareloc", "sloc"}, usage = "/sharelocation [Spieler...] (-d)")
-    public boolean onCommand(EntityPlayerSP p, @CommandParam(arrayStart = true) String[] players, @CommandParam(required = false, requiredValue = "-d") boolean allianceChat) {
+    public boolean onCommand(UPlayer p, @CommandParam(arrayStart = true) String[] players, @CommandParam(required = false, requiredValue = "-d") boolean allianceChat) {
         List<String> onlinePlayers = ForgeUtils.getOnlinePlayers();
         Set<String> playerNames = new LinkedHashSet<>();
 
@@ -88,9 +89,10 @@ public class ShareLocationCommand {
         String playerString = String.join(", ", playerNames);
         String command = allianceChat ? "/d" : "/f";
 
-        int posX = (int) p.posX;
-        int posY = (int) p.posY;
-        int posZ = (int) p.posZ;
+        BlockPos position = p.getPosition();
+        int posX = position.getX();
+        int posY = position.getY();
+        int posZ = position.getZ();
 
         String fullCommand = command + " Positionsteilung für " + playerString + "! -> X: " + posX + " | Y: " + posY + " | Z: " + posZ;
         p.sendChatMessage(fullCommand);
