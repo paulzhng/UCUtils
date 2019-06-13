@@ -43,7 +43,6 @@ public class TSClientQuery implements Closeable {
         if (instance != null) {
             Logger.LOGGER.info("Closing the TeamSpeak Client Query Connection...");
             instance.close();
-            instance = null;
         }
     }
 
@@ -112,13 +111,14 @@ public class TSClientQuery implements Closeable {
     }
 
     private void setupSchandlerID() {
-        CurrentSchandlerIDCommand.Response response = new CurrentSchandlerIDCommand().execute().getResponse();
+        CurrentSchandlerIDCommand.Response response = new CurrentSchandlerIDCommand().getResponse();
         this.schandlerID = response.getSchandlerID();
     }
 
     private void registerEvents() {
+        int schandlerID = TSClientQuery.getInstance().getSchandlerID();
         for (String eventName : TSEventHandler.TEAMSPEAK_EVENTS.keySet()) {
-            new ClientNotifyRegisterCommand(TSClientQuery.getInstance().getSchandlerID(), eventName).execute().getResponse();
+            new ClientNotifyRegisterCommand(schandlerID, eventName).execute();
         }
     }
 
@@ -145,5 +145,6 @@ public class TSClientQuery implements Closeable {
     @Override
     public void close() {
         IOUtils.closeQuietly(socket, writer, reader, keepAliveThread);
+        TSClientQuery.instance = null;
     }
 }

@@ -9,7 +9,7 @@ import java.util.StringJoiner;
  */
 public class CommandResponse {
 
-    protected final String rawResponse;
+    private final String rawResponse;
     private Map<String, String> response;
     private List<Map<String, String>> responseList;
 
@@ -60,7 +60,7 @@ public class CommandResponse {
 
     public Map<String, String> getResponse() {
         if (response == null) {
-            response = ResponseParser.parse(rawResponse);
+            response = TSParser.parse(rawResponse);
         }
 
         return response;
@@ -68,7 +68,7 @@ public class CommandResponse {
 
     public List<Map<String, String>> getResponseList() {
         if (responseList == null) {
-            responseList = ResponseParser.parseMap(rawResponse);
+            responseList = TSParser.parseMap(rawResponse);
         }
 
         return responseList;

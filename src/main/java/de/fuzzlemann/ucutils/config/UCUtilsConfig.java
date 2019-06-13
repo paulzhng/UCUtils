@@ -1,6 +1,7 @@
 package de.fuzzlemann.ucutils.config;
 
 import de.fuzzlemann.ucutils.Main;
+import de.fuzzlemann.ucutils.teamspeak.TSClientQuery;
 import net.minecraftforge.common.config.Config;
 import net.minecraftforge.common.config.ConfigManager;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
@@ -74,10 +75,19 @@ public class UCUtilsConfig {
     @Config.Comment("Gibt eine Nachricht und einen Sound ab, wenn eine Person das Wartezimmer im TeamSpeak betritt (Nur als Teammitglied wichtig)")
     public static boolean notifyWaitingSupport = false;
 
+    @Config.Name("notifyWaitingPublicChannel")
+    @Config.Comment("Gibt eine Nachricht und einen Sound ab, wenn eine Person das Öffentlich der eigenen Fraktion im TeamSpeak betritt")
+    public static boolean notifyWaitingPublic = false;
+
     @SubscribeEvent
     public static void onConfigChange(ConfigChangedEvent e) {
         if (e == null || e.getModID().equals(Main.MOD_ID)) {
+            String previousTSApiKey = tsAPIKey;
             ConfigManager.sync(Main.MOD_ID, Config.Type.INSTANCE);
+
+            if (!previousTSApiKey.equals(tsAPIKey)) {
+                TSClientQuery.reconnect();
+            }
         }
     }
 }

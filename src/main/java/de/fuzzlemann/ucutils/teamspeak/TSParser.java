@@ -30,7 +30,7 @@ import java.util.*;
 /**
  * @author Bert De Geyter, Roger Baumgartner
  */
-public class ResponseParser {
+public class TSParser {
 
     public static Map<String, String> parse(String raw) {
         StringTokenizer st = new StringTokenizer(raw, " ", false);
@@ -58,10 +58,27 @@ public class ResponseParser {
         List<Map<String, String>> result = new ArrayList<>();
 
         for (String rawMap : rawMaps) {
-            result.add(ResponseParser.parse(rawMap));
+            result.add(TSParser.parse(rawMap));
         }
 
         return result;
+    }
+
+    public static String encode(String str) {
+        str = str.replace("\\", "\\\\");
+
+        str = str.replace(" ", "\\s");
+        str = str.replace("/", "\\/");
+        str = str.replace("|", "\\p");
+        str = str.replace("\b", "\\b");
+        str = str.replace("\f", "\\f");
+        str = str.replace("\n", "\\n");
+        str = str.replace("\r", "\\r");
+        str = str.replace("\t", "\\t");
+        str = str.replace(String.valueOf((char) 7), "\\a");
+        str = str.replace(String.valueOf((char) 11), "\\v");
+
+        return str;
     }
 
     private static String decode(String str) {

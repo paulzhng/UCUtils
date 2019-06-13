@@ -38,7 +38,6 @@ public class ClientQueryWriter extends Thread implements Closeable {
                     Thread.currentThread().interrupt();
                 }
 
-                Logger.LOGGER.info("CLIENT QUERY WRITER: " + command.getCommand());
                 writer.println(command.getCommand());
             }
 

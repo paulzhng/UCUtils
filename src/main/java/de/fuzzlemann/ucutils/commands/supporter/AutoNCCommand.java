@@ -4,11 +4,12 @@ import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.gson.Gson;
 import de.fuzzlemann.ucutils.Main;
+import de.fuzzlemann.ucutils.config.UCUtilsConfig;
+import de.fuzzlemann.ucutils.keybind.KeyBindRegistry;
 import de.fuzzlemann.ucutils.utils.abstraction.AbstractionHandler;
 import de.fuzzlemann.ucutils.utils.api.APIUtils;
 import de.fuzzlemann.ucutils.utils.command.api.Command;
 import de.fuzzlemann.ucutils.utils.command.api.CommandParam;
-import de.fuzzlemann.ucutils.config.UCUtilsConfig;
 import de.fuzzlemann.ucutils.utils.sound.SoundUtil;
 import de.fuzzlemann.ucutils.utils.text.Message;
 import net.minecraft.util.text.TextFormatting;
@@ -20,7 +21,6 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.lwjgl.input.Keyboard;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -128,9 +128,7 @@ public class AutoNCCommand {
         if (!enabled) return;
         if (!Main.MINECRAFT.inGameHasFocus) return;
 
-        int key = Keyboard.getEventCharacter();
-        if (key != 'g') return;
-
+        if (!KeyBindRegistry.autoNC.isPressed()) return;
         if (System.currentTimeMillis() - time > TimeUnit.SECONDS.toMillis(30)) return;
 
         String answer = ANSWER_MAP.get(i);

@@ -79,6 +79,6 @@ public class TestPlayer implements UPlayer {
 
     @Override
     public UUID getUniqueID() {
-        return UUID.fromString("4e1cd0a8-96ad-4fe3-ab8a-14cb6bf15563");
+        return UUID.fromString("4ed47123-7831-4ca2-a18b-131b77711dbe");
     }
 }

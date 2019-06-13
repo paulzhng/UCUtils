@@ -28,7 +28,7 @@ public class MoveCommand {
         }
 
         List<Client> clientsMoved = TSUtils.getClientsByName(moved);
-        List<Client> clientsMoveTo = TSUtils.getClientsByName(moveTo);
+        List<Client> clientsMoveTo = TSUtils.getClientsByName(MojangAPI.getEarlierNames(moveTo));
 
         if (clientsMoved.isEmpty() || clientsMoveTo.isEmpty()) {
             TextUtils.error("Einer der Spieler befindet sich nicht auf dem TeamSpeak.");
@@ -36,7 +36,7 @@ public class MoveCommand {
         }
 
         Client moveToClient = clientsMoveTo.get(0);
-        CommandResponse response = new ClientMoveCommand(moveToClient.getChannelID(), clientsMoveTo).execute().getResponse();
+        CommandResponse response = new ClientMoveCommand(moveToClient.getChannelID(), clientsMoved).getResponse();
         if (!response.succeeded()) {
             TextUtils.error("Das Moven ist fehlgeschlagen.");
             return true;

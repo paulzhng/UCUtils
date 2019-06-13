@@ -1,5 +1,10 @@
 package de.fuzzlemann.ucutils.utils.data;
 
+import de.fuzzlemann.ucutils.utils.Logger;
+import de.fuzzlemann.ucutils.utils.abstraction.AbstractionHandler;
+import de.fuzzlemann.ucutils.utils.abstraction.TestPlayer;
+import de.fuzzlemann.ucutils.utils.faction.Faction;
+import de.fuzzlemann.ucutils.utils.faction.FactionLoader;
 import net.minecraftforge.fml.common.discovery.ASMDataTable;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -22,6 +27,8 @@ public class DataTest {
 
     @BeforeAll
     static void setUp() {
+        AbstractionHandler.getInstance().setPlayerImplementation(TestPlayer.class);
+
         ASMDataTable asmDataTable = mock(ASMDataTable.class);
         Set<ASMDataTable.ASMData> asmDataSet = new HashSet<>();
 
@@ -50,5 +57,11 @@ public class DataTest {
     @Test
     void testLoadDataWithMessage() {
         DataManager.loadData(true);
+    }
+
+    @Test
+    void testLoadFaction() {
+        new FactionLoader().load();
+        Logger.LOGGER.info("faction: " + Faction.getFactionOfPlayer());
     }
 }

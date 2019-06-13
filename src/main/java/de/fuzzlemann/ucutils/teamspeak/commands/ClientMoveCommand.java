@@ -27,7 +27,7 @@ public class ClientMoveCommand extends BaseCommand<CommandResponse> {
     private static String parseCommand(int channelID, int... clientIDs) {
         StringJoiner stringJoiner = new StringJoiner("|");
         for (int clientID : clientIDs) {
-            stringJoiner.add("clid=" + String.valueOf(clientID));
+            stringJoiner.add("clid=" + clientID);
         }
 
         return "clientmove cid=" + channelID + " " + stringJoiner;

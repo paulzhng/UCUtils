@@ -44,14 +44,14 @@ public class InitializorHandler {
             Collection<IInitializor> initializors = entry.getValue();
 
             for (IInitializor initializor : initializors) {
-                Logger.LOGGER.info(value + "-Initializor: trying to use " + initializor.getClass().getName());
+                Logger.LOGGER.info(value + "-Initializor: loading " + initializor.getClass().getName());
 
                 try {
                     initializor.init();
-                    Logger.LOGGER.info(value + "-Initializor: successfully used " + initializor.getClass().getName());
+                    Logger.LOGGER.info(value + "-Initializor: successfully loaded " + initializor.getClass().getName());
                     break;
                 } catch (Exception | NoClassDefFoundError e) {
-                    Logger.LOGGER.info(value + "-Initializor: failed to use " + initializor.getClass().getName());
+                    Logger.LOGGER.info(value + "-Initializor: failed to load " + initializor.getClass().getName());
                 }
             }
         }

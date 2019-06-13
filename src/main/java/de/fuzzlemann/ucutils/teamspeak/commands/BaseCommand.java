@@ -37,6 +37,8 @@ public abstract class BaseCommand<T extends CommandResponse> {
     }
 
     public T getResponse() {
+        if (!future.isDone()) execute();
+
         return future.get();
     }
 

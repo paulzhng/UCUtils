@@ -26,7 +26,7 @@ public class KeepAliveThread extends Thread implements Closeable {
         while (!closed) {
             if (!clientQuery.isAuthenticated()) continue;
 
-            new WhoAmICommand().execute(clientQuery).getResponse();
+            new WhoAmICommand().execute(clientQuery);
 
             try {
                 Thread.sleep(TimeUnit.MINUTES.toMillis(1));

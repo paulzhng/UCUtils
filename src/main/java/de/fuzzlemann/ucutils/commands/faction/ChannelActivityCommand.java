@@ -43,7 +43,6 @@ public class ChannelActivityCommand {
         if (!players.contains(p.getName())) players.add(p.getName());
 
         List<String> members = new ArrayList<>(MemberActivityEventHandler.MEMBER_LIST);
-
         if (members.isEmpty()) {
             TextUtils.error("Du hast /memberactivity noch nicht ausgeführt.");
             return true;
@@ -54,7 +53,7 @@ public class ChannelActivityCommand {
 
         if (copy) {
             copyList(members);
-            TextUtils.simpleMessage("Du hast die Liste von nicht-anwesenden Spielern kopiert.");
+            TextUtils.simpleMessage("Du hast die Liste mit den nicht-anwesenden Spielern kopiert.");
         } else {
             sendList(members);
         }
@@ -111,13 +110,13 @@ public class ChannelActivityCommand {
     }
 
     private List<String> getPlayersInChannel() {
-        ChannelClientListCommand.Response channelClientListCommandResponse = new ChannelClientListCommand(TSUtils.getMyClientID()).execute().getResponse();
+        ChannelClientListCommand.Response channelClientListCommandResponse = new ChannelClientListCommand(TSUtils.getMyClientID()).getResponse();
         if (!channelClientListCommandResponse.succeeded()) return Collections.emptyList();
 
         List<Client> clients = channelClientListCommandResponse.getClients();
         List<String> descriptions = new ArrayList<>();
         for (Client client : clients) {
-            ClientVariableCommand.Response clientVariableCommandResponse = new ClientVariableCommand(client).execute().getResponse();
+            ClientVariableCommand.Response clientVariableCommandResponse = new ClientVariableCommand(client).getResponse();
             String minecraftName = clientVariableCommandResponse.getMinecraftName();
 
             if (minecraftName == null) continue;

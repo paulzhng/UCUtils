@@ -5,6 +5,7 @@ package de.fuzzlemann.ucutils.teamspeak.exceptions;
  */
 public class ClientQueryConnectionException extends ClientQueryException {
     public ClientQueryConnectionException() {
+        super();
     }
 
     public ClientQueryConnectionException(String message) {

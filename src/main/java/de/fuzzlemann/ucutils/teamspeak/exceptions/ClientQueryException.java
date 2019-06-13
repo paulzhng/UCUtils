@@ -6,6 +6,7 @@ package de.fuzzlemann.ucutils.teamspeak.exceptions;
 public abstract class ClientQueryException extends RuntimeException {
 
     public ClientQueryException() {
+        super();
     }
 
     public ClientQueryException(String message) {

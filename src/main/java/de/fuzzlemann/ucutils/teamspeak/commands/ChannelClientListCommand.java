@@ -1,7 +1,6 @@
 package de.fuzzlemann.ucutils.teamspeak.commands;
 
 import de.fuzzlemann.ucutils.teamspeak.CommandResponse;
-import de.fuzzlemann.ucutils.teamspeak.ResponseParser;
 import de.fuzzlemann.ucutils.teamspeak.objects.Client;
 
 import java.util.ArrayList;
@@ -22,7 +21,7 @@ public class ChannelClientListCommand extends BaseCommand<ChannelClientListComma
 
         public Response(String rawResponse) {
             super(rawResponse);
-            List<Map<String, String>> maps = ResponseParser.parseMap(rawResponse);
+            List<Map<String, String>> maps = getResponseList();
 
             for (Map<String, String> clientMap : maps) {
                 clients.add(new Client(clientMap));

@@ -8,7 +8,7 @@ import de.fuzzlemann.ucutils.utils.command.api.ParameterParser;
 public class FactionParser implements ParameterParser<String, Faction> {
     @Override
     public Faction parse(String input) {
-        return Faction.getFactionEnum(input);
+        return Faction.byShortName(input);
     }
 
     @Override

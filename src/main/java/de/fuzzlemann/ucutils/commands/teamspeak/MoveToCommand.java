@@ -30,7 +30,7 @@ public class MoveToCommand {
         }
 
         Client client = clients.get(0);
-        CommandResponse response = new ClientMoveCommand(client.getChannelID(), TSUtils.getMyClientID()).execute().getResponse();
+        CommandResponse response = new ClientMoveCommand(client.getChannelID(), TSUtils.getMyClientID()).getResponse();
         if (!response.succeeded()) {
             TextUtils.error("Das Bewegen ist fehlgeschlagen.");
             return true;

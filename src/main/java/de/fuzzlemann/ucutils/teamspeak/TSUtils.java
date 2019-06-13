@@ -13,15 +13,15 @@ import java.util.*;
 public class TSUtils {
 
     public static int getMyClientID() {
-        return new WhoAmICommand().execute().getResponse().getClientID();
+        return new WhoAmICommand().getResponse().getClientID();
     }
 
     public static int getMyChannelID() {
-        return new WhoAmICommand().execute().getResponse().getChannelID();
+        return new WhoAmICommand().getResponse().getChannelID();
     }
 
     public static List<Client> getClients() {
-        return new ClientListCommand().execute().getResponse().getClientList();
+        return new ClientListCommand().getResponse().getClientList();
     }
 
     public static List<Client> getClientsByName(String minecraftName) {
@@ -29,9 +29,9 @@ public class TSUtils {
     }
 
     public static List<Client> getClientsByName(List<String> minecraftNames) {
-        List<Client> clients = new ArrayList<>();
-        if (minecraftNames.isEmpty()) return clients;
+        if (minecraftNames.isEmpty()) return Collections.emptyList();
 
+        List<Client> clients = new ArrayList<>();
         Map<Client, CommandFuture<ClientVariableCommand.Response>> futures = new HashMap<>();
         for (Client client : getClients()) {
             int clientID = client.getClientID();
@@ -46,8 +46,6 @@ public class TSUtils {
 
             ClientVariableCommand.Response response = future.get();
             String minecraftName = response.getMinecraftName();
-
-            System.out.println(minecraftName);
 
             if (!minecraftNames.contains(minecraftName)) continue;
             clients.add(client);

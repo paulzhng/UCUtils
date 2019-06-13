@@ -3,7 +3,6 @@ package de.fuzzlemann.ucutils.teamspeak;
 import de.fuzzlemann.ucutils.teamspeak.commands.BaseCommand;
 import de.fuzzlemann.ucutils.teamspeak.events.TSEvent;
 import de.fuzzlemann.ucutils.utils.Logger;
-import net.minecraftforge.common.MinecraftForge;
 import org.apache.commons.io.IOUtils;
 
 import java.io.BufferedReader;
@@ -44,7 +43,7 @@ public class ClientQueryReader extends Thread implements Closeable {
                     if (line.startsWith("notify")) {
                         TSEvent event = TSEventHandler.getEvent(line);
                         if (event != null) {
-                            MinecraftForge.EVENT_BUS.post(event);
+                            TSEventHandler.fireEvent(event);
                             continue;
                         }
                     }
@@ -66,8 +65,6 @@ public class ClientQueryReader extends Thread implements Closeable {
                         }
 
                         line = String.join(" ", lines);
-
-                        Logger.LOGGER.info("CLIENT QUERY READER: " + line);
 
                         ParameterizedType genericSuperclass = (ParameterizedType) baseCommand.getClass().getGenericSuperclass();
                         String className = genericSuperclass.getActualTypeArguments()[0].getTypeName();

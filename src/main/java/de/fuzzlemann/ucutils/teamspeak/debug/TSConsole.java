@@ -1,5 +1,8 @@
-package de.fuzzlemann.ucutils.teamspeak;
+package de.fuzzlemann.ucutils.teamspeak.debug;
 
+import de.fuzzlemann.ucutils.teamspeak.CommandResponse;
+import de.fuzzlemann.ucutils.teamspeak.TSAPIKeyLoader;
+import de.fuzzlemann.ucutils.teamspeak.TSClientQuery;
 import de.fuzzlemann.ucutils.teamspeak.commands.BaseCommand;
 import de.fuzzlemann.ucutils.utils.Logger;
 
@@ -21,7 +24,7 @@ public class TSConsole {
                 String line = scanner.nextLine();
 
                 CommandResponse response = new BaseCommand<CommandResponse>(line) {
-                }.execute().getResponse();
+                }.getResponse();
 
                 Logger.LOGGER.info(response.getRawResponse());
             }

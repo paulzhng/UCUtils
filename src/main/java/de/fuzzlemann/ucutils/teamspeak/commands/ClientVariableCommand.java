@@ -96,7 +96,6 @@ public class ClientVariableCommand extends BaseCommand<ClientVariableCommand.Res
             super(rawResponse);
 
             Map<String, String> map = getResponse();
-            System.out.println(map);
             this.id = parseInt(map.get("id"));
             this.clientID = parseInt(map.get("clid"));
             this.clientDatabaseID = parseInt(map.get("client_database_id"));

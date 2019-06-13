@@ -1,6 +1,6 @@
 package de.fuzzlemann.ucutils.teamspeak.events;
 
-import de.fuzzlemann.ucutils.teamspeak.ResponseParser;
+import de.fuzzlemann.ucutils.teamspeak.TSParser;
 import net.minecraftforge.fml.common.eventhandler.Event;
 
 import java.lang.annotation.ElementType;
@@ -20,7 +20,7 @@ public abstract class TSEvent extends Event {
     TSEvent(String input) {
         super();
         this.input = input;
-        this.map = ResponseParser.parse(input);
+        this.map = TSParser.parse(input);
     }
 
     public String getInput() {

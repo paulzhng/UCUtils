@@ -1,7 +1,7 @@
 package de.fuzzlemann.ucutils.utils.command.tabcompletion;
 
 import de.fuzzlemann.ucutils.Main;
-import de.fuzzlemann.ucutils.utils.abstraction.AbstractionHandler;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiChat;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.network.play.client.CPacketTabComplete;
@@ -89,7 +89,7 @@ public class TabCompleterEx extends GuiChat.ChatTabCompleter {
                 }
             }
 
-            AbstractionHandler.getInstance().getPlayer().getConnection().sendPacket(new CPacketTabComplete(prefix, this.getTargetBlockPos(), this.hasTargetBlock));
+            Minecraft.getMinecraft().player.connection.sendPacket(new CPacketTabComplete(prefix, this.getTargetBlockPos(), this.hasTargetBlock));
             this.requestedCompletions = true;
         }
     }

@@ -1,6 +1,7 @@
 package de.fuzzlemann.ucutils.commands;
 
 import de.fuzzlemann.ucutils.Main;
+import de.fuzzlemann.ucutils.keybind.KeyBindRegistry;
 import de.fuzzlemann.ucutils.utils.abstraction.AbstractionHandler;
 import de.fuzzlemann.ucutils.utils.command.api.Command;
 import de.fuzzlemann.ucutils.utils.command.api.CommandParam;
@@ -54,7 +55,7 @@ public class ABuyCommand {
                 .newLine()
                 .info()
                 .of("Um das gewünschte Produkt zu kaufen, klicke nun mit ").color(TextFormatting.WHITE).advance()
-                .of("'b'").color(TextFormatting.GOLD).advance()
+                .of("'" + KeyBindRegistry.aBuy.getDisplayName().toLowerCase() + "'").color(TextFormatting.GOLD).advance()
                 .of(" auf das Item im Shop.").color(TextFormatting.WHITE).advance()
                 .send();
         return true;
@@ -64,8 +65,7 @@ public class ABuyCommand {
     public static void onKeyboardClickEvent(GuiScreenEvent.KeyboardInputEvent e) {
         if (amount == 0) return;
 
-        int key = Keyboard.getEventCharacter();
-        if (key != 'b') return;
+        if (Keyboard.isKeyDown(KeyBindRegistry.aBuy.getKeyCode())) return;
 
         if (!(e.getGui() instanceof GuiContainer)) return;
         GuiContainer inv = (GuiContainer) e.getGui();

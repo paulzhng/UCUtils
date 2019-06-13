@@ -35,7 +35,7 @@ public class MoveHereCommand {
             return true;
         }
 
-        CommandResponse response = new ClientMoveCommand(channelID, clients).execute().getResponse();
+        CommandResponse response = new ClientMoveCommand(channelID, clients).getResponse();
         if (!response.succeeded()) {
             TextUtils.error("Das Moven ist fehlgeschlagen.");
             return true;
