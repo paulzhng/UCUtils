@@ -34,11 +34,11 @@ public class MessagePart {
         this.clickEvent = clickEvent;
     }
 
-    public static MessagePartBuilder builder() {
-        return new MessagePartBuilder();
+    public static Builder builder() {
+        return new Builder();
     }
 
-    public static MessagePart simpleMessagePart(String message, TextFormatting color) {
+    public static MessagePart simple(String message, TextFormatting color) {
         return MessagePart.builder().message(message).color(color).build();
     }
 
@@ -89,8 +89,8 @@ public class MessagePart {
         return messageComponent;
     }
 
-    public static final class MessagePartBuilder {
-        private Message.MessageBuilder currentBuilder;
+    public static final class Builder {
+        private Message.Builder currentBuilder;
         private String message;
         private TextFormatting color;
         private boolean bold;
@@ -101,80 +101,80 @@ public class MessagePart {
         private HoverEvent hoverEvent;
         private ClickEvent clickEvent;
 
-        public MessagePartBuilder currentBuilder(Message.MessageBuilder currentBuilder) {
+        public Builder currentBuilder(Message.Builder currentBuilder) {
             this.currentBuilder = currentBuilder;
             return this;
         }
 
-        public MessagePartBuilder bold() {
+        public Builder bold() {
             return bold(true);
         }
 
-        public MessagePartBuilder bold(boolean bold) {
+        public Builder bold(boolean bold) {
             this.bold = bold;
             return this;
         }
 
-        public MessagePartBuilder italic() {
+        public Builder italic() {
             return italic(true);
         }
 
-        public MessagePartBuilder italic(boolean italic) {
+        public Builder italic(boolean italic) {
             this.italic = italic;
             return this;
         }
 
-        public MessagePartBuilder strikethrough() {
+        public Builder strikethrough() {
             return strikethrough(true);
         }
 
-        public MessagePartBuilder strikethrough(boolean strikethrough) {
+        public Builder strikethrough(boolean strikethrough) {
             this.strikethrough = strikethrough;
             return this;
         }
 
-        public MessagePartBuilder underlined() {
+        public Builder underlined() {
             return underlined(true);
         }
 
-        public MessagePartBuilder underlined(boolean underlined) {
+        public Builder underlined(boolean underlined) {
             this.underlined = underlined;
             return this;
         }
 
-        public MessagePartBuilder obfuscated() {
+        public Builder obfuscated() {
             return obfuscated(true);
         }
 
-        public MessagePartBuilder obfuscated(boolean obfuscated) {
+        public Builder obfuscated(boolean obfuscated) {
             this.obfuscated = obfuscated;
             return this;
         }
 
-        public MessagePartBuilder message(String message) {
+        public Builder message(String message) {
             this.message = message;
             return this;
         }
 
-        public MessagePartBuilder color(TextFormatting color) {
+        public Builder color(TextFormatting color) {
             this.color = color;
             return this;
         }
 
-        public MessagePartBuilder hoverEvent(HoverEvent.Action action, MessagePart messagePart) {
+        public Builder hoverEvent(HoverEvent.Action action, MessagePart messagePart) {
             return hoverEvent(new HoverEvent(action, Message.builder().messageParts(messagePart).build().toTextComponent()));
         }
 
-        MessagePartBuilder hoverEvent(HoverEvent hoverEvent) {
+        Builder hoverEvent(HoverEvent hoverEvent) {
             this.hoverEvent = hoverEvent;
             return this;
         }
 
-        public MessagePartBuilder clickEvent(ClickEvent.Action action, String message) {
+        public Builder clickEvent(ClickEvent.Action action, String message) {
             return clickEvent(new ClickEvent(action, message));
         }
 
-        MessagePartBuilder clickEvent(ClickEvent clickEvent) {
+        Builder clickEvent(ClickEvent clickEvent) {
             this.clickEvent = clickEvent;
             return this;
         }
@@ -183,7 +183,7 @@ public class MessagePart {
             return new MessagePart(message, color, bold, italic, strikethrough, underlined, obfuscated, hoverEvent, clickEvent);
         }
 
-        public Message.MessageBuilder advance() {
+        public Message.Builder advance() {
             return currentBuilder.messageParts(build());
         }
     }

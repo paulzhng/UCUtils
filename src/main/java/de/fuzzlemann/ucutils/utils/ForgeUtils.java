@@ -1,7 +1,6 @@
 package de.fuzzlemann.ucutils.utils;
 
 import com.google.common.collect.Maps;
-import com.mojang.text2speech.Narrator;
 import de.fuzzlemann.ucutils.Main;
 import de.fuzzlemann.ucutils.utils.abstraction.AbstractionHandler;
 import de.fuzzlemann.ucutils.utils.text.TextUtils;
@@ -43,6 +42,10 @@ public class ForgeUtils {
         } catch (ClassNotFoundException e) {
             isTest = false;
         }
+    }
+
+    public static boolean isConnected() {
+        return AbstractionHandler.getInstance().getPlayer().isConnected();
     }
 
     public static boolean isTest() {

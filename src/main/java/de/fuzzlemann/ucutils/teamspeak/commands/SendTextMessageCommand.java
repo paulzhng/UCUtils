@@ -14,7 +14,7 @@ public class SendTextMessageCommand extends BaseCommand<CommandResponse> {
     }
 
     public SendTextMessageCommand(int targetID, String message) {
-        super("sendtextmessage targetmode=" + TargetMode.PRIVATE.getID() + " msg=" + TSParser.encode(message));
+        super("sendtextmessage targetmode=" + TargetMode.PRIVATE.getID() + " target=" + targetID + " msg=" + TSParser.encode(message));
     }
 
     public SendTextMessageCommand(TargetMode targetMode, String message) {

@@ -15,7 +15,7 @@ public class ASMSCommand {
 
     @Command(value = "asms", usage = "/%label% [Spieler] [Nachricht]", async = true)
     public boolean onCommand(UPlayer p, String target, @CommandParam(joinStart = true) String message) {
-        int number = MobileUtils.getNumber(p, target);
+        int number = MobileUtils.getNumber(target);
         if (number == -1) return true;
 
         p.sendChatMessage("/sms " + number + " " + message);

@@ -17,6 +17,12 @@ import java.util.UUID;
  * @author Fuzzlemann
  */
 public class TestPlayer implements UPlayer {
+
+    @Override
+    public boolean isConnected() {
+        return true;
+    }
+
     @Override
     public void sendMessage(ITextComponent textComponent) {
         Logger.LOGGER.info("MESSAGE: " + textComponent.getUnformattedText());

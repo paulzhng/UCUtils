@@ -1,5 +1,6 @@
 package de.fuzzlemann.ucutils.commands.faction;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Multimap;
 import de.fuzzlemann.ucutils.events.MemberActivityEventHandler;
 import de.fuzzlemann.ucutils.teamspeak.TSUtils;
@@ -62,7 +63,7 @@ public class ChannelActivityCommand {
     }
 
     private void sendList(List<String> members) {
-        Message.MessageBuilder builder = Message.builder();
+        Message.Builder builder = Message.builder();
 
         builder.of("» ").color(TextFormatting.DARK_GRAY).advance()
                 .of("Nicht anwesende Fraktionsmitglieder\n").color(TextFormatting.DARK_AQUA).advance();
@@ -73,12 +74,12 @@ public class ChannelActivityCommand {
 
         builder.of(" » ").color(TextFormatting.DARK_GRAY).advance()
                 .of("⟳")
-                .hoverEvent(HoverEvent.Action.SHOW_TEXT, MessagePart.simpleMessagePart("Aktualisieren", TextFormatting.DARK_AQUA))
+                .hoverEvent(HoverEvent.Action.SHOW_TEXT, MessagePart.simple("Aktualisieren", TextFormatting.DARK_AQUA))
                 .clickEvent(ClickEvent.Action.RUN_COMMAND, "/channelactivity")
                 .color(TextFormatting.DARK_PURPLE).advance()
                 .space()
                 .of("⎘")
-                .hoverEvent(HoverEvent.Action.SHOW_TEXT, MessagePart.simpleMessagePart("Kopieren", TextFormatting.DARK_AQUA))
+                .hoverEvent(HoverEvent.Action.SHOW_TEXT, MessagePart.simple("Kopieren", TextFormatting.DARK_AQUA))
                 .clickEvent(ClickEvent.Action.RUN_COMMAND, "/channelactivity copy")
                 .color(TextFormatting.DARK_PURPLE).advance();
 
@@ -109,8 +110,9 @@ public class ChannelActivityCommand {
         }
     }
 
-    private List<String> getPlayersInChannel() {
-        ChannelClientListCommand.Response channelClientListCommandResponse = new ChannelClientListCommand(TSUtils.getMyClientID()).getResponse();
+    @VisibleForTesting
+    public List<String> getPlayersInChannel() {
+        ChannelClientListCommand.Response channelClientListCommandResponse = new ChannelClientListCommand(TSUtils.getMyChannelID()).getResponse();
         if (!channelClientListCommandResponse.succeeded()) return Collections.emptyList();
 
         List<Client> clients = channelClientListCommandResponse.getClients();

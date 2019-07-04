@@ -29,7 +29,7 @@ import static org.mockito.Mockito.when;
  * @author Fuzzlemann
  */
 @ExtendWith(MockitoExtension.class)
-public class CommandTest {
+class CommandTest {
 
     @BeforeAll
     static void setUp() {

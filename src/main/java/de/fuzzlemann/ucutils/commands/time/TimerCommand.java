@@ -24,6 +24,7 @@ import java.util.*;
  */
 @SideOnly(Side.CLIENT)
 public class TimerCommand implements TabCompletion {
+
     private final Timer timer = new Timer();
     private final Map<Integer, Long> timers = new HashMap<>();
     private TimerSound currentTimerSound;
@@ -108,7 +109,7 @@ public class TimerCommand implements TabCompletion {
             return;
         }
 
-        Message.MessageBuilder builder = Message.builder();
+        Message.Builder builder = Message.builder();
 
         builder.of("» ").color(TextFormatting.DARK_GRAY).advance()
                 .of("Timer\n").color(TextFormatting.DARK_AQUA).advance();
@@ -125,7 +126,7 @@ public class TimerCommand implements TabCompletion {
                     .messageParts(FormatUtils.formatMillisecondsToMessage(timeLeft))
                     .of(" verbleibend").color(TextFormatting.GRAY).advance()
                     .of(" [✗]").color(TextFormatting.RED).clickEvent(ClickEvent.Action.RUN_COMMAND, "/timer stop " + id)
-                    .hoverEvent(HoverEvent.Action.SHOW_TEXT, MessagePart.simpleMessagePart("Den Timer löschen", TextFormatting.RED)).advance()
+                    .hoverEvent(HoverEvent.Action.SHOW_TEXT, MessagePart.simple("Den Timer löschen", TextFormatting.RED)).advance()
                     .newLine();
         }
 

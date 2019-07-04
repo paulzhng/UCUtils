@@ -1,5 +1,8 @@
 package de.fuzzlemann.ucutils.utils;
 
+import de.fuzzlemann.ucutils.utils.command.tabcompletion.TabCompleterEx;
+import net.minecraft.client.gui.GuiChat;
+
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -55,7 +58,7 @@ public class ReflectionUtil {
         }
     }
 
-    public static void setValue(Object object, Class<?> type, Object value) {
+    public static void setValue(GuiChat object, Class<?> type, TabCompleterEx value) {
         try {
             Field field = getField(object.getClass(), type);
             if (field == null) return;

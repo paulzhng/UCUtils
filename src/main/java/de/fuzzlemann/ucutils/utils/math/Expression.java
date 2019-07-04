@@ -132,7 +132,7 @@ public class Expression {
         return false;
     }
 
-    public static class ExpressionException extends RuntimeException {
+    public static class ExpressionException extends ArithmeticException {
 
         ExpressionException(String message) {
             super(message);

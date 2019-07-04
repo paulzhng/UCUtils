@@ -1,5 +1,6 @@
 package de.fuzzlemann.ucutils.teamspeak;
 
+import com.google.common.util.concurrent.Uninterruptibles;
 import de.fuzzlemann.ucutils.config.UCUtilsConfig;
 import de.fuzzlemann.ucutils.teamspeak.commands.AuthCommand;
 import de.fuzzlemann.ucutils.teamspeak.commands.BaseCommand;
@@ -59,12 +60,7 @@ public class TSClientQuery implements Closeable {
     }
 
     public void executeCommand(BaseCommand<?> command) {
-        try {
-            writer.getQueue().put(command);
-        } catch (InterruptedException e) {
-            Logger.LOGGER.catching(e);
-            Thread.currentThread().interrupt();
-        }
+        Uninterruptibles.putUninterruptibly(writer.getQueue(), command);
     }
 
     private void connect() throws IOException {

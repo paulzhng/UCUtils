@@ -29,7 +29,7 @@ public class MobileBlockListCommand {
             return true;
         }
 
-        Message.MessageBuilder builder = Message.builder();
+        Message.Builder builder = Message.builder();
 
         builder.of("» ").color(TextFormatting.DARK_GRAY).advance()
                 .of("Blockierte Spieler\n").color(TextFormatting.DARK_AQUA).advance();
@@ -42,7 +42,7 @@ public class MobileBlockListCommand {
                     .of(blockedPlayer).color(TextFormatting.GRAY).advance()
                     .space()
                     .of("[✗]").color(TextFormatting.RED)
-                    .hoverEvent(HoverEvent.Action.SHOW_TEXT, MessagePart.simpleMessagePart(blockedPlayer + " entblocken", TextFormatting.RED))
+                    .hoverEvent(HoverEvent.Action.SHOW_TEXT, MessagePart.simple(blockedPlayer + " entblocken", TextFormatting.RED))
                     .clickEvent(ClickEvent.Action.RUN_COMMAND, "/mobileblock " + blockedPlayer).advance()
                     .newLine();
         }

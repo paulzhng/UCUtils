@@ -1,10 +1,11 @@
 package de.fuzzlemann.ucutils.utils.chatlog;
 
-import de.fuzzlemann.ucutils.utils.Logger;
+import com.google.common.util.concurrent.Uninterruptibles;
 import de.fuzzlemann.ucutils.config.UCUtilsConfig;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author Fuzzlemann
@@ -25,12 +26,7 @@ class ChatLogConsumer {
                     this.chatLogger.getLogger().info(message);
                 }
 
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    Logger.LOGGER.catching(e);
-                    Thread.currentThread().interrupt();
-                }
+                Uninterruptibles.sleepUninterruptibly(1, TimeUnit.SECONDS);
             }
         }, "UCUtils-ChatLogConsumer").start();
     }

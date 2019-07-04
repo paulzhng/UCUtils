@@ -1,6 +1,7 @@
 package de.fuzzlemann.ucutils.utils.mobile;
 
-import de.fuzzlemann.ucutils.utils.abstraction.UPlayer;
+import com.google.common.util.concurrent.Uninterruptibles;
+import de.fuzzlemann.ucutils.utils.abstraction.AbstractionHandler;
 import de.fuzzlemann.ucutils.utils.io.JsonManager;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -54,15 +55,12 @@ public class MobileUtils {
         new Thread(() -> JsonManager.writeList(BLOCKED_FILE, BLOCKED_PLAYERS)).start();
     }
 
-    public static int getNumber(UPlayer p, String numberPlayer) {
+    public static int getNumber(String numberPlayer) {
         future = new CompletableFuture<>();
-        p.sendChatMessage("/nummer " + numberPlayer);
+        AbstractionHandler.getInstance().getPlayer().sendChatMessage("/nummer " + numberPlayer);
 
         try {
-            return future.get();
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            throw new IllegalStateException(e);
+            return Uninterruptibles.getUninterruptibly(future);
         } catch (ExecutionException e) {
             throw new IllegalStateException(e);
         }

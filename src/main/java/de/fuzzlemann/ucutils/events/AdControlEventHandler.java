@@ -18,7 +18,7 @@ import java.util.regex.Pattern;
  * @author Fuzzlemann
  */
 @Mod.EventBusSubscriber
-public class ADControlModifier {
+public class AdControlEventHandler {
 
     private static final Pattern AD_CONTROL_PATTERN = Pattern.compile("^\\[Werbung] ([a-zA-Z0-9_]+) hat eine Werbung geschalten: .+$");
     private static long adTime;

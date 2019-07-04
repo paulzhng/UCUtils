@@ -11,9 +11,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 /**
  * @author Fuzzlemann
  */
-class MessageBuilderTest {
+class BuilderTest {
 
-    private Message.MessageBuilder builder;
+    private Message.Builder builder;
 
     @BeforeEach
     void afterEach() {
@@ -22,9 +22,9 @@ class MessageBuilderTest {
 
     @Test
     void testPrefixAndInfo() {
-        assertEquals(Message.MessageBuilder.PREFIX_PARTS, builder.prefix().build().getMessageParts());
+        assertEquals(Message.Builder.PREFIX_PARTS, builder.prefix().build().getMessageParts());
         resetBuilder();
-        assertEquals(Message.MessageBuilder.INFO_PARTS, builder.info().build().getMessageParts());
+        assertEquals(Message.Builder.INFO_PARTS, builder.info().build().getMessageParts());
     }
 
     @Test
@@ -38,8 +38,8 @@ class MessageBuilderTest {
 
     @Test
     void testConcatenation() {
-        List<MessagePart> expected = new ArrayList<>(Message.MessageBuilder.PREFIX_PARTS);
-        expected.addAll(Message.MessageBuilder.INFO_PARTS);
+        List<MessagePart> expected = new ArrayList<>(Message.Builder.PREFIX_PARTS);
+        expected.addAll(Message.Builder.INFO_PARTS);
 
         List<MessagePart> actual = builder.prefix().info().build().getMessageParts();
 

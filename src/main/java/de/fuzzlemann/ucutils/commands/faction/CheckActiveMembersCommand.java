@@ -1,5 +1,6 @@
 package de.fuzzlemann.ucutils.commands.faction;
 
+import com.google.common.util.concurrent.Uninterruptibles;
 import de.fuzzlemann.ucutils.utils.abstraction.AbstractionHandler;
 import de.fuzzlemann.ucutils.utils.command.api.Command;
 import de.fuzzlemann.ucutils.utils.faction.Faction;
@@ -65,7 +66,7 @@ public class CheckActiveMembersCommand {
 
     @Command(value = "checkactivemembers", async = true)
     public boolean onCommand() {
-        Message.MessageBuilder builder = Message.builder();
+        Message.Builder builder = Message.builder();
 
         builder.of("» ").color(TextFormatting.DARK_GRAY).advance()
                 .of("Aktive Spieler in den Fraktionen\n").color(TextFormatting.DARK_AQUA).advance();
@@ -79,7 +80,7 @@ public class CheckActiveMembersCommand {
             builder.of(" * ").color(TextFormatting.DARK_GRAY).advance()
                     .of(faction.getFactionInfo().getFullName() + ": ").color(TextFormatting.GRAY)
                     .clickEvent(ClickEvent.Action.RUN_COMMAND, "/memberinfo " + faction.getFactionKey())
-                    .hoverEvent(HoverEvent.Action.SHOW_TEXT, MessagePart.simpleMessagePart("/memberinfo ausführen", TextFormatting.GRAY))
+                    .hoverEvent(HoverEvent.Action.SHOW_TEXT, MessagePart.simple("/memberinfo ausführen", TextFormatting.GRAY))
                     .advance();
 
             builder.of(String.valueOf(activeMembers)).color(TextFormatting.DARK_GREEN).advance();
@@ -96,10 +97,7 @@ public class CheckActiveMembersCommand {
         AbstractionHandler.getInstance().getPlayer().sendChatMessage("/memberinfo " + faction.getFactionKey());
 
         try {
-            return future.get();
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            throw new IllegalStateException(e);
+            return Uninterruptibles.getUninterruptibly(future);
         } catch (ExecutionException e) {
             throw new IllegalStateException(e);
         } finally {

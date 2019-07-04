@@ -1,5 +1,6 @@
 package de.fuzzlemann.ucutils.utils.faction.police;
 
+import com.google.common.util.concurrent.Uninterruptibles;
 import de.fuzzlemann.ucutils.events.NameFormatEventHandler;
 import de.fuzzlemann.ucutils.utils.ForgeUtils;
 import de.fuzzlemann.ucutils.utils.abstraction.AbstractionHandler;
@@ -54,10 +55,7 @@ public class WantedManager implements DataLoader {
         AbstractionHandler.getInstance().getPlayer().sendChatMessage("/wantedinfo " + player);
 
         try {
-            return future.get();
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            throw new IllegalStateException(e);
+            return Uninterruptibles.getUninterruptibly(future);
         } catch (ExecutionException e) {
             throw new IllegalStateException(e);
         }

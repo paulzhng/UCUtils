@@ -65,7 +65,7 @@ public class NaviCommand implements TabCompletion {
         lastCommand = System.currentTimeMillis();
         future = new CompletableFuture<>();
 
-        p.sendChatMessage("/navi " + naviPoint.getX() + "/" + naviPoint.getY() + "/" + naviPoint.getZ());
+        passToServer(p, naviPoint.getX() + "/" + naviPoint.getY() + "/" + naviPoint.getZ());
 
         new Thread(() -> {
             try {

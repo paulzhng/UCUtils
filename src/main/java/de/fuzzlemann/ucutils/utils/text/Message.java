@@ -21,8 +21,8 @@ public class Message {
         this.messageParts = messageParts;
     }
 
-    public static MessageBuilder builder() {
-        return new MessageBuilder();
+    public static Builder builder() {
+        return new Builder();
     }
 
     public List<MessagePart> getMessageParts() {
@@ -45,7 +45,7 @@ public class Message {
         return textComponent;
     }
 
-    public static final class MessageBuilder {
+    public static final class Builder {
         @VisibleForTesting
         static final List<MessagePart> PREFIX_PARTS;
         @VisibleForTesting
@@ -68,39 +68,55 @@ public class Message {
 
         private final List<MessagePart> messageParts = new ArrayList<>();
 
-        private MessageBuilder() {
+        private Builder() {
         }
 
-        public MessageBuilder prefix() {
+        public Builder prefix() {
             return messageParts(PREFIX_PARTS);
         }
 
-        public MessageBuilder info() {
+        public Builder info() {
             return messageParts(INFO_PARTS);
         }
 
-        public MessagePart.MessagePartBuilder of(String text) {
+        public <T> MessageJoiner.Builder<T> joiner(T[] over) {
+            return MessageJoiner.builder(over).currentBuilder(this);
+        }
+
+        public <T> MessageJoiner.Builder<T> joiner(Iterable<T> over) {
+            return MessageJoiner.builder(over).currentBuilder(this);
+        }
+
+        public <T> MessageJoiner.Builder<T> joiner(Collection<T> over) {
+            return MessageJoiner.builder(over).currentBuilder(this);
+        }
+
+        public <T> MessageJoiner.Builder<T> joiner(List<T> over) {
+            return MessageJoiner.builder(over).currentBuilder(this);
+        }
+
+        public MessagePart.Builder of(String text) {
             return MessagePart.builder().currentBuilder(this).message(text);
         }
 
-        public MessageBuilder add(String text) {
+        public Builder add(String text) {
             return MessagePart.builder().currentBuilder(this).message(text).advance();
         }
 
-        public MessageBuilder space() {
+        public Builder space() {
             return add(" ");
         }
 
-        public MessageBuilder newLine() {
+        public Builder newLine() {
             return add("\n");
         }
 
-        public MessageBuilder messageParts(MessagePart... messageParts) {
+        public Builder messageParts(MessagePart... messageParts) {
             Collections.addAll(this.messageParts, messageParts);
             return this;
         }
 
-        public MessageBuilder messageParts(Collection<MessagePart> messageParts) {
+        public Builder messageParts(Collection<MessagePart> messageParts) {
             this.messageParts.addAll(messageParts);
             return this;
         }

@@ -43,11 +43,11 @@ public class UpdateReminder implements DataLoader {
                 .newLine()
                 .of("Du kannst das Update ").color(TextFormatting.RED).advance()
                 .of("hier").color(TextFormatting.RED)
-                .hoverEvent(HoverEvent.Action.SHOW_TEXT, MessagePart.simpleMessagePart("Download", TextFormatting.GREEN))
+                .hoverEvent(HoverEvent.Action.SHOW_TEXT, MessagePart.simple("Download", TextFormatting.GREEN))
                 .clickEvent(ClickEvent.Action.OPEN_URL, "https://fuzzlemann.de/UCUtils.jar").advance()
                 .of(" herunterladen oder mittels ").color(TextFormatting.RED).advance()
                 .of("/updateucutils").color(TextFormatting.RED)
-                .hoverEvent(HoverEvent.Action.SHOW_TEXT, MessagePart.simpleMessagePart("Ausführen", TextFormatting.GREEN))
+                .hoverEvent(HoverEvent.Action.SHOW_TEXT, MessagePart.simple("Ausführen", TextFormatting.GREEN))
                 .clickEvent(ClickEvent.Action.RUN_COMMAND, "/updateucutils").advance()
                 .of("direkt updaten.").color(TextFormatting.RED).advance()
                 .send();

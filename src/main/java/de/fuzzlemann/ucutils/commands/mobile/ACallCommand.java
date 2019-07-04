@@ -14,7 +14,7 @@ public class ACallCommand {
 
     @Command(value = "acall", usage = "/%label% [Spieler]", async = true)
     public boolean onCommand(UPlayer p, String target) {
-        int number = MobileUtils.getNumber(p, target);
+        int number = MobileUtils.getNumber(target);
         if (number == -1) return true;
 
         p.sendChatMessage("/call " + number);

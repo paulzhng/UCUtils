@@ -31,7 +31,7 @@ public class DeleteFriendConfirmEventHandler {
             return;
         }
 
-        Message.MessageBuilder prefixBuilder = Message.builder();
+        Message.Builder prefixBuilder = Message.builder();
 
         prefixBuilder.of("[").color(TextFormatting.DARK_GRAY).advance()
                 .of("FreundesListe").color(TextFormatting.LIGHT_PURPLE).advance()

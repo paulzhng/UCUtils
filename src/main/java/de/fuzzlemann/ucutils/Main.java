@@ -4,6 +4,7 @@ import de.fuzzlemann.ucutils.commands.UpdateCommand;
 import de.fuzzlemann.ucutils.teamspeak.TSClientQuery;
 import de.fuzzlemann.ucutils.utils.AnalyticsUtil;
 import de.fuzzlemann.ucutils.utils.Logger;
+import de.fuzzlemann.ucutils.utils.chatlog.ChatLogger;
 import de.fuzzlemann.ucutils.utils.command.CommandRegistry;
 import de.fuzzlemann.ucutils.utils.data.DataManager;
 import de.fuzzlemann.ucutils.utils.initializor.InitializorHandler;
@@ -58,5 +59,6 @@ public class Main {
         new Thread(TSClientQuery::getInstance).start();
 
         InitializorHandler.initAll();
+        new ChatLogger();
     }
 }

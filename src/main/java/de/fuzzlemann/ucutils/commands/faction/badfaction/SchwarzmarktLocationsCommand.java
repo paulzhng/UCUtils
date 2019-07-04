@@ -29,7 +29,7 @@ public class SchwarzmarktLocationsCommand {
 
     @Command({"schwarzmarktlocations", "schwarzmarktlocs"})
     public boolean onCommand() {
-        Message.MessageBuilder builder = Message.builder();
+        Message.Builder builder = Message.builder();
 
         builder.of("» ").color(TextFormatting.DARK_GRAY).advance()
                 .of("Positionen aller möglichen Schwarzmärkte\n").color(TextFormatting.DARK_AQUA).advance();

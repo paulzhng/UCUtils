@@ -100,7 +100,11 @@ public class ShareLocationCommand {
         Message.builder()
                 .prefix()
                 .of("Du hast deine Position mit ").color(TextFormatting.GRAY).advance()
-                .of(playerString).color(TextFormatting.BLUE).advance() //TODO add nice join
+                .joiner(players)
+                .consumer((b, s) -> b.of(s).color(TextFormatting.BLUE).advance())
+                .commaJoiner()
+                .andNiceJoiner()
+                .advance()
                 .of(" geteilt.").color(TextFormatting.GRAY).advance()
                 .send();
         return true;

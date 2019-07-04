@@ -72,7 +72,7 @@ public class BlacklistPriceCommand implements TabCompletion {
     }
 
     private void sendBlacklistPrices() {
-        Message.MessageBuilder builder = Message.builder();
+        Message.Builder builder = Message.builder();
 
         builder.of("» ").color(TextFormatting.DARK_GRAY).advance()
                 .of("Eingestellte Blacklistpreise\n").color(TextFormatting.DARK_AQUA).advance();

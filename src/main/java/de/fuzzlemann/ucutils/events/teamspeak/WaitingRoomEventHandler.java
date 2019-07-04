@@ -28,6 +28,8 @@ public class WaitingRoomEventHandler {
 
     @SubscribeEvent
     public static void onClientMoved(ClientMovedEvent e) {
+        if (Main.MINECRAFT.player == null) return;
+
         boolean supportNotification = UCUtilsConfig.notifyWaitingSupport;
         boolean publicNotification = UCUtilsConfig.notifyWaitingPublic;
         if (!supportNotification && !publicNotification) return;
@@ -56,7 +58,7 @@ public class WaitingRoomEventHandler {
             ClientVariableCommand.Response response = new ClientVariableCommand(clientID).getResponse();
             String name = response.getDescription();
 
-            Message.MessageBuilder builder = Message.builder()
+            Message.Builder builder = Message.builder()
                     .prefix()
                     .of(name).color(TextFormatting.BLUE).advance()
                     .space();

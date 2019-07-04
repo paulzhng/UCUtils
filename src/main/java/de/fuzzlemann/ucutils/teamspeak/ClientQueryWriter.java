@@ -1,6 +1,6 @@
 package de.fuzzlemann.ucutils.teamspeak;
 
-import de.fuzzlemann.ucutils.utils.Logger;
+import com.google.common.util.concurrent.Uninterruptibles;
 import de.fuzzlemann.ucutils.teamspeak.commands.BaseCommand;
 import org.apache.commons.io.IOUtils;
 
@@ -8,6 +8,7 @@ import java.io.Closeable;
 import java.io.PrintWriter;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author Fuzzlemann
@@ -31,22 +32,11 @@ public class ClientQueryWriter extends Thread implements Closeable {
         while (!closed) {
             BaseCommand command;
             while ((command = queue.poll()) != null) {
-                try {
-                    query.getReader().getQueue().put(command);
-                } catch (InterruptedException e) {
-                    Logger.LOGGER.catching(e);
-                    Thread.currentThread().interrupt();
-                }
-
+                Uninterruptibles.putUninterruptibly(query.getReader().getQueue(), command);
                 writer.println(command.getCommand());
             }
 
-            try {
-                Thread.sleep(100L);
-            } catch (InterruptedException e) {
-                Logger.LOGGER.catching(e);
-                Thread.currentThread().interrupt();
-            }
+            Uninterruptibles.sleepUninterruptibly(100, TimeUnit.MILLISECONDS);
         }
     }
 

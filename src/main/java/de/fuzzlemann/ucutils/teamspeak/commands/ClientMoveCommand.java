@@ -1,6 +1,8 @@
 package de.fuzzlemann.ucutils.teamspeak.commands;
 
 import de.fuzzlemann.ucutils.teamspeak.CommandResponse;
+import de.fuzzlemann.ucutils.teamspeak.TSParser;
+import de.fuzzlemann.ucutils.teamspeak.TSUtils;
 import de.fuzzlemann.ucutils.teamspeak.objects.Client;
 
 import java.util.Arrays;
@@ -22,6 +24,10 @@ public class ClientMoveCommand extends BaseCommand<CommandResponse> {
 
     public ClientMoveCommand(int channelID, int... clientIDs) {
         super(parseCommand(channelID, clientIDs));
+    }
+
+    public ClientMoveCommand(int channelID, String password) {
+        super("clientmove cid=" + channelID + " cpw= " + TSParser.encode(password) + " clid=" + TSUtils.getMyClientID());
     }
 
     private static String parseCommand(int channelID, int... clientIDs) {

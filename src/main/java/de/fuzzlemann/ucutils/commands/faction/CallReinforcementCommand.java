@@ -5,6 +5,7 @@ import de.fuzzlemann.ucutils.utils.abstraction.UPlayer;
 import de.fuzzlemann.ucutils.utils.command.api.Command;
 import de.fuzzlemann.ucutils.utils.command.api.CommandParam;
 import de.fuzzlemann.ucutils.utils.command.api.ParameterParser;
+import de.fuzzlemann.ucutils.utils.command.api.TabCompletion;
 import de.fuzzlemann.ucutils.utils.location.navigation.NavigationUtil;
 import de.fuzzlemann.ucutils.utils.text.Message;
 import de.fuzzlemann.ucutils.utils.text.MessagePart;
@@ -20,16 +21,18 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.commons.lang3.ObjectUtils;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 /**
  * @author Fuzzlemann
  */
 @SideOnly(Side.CLIENT)
 @Mod.EventBusSubscriber
-public class CallReinforcementCommand {
+public class CallReinforcementCommand implements TabCompletion {
 
     private static final Pattern REINFORCEMENT_PATTERN = Pattern.compile("^(.+ ((?:\\[UC])*[a-zA-Z0-9_]+)): Benötige Verstärkung! -> X: (-*\\d+) \\| Y: (-*\\d+) \\| Z: (-*\\d+)$");
     private static final Pattern ON_THE_WAY_PATTERN = Pattern.compile("^(.+ (?:\\[UC])*[a-zA-Z0-9_]+): ((?:\\[UC])*[a-zA-Z0-9_]+), ich bin zu deinem Verstärkungsruf unterwegs! \\((\\d+) Meter entfernt\\)$");
@@ -58,7 +61,7 @@ public class CallReinforcementCommand {
 
             boolean dChat = siblings.get(0).getStyle().getColor() == TextFormatting.RED && siblings.get(2).getStyle().getColor() == TextFormatting.RED;
 
-            Message.MessageBuilder builder = Message.builder();
+            Message.Builder builder = Message.builder();
 
             if (lastReinforcement != null && name.equals(lastReinforcement.getIssuer()) && System.currentTimeMillis() - lastReinforcement.getTime() < 1000) {
                 builder.of(lastReinforcement.getType().getMessage()).color(TextFormatting.RED).advance().space();
@@ -70,7 +73,7 @@ public class CallReinforcementCommand {
                     .messageParts(NavigationUtil.getNavigationMessage(posX, posY, posZ).getMessageParts())
                     .of(" | ").color(TextFormatting.GRAY).advance()
                     .of("Unterwegs")
-                    .hoverEvent(HoverEvent.Action.SHOW_TEXT, MessagePart.simpleMessagePart("Bescheid geben, dass man unterwegs ist", TextFormatting.RED))
+                    .hoverEvent(HoverEvent.Action.SHOW_TEXT, MessagePart.simple("Bescheid geben, dass man unterwegs ist", TextFormatting.RED))
                     .clickEvent(ClickEvent.Action.RUN_COMMAND, "/reinforcement ontheway " + name + " " + posX + " " + posY + " " + posZ + (dChat ? " -d" : ""))
                     .color(TextFormatting.RED).advance()
                     .send();
@@ -138,6 +141,15 @@ public class CallReinforcementCommand {
 
         p.sendChatMessage("/" + chatType + " Benötige Verstärkung! -> X: " + posX + " | Y: " + posY + " | Z: " + posZ);
         return true;
+    }
+
+    @Override
+    public List<String> getTabCompletions(UPlayer p, String[] args) {
+        if (args.length != 0) return null;
+
+        return Arrays.stream(Type.values())
+                .map(Type::getArgument)
+                .collect(Collectors.toList());
     }
 
     @ParameterParser.At(TypeParser.class)

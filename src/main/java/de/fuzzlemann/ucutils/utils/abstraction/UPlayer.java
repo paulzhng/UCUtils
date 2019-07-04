@@ -17,6 +17,8 @@ import java.util.UUID;
  */
 public interface UPlayer {
 
+    boolean isConnected();
+
     void sendMessage(ITextComponent textComponent);
 
     void sendChatMessage(String message);

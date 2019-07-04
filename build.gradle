@@ -60,10 +60,16 @@ sourceSets {
         java {
             srcDirs('src/main/java')
         }
+        resources {
+            srcDirs('src/main/resources')
+        }
     }
     test {
         java {
             srcDirs('src/test/java')
+        }
+        resources {
+            srcDirs('src/test/resources')
         }
     }
 }
@@ -118,7 +124,7 @@ remotes {
     webServer {
         host = project.findProperty('host')
         user = project.findProperty('user')
-        password = project.findProperty('password')
+        identity = new File(project.findProperty('identity'))
     }
 }
 

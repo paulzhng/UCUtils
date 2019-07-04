@@ -48,6 +48,7 @@ public class ChatLogger {
         logger.addHandler(fileHandler);
 
         consumer = new ChatLogConsumer(this);
+        instance = this;
 
         log("------------ Chat Log ------------");
     }

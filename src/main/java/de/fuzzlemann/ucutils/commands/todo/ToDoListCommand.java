@@ -32,7 +32,7 @@ public class ToDoListCommand {
             return true;
         }
 
-        Message.MessageBuilder builder = Message.builder();
+        Message.Builder builder = Message.builder();
 
         builder.of("» ").color(TextFormatting.DARK_GRAY).advance()
                 .of("ToDos\n").color(TextFormatting.DARK_AQUA).advance();
@@ -40,25 +40,25 @@ public class ToDoListCommand {
         for (ToDo toDo : toDoList) {
             builder.space().space()
                     .of("*").color(TextFormatting.DARK_GRAY)
-                    .hoverEvent(HoverEvent.Action.SHOW_TEXT, MessagePart.simpleMessagePart("Erstellt am " + dateFormat.format(new Date(toDo.getCreated())), TextFormatting.GRAY)).advance()
+                    .hoverEvent(HoverEvent.Action.SHOW_TEXT, MessagePart.simple("Erstellt am " + dateFormat.format(new Date(toDo.getCreated())), TextFormatting.GRAY)).advance()
                     .space()
                     .of(toDo.getMessage()).color(toDo.isDone() ? TextFormatting.GREEN : TextFormatting.RED)
-                    .hoverEvent(HoverEvent.Action.SHOW_TEXT, MessagePart.simpleMessagePart(toDo.isDone() ? "Erledigt" : "Nicht erledigt", toDo.isDone() ? TextFormatting.GREEN : TextFormatting.RED)).advance()
+                    .hoverEvent(HoverEvent.Action.SHOW_TEXT, MessagePart.simple(toDo.isDone() ? "Erledigt" : "Nicht erledigt", toDo.isDone() ? TextFormatting.GREEN : TextFormatting.RED)).advance()
                     .space();
 
             if (!toDo.isDone()) {
                 builder.of("[✓]").color(TextFormatting.GREEN)
-                        .hoverEvent(HoverEvent.Action.SHOW_TEXT, MessagePart.simpleMessagePart("Markiere den Eintrag als erledigt", TextFormatting.GREEN))
+                        .hoverEvent(HoverEvent.Action.SHOW_TEXT, MessagePart.simple("Markiere den Eintrag als erledigt", TextFormatting.GREEN))
                         .clickEvent(ClickEvent.Action.RUN_COMMAND, "/donetodo " + toDo.getID()).advance()
                         .space();
             }
 
             builder.of("[✗]").color(TextFormatting.RED)
-                    .hoverEvent(HoverEvent.Action.SHOW_TEXT, MessagePart.simpleMessagePart("Lösche den Eintrag", TextFormatting.RED))
+                    .hoverEvent(HoverEvent.Action.SHOW_TEXT, MessagePart.simple("Lösche den Eintrag", TextFormatting.RED))
                     .clickEvent(ClickEvent.Action.RUN_COMMAND, "/removetodo " + toDo.getID()).advance()
                     .space()
                     .of("[␈]\n").color(TextFormatting.DARK_GRAY)
-                    .hoverEvent(HoverEvent.Action.SHOW_TEXT, MessagePart.simpleMessagePart("Verändere den Eintrag", TextFormatting.DARK_GRAY))
+                    .hoverEvent(HoverEvent.Action.SHOW_TEXT, MessagePart.simple("Verändere den Eintrag", TextFormatting.DARK_GRAY))
                     .clickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/modifytodo " + toDo.getID() + " " + toDo.getMessage()).advance();
         }
 

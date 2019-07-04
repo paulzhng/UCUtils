@@ -293,7 +293,6 @@ class CommandIssuer {
                 if (parsedArgument instanceof Boolean) {
                     if ((boolean) parsedArgument) {
                         index--;
-                        continue;
                     }
 
                     continue;

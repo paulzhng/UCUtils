@@ -25,7 +25,7 @@ public class InternetTestCommand {
 
     @Command(value = {"internettest", "inettest"}, async = true)
     public boolean onCommand() {
-        Message.MessageBuilder builder = Message.builder();
+        Message.Builder builder = Message.builder();
 
         for (int i = 0; i < hosts.size(); i++) {
             String host = hosts.get(i);

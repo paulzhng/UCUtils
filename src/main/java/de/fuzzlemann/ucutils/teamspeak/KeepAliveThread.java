@@ -1,6 +1,6 @@
 package de.fuzzlemann.ucutils.teamspeak;
 
-import de.fuzzlemann.ucutils.utils.Logger;
+import com.google.common.util.concurrent.Uninterruptibles;
 import de.fuzzlemann.ucutils.teamspeak.commands.WhoAmICommand;
 
 import java.io.Closeable;
@@ -28,12 +28,7 @@ public class KeepAliveThread extends Thread implements Closeable {
 
             new WhoAmICommand().execute(clientQuery);
 
-            try {
-                Thread.sleep(TimeUnit.MINUTES.toMillis(1));
-            } catch (InterruptedException e) {
-                Logger.LOGGER.catching(e);
-                Thread.currentThread().interrupt();
-            }
+            Uninterruptibles.sleepUninterruptibly(1, TimeUnit.MINUTES);
         }
     }
 

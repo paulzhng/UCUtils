@@ -1,5 +1,6 @@
 package de.fuzzlemann.ucutils.teamspeak;
 
+import com.google.common.util.concurrent.Uninterruptibles;
 import de.fuzzlemann.ucutils.teamspeak.commands.BaseCommand;
 import de.fuzzlemann.ucutils.teamspeak.events.TSEvent;
 import de.fuzzlemann.ucutils.utils.Logger;
@@ -14,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author Fuzzlemann
@@ -79,12 +81,7 @@ public class ClientQueryReader extends Thread implements Closeable {
                 Logger.LOGGER.catching(e);
             }
 
-            try {
-                Thread.sleep(100L);
-            } catch (InterruptedException e) {
-                Logger.LOGGER.catching(e);
-                Thread.currentThread().interrupt();
-            }
+            Uninterruptibles.sleepUninterruptibly(100, TimeUnit.MILLISECONDS);
         }
     }
 

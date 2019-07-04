@@ -114,15 +114,15 @@ public class NotificationEventHandler {
         ITextComponent buttons = Message.builder()
                 .space()
                 .of("[☎]").color(TextFormatting.DARK_GREEN)
-                .hoverEvent(HoverEvent.Action.SHOW_TEXT, MessagePart.simpleMessagePart("Rufe " + friendName + " an", TextFormatting.DARK_GREEN))
+                .hoverEvent(HoverEvent.Action.SHOW_TEXT, MessagePart.simple("Rufe " + friendName + " an", TextFormatting.DARK_GREEN))
                 .clickEvent(ClickEvent.Action.RUN_COMMAND, "/acall " + friendName).advance()
                 .space()
                 .of("[✉]").color(TextFormatting.GREEN)
-                .hoverEvent(HoverEvent.Action.SHOW_TEXT, MessagePart.simpleMessagePart("Schreibe eine SMS an " + friendName, TextFormatting.GREEN))
+                .hoverEvent(HoverEvent.Action.SHOW_TEXT, MessagePart.simple("Schreibe eine SMS an " + friendName, TextFormatting.GREEN))
                 .clickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/asms " + friendName + " ").advance()
                 .space()
                 .of("[✗]").color(TextFormatting.RED)
-                .hoverEvent(HoverEvent.Action.SHOW_TEXT, MessagePart.simpleMessagePart("Lösche " + friendName + " als Freund", TextFormatting.RED))
+                .hoverEvent(HoverEvent.Action.SHOW_TEXT, MessagePart.simple("Lösche " + friendName + " als Freund", TextFormatting.RED))
                 .clickEvent(ClickEvent.Action.RUN_COMMAND, "/friend delete " + friendName).advance()
                 .build().toTextComponent();
 

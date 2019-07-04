@@ -1,6 +1,7 @@
 package de.fuzzlemann.ucutils.utils.abstraction;
 
 import de.fuzzlemann.ucutils.Main;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.inventory.Container;
 import net.minecraft.scoreboard.Scoreboard;
@@ -17,69 +18,78 @@ import java.util.UUID;
  * @author Fuzzlemann
  */
 public class UPlayerImpl implements UPlayer {
+    
+    @Override
+    public boolean isConnected() {
+        return getPlayer() != null;
+    }
 
     @Override
     public void sendMessage(ITextComponent textComponent) {
-        Main.MINECRAFT.player.sendMessage(textComponent);
+        getPlayer().sendMessage(textComponent);
     }
 
     @Override
     public void sendChatMessage(String message) {
-        Main.MINECRAFT.player.sendChatMessage(message);
+        getPlayer().sendChatMessage(message);
     }
 
     @Override
     public void playSound(SoundEvent soundIn, float volume, float pitch) {
-        Main.MINECRAFT.player.playSound(soundIn, volume, pitch);
+        getPlayer().playSound(soundIn, volume, pitch);
     }
 
     @Override
     public String getName() {
-        return Main.MINECRAFT.player.getName();
+        return getPlayer().getName();
     }
 
     @Override
     public UUID getUniqueID() {
-        return Main.MINECRAFT.player.getUniqueID();
+        return getPlayer().getUniqueID();
     }
 
     @Override
     public BlockPos getPosition() {
-        return Main.MINECRAFT.player.getPosition();
+        return getPlayer().getPosition();
     }
 
     @Override
     public Team getTeam() {
-        return Main.MINECRAFT.player.getTeam();
+        return getPlayer().getTeam();
     }
 
     @Override
     public Scoreboard getWorldScoreboard() {
-        return Main.MINECRAFT.player.getWorldScoreboard();
+        return getPlayer().getWorldScoreboard();
     }
 
     @Override
     public World getWorld() {
-        return Main.MINECRAFT.player.getEntityWorld();
+        return getPlayer().getEntityWorld();
     }
 
     @Override
     public Container getOpenContainer() {
-        return Main.MINECRAFT.player.openContainer;
+        return getPlayer().openContainer;
     }
 
     @Override
     public Container getInventoryContainer() {
-        return Main.MINECRAFT.player.inventoryContainer;
+        return getPlayer().inventoryContainer;
     }
 
     @Override
     public AxisAlignedBB getEntityBoundingBox() {
-        return Main.MINECRAFT.player.getEntityBoundingBox();
+        return getPlayer().getEntityBoundingBox();
     }
 
     @Override
     public NetHandlerPlayClient getConnection() {
-        return Main.MINECRAFT.player.connection;
+        return getPlayer().connection;
+    }
+    
+    private EntityPlayerSP getPlayer() {
+        return Main.MINECRAFT.player;
     }
 }

@@ -15,20 +15,14 @@ public class FormatUtils {
     public static List<MessagePart> formatMillisecondsToMessage(long ms) {
         List<String> timeElements = getTimeElements(ms);
 
-        Message.MessageBuilder builder = Message.builder();
-        for (int i = 0; i < timeElements.size(); i++) {
-            String timeElement = timeElements.get(i);
-            builder.of(timeElement).color(TextFormatting.BLUE).advance();
-
-            if (i == timeElements.size() - 1) continue;
-            if (i == timeElements.size() - 2) {
-                builder.of(" und ").color(TextFormatting.GRAY).advance();
-            } else {
-                builder.of(", ").color(TextFormatting.GRAY).advance();
-            }
-        }
-
-        return builder.build().getMessageParts();
+        return Message.builder()
+                .joiner(timeElements)
+                .consumer((b, s) -> b.of(s).color(TextFormatting.BLUE).advance())
+                .commaJoiner(TextFormatting.GRAY)
+                .andNiceJoiner(TextFormatting.GRAY)
+                .advance()
+                .build()
+                .getMessageParts();
     }
 
     private static List<String> getTimeElements(long ms) {

@@ -13,7 +13,7 @@ public class TestMessageCommand {
 
     @Command(value = "testmessage", management = true)
     public boolean onCommand(@CommandParam(joinStart = true) String message) {
-        Message.MessageBuilder builder = Message.builder();
+        Message.Builder builder = Message.builder();
         String[] split = message.split("&");
         for (String s : split) {
             if (s.isEmpty()) continue;

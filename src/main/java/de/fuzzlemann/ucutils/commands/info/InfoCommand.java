@@ -17,7 +17,7 @@ public class InfoCommand {
 
     @Command("info")
     public boolean onCommand() {
-        Message.MessageBuilder builder = Message.builder();
+        Message.Builder builder = Message.builder();
 
         constructText(builder, "Fraktionen", "/finfo");
         constructText(builder, "Wichtige Befehle", "/cinfo");
@@ -27,10 +27,10 @@ public class InfoCommand {
         return true;
     }
 
-    private void constructText(Message.MessageBuilder builder, String text, String command) {
+    private void constructText(Message.Builder builder, String text, String command) {
         builder.of("\n » ").color(TextFormatting.RED).advance()
                 .of(text).color(TextFormatting.DARK_GREEN)
-                .hoverEvent(HoverEvent.Action.SHOW_TEXT, MessagePart.simpleMessagePart("Klick mich!", TextFormatting.GREEN))
+                .hoverEvent(HoverEvent.Action.SHOW_TEXT, MessagePart.simple("Klick mich!", TextFormatting.GREEN))
                 .clickEvent(ClickEvent.Action.RUN_COMMAND, command)
                 .advance();
     }

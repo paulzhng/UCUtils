@@ -81,7 +81,7 @@ public class NavigationUtil implements DataLoader {
     }
 
     private static Message constructNavigationMessage(String naviCommand) {
-        Message.MessageBuilder builder = Message.builder();
+        Message.Builder builder = Message.builder();
 
         return builder.of(" » ").color(TextFormatting.GRAY).advance()
                 .messageParts(constructRawNavigationMessage(naviCommand).getMessageParts())
@@ -93,12 +93,12 @@ public class NavigationUtil implements DataLoader {
     }
 
     private static Message constructRawNavigationMessage(String naviCommand) {
-        Message.MessageBuilder builder = Message.builder();
+        Message.Builder builder = Message.builder();
 
         return builder.of("Route anzeigen")
                 .color(TextFormatting.RED)
                 .clickEvent(ClickEvent.Action.RUN_COMMAND, naviCommand)
-                .hoverEvent(HoverEvent.Action.SHOW_TEXT, MessagePart.simpleMessagePart("Route anzeigen", TextFormatting.RED))
+                .hoverEvent(HoverEvent.Action.SHOW_TEXT, MessagePart.simple("Route anzeigen", TextFormatting.RED))
                 .advance()
                 .build();
     }

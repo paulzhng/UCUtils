@@ -39,7 +39,7 @@ public class EventNotificationEventHandler {
                 String eventType = responseObject.get("eventType").getAsJsonPrimitive().getAsString();
                 String comment = responseObject.get("comment").getAsJsonPrimitive().getAsString().trim();
 
-                Message.MessageBuilder builder = Message.builder().of("Ereignis: " + eventType + " | Am " + startDate).color(TextFormatting.RED).advance();
+                Message.Builder builder = Message.builder().of("Ereignis: " + eventType + " | Am " + startDate).color(TextFormatting.RED).advance();
 
                 if (!comment.isEmpty()) {
                     builder.of(" | Kommentar: " + comment).advance();
