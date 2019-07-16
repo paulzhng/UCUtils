@@ -10,7 +10,7 @@ import java.util.List;
 public class CustomNaviPoint {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @ElementCollection
     private List<String> names;

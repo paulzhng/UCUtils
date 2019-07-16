@@ -14,7 +14,7 @@ import javax.persistence.Id;
 public class House {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String owner;
     @Expose

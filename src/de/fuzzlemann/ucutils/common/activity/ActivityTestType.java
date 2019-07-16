@@ -10,8 +10,8 @@ public enum ActivityTestType {
     ARREST("Verhaftungen"),
     KILLS("Kills"),
     LARGE_OPERATION("Großeinsatz"),
-    EQUIP("Equip"),
-    OTHER("Andere");
+    OTHER("Andere"),
+    EQUIP("Equip");
 
     private final String name;
 
