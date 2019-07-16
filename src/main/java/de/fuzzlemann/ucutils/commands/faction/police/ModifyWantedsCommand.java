@@ -52,6 +52,11 @@ public class ModifyWantedsCommand implements TabCompletion {
         if (wantedAmount > 69)
             wantedAmount = 69;
 
+        if (wantedAmount == wanted.getAmount() && wantedReason.equals(wanted.getReason())) {
+            TextUtils.error("Der Spieler besitzt bereits diese Modifikatoren.");
+            return true;
+        }
+
         p.sendChatMessage("/su " + wantedAmount + " " + target + " " + wantedReason);
         return true;
     }

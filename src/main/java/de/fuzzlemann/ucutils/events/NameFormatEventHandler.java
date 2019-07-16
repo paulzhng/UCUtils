@@ -1,15 +1,19 @@
 package de.fuzzlemann.ucutils.events;
 
+import de.fuzzlemann.ucutils.Main;
 import de.fuzzlemann.ucutils.config.UCUtilsConfig;
 import de.fuzzlemann.ucutils.utils.faction.HouseBanHandler;
 import de.fuzzlemann.ucutils.utils.text.TextUtils;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemSkull;
 import net.minecraft.scoreboard.ScorePlayerTeam;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.commons.lang3.StringUtils;
@@ -25,8 +29,11 @@ import java.util.regex.Pattern;
 @SideOnly(Side.CLIENT)
 public class NameFormatEventHandler {
 
+    //--------------------- PLAYER_MAP ---------------------\\
+    private static final Map<String, EntityPlayer> PLAYER_MAP = new HashMap<>();
     //--------------------- Wanteds ---------------------\\
     public static final Map<String, Integer> WANTED_MAP = new HashMap<>();
+    private static final Pattern WANTED_LIST_ENTRY_PATTERN = Pattern.compile("^ {2}- (?:\\[UC])*([a-zA-Z0-9_]+) \\| (\\d+)(?:.+)*$");
     private static final Pattern WANTEDS_GIVEN_PATTERN = Pattern.compile("^HQ: (?:\\[UC])*([a-zA-Z0-9_]+)'s momentanes WantedLevel: (\\d+)$");
     private static final Pattern WANTEDS_DELETED_PATTERN = Pattern.compile("^HQ: (?:\\[UC])*([a-zA-Z0-9_]+) wurde von (?:\\[UC])*[a-zA-Z0-9_]+ eingesperrt.$" +
             "|^.+ (?:\\[UC])*[a-zA-Z0-9_]+ hat (?:\\[UC])*([a-zA-Z0-9_]+) getötet!$" +
@@ -40,7 +47,8 @@ public class NameFormatEventHandler {
     private static final List<String> BLACKLIST = new ArrayList<>();
     private static final Pattern BLACKLIST_ADDED_PATTERN = Pattern.compile("^\\[Blacklist] (?:\\[UC])*([a-zA-Z0-9_]+) wurde von (?:\\[UC])*[a-zA-Z0-9_]+ auf die Blacklist gesetzt!$");
     private static final Pattern BLACKLIST_REMOVED_PATTERN = Pattern.compile("^\\[Blacklist] (?:\\[UC])*([a-zA-Z0-9_]+) wurde von (?:\\[UC])*[a-zA-Z0-9_]+ von der Blacklist gelöscht!$");
-    private static final Map<String, EntityPlayer> PLAYER_MAP = new HashMap<>();
+    //--------------------- Time ---------------------\\
+    private static int tick;
     private static long wantedsShown;
     private static long hitlistShown;
     private static long blacklistShown;
@@ -61,6 +69,34 @@ public class NameFormatEventHandler {
         if (color == null) return;
 
         e.setDisplayname(color + userName);
+    }
+
+    @SubscribeEvent
+    public static void onWorldTick(TickEvent.ClientTickEvent e) {
+        if (e.phase != TickEvent.Phase.START) return;
+
+        if (Main.MINECRAFT.world == null) return;
+        if (tick++ != 20) return;
+
+        List<EntityItem> items = Main.MINECRAFT.world.getEntities(EntityItem.class, (ent) -> ent != null && ent.hasCustomName() && ent.getItem().getItem() instanceof ItemSkull);
+
+        for (EntityItem entityItem : items) {
+            String name = entityItem.getCustomNameTag();
+            String colorStrippedName = TextUtils.stripColor(name);
+
+            if (name.startsWith("§8")) continue; //Hitman Corpse
+
+            String color = getPrefix(TextUtils.stripPrefix(colorStrippedName));
+            if (color == null) {
+                if (name.startsWith("§7")) continue;
+
+                color = "§7";
+            }
+
+            entityItem.setCustomNameTag(color + colorStrippedName);
+        }
+
+        tick = 0;
     }
 
     @SubscribeEvent
@@ -120,20 +156,11 @@ public class NameFormatEventHandler {
             return;
         }
 
-        //TODO TRANSFORM TO REGEX
-        if (currentTime - wantedsShown > 1000L || !unformattedMessage.startsWith("  - ")) return;
+        Matcher wantedListEntryMatcher = WANTED_LIST_ENTRY_PATTERN.matcher(unformattedMessage);
+        if (currentTime - wantedsShown > 1000L || !wantedListEntryMatcher.find()) return;
 
-        String[] splittedMessage = StringUtils.split(unformattedMessage, " | ");
-        if (splittedMessage.length < 3) return;
-
-        String name;
-        int wanteds;
-        try {
-            name = TextUtils.stripPrefix(splittedMessage[1]);
-            wanteds = Integer.parseInt(splittedMessage[2]);
-        } catch (Exception exc) {
-            return;
-        }
+        String name = wantedListEntryMatcher.group(1);
+        int wanteds = Integer.parseInt(wantedListEntryMatcher.group(2));
 
         WANTED_MAP.put(name, wanteds);
         refreshDisplayName(name);

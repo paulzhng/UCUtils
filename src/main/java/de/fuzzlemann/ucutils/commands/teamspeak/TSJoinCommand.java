@@ -10,6 +10,7 @@ import de.fuzzlemann.ucutils.utils.abstraction.UPlayer;
 import de.fuzzlemann.ucutils.utils.command.api.Command;
 import de.fuzzlemann.ucutils.utils.command.api.CommandParam;
 import de.fuzzlemann.ucutils.utils.command.api.TabCompletion;
+import de.fuzzlemann.ucutils.utils.faction.Faction;
 import de.fuzzlemann.ucutils.utils.text.Message;
 import de.fuzzlemann.ucutils.utils.text.TextUtils;
 import net.minecraft.util.text.TextFormatting;
@@ -45,7 +46,13 @@ public class TSJoinCommand implements TabCompletion {
         }
 
         channelName = channelName.replace('-', ' ');
-        Channel foundChannel = ForgeUtils.getMostMatching(channelMaps.values(), channelName, (channel) -> modifyChannelName(channel.getName()));
+        Channel foundChannel;
+        if (channelName.equals("Öffentlich") && Faction.getFactionOfPlayer() != null) {
+            foundChannel = new Channel(Faction.getFactionOfPlayer().getPublicChannelID(), "Öffentlich", 0, 0);
+        } else {
+            foundChannel = ForgeUtils.getMostMatching(channelMaps.values(), channelName, (channel) -> modifyChannelName(channel.getName()));
+        }
+
         if (foundChannel == null) {
             TextUtils.error("Es wurde kein Channel gefunden.");
             return true;

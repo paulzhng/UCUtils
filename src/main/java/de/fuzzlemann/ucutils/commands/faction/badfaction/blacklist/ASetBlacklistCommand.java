@@ -1,5 +1,6 @@
 package de.fuzzlemann.ucutils.commands.faction.badfaction.blacklist;
 
+import de.fuzzlemann.ucutils.utils.ForgeUtils;
 import de.fuzzlemann.ucutils.utils.abstraction.UPlayer;
 import de.fuzzlemann.ucutils.utils.command.api.Command;
 import de.fuzzlemann.ucutils.utils.command.api.CommandParam;
@@ -27,11 +28,18 @@ public class ASetBlacklistCommand implements TabCompletion {
 
     @Override
     public List<String> getTabCompletions(UPlayer p, String[] args) {
-        if (args.length != 2) return Collections.emptyList();
+        if (args.length == 1) return Collections.emptyList();
 
-        return BlacklistUtil.BLACKLIST_REASONS
+        List<String> completions = BlacklistUtil.BLACKLIST_REASONS
                 .stream()
                 .map(BlacklistReason::getReason)
                 .collect(Collectors.toList());
+        String input = args[args.length - 1].toLowerCase().replace('-', ' ');
+
+        completions.removeIf(tabComplete -> !tabComplete.toLowerCase().startsWith(input));
+
+        completions.addAll(ForgeUtils.getOnlinePlayers());
+
+        return completions;
     }
 }

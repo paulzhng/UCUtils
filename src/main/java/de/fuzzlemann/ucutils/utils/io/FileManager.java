@@ -16,7 +16,7 @@ public class FileManager {
         if (ForgeUtils.isTest()) {
             MC_DIRECTORY = new File("/testDirectory");
         } else {
-            MC_DIRECTORY = Main.MINECRAFT.mcDataDir;
+            MC_DIRECTORY = Main.MINECRAFT.gameDir;
         }
     }
 }

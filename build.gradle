@@ -15,23 +15,40 @@ buildscript {
 }
 
 plugins {
+    id 'idea'
     id 'org.hidetake.ssh' version '2.10.1'
+}
+
+repositories {
+    flatDir {
+        dirs '/libs'
+        dirs '../UCUtils_common/target'
+    }
 }
 
 apply plugin: 'net.minecraftforge.gradle.forge'
 
-version = "1.12.1-1.6"
+version = "1.12.2-1.7"
 group = "de.fuzzlemann.ucutils"
 archivesBaseName = "ucutils"
 
 configurations {
     shade
-    compile.extendsFrom shade
+    compile.extendsFrom(shade)
+}
+
+idea {
+    module {
+        downloadJavadoc = true
+        downloadSources = true
+
+        scopes.COMPILE.plus += [configurations.shade]
+    }
 }
 
 dependencies {
-    provided fileTree(dir: 'libs', include: ['*.jar'])
-    shade fileTree(dir: '../UCUtils_common/target', include: ['*.jar'])
+    provided 'net.labymod:lm_api_mc1.12.2:3.4.2'
+    shade 'de.fuzzlemann.common:common-1.0.0:1.0.0'
 
     testImplementation 'org.reflections:reflections:0.9.11'
     testImplementation 'org.mockito:mockito-junit-jupiter:2.28.2'
@@ -50,9 +67,9 @@ compileJava {
 }
 
 minecraft {
-    version = "1.12.1-14.22.1.2485"
+    version = "1.12.2-14.23.5.2838"
     runDir = "run"
-    mappings = "snapshot_20170624"
+    mappings = "stable_39"
 }
 
 sourceSets {

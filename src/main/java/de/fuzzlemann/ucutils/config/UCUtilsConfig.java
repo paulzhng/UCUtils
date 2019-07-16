@@ -85,7 +85,7 @@ public class UCUtilsConfig {
             String previousTSApiKey = tsAPIKey;
             ConfigManager.sync(Main.MOD_ID, Config.Type.INSTANCE);
 
-            if (!previousTSApiKey.equals(tsAPIKey)) {
+            if (!previousTSApiKey.equals(tsAPIKey) && !tsAPIKey.isEmpty()) {
                 TSClientQuery.reconnect();
             }
         }

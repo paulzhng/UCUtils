@@ -3,9 +3,9 @@ package de.fuzzlemann.ucutils.events;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import de.fuzzlemann.ucutils.config.UCUtilsConfig;
 import de.fuzzlemann.ucutils.utils.Logger;
 import de.fuzzlemann.ucutils.utils.api.APIUtils;
-import de.fuzzlemann.ucutils.config.UCUtilsConfig;
 import de.fuzzlemann.ucutils.utils.text.Message;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
@@ -39,10 +39,18 @@ public class EventNotificationEventHandler {
                 String eventType = responseObject.get("eventType").getAsJsonPrimitive().getAsString();
                 String comment = responseObject.get("comment").getAsJsonPrimitive().getAsString().trim();
 
-                Message.Builder builder = Message.builder().of("Ereignis: " + eventType + " | Am " + startDate).color(TextFormatting.RED).advance();
+                Message.Builder builder = Message.builder()
+                        .prefix()
+                        .of("Am ").color(TextFormatting.GRAY).advance()
+                        .of(startDate).color(TextFormatting.BLUE).advance()
+                        .of(" findet das Fraktionsereignis ").color(TextFormatting.GRAY).advance()
+                        .of("\"" + eventType + "\"").color(TextFormatting.BLUE).advance()
+                        .of(" statt!").color(TextFormatting.GRAY).advance();
 
                 if (!comment.isEmpty()) {
-                    builder.of(" | Kommentar: " + comment).advance();
+                    builder.of(" (").color(TextFormatting.GRAY).advance()
+                            .of(comment).color(TextFormatting.BLUE).advance()
+                            .of(")").color(TextFormatting.GRAY).advance();
                 }
 
                 builder.send();

@@ -108,6 +108,7 @@ public class CallReinforcementCommand implements TabCompletion {
 
             lastReinforcement = new ReinforcementType(name, type);
             e.setCanceled(true);
+            return;
         }
     }
 
@@ -145,7 +146,7 @@ public class CallReinforcementCommand implements TabCompletion {
 
     @Override
     public List<String> getTabCompletions(UPlayer p, String[] args) {
-        if (args.length != 0) return null;
+        if (args.length != 1) return null;
 
         return Arrays.stream(Type.values())
                 .map(Type::getArgument)

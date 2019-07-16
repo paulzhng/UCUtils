@@ -3,8 +3,8 @@
     "modid": "ucutils",
     "name": "UC Utils",
     "description": "An useful Util Mod for UnicaCity",
-    "version": "1.12.1-1.6",
-    "mcversion": "1.12.1",
+    "version": "1.12.2-1.7",
+    "mcversion": "1.12.2",
     "authorList": [
       "Fuzzlemann"
     ],

@@ -26,7 +26,7 @@ import java.util.List;
 public class UCUtilsCommand implements TabCompletion {
 
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
-    private final long compileTime = 1562167855417L; //updated by gradle
+    private final long compileTime = 1563284076320L; //updated by gradle
     private final String formattedTime = dateFormat.format(new Date(compileTime));
 
     @Command("ucutils")
