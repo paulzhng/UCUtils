@@ -48,7 +48,7 @@ idea {
 
 dependencies {
     provided 'net.labymod:lm_api_mc1.12.2:3.4.2'
-    shade 'de.fuzzlemann.common:common-1.0.0:1.0.0'
+    shade 'de.fuzzlemann.common:common-1.0.1:1.0.1'
 
     testImplementation 'org.reflections:reflections:0.9.11'
     testImplementation 'org.mockito:mockito-junit-jupiter:2.28.2'

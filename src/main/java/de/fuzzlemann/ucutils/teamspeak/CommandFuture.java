@@ -15,6 +15,7 @@ public class CommandFuture<T> extends CompletableFuture<T> {
         }
     }
 
+    @Override
     public boolean complete(Object commandResponse) {
         return super.complete((T) commandResponse);
     }

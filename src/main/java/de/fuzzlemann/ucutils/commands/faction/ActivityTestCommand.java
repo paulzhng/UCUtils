@@ -1,70 +1,59 @@
 package de.fuzzlemann.ucutils.commands.faction;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
-import de.fuzzlemann.ucutils.Main;
+import de.fuzzlemann.ucutils.commands.UploadImageCommand;
 import de.fuzzlemann.ucutils.commands.time.ClockCommand;
 import de.fuzzlemann.ucutils.common.activity.ActivityTestType;
-import de.fuzzlemann.ucutils.utils.ReflectionUtil;
+import de.fuzzlemann.ucutils.keybind.KeyBindRegistry;
+import de.fuzzlemann.ucutils.utils.ForgeUtils;
+import de.fuzzlemann.ucutils.utils.Logger;
 import de.fuzzlemann.ucutils.utils.abstraction.UPlayer;
 import de.fuzzlemann.ucutils.utils.api.APIUtils;
 import de.fuzzlemann.ucutils.utils.command.api.Command;
 import de.fuzzlemann.ucutils.utils.command.api.TabCompletion;
 import de.fuzzlemann.ucutils.utils.image.ImageUploader;
 import de.fuzzlemann.ucutils.utils.io.FileManager;
+import de.fuzzlemann.ucutils.utils.text.Message;
+import de.fuzzlemann.ucutils.utils.text.MessagePart;
 import de.fuzzlemann.ucutils.utils.text.TextUtils;
-import net.minecraft.client.shader.Framebuffer;
-import net.minecraft.util.ScreenShotHelper;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.event.ClickEvent;
+import net.minecraft.util.text.event.HoverEvent;
+import net.minecraftforge.client.event.GuiScreenEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.InputEvent;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
 /**
  * @author Fuzzlemann
  */
+@Mod.EventBusSubscriber
 public class ActivityTestCommand implements TabCompletion {
 
-    private final File directory = new File(FileManager.MC_DIRECTORY, "activityTests");
+    private static final File ACTIVITY_TEST_FOLDER = new File(FileManager.MC_DIRECTORY, "activityTests");
+    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd-MM-yyyy_HH-mm-ss");
 
     @Command(value = "activitytest", usage = "/%label% [Thema]")
     public boolean onCommand(ActivityTestType testType) {
         try {
             new ClockCommand().onCommand();
 
-            if (!directory.exists()) {
-                directory.mkdir();
+            if (!ACTIVITY_TEST_FOLDER.exists()) {
+                ACTIVITY_TEST_FOLDER.mkdir();
             }
 
-            Framebuffer framebuffer = ReflectionUtil.getValue(Main.MINECRAFT, Framebuffer.class);
-            assert framebuffer != null;
-
-            File file = new File(directory, testType.getName().toLowerCase() + "_" + System.currentTimeMillis() + ".jpg");
-            try {
-                file.createNewFile();
-            } catch (IOException e) {
-                throw new IllegalStateException(e);
-            }
-
-            BufferedImage image = ScreenShotHelper.createScreenshot(Main.MINECRAFT.displayWidth, Main.MINECRAFT.displayHeight, framebuffer);
+            File file = new File(ACTIVITY_TEST_FOLDER, testType.getName().toLowerCase() + "_" + System.currentTimeMillis() + ".jpg");
+            ForgeUtils.makeScreenshot(file);
 
             new Thread(() -> {
                 try {
-                    try {
-                        ImageIO.write(image, "jpg", file);
-                    } catch (IOException e) {
-                        throw new IllegalStateException(e);
-                    }
-
-                    String json = ImageUploader.upload(file);
-
-                    JsonParser jsonParser = new JsonParser();
-                    JsonElement jsonElement = jsonParser.parse(json);
-                    String link = jsonElement.getAsJsonObject().get("data").getAsJsonObject().get("link").getAsString();
+                    String link = ImageUploader.uploadToLink(file);
 
                     String str = APIUtils.postAuthenticated("http://tomcat.fuzzlemann.de/factiononline/activityTest/add",
                             "typeString", testType.getName(),
@@ -77,12 +66,15 @@ public class ActivityTestCommand implements TabCompletion {
 
                     TextUtils.simpleMessage("Die Aktivität wurde erfolgreich eingetragen.");
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    TextUtils.error("Ein Fehler ist aufgetreten.");
+                    Logger.LOGGER.catching(e);
                 }
-            }, "ActivityTestCommand").start();
+            }, "UCUtils-ActivityTestCommand").start();
         } catch (Exception e) {
-            e.printStackTrace();
+            TextUtils.error("Ein Fehler ist aufgetreten.");
+            Logger.LOGGER.catching(e);
         }
+
         return true;
     }
 
@@ -93,5 +85,61 @@ public class ActivityTestCommand implements TabCompletion {
         return Arrays.stream(ActivityTestType.values())
                 .map(ActivityTestType::getName)
                 .collect(Collectors.toList());
+    }
+
+    @SubscribeEvent
+    public static void onKeyboardClickEvent(InputEvent.KeyInputEvent e) {
+        handleAlternateScreenshot();
+    }
+
+    @SubscribeEvent
+    public static void onKeyboardClickEvent(GuiScreenEvent.KeyboardInputEvent.Post e) {
+        handleAlternateScreenshot();
+    }
+
+    private static void handleAlternateScreenshot() {
+        if (!KeyBindRegistry.isPressed(KeyBindRegistry.alternateScreenshot) && !KeyBindRegistry.isPressed(KeyBindRegistry.alternateScreenshotWithUpload))
+            return;
+
+        if (!ACTIVITY_TEST_FOLDER.exists())
+            ACTIVITY_TEST_FOLDER.mkdir();
+
+        String date = DATE_FORMAT.format(new Date());
+
+        StringBuilder name = new StringBuilder(date);
+        int i = 1;
+        while (new File(ACTIVITY_TEST_FOLDER, name + ".jpg").exists()) {
+            if (i == 1) {
+                name.append("_");
+                name.append(i++);
+            } else {
+                name.replace(name.length() - 1, name.length(), String.valueOf(i));
+            }
+        }
+
+        String fullName = name + ".jpg";
+
+        File file = new File(ACTIVITY_TEST_FOLDER, fullName);
+        ForgeUtils.makeScreenshot(file);
+
+        Message.builder()
+                .prefix()
+                .of("Der Screenshot wurde als").color(TextFormatting.GRAY).advance()
+                .space()
+                .of(fullName).color(TextFormatting.BLUE).bold()
+                .clickEvent(ClickEvent.Action.OPEN_FILE, file.getAbsolutePath())
+                .advance()
+                .space()
+                .of("gespeichert.").color(TextFormatting.GRAY).advance()
+                .space()
+                .of("⬆").color(TextFormatting.BLUE)
+                .hoverEvent(HoverEvent.Action.SHOW_TEXT, MessagePart.simple("Hochladen", TextFormatting.DARK_AQUA))
+                .clickEvent(ClickEvent.Action.RUN_COMMAND, "/uploadimage " + file.getAbsolutePath())
+                .advance()
+                .send();
+
+        if (KeyBindRegistry.isPressed(KeyBindRegistry.alternateScreenshotWithUpload)) {
+            new UploadImageCommand().onCommand(file);
+        }
     }
 }

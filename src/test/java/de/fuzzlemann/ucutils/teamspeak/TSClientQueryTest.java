@@ -87,7 +87,7 @@ public class TSClientQueryTest {
     void test2() {
         ChannelListCommand.Response response = new ChannelListCommand().getResponse();
         for (Channel channel : response.getChannels()) {
-            System.out.println(channel.getName());
+            Logger.LOGGER.info(channel.getName());
         }
     }
 }

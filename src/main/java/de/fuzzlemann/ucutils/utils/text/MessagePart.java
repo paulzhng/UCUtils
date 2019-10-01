@@ -162,7 +162,11 @@ public class MessagePart {
         }
 
         public Builder hoverEvent(HoverEvent.Action action, MessagePart messagePart) {
-            return hoverEvent(new HoverEvent(action, Message.builder().messageParts(messagePart).build().toTextComponent()));
+            return hoverEvent(action, Message.builder().messageParts(messagePart).build());
+        }
+
+        public Builder hoverEvent(HoverEvent.Action action, Message message) {
+            return hoverEvent(new HoverEvent(action, message.toTextComponent()));
         }
 
         Builder hoverEvent(HoverEvent hoverEvent) {

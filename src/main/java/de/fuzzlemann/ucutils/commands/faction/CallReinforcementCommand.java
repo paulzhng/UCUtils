@@ -1,5 +1,7 @@
 package de.fuzzlemann.ucutils.commands.faction;
 
+import de.fuzzlemann.ucutils.common.CustomNaviPoint;
+import de.fuzzlemann.ucutils.utils.ForgeUtils;
 import de.fuzzlemann.ucutils.utils.abstraction.AbstractionHandler;
 import de.fuzzlemann.ucutils.utils.abstraction.UPlayer;
 import de.fuzzlemann.ucutils.utils.command.api.Command;
@@ -67,8 +69,23 @@ public class CallReinforcementCommand implements TabCompletion {
                 builder.of(lastReinforcement.getType().getMessage()).color(TextFormatting.RED).advance().space();
             }
 
+            CustomNaviPoint nearestNaviPoint = ForgeUtils.getNearestObject(new BlockPos(posX, posY, posZ), NavigationUtil.NAVI_POINTS, CustomNaviPoint::getX, CustomNaviPoint::getY, CustomNaviPoint::getZ).getValue();
+
+            Message hover = Message.builder()
+                    .of("X: ").color(TextFormatting.GRAY).advance()
+                    .of(String.valueOf(posX)).color(TextFormatting.BLUE).advance()
+                    .space()
+                    .of("Y: ").color(TextFormatting.GRAY).advance()
+                    .of(String.valueOf(posY)).color(TextFormatting.BLUE).advance()
+                    .space()
+                    .of("Z: ").color(TextFormatting.GRAY).advance()
+                    .of(String.valueOf(posZ)).color(TextFormatting.BLUE).advance()
+                    .build();
+
             builder.of(fullName).color(TextFormatting.DARK_GREEN).advance()
-                    .of(" benötigt Unterstützung bei X: " + posX + " | Y: " + posY + " | Z: " + posZ + "! (" + distance + " Meter entfernt)").color(TextFormatting.GREEN).advance()
+                    .of(" benötigt Unterstützung in der Nähe von " + nearestNaviPoint.getNames().get(0) + "! (" + distance + " Meter entfernt)")
+                    .hoverEvent(HoverEvent.Action.SHOW_TEXT, hover)
+                    .color(TextFormatting.GREEN).advance()
                     .newLine()
                     .messageParts(NavigationUtil.getNavigationMessage(posX, posY, posZ).getMessageParts())
                     .of(" | ").color(TextFormatting.GRAY).advance()
@@ -158,6 +175,7 @@ public class CallReinforcementCommand implements TabCompletion {
         DEFAULT("-f", "f", null),
         D_CHAT("-d", "d", null),
         RAM("-r", "f", "Rammen!"),
+        RAM_D("-rd", "d", "Rammen!"),
         EMERGENCY("-e", "f", "Dringend!"),
         EMERGENCY_D("-ed", "d", "Dringend!"),
         MEDIC("-m", "d", "Medic benötigt!"),

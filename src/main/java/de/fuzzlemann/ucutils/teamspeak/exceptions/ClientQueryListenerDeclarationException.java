@@ -4,7 +4,6 @@ package de.fuzzlemann.ucutils.teamspeak.exceptions;
  * @author Fuzzlemann
  */
 public class ClientQueryListenerDeclarationException extends ClientQueryException {
-
     public ClientQueryListenerDeclarationException() {
         super();
     }

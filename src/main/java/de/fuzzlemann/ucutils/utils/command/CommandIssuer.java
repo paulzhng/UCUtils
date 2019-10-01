@@ -70,7 +70,7 @@ class CommandIssuer {
                 Class<? extends Throwable>[] sendUsageOn = commandAnnotation.sendUsageOn();
 
                 for (Class<? extends Throwable> clazz : sendUsageOn) {
-                    if (clazz.isInstance(e)) {
+                    if (e.getClass().isAssignableFrom(clazz)) {
                         sendUsage(usage, label); //throwable is expected; send usage
                         return;
                     }

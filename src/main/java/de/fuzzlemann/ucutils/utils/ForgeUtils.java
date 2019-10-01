@@ -7,13 +7,18 @@ import de.fuzzlemann.ucutils.utils.text.TextUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.client.network.NetworkPlayerInfo;
+import net.minecraft.client.shader.Framebuffer;
 import net.minecraft.scoreboard.ScorePlayerTeam;
+import net.minecraft.util.ScreenShotHelper;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.commons.lang3.SystemUtils;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.util.*;
 import java.util.function.Function;
@@ -54,6 +59,20 @@ public class ForgeUtils {
 
     public static boolean hasLabyMod() {
         return labyMod;
+    }
+
+    public static void makeScreenshot(File target) {
+        Framebuffer framebuffer = ReflectionUtil.getValue(Main.MINECRAFT, Framebuffer.class);
+        assert framebuffer != null;
+
+        BufferedImage image = ScreenShotHelper.createScreenshot(Main.MINECRAFT.displayWidth, Main.MINECRAFT.displayHeight, framebuffer);
+
+        try {
+            target.createNewFile();
+            ImageIO.write(image, "jpg", target);
+        } catch (IOException e) {
+            throw new IllegalStateException(e);
+        }
     }
 
     public static <T> Map.Entry<Double, T> getNearestObject(T[] array, Function<T, BlockPos> blockPosFunction) {

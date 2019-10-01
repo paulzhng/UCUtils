@@ -19,6 +19,8 @@ public class KeyBindRegistry implements IInitializor {
     public static KeyBinding autoNC;
     public static KeyBinding acceptAD;
     public static KeyBinding denyAD;
+    public static KeyBinding alternateScreenshot;
+    public static KeyBinding alternateScreenshotWithUpload;
 
     @Override
     public void init() {
@@ -26,10 +28,18 @@ public class KeyBindRegistry implements IInitializor {
         autoNC = new KeyBinding("key.autonc", Keyboard.KEY_G, KEY_CATEGORY);
         acceptAD = new KeyBinding("key.acceptad", Keyboard.KEY_J, KEY_CATEGORY);
         denyAD = new KeyBinding("key.denyad", Keyboard.KEY_N, KEY_CATEGORY);
+        alternateScreenshot = new KeyBinding("key.alternatescreenshot", Keyboard.KEY_NONE, KEY_CATEGORY);
+        alternateScreenshotWithUpload = new KeyBinding("key.alternatescreenshotwithupload", Keyboard.KEY_NONE, KEY_CATEGORY);
 
         ClientRegistry.registerKeyBinding(aBuy);
         ClientRegistry.registerKeyBinding(autoNC);
         ClientRegistry.registerKeyBinding(acceptAD);
         ClientRegistry.registerKeyBinding(denyAD);
+        ClientRegistry.registerKeyBinding(alternateScreenshot);
+        ClientRegistry.registerKeyBinding(alternateScreenshotWithUpload);
+    }
+
+    public static boolean isPressed(KeyBinding keyBinding) {
+        return keyBinding.getKeyCode() != Keyboard.KEY_NONE && Keyboard.isKeyDown(keyBinding.getKeyCode());
     }
 }

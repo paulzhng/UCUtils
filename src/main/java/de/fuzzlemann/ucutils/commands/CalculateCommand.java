@@ -15,7 +15,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class CalculateCommand {
 
-    @Command(value = {"calc", "calculate", "rechner"}, usage = "/%label% (Expression)")
+    @Command(value = {"calc", "calculate", "rechner"}, usage = "/%label% [Mathematischer Ausdruck]")
     public boolean onCommand(@CommandParam(joinStart = true, joiner = "") String input) {
         Expression expr = new Expression(input);
         try {

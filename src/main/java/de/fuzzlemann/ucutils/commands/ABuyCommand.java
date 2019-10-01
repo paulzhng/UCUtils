@@ -62,7 +62,7 @@ public class ABuyCommand {
     }
 
     @SubscribeEvent
-    public static void onKeyboardClickEvent(GuiScreenEvent.KeyboardInputEvent e) {
+    public static void onKeyboardClickEvent(GuiScreenEvent.KeyboardInputEvent.Post e) {
         if (amount == 0) return;
 
         if (Keyboard.isKeyDown(KeyBindRegistry.aBuy.getKeyCode())) return;

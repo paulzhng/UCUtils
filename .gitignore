@@ -19,3 +19,4 @@ sonarqube.bat
 libs/
 /replaceLocal.bat
 /gradlew
+/UCUtils-common/

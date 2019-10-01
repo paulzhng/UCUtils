@@ -1,4 +1,23 @@
+/*
+ * Copyright 2014 DV8FromTheWorld (Austin Keener)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package de.fuzzlemann.ucutils.utils.image;
+
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 
 import javax.xml.bind.DatatypeConverter;
 import java.io.*;
@@ -13,7 +32,15 @@ import java.net.URLEncoder;
  */
 public class ImageUploader {
 
-    public static final String UPLOAD_API_URL = "https://api.imgur.com/3/image";
+    private static final String UPLOAD_API_URL = "https://api.imgur.com/3/image";
+
+    public static String uploadToLink(File file) {
+        String json = ImageUploader.upload(file);
+
+        JsonParser jsonParser = new JsonParser();
+        JsonElement jsonElement = jsonParser.parse(json);
+        return jsonElement.getAsJsonObject().get("data").getAsJsonObject().get("link").getAsString();
+    }
 
     /**
      * Takes a file and uploads it to Imgur.
