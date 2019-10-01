@@ -20,3 +20,4 @@ libs/
 /replaceLocal.bat
 /gradlew
 /UCUtils-common/
+/UCUtils-common/target/
