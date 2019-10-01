@@ -6,7 +6,7 @@
 
     <groupId>de.fuzzlemann</groupId>
     <artifactId>common</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
 
     <dependencies>
         <dependency>
@@ -30,4 +30,12 @@
     <build>
         <sourceDirectory>src</sourceDirectory>
     </build>
+
+    <distributionManagement>
+        <repository>
+            <id>github</id>
+            <name>GitHub Fuzzlemann Apache Maven Packages</name>
+            <url>https://maven.pkg.github.com/Fuzzlemann/UCUtils</url>
+        </repository>
+    </distributionManagement>
 </project>
