@@ -1,7 +1,7 @@
 package de.fuzzlemann.ucutils.utils.mobile;
 
 import com.google.common.util.concurrent.Uninterruptibles;
-import de.fuzzlemann.ucutils.utils.abstraction.AbstractionHandler;
+import de.fuzzlemann.ucutils.utils.abstraction.AbstractionLayer;
 import de.fuzzlemann.ucutils.utils.io.JsonManager;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -57,7 +57,7 @@ public class MobileUtils {
 
     public static int getNumber(String numberPlayer) {
         future = new CompletableFuture<>();
-        AbstractionHandler.getInstance().getPlayer().sendChatMessage("/nummer " + numberPlayer);
+        AbstractionLayer.getPlayer().sendChatMessage("/nummer " + numberPlayer);
 
         try {
             return Uninterruptibles.getUninterruptibly(future);

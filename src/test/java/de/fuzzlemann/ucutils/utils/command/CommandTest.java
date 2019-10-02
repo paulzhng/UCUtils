@@ -2,7 +2,7 @@ package de.fuzzlemann.ucutils.utils.command;
 
 import de.fuzzlemann.ucutils.commands.UpdateCommand;
 import de.fuzzlemann.ucutils.commands.faction.CheckActiveMembersCommand;
-import de.fuzzlemann.ucutils.utils.abstraction.AbstractionHandler;
+import de.fuzzlemann.ucutils.utils.abstraction.AbstractionLayer;
 import de.fuzzlemann.ucutils.utils.abstraction.TestPlayer;
 import de.fuzzlemann.ucutils.utils.command.api.Command;
 import de.fuzzlemann.ucutils.utils.io.FileManager;
@@ -35,7 +35,7 @@ class CommandTest {
     static void setUp() {
         UpdateCommand.modFile = new File(FileManager.MC_DIRECTORY, "ucutils.jar");
 
-        AbstractionHandler.getInstance().setPlayerImplementation(TestPlayer.class);
+        AbstractionLayer.getInstance().setPlayerImplementation(TestPlayer.class);
         ASMDataTable asmDataTable = mock(ASMDataTable.class);
 
         Set<ASMDataTable.ASMData> asmDataSet = new HashSet<>();

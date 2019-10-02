@@ -1,7 +1,7 @@
 package de.fuzzlemann.ucutils.utils.sound;
 
 import de.fuzzlemann.ucutils.Main;
-import de.fuzzlemann.ucutils.utils.abstraction.AbstractionHandler;
+import de.fuzzlemann.ucutils.utils.abstraction.AbstractionLayer;
 import net.minecraft.client.audio.MovingSound;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.Vec3d;
@@ -33,7 +33,7 @@ public class TimerSound extends MovingSound {
             return;
         }
 
-        Vec3d vec = AbstractionHandler.getInstance().getPlayer().getEntityBoundingBox().getCenter();
+        Vec3d vec = AbstractionLayer.getPlayer().getEntityBoundingBox().getCenter();
 
         this.xPosF = (float) vec.x;
         this.yPosF = (float) vec.y;

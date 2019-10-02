@@ -1,7 +1,7 @@
 package de.fuzzlemann.ucutils.events;
 
 import com.google.common.collect.ImmutableSet;
-import de.fuzzlemann.ucutils.utils.abstraction.AbstractionHandler;
+import de.fuzzlemann.ucutils.utils.abstraction.AbstractionLayer;
 import de.fuzzlemann.ucutils.utils.abstraction.UPlayer;
 import net.minecraft.block.BlockAir;
 import net.minecraft.block.state.IBlockState;
@@ -27,7 +27,7 @@ public class FDoorEventHandler {
 
     @SubscribeEvent
     public static void onRightClickBlock(PlayerInteractEvent.RightClickBlock e) {
-        UPlayer p = AbstractionHandler.getInstance().getPlayer();
+        UPlayer p = AbstractionLayer.getPlayer();
         BlockPos pos = e.getPos();
 
         if (p.getPosition().getDistance(pos.getX(), pos.getY(), pos.getZ()) > 4) return;
@@ -94,7 +94,7 @@ public class FDoorEventHandler {
             boolean set = false;
             boolean open = false;
             for (BlockPos openPosition : openPositions) {
-                IBlockState blockState = AbstractionHandler.getInstance().getPlayer().getWorld().getBlockState(openPosition);
+                IBlockState blockState = AbstractionLayer.getPlayer().getWorld().getBlockState(openPosition);
                 boolean air = blockState.getBlock() instanceof BlockAir;
                 if (!set) {
                     open = air;

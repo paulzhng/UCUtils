@@ -1,8 +1,6 @@
 package de.fuzzlemann.ucutils.teamspeak;
 
 import de.fuzzlemann.ucutils.config.UCUtilsConfig;
-import de.fuzzlemann.ucutils.utils.abstraction.AbstractionHandler;
-import de.fuzzlemann.ucutils.utils.abstraction.TestPlayer;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 

@@ -6,7 +6,7 @@ import de.fuzzlemann.ucutils.Main;
 import de.fuzzlemann.ucutils.config.UCUtilsConfig;
 import de.fuzzlemann.ucutils.teamspeak.commands.ClientVariableCommand;
 import de.fuzzlemann.ucutils.teamspeak.events.ClientMovedEvent;
-import de.fuzzlemann.ucutils.utils.abstraction.AbstractionHandler;
+import de.fuzzlemann.ucutils.utils.abstraction.AbstractionLayer;
 import de.fuzzlemann.ucutils.utils.faction.Faction;
 import de.fuzzlemann.ucutils.utils.sound.SoundUtil;
 import de.fuzzlemann.ucutils.utils.text.Message;
@@ -71,7 +71,7 @@ public class WaitingRoomEventHandler {
 
             builder.send();
 
-            Main.MINECRAFT.addScheduledTask(() -> AbstractionHandler.getInstance().getPlayer().playSound(Objects.requireNonNull(SoundUtil.getSoundEvent("block.note.pling")), 1, 1));
+            Main.MINECRAFT.addScheduledTask(() -> AbstractionLayer.getPlayer().playSound(Objects.requireNonNull(SoundUtil.getSoundEvent("block.note.pling")), 1, 1));
         }).start();
     }
 }

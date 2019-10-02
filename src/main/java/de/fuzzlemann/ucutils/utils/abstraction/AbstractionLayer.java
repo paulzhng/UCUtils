@@ -3,30 +3,38 @@ package de.fuzzlemann.ucutils.utils.abstraction;
 /**
  * @author Fuzzlemann
  */
-public class AbstractionHandler {
+public class AbstractionLayer {
 
-    private static AbstractionHandler instance;
+    private static AbstractionLayer instance;
 
-    public static AbstractionHandler getInstance() {
+    public static AbstractionLayer getInstance() {
         if (instance == null) {
-            instance = new AbstractionHandler();
+            instance = new AbstractionLayer();
         }
 
         return instance;
     }
 
+    public static UPlayer getPlayer() {
+        return getInstance().getAbstractPlayer();
+    }
+
     private Class<? extends UPlayer> playerImplClass;
     private UPlayer player;
 
-    private AbstractionHandler() {
+    private AbstractionLayer() {
         this.playerImplClass = UPlayerImpl.class;
     }
 
     public void setPlayerImplementation(Class<? extends UPlayer> playerImplClass) {
-        this.playerImplClass = playerImplClass;
+        if (this.playerImplClass != playerImplClass) {
+            this.playerImplClass = playerImplClass;
+
+            player = null; //force creation of new instance with the new implementation
+        }
     }
 
-    public UPlayer getPlayer() {
+    public UPlayer getAbstractPlayer() {
         if (player == null) {
             try {
                 this.player = playerImplClass.newInstance();

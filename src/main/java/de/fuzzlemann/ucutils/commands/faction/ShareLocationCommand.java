@@ -1,7 +1,7 @@
 package de.fuzzlemann.ucutils.commands.faction;
 
 import de.fuzzlemann.ucutils.utils.ForgeUtils;
-import de.fuzzlemann.ucutils.utils.abstraction.AbstractionHandler;
+import de.fuzzlemann.ucutils.utils.abstraction.AbstractionLayer;
 import de.fuzzlemann.ucutils.utils.abstraction.UPlayer;
 import de.fuzzlemann.ucutils.utils.command.api.Command;
 import de.fuzzlemann.ucutils.utils.command.api.CommandParam;
@@ -17,10 +17,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import java.util.Arrays;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -41,7 +38,7 @@ public class ShareLocationCommand {
         Matcher shareLocationMatcher = SHARE_LOCATION_PATTERN.matcher(msg);
         if (!shareLocationMatcher.find()) return;
 
-        UPlayer p = AbstractionHandler.getInstance().getPlayer();
+        UPlayer p = AbstractionLayer.getPlayer();
         String playerName = p.getName();
 
         e.setCanceled(true);

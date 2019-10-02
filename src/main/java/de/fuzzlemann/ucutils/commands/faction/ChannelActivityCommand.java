@@ -23,9 +23,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+import java.util.*;
 
 /**
  * @author Fuzzlemann
@@ -63,16 +62,17 @@ public class ChannelActivityCommand {
     }
 
     private void sendList(List<String> members) {
-        Message.Builder builder = Message.builder();
-
-        builder.of("» ").color(TextFormatting.DARK_GRAY).advance()
-                .of("Nicht anwesende Fraktionsmitglieder\n").color(TextFormatting.DARK_AQUA).advance();
-        for (String member : members) {
-            builder.of("  * ").color(TextFormatting.DARK_GRAY).advance()
-                    .of(member + "\n").color(TextFormatting.GRAY).advance();
-        }
-
-        builder.of(" » ").color(TextFormatting.DARK_GRAY).advance()
+        Message.builder()
+                .of("» ").color(TextFormatting.DARK_GRAY).advance()
+                .of("Nicht anwesende Fraktionsmitglieder").color(TextFormatting.DARK_AQUA).advance()
+                .newLine()
+                .joiner(members)
+                .consumer((b, member) -> b.of(" * ").color(TextFormatting.DARK_GRAY).advance()
+                        .of(member).color(TextFormatting.GRAY).advance())
+                .newLineJoiner()
+                .advance()
+                .newLine()
+                .of(" » ").color(TextFormatting.DARK_GRAY).advance()
                 .of("⟳")
                 .hoverEvent(HoverEvent.Action.SHOW_TEXT, MessagePart.simple("Aktualisieren", TextFormatting.DARK_AQUA))
                 .clickEvent(ClickEvent.Action.RUN_COMMAND, "/channelactivity")
@@ -81,31 +81,33 @@ public class ChannelActivityCommand {
                 .of("⎘")
                 .hoverEvent(HoverEvent.Action.SHOW_TEXT, MessagePart.simple("Kopieren", TextFormatting.DARK_AQUA))
                 .clickEvent(ClickEvent.Action.RUN_COMMAND, "/channelactivity copy")
-                .color(TextFormatting.DARK_PURPLE).advance();
-
-        builder.send();
+                .color(TextFormatting.DARK_PURPLE).advance()
+                .send();
     }
 
     private void copyList(List<String> members) {
-        StringBuilder sb = new StringBuilder("[color=#008080][b]Nicht-Anwesende Member:[/b][/color]");
+        StringJoiner stringJoiner = new StringJoiner("\n");
+
+        stringJoiner.add("[color=#008080][b]Nicht-Anwesende Member:[/b][/color]");
 
         for (String member : members) {
-            sb.append("\n- ").append(member);
+            stringJoiner.add(member);
         }
 
-        StringSelection stringSelection = new StringSelection(sb.toString());
+        StringSelection stringSelection = new StringSelection(stringJoiner.toString());
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
         clipboard.setContents(stringSelection, null);
     }
 
     private void removeEarlierNames(List<String> players, List<String> members) {
         Multimap<String, String> earlierNames = MojangAPI.getEarlierNames(members);
-        for (String name : earlierNames.values()) {
-            for (String earlierName : earlierNames.get(name)) {
-                if (players.stream().anyMatch(player -> player.equalsIgnoreCase(earlierName))) {
-                    members.remove(name);
-                    break;
-                }
+        for (Map.Entry<String, String> entry : earlierNames.entries()) {
+            String name = entry.getKey();
+            String earlierName = entry.getValue();
+
+            if (players.stream().anyMatch(player -> player.equalsIgnoreCase(earlierName))) {
+                members.remove(name);
+                break;
             }
         }
     }

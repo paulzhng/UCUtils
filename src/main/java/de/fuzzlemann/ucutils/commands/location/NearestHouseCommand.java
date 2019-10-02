@@ -6,6 +6,7 @@ import de.fuzzlemann.ucutils.utils.command.api.Command;
 import de.fuzzlemann.ucutils.utils.command.api.CommandParam;
 import de.fuzzlemann.ucutils.utils.location.navigation.NavigationUtil;
 import de.fuzzlemann.ucutils.utils.text.Message;
+import de.fuzzlemann.ucutils.utils.text.MessagePart;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextFormatting;
@@ -61,7 +62,7 @@ public class NearestHouseCommand {
         String command = "/nearesthouse " + String.join(" ", houseNumbers);
 
         style.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, command));
-        style.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Message.builder().of("Das näheste Haus anzeigen").color(TextFormatting.DARK_AQUA).build().toTextComponent()));
+        style.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, MessagePart.simple("Das näheste Haus anzeigen", TextFormatting.DARK_AQUA).toTextComponent()));
     }
 
     @Command(value = "nearesthouse", usage = "/%label% [Häuser...]")

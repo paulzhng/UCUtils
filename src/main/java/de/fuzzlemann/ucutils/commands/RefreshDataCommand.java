@@ -34,6 +34,7 @@ public class RefreshDataCommand implements TabCompletion {
                     .of(" aus.").color(TextFormatting.WHITE).advance()
                     .send();
         }
+
         return true;
     }
 

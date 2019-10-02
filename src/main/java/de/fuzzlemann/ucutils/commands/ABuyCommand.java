@@ -2,7 +2,7 @@ package de.fuzzlemann.ucutils.commands;
 
 import de.fuzzlemann.ucutils.Main;
 import de.fuzzlemann.ucutils.keybind.KeyBindRegistry;
-import de.fuzzlemann.ucutils.utils.abstraction.AbstractionHandler;
+import de.fuzzlemann.ucutils.utils.abstraction.AbstractionLayer;
 import de.fuzzlemann.ucutils.utils.command.api.Command;
 import de.fuzzlemann.ucutils.utils.command.api.CommandParam;
 import de.fuzzlemann.ucutils.utils.text.Message;
@@ -124,10 +124,10 @@ public class ABuyCommand {
         --amountLeft;
         lastBuy = System.currentTimeMillis();
 
-        Container container = AbstractionHandler.getInstance().getPlayer().getOpenContainer();
+        Container container = AbstractionLayer.getPlayer().getOpenContainer();
         Main.MINECRAFT.playerController.windowClick(container.windowId, slotIndex, 0, ClickType.QUICK_MOVE, Main.MINECRAFT.player);
 
         container.detectAndSendChanges();
-        AbstractionHandler.getInstance().getPlayer().getInventoryContainer().detectAndSendChanges();
+        AbstractionLayer.getPlayer().getInventoryContainer().detectAndSendChanges();
     }
 }

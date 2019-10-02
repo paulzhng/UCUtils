@@ -1,6 +1,6 @@
 package de.fuzzlemann.ucutils.events;
 
-import de.fuzzlemann.ucutils.utils.abstraction.AbstractionHandler;
+import de.fuzzlemann.ucutils.utils.abstraction.AbstractionLayer;
 import de.fuzzlemann.ucutils.utils.abstraction.UPlayer;
 import de.fuzzlemann.ucutils.config.UCUtilsConfig;
 import de.fuzzlemann.ucutils.utils.sound.SoundUtil;
@@ -59,7 +59,7 @@ public class NotificationEventHandler {
             return;
         }
 
-        UPlayer p = AbstractionHandler.getInstance().getPlayer();
+        UPlayer p = AbstractionLayer.getPlayer();
 
         if (UCUtilsConfig.inviteAnnouncement) {
             if (INVITE_PATTERN.matcher(unformattedText).find()) {

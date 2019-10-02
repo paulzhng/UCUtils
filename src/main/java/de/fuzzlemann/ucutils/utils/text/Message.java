@@ -1,7 +1,7 @@
 package de.fuzzlemann.ucutils.utils.text;
 
 import com.google.common.annotations.VisibleForTesting;
-import de.fuzzlemann.ucutils.utils.abstraction.AbstractionHandler;
+import de.fuzzlemann.ucutils.utils.abstraction.AbstractionLayer;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 
@@ -122,7 +122,7 @@ public class Message {
         }
 
         public void send() {
-            AbstractionHandler.getInstance().getPlayer().sendMessage(build().toTextComponent());
+            AbstractionLayer.getPlayer().sendMessage(build().toTextComponent());
         }
 
         public Message build() {

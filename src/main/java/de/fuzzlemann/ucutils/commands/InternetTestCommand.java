@@ -55,7 +55,6 @@ public class InternetTestCommand {
 
         String pingResult = null;
 
-
         try (InputStreamReader in = new InputStreamReader(proc.getInputStream(), StandardCharsets.UTF_8);
              BufferedReader reader = new BufferedReader(in)) {
             int i = 0;

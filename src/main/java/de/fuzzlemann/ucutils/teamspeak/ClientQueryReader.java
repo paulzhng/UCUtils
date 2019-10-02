@@ -22,7 +22,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class ClientQueryReader extends Thread implements Closeable {
 
-    private final BlockingQueue<BaseCommand> queue = new LinkedBlockingQueue<>();
+    private final BlockingQueue<BaseCommand<?>> queue = new LinkedBlockingQueue<>();
     private final TSClientQuery query;
     private final BufferedReader reader;
     private volatile boolean closed;
@@ -91,7 +91,7 @@ public class ClientQueryReader extends Thread implements Closeable {
         IOUtils.closeQuietly(reader);
     }
 
-    public BlockingQueue<BaseCommand> getQueue() {
+    public BlockingQueue<BaseCommand<?>> getQueue() {
         return queue;
     }
 

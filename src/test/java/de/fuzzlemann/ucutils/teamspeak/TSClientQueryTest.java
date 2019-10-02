@@ -7,7 +7,7 @@ import de.fuzzlemann.ucutils.teamspeak.commands.*;
 import de.fuzzlemann.ucutils.teamspeak.objects.Channel;
 import de.fuzzlemann.ucutils.teamspeak.objects.Client;
 import de.fuzzlemann.ucutils.utils.Logger;
-import de.fuzzlemann.ucutils.utils.abstraction.AbstractionHandler;
+import de.fuzzlemann.ucutils.utils.abstraction.AbstractionLayer;
 import de.fuzzlemann.ucutils.utils.abstraction.TestPlayer;
 import jdk.nashorn.internal.ir.annotations.Ignore;
 import org.junit.jupiter.api.AfterAll;
@@ -27,7 +27,7 @@ public class TSClientQueryTest {
     @BeforeAll
     static void setUp() throws IOException {
         new TSAPIKeyLoader().load();
-        AbstractionHandler.getInstance().setPlayerImplementation(TestPlayer.class);
+        AbstractionLayer.getInstance().setPlayerImplementation(TestPlayer.class);
 
         TSClientQuery.getInstance();
     }

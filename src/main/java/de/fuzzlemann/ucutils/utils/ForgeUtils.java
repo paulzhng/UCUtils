@@ -2,7 +2,7 @@ package de.fuzzlemann.ucutils.utils;
 
 import com.google.common.collect.Maps;
 import de.fuzzlemann.ucutils.Main;
-import de.fuzzlemann.ucutils.utils.abstraction.AbstractionHandler;
+import de.fuzzlemann.ucutils.utils.abstraction.AbstractionLayer;
 import de.fuzzlemann.ucutils.utils.text.TextUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.NetHandlerPlayClient;
@@ -50,7 +50,7 @@ public class ForgeUtils {
     }
 
     public static boolean isConnected() {
-        return AbstractionHandler.getInstance().getPlayer().isConnected();
+        return AbstractionLayer.getPlayer().isConnected();
     }
 
     public static boolean isTest() {
@@ -80,7 +80,7 @@ public class ForgeUtils {
     }
 
     public static <T> Map.Entry<Double, T> getNearestObject(Iterable<T> iterable, Function<T, BlockPos> blockPosFunction) {
-        return getNearestObject(AbstractionHandler.getInstance().getPlayer().getPosition(), iterable, blockPosFunction);
+        return getNearestObject(AbstractionLayer.getPlayer().getPosition(), iterable, blockPosFunction);
     }
 
     public static <T> Map.Entry<Double, T> getNearestObject(T[] array, Function<T, Integer> xFunction, Function<T, Integer> yFunction, Function<T, Integer> zFunction) {
@@ -88,7 +88,7 @@ public class ForgeUtils {
     }
 
     public static <T> Map.Entry<Double, T> getNearestObject(Iterable<T> iterable, Function<T, Integer> xFunction, Function<T, Integer> yFunction, Function<T, Integer> zFunction) {
-        return getNearestObject(AbstractionHandler.getInstance().getPlayer().getPosition(), iterable, xFunction, yFunction, zFunction);
+        return getNearestObject(AbstractionLayer.getPlayer().getPosition(), iterable, xFunction, yFunction, zFunction);
     }
 
     public static <T> Map.Entry<Double, T> getNearestObject(BlockPos blockPos, T[] array, Function<T, BlockPos> blockPosFunction) {

@@ -105,7 +105,7 @@ public class UpdateCommand {
                 "\t\t\n" +
                 "\t\techo 60 tries over; cancel update\n" +
                 "\t\texit\n" +
-                "\t)";
+                "\t)"; //TODO move to external resource, then replace
 
         File batFile = new File(System.getProperty("java.io.tmpdir"), "ucutils_update.bat");
         FileUtils.write(batFile, batContent, Charset.defaultCharset());

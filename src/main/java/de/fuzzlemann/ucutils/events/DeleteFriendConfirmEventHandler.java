@@ -39,14 +39,17 @@ public class DeleteFriendConfirmEventHandler {
 
         List<MessagePart> prefixComponents = prefixBuilder.build().getMessageParts();
 
-        Message.builder().messageParts(prefixComponents)
-                .of(" Bestätige, dass du die Freundschaft mit " + name + " beenden willst.\n").color(TextFormatting.GOLD).advance()
+        Message.builder()
+                .messageParts(prefixComponents)
+                .space()
+                .of("Bestätige, dass du die Freundschaft mit " + name + " beenden willst.").color(TextFormatting.GOLD).advance()
+                .newLine()
                 .messageParts(prefixComponents)
                 .space()
                 .of("[").color(TextFormatting.GRAY).advance()
                 .of("Bestätigen").color(TextFormatting.GREEN)
                 .clickEvent(ClickEvent.Action.RUN_COMMAND, "/friend delete " + name + " confirm")
-                .hoverEvent(HoverEvent.Action.SHOW_TEXT, Message.builder().of("Bestätigen").color(TextFormatting.GREEN).build()).advance()
+                .hoverEvent(HoverEvent.Action.SHOW_TEXT, MessagePart.simple("Bestätigen", TextFormatting.GREEN)).advance()
                 .of("]").color(TextFormatting.GRAY).advance()
                 .send();
 

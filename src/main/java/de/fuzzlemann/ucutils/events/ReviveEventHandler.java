@@ -1,7 +1,7 @@
 package de.fuzzlemann.ucutils.events;
 
 import de.fuzzlemann.ucutils.Main;
-import de.fuzzlemann.ucutils.utils.abstraction.AbstractionHandler;
+import de.fuzzlemann.ucutils.utils.abstraction.AbstractionLayer;
 import de.fuzzlemann.ucutils.utils.faction.Faction;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemSkull;
@@ -30,7 +30,7 @@ public class ReviveEventHandler {
             double distance = entityItem.getDistanceSq(pos.getX(), pos.getY(), pos.getZ());
 
             if (distance < 2) {
-                AbstractionHandler.getInstance().getPlayer().sendChatMessage("/revive");
+                AbstractionLayer.getPlayer().sendChatMessage("/revive");
                 return;
             }
         }

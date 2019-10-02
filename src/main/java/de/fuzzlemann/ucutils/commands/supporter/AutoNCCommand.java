@@ -6,12 +6,13 @@ import com.google.gson.Gson;
 import de.fuzzlemann.ucutils.Main;
 import de.fuzzlemann.ucutils.config.UCUtilsConfig;
 import de.fuzzlemann.ucutils.keybind.KeyBindRegistry;
-import de.fuzzlemann.ucutils.utils.abstraction.AbstractionHandler;
+import de.fuzzlemann.ucutils.utils.abstraction.AbstractionLayer;
 import de.fuzzlemann.ucutils.utils.api.APIUtils;
 import de.fuzzlemann.ucutils.utils.command.api.Command;
 import de.fuzzlemann.ucutils.utils.command.api.CommandParam;
 import de.fuzzlemann.ucutils.utils.sound.SoundUtil;
 import de.fuzzlemann.ucutils.utils.text.Message;
+import de.fuzzlemann.ucutils.utils.text.MessagePart;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.event.ClickEvent;
 import net.minecraft.util.text.event.HoverEvent;
@@ -115,11 +116,11 @@ public class AutoNCCommand {
                     .of("[").color(TextFormatting.GRAY).advance()
                     .of("Bestätigen").color(TextFormatting.GREEN)
                     .clickEvent(ClickEvent.Action.RUN_COMMAND, "/autonc " + i)
-                    .hoverEvent(HoverEvent.Action.SHOW_TEXT, Message.builder().of("Bestätigen").color(TextFormatting.GREEN).build()).advance()
+                    .hoverEvent(HoverEvent.Action.SHOW_TEXT, MessagePart.simple("Bestätigen", TextFormatting.GREEN)).advance()
                     .of("]").color(TextFormatting.GRAY).advance()
                     .send();
 
-            Main.MINECRAFT.addScheduledTask(() -> AbstractionHandler.getInstance().getPlayer().playSound(Objects.requireNonNull(SoundUtil.getSoundEvent("block.note.pling")), 1, 1));
+            Main.MINECRAFT.addScheduledTask(() -> AbstractionLayer.getPlayer().playSound(Objects.requireNonNull(SoundUtil.getSoundEvent("block.note.pling")), 1, 1));
         }).start();
     }
 
@@ -168,7 +169,7 @@ public class AutoNCCommand {
         }
 
         for (String subMessage : subMessages) {
-            AbstractionHandler.getInstance().getPlayer().sendChatMessage("/nc " + subMessage);
+            AbstractionLayer.getPlayer().sendChatMessage("/nc " + subMessage);
         }
     }
 

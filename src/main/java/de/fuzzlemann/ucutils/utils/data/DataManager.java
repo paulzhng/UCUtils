@@ -32,46 +32,40 @@ public class DataManager {
         }
     }
 
-    public static void loadData(boolean message) {
+    public static void loadData(boolean verbose) {
         for (DataLoader dataLoader : DATA_LOADERS) {
             DataModule dataModule = dataLoader.getClass().getAnnotation(DataModule.class);
 
-            if (message)
-                moduleMessage(dataModule, "wird geladen...");
+            moduleMessage(verbose, dataModule, "wird geladen...");
             try {
                 dataLoader.load();
 
-                if (message)
-                    moduleMessage(dataModule, "wurde erfolgreich geladen!");
+                moduleMessage(verbose, dataModule, "wurde erfolgreich geladen!");
             } catch (Exception e) {
                 Logger.LOGGER.catching(e);
 
-                if (message) loadingErrorMessage(dataModule);
+                moduleMessage(verbose, dataModule, "hat fehlgeschlagen, zu laden!");
 
                 if (dataModule.hasFallback()) {
-                    if (message)
-                        moduleMessage(dataModule, "über Fallback zu laden...");
+                    moduleMessage(verbose, dataModule, "über Fallback zu laden...");
 
                     try {
                         dataLoader.fallbackLoading();
 
-                        if (message)
-                            moduleMessage(dataModule, "wurde erfolgreich über Fallback geladen (kann ggf. veraltete Daten enthalten)!");
+                        moduleMessage(verbose, dataModule, "wurde erfolgreich über Fallback geladen (kann ggf. veraltete Daten enthalten)!");
                     } catch (Exception e2) {
                         Logger.LOGGER.catching(e2);
 
-                        if (message) loadingErrorMessage(dataModule);
+                        moduleMessage(verbose, dataModule, "hat fehlgeschlagen über Fallback, zu laden!");
                     }
                 }
             }
         }
     }
 
-    private static void loadingErrorMessage(DataModule dataModule) {
-        moduleMessage(dataModule, "hat fehlgeschlagen, zu laden!");
-    }
+    private static void moduleMessage(boolean verbose, DataModule dataModule, String message) {
+        if (verbose) return;
 
-    private static void moduleMessage(DataModule dataModule, String message) {
         Message.builder()
                 .prefix()
                 .of("Modul ").color(TextFormatting.GRAY).advance()

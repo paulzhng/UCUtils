@@ -2,7 +2,7 @@ package de.fuzzlemann.ucutils.events;
 
 import de.fuzzlemann.ucutils.Main;
 import de.fuzzlemann.ucutils.keybind.KeyBindRegistry;
-import de.fuzzlemann.ucutils.utils.abstraction.AbstractionHandler;
+import de.fuzzlemann.ucutils.utils.abstraction.AbstractionLayer;
 import de.fuzzlemann.ucutils.utils.abstraction.UPlayer;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -40,7 +40,7 @@ public class AdControlEventHandler {
         if (adSender == null) return;
         if (System.currentTimeMillis() - adTime > TimeUnit.SECONDS.toMillis(20)) return;
 
-        UPlayer p = AbstractionHandler.getInstance().getPlayer();
+        UPlayer p = AbstractionLayer.getPlayer();
         if (Keyboard.isKeyDown(KeyBindRegistry.acceptAD.getKeyCode())) {
             p.sendChatMessage("/adcontrol " + adSender + " freigeben");
             adSender = null;

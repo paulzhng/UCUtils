@@ -2,7 +2,7 @@ package de.fuzzlemann.ucutils.commands.faction;
 
 import de.fuzzlemann.ucutils.common.CustomNaviPoint;
 import de.fuzzlemann.ucutils.utils.ForgeUtils;
-import de.fuzzlemann.ucutils.utils.abstraction.AbstractionHandler;
+import de.fuzzlemann.ucutils.utils.abstraction.AbstractionLayer;
 import de.fuzzlemann.ucutils.utils.abstraction.UPlayer;
 import de.fuzzlemann.ucutils.utils.command.api.Command;
 import de.fuzzlemann.ucutils.utils.command.api.CommandParam;
@@ -43,7 +43,7 @@ public class CallReinforcementCommand implements TabCompletion {
 
     @SubscribeEvent
     public static void onChatReceived(ClientChatReceivedEvent e) {
-        UPlayer p = AbstractionHandler.getInstance().getPlayer();
+        UPlayer p = AbstractionLayer.getPlayer();
         ITextComponent messageComponent = e.getMessage();
         String msg = messageComponent.getUnformattedText();
 

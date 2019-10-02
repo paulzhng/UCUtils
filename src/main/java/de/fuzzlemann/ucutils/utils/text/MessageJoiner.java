@@ -120,41 +120,41 @@ public class MessageJoiner<T> {
             return this;
         }
 
-        public Builder commaJoiner() {
+        public Builder<T> commaJoiner() {
             return commaJoiner(TextFormatting.GRAY);
         }
 
-        public Builder commaJoiner(TextFormatting color) {
+        public Builder<T> commaJoiner(TextFormatting color) {
             return joiner(MessagePart.simple(", ", color));
         }
 
-        public Builder newLineJoiner() {
+        public Builder<T> newLineJoiner() {
             return joiner(MessagePart.simple("\n", null));
         }
 
-        public Builder joiner(MessagePart joiner) {
+        public Builder<T> joiner(MessagePart joiner) {
             this.joiner = joiner;
             return this;
         }
 
-        public Builder andNiceJoiner() {
+        public Builder<T> andNiceJoiner() {
             return andNiceJoiner(TextFormatting.GRAY);
         }
 
-        public Builder andNiceJoiner(TextFormatting color) {
+        public Builder<T> andNiceJoiner(TextFormatting color) {
             return niceJoiner(MessagePart.simple(" und ", color));
         }
 
-        public Builder niceJoiner(MessagePart niceJoiner) {
+        public Builder<T> niceJoiner(MessagePart niceJoiner) {
             this.niceJoiner = niceJoiner;
             return nice();
         }
 
-        public Builder nice() {
+        public Builder<T> nice() {
             return nice(true);
         }
 
-        public Builder nice(boolean nice) {
+        public Builder<T> nice(boolean nice) {
             this.nice = nice;
             return this;
         }

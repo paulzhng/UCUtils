@@ -4,7 +4,7 @@ import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.ListMultimap;
 import de.fuzzlemann.ucutils.utils.Logger;
 import de.fuzzlemann.ucutils.utils.ReflectionUtil;
-import de.fuzzlemann.ucutils.utils.abstraction.AbstractionHandler;
+import de.fuzzlemann.ucutils.utils.abstraction.AbstractionLayer;
 import de.fuzzlemann.ucutils.utils.abstraction.UPlayer;
 import de.fuzzlemann.ucutils.utils.command.api.Command;
 import de.fuzzlemann.ucutils.utils.command.api.CommandParam;
@@ -126,7 +126,7 @@ class CommandIssuer {
             // the UPLayer parameter *must* always be the first one, so when it is present, the other parameters
             // are getting moved one to the right and the UPlayer is inserted at the start of the (new) array
             checkedParameters = new Object[parameters.length + 1];
-            checkedParameters[0] = AbstractionHandler.getInstance().getPlayer();
+            checkedParameters[0] = AbstractionLayer.getPlayer();
             System.arraycopy(parameters, 0, checkedParameters, 1, parameters.length); //Content of the previous array is inserted in the new array at index 1
         } else {
             checkedParameters = parameters; //no player param present -> use previous array

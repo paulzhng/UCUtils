@@ -1,6 +1,6 @@
 package de.fuzzlemann.ucutils.events;
 
-import de.fuzzlemann.ucutils.utils.abstraction.AbstractionHandler;
+import de.fuzzlemann.ucutils.utils.abstraction.AbstractionLayer;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -27,6 +27,6 @@ public class CheckKFZEventHandler {
         String name = matcher.group(1);
         if (name == null) name = matcher.group(2);
 
-        AbstractionHandler.getInstance().getPlayer().sendChatMessage("/memberinfo " + name);
+        AbstractionLayer.getPlayer().sendChatMessage("/memberinfo " + name);
     }
 }

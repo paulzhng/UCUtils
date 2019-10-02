@@ -1,7 +1,7 @@
 package de.fuzzlemann.ucutils.utils.data;
 
 import de.fuzzlemann.ucutils.utils.Logger;
-import de.fuzzlemann.ucutils.utils.abstraction.AbstractionHandler;
+import de.fuzzlemann.ucutils.utils.abstraction.AbstractionLayer;
 import de.fuzzlemann.ucutils.utils.abstraction.TestPlayer;
 import de.fuzzlemann.ucutils.utils.faction.Faction;
 import de.fuzzlemann.ucutils.utils.faction.FactionLoader;
@@ -27,7 +27,7 @@ public class DataTest {
 
     @BeforeAll
     static void setUp() {
-        AbstractionHandler.getInstance().setPlayerImplementation(TestPlayer.class);
+        AbstractionLayer.getInstance().setPlayerImplementation(TestPlayer.class);
 
         ASMDataTable asmDataTable = mock(ASMDataTable.class);
         Set<ASMDataTable.ASMData> asmDataSet = new HashSet<>();

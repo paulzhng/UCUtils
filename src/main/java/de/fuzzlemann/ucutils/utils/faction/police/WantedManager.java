@@ -3,7 +3,7 @@ package de.fuzzlemann.ucutils.utils.faction.police;
 import com.google.common.util.concurrent.Uninterruptibles;
 import de.fuzzlemann.ucutils.events.NameFormatEventHandler;
 import de.fuzzlemann.ucutils.utils.ForgeUtils;
-import de.fuzzlemann.ucutils.utils.abstraction.AbstractionHandler;
+import de.fuzzlemann.ucutils.utils.abstraction.AbstractionLayer;
 import de.fuzzlemann.ucutils.utils.api.APIUtils;
 import de.fuzzlemann.ucutils.utils.data.DataLoader;
 import de.fuzzlemann.ucutils.utils.data.DataModule;
@@ -52,7 +52,7 @@ public class WantedManager implements DataLoader {
 
     public static Wanted getWanteds(String player) {
         future = new CompletableFuture<>();
-        AbstractionHandler.getInstance().getPlayer().sendChatMessage("/wantedinfo " + player);
+        AbstractionLayer.getPlayer().sendChatMessage("/wantedinfo " + player);
 
         try {
             return Uninterruptibles.getUninterruptibly(future);

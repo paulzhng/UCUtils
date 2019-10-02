@@ -15,7 +15,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class ClientQueryWriter extends Thread implements Closeable {
 
-    private final BlockingQueue<BaseCommand> queue = new LinkedBlockingQueue<>();
+    private final BlockingQueue<BaseCommand<?>> queue = new LinkedBlockingQueue<>();
     private final TSClientQuery query;
     private final PrintWriter writer;
     private volatile boolean closed;
@@ -30,7 +30,7 @@ public class ClientQueryWriter extends Thread implements Closeable {
     @Override
     public void run() {
         while (!closed) {
-            BaseCommand command;
+            BaseCommand<?> command;
             while ((command = queue.poll()) != null) {
                 Uninterruptibles.putUninterruptibly(query.getReader().getQueue(), command);
                 writer.println(command.getCommand());
@@ -46,7 +46,7 @@ public class ClientQueryWriter extends Thread implements Closeable {
         IOUtils.closeQuietly(writer);
     }
 
-    public BlockingQueue<BaseCommand> getQueue() {
+    public BlockingQueue<BaseCommand<?>> getQueue() {
         return queue;
     }
 
