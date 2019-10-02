@@ -46,7 +46,7 @@ public class DataTest {
 
         when(asmDataTable.getAll(DataModule.class.getCanonicalName())).thenReturn(asmDataSet);
 
-        DataManager.initDataLoaders(asmDataTable);
+        DataManager.registerDataLoaders(asmDataTable);
     }
 
     @Test

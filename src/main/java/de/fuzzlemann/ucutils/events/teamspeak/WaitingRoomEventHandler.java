@@ -28,7 +28,7 @@ public class WaitingRoomEventHandler {
 
     @SubscribeEvent
     public static void onClientMoved(ClientMovedEvent e) {
-        if (Main.MINECRAFT.player == null) return;
+        if (!AbstractionLayer.getPlayer().isConnected()) return;
 
         boolean supportNotification = UCUtilsConfig.notifyWaitingSupport;
         boolean publicNotification = UCUtilsConfig.notifyWaitingPublic;

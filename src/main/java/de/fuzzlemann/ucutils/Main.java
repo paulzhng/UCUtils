@@ -6,7 +6,7 @@ import de.fuzzlemann.ucutils.teamspeak.TSClientQuery;
 import de.fuzzlemann.ucutils.utils.AnalyticsUtil;
 import de.fuzzlemann.ucutils.utils.Logger;
 import de.fuzzlemann.ucutils.utils.chatlog.ChatLogger;
-import de.fuzzlemann.ucutils.utils.command.CommandRegistry;
+import de.fuzzlemann.ucutils.utils.command.execution.CommandRegistry;
 import de.fuzzlemann.ucutils.utils.data.DataManager;
 import de.fuzzlemann.ucutils.utils.initializor.InitializorHandler;
 import net.minecraft.client.Minecraft;
@@ -48,8 +48,8 @@ public class Main {
 
         ASMDataTable asmDataTable = e.getAsmData();
 
-        DataManager.initDataLoaders(asmDataTable);
-        InitializorHandler.initInitializors(asmDataTable);
+        DataManager.registerDataLoaders(asmDataTable);
+        InitializorHandler.registerInitializors(asmDataTable);
         CommandRegistry.registerAllCommands(asmDataTable);
     }
 

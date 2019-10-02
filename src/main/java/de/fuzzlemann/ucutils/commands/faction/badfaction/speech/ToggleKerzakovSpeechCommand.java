@@ -1,6 +1,6 @@
 package de.fuzzlemann.ucutils.commands.faction.badfaction.speech;
 
-import de.fuzzlemann.ucutils.utils.command.api.Command;
+import de.fuzzlemann.ucutils.utils.command.Command;
 import de.fuzzlemann.ucutils.utils.faction.badfaction.speech.KerzakovSpeechModifier;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;

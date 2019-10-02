@@ -1,9 +1,9 @@
 package de.fuzzlemann.ucutils.commands.faction.badfaction.drug;
 
 import de.fuzzlemann.ucutils.utils.abstraction.UPlayer;
-import de.fuzzlemann.ucutils.utils.command.api.Command;
-import de.fuzzlemann.ucutils.utils.command.api.CommandParam;
-import de.fuzzlemann.ucutils.utils.command.api.TabCompletion;
+import de.fuzzlemann.ucutils.utils.command.Command;
+import de.fuzzlemann.ucutils.utils.command.CommandParam;
+import de.fuzzlemann.ucutils.utils.command.TabCompletion;
 import de.fuzzlemann.ucutils.utils.faction.badfaction.drug.Drug;
 import de.fuzzlemann.ucutils.utils.faction.badfaction.drug.DrugUtil;
 import de.fuzzlemann.ucutils.utils.text.Message;

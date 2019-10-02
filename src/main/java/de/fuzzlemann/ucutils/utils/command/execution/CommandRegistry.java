@@ -1,7 +1,7 @@
-package de.fuzzlemann.ucutils.utils.command;
+package de.fuzzlemann.ucutils.utils.command.execution;
 
-import de.fuzzlemann.ucutils.utils.command.api.Command;
-import de.fuzzlemann.ucutils.utils.command.api.TabCompletion;
+import de.fuzzlemann.ucutils.utils.command.Command;
+import de.fuzzlemann.ucutils.utils.command.TabCompletion;
 import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.fml.common.discovery.ASMDataTable;
 
@@ -39,7 +39,7 @@ public class CommandRegistry {
     }
 
     private static void registerCommand(Object commandExecutor, @Nullable TabCompletion tabCompletion) {
-        Command commandAnnotation = CommandIssuer.getCommand(commandExecutor);
+        Command commandAnnotation = CommandReflection.getCommand(commandExecutor);
         String[] labels = commandAnnotation.value();
         boolean management = commandAnnotation.management();
 

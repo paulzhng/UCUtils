@@ -39,7 +39,7 @@ public class InitializorTest {
 
         when(asmDataTable.getAll(Initializor.class.getCanonicalName())).thenReturn(asmDataSet);
 
-        InitializorHandler.initInitializors(asmDataTable);
+        InitializorHandler.registerInitializors(asmDataTable);
     }
 
     @Test

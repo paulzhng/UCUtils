@@ -109,7 +109,7 @@ public class JsonManager {
     }
 
     private static void createFile(File file) {
-        if (DIRECTORY.mkdir())
+        if (DIRECTORY.mkdirs())
             Logger.LOGGER.info(DIRECTORY + " created");
         try {
             if (file.createNewFile())

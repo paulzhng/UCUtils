@@ -1,4 +1,4 @@
-package de.fuzzlemann.ucutils.utils.command;
+package de.fuzzlemann.ucutils.utils.command.execution;
 
 import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.ListMultimap;
@@ -6,10 +6,9 @@ import de.fuzzlemann.ucutils.utils.Logger;
 import de.fuzzlemann.ucutils.utils.ReflectionUtil;
 import de.fuzzlemann.ucutils.utils.abstraction.AbstractionLayer;
 import de.fuzzlemann.ucutils.utils.abstraction.UPlayer;
-import de.fuzzlemann.ucutils.utils.command.api.Command;
-import de.fuzzlemann.ucutils.utils.command.api.CommandParam;
+import de.fuzzlemann.ucutils.utils.command.Command;
+import de.fuzzlemann.ucutils.utils.command.CommandParam;
 import de.fuzzlemann.ucutils.utils.command.exceptions.ArgumentException;
-import de.fuzzlemann.ucutils.utils.command.exceptions.DeclarationException;
 import de.fuzzlemann.ucutils.utils.text.TextUtils;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -19,7 +18,6 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -31,30 +29,33 @@ import java.util.Map;
 @SideOnly(Side.CLIENT)
 class CommandIssuer {
 
+    private final String label;
+    private final String[] args;
+    private final boolean throwException;
+
+    private Object commandExecutor;
+    private Method onCommand;
+    private Command commandAnnotation;
+
     /**
-     * Issues the command associated with the {@code label}.
-     *
-     * @param label the label the command was issued with
-     * @param args  the arguments which were given with the command
-     * @see #issueCommand(String, String[], boolean)
+     * @param label          the label of the command
+     * @param args           the given arguments
+     * @param throwException {@code true}, if an exception on error should be thrown, {@code false}, when the error-handling should be done by the method itself.
+     *                       When this is enabled, asynchronous execution is disabled by default. This should mostly be used for testing.
      */
-    static void issueCommand(String label, String[] args) {
-        issueCommand(label, args, false);
+    public CommandIssuer(String label, String[] args, boolean throwException) {
+        this.label = label;
+        this.args = args;
+        this.throwException = throwException;
     }
 
     /**
      * Issues the command associated with the {@code label}.
-     *
-     * @param label          the label the command was issued with
-     * @param args           the arguments which were given with the command
-     * @param throwException {@code true}, if an exception on error should be thrown, {@code false}, when the error-handling should be done by the method itself.
-     *                       When this is enabled, asynchronous execution is disabled by default. This should mostly be used for testing.
-     * @see #issueCommand(String, String[])
      */
-    static void issueCommand(String label, String[] args, boolean throwException) {
-        Object command = CommandRegistry.COMMAND_REGISTRY.get(label);
-        Method onCommand = getOnCommand(command);
-        Command commandAnnotation = getCommand(onCommand);
+    void issue() {
+        commandExecutor = CommandRegistry.COMMAND_REGISTRY.get(label);
+        onCommand = CommandReflection.getOnCommand(commandExecutor);
+        commandAnnotation = CommandReflection.getCommand(onCommand);
 
         //Runnable containing the surrounding logic of the command execution
         Runnable commandRunnable = () -> {
@@ -62,7 +63,7 @@ class CommandIssuer {
 
             try {
                 //Sends the usage if the arguments given were incorrect (false is returned)
-                if (!executeCommand(command, onCommand, args))
+                if (!executeCommand())
                     sendUsage(usage, label);
             } catch (Throwable e) { //check if the throwable is expected; if so, send the usage
                 if (throwException) throw e;
@@ -96,7 +97,7 @@ class CommandIssuer {
      * @param label the label the player used for accessing the command
      * @implNote The substring {@code %label%} is replaced with {@code label}
      */
-    private static void sendUsage(String usage, String label) {
+    private void sendUsage(String usage, String label) {
         usage = usage.replace("%label%", label);
         TextUtils.error(usage);
     }
@@ -104,25 +105,22 @@ class CommandIssuer {
     /**
      * Parses the arguments and passes them on to the command.
      *
-     * @param command   the command executor associated with the command
-     * @param onCommand the method where the logic of the command is located in
-     * @param args      the arguments which were given
      * @return {@code true}, if the execution of the command was successful; {@code false}, if the arguments ({@code args}) were not given correctly
      */
-    private static boolean executeCommand(Object command, Method onCommand, String[] args) {
+    private boolean executeCommand() {
         Object[] parameters;
-        if (checkDefaultUsage(onCommand)) { //checks if the raw unparsed arguments should be passed on to onCommand
+        if (CommandReflection.checkDefaultUsage(onCommand)) { //checks if the raw unparsed arguments should be passed on to onCommand
             parameters = new Object[]{args};
         } else {
             try {
-                parameters = parseArguments(onCommand, args);
+                parameters = parseArguments();
             } catch (ArgumentException e) {
                 return !e.showUsage(); //arguments failed to parse properly as those were not given correctly
             }
         }
 
         Object[] checkedParameters;
-        if (hasPlayerParam(onCommand)) { //checks if UPlayer should be passed on to the command
+        if (CommandReflection.hasPlayerParam(onCommand)) { //checks if UPlayer should be passed on to the command
             // the UPLayer parameter *must* always be the first one, so when it is present, the other parameters
             // are getting moved one to the right and the UPlayer is inserted at the start of the (new) array
             checkedParameters = new Object[parameters.length + 1];
@@ -133,64 +131,20 @@ class CommandIssuer {
         }
 
         try {
-            return (boolean) onCommand.invoke(command, checkedParameters); //executes the command itself
+            return (boolean) onCommand.invoke(commandExecutor, checkedParameters); //executes the command itself
         } catch (IllegalAccessException | InvocationTargetException | IllegalArgumentException e) {
             return false; //the resolved arguments were wrong; the cause is the wrong usage of the command
         }
     }
 
     /**
-     * Checks if the raw unparsed arguments are wanted by {@code onCommand}.<br>
-     * When a {@code String[]} parameter is present which is <b>not</b> annotated with {@link CommandParam},
-     * it is considered that the raw unparsed arguments are wanted.
-     *
-     * @param onCommand the {@link Method} which is checked
-     * @return if the raw unparsed arguments are wanted
-     */
-    private static boolean checkDefaultUsage(Method onCommand) {
-        Class<?>[] parameterTypes = onCommand.getParameterTypes();
-        if (parameterTypes.length == 0)
-            return false; //when no arguments are present, no String[] can be passed onto the method
-
-        boolean containsNonAnnotatedStringArray = false;
-        for (Class<?> parameterType : parameterTypes) {
-            if (parameterType.isAssignableFrom(String[].class) && !parameterType.isAnnotationPresent(CommandParam.class)) { //checks if the parameter type is a String[]
-                containsNonAnnotatedStringArray = true;
-                continue;
-            }
-
-            if (!parameterType.isAssignableFrom(UPlayer.class)) { //UPlayer can be another valid parameter type
-                return false; //no other parameter types except UPlayer and String[] can be defined when using default usage
-            }
-        }
-
-        return containsNonAnnotatedStringArray;
-    }
-
-    /**
-     * Checks if {@code onCommand} has {@link UPlayer} as its first parameter.
-     *
-     * @param onCommand the {@link Method} which is checked
-     * @return if {@code onCommand} has {@link UPlayer} as its first parameter
-     */
-    private static boolean hasPlayerParam(Method onCommand) {
-        Class<?>[] parameterTypes = onCommand.getParameterTypes();
-        if (parameterTypes.length == 0)
-            return false; //no parameters at all -> UPLayer cannot be the first parameter
-
-        return parameterTypes[0].isAssignableFrom(UPlayer.class);
-    }
-
-    /**
      * Parses the arguments to the fitting {@link Object}s.
      *
-     * @param onCommand the method where the logic of the command is located in
-     * @param args      the arguments which were given
      * @return the parsed arguments
      * @throws ArgumentException when invalid arguments were given
      */
-    private static Object[] parseArguments(Method onCommand, String[] args) {
-        ListMultimap<Class<?>, CommandParam> commandParamMap = parseParameters(onCommand); //the parameter types associated with the CommandParam
+    private Object[] parseArguments() {
+        ListMultimap<Class<?>, CommandParam> commandParamMap = parseParameters(); //the parameter types associated with the CommandParam
         List<Object> arguments = new ArrayList<>(); //the list where all parsed objects land in
 
         int index = 0;
@@ -200,7 +154,7 @@ class CommandIssuer {
 
             if (commandParam.joinStart() || commandParam.arrayStart()) {
                 String[] joiningArray;
-                int endIndex = getEndIndexOfArgumentArray(args, index, commandParamMap);
+                int endIndex = getEndIndexOfArgumentArray(index, commandParamMap);
                 if (args.length <= endIndex) { //checks if the end index is outside the argument array
                     if (commandParam.required()) //as an own argument is required, the execution is ended here
                         throw new ArgumentException("Array or String join parameter is required but not satisfied (args.length <= index)");
@@ -271,7 +225,7 @@ class CommandIssuer {
         return arguments.toArray();
     }
 
-    private static int getEndIndexOfArgumentArray(String[] args, int startIndex, ListMultimap<Class<?>, CommandParam> commandParamMap) {
+    private int getEndIndexOfArgumentArray(int startIndex, ListMultimap<Class<?>, CommandParam> commandParamMap) {
         ListMultimap<Class<?>, CommandParam> followingParams = extractFollowingParams(commandParamMap);
 
         int index = args.length - 1;
@@ -307,7 +261,7 @@ class CommandIssuer {
         return index;
     }
 
-    private static ListMultimap<Class<?>, CommandParam> extractFollowingParams(ListMultimap<Class<?>, CommandParam> commandParamMap) {
+    private ListMultimap<Class<?>, CommandParam> extractFollowingParams(ListMultimap<Class<?>, CommandParam> commandParamMap) {
         boolean arrayStart = false;
         ListMultimap<Class<?>, CommandParam> followingParams = LinkedListMultimap.create();
         for (Map.Entry<Class<?>, CommandParam> entry : commandParamMap.entries()) {
@@ -325,7 +279,7 @@ class CommandIssuer {
         return followingParams;
     }
 
-    private static ListMultimap<Class<?>, CommandParam> parseParameters(Method onCommand) {
+    private ListMultimap<Class<?>, CommandParam> parseParameters() {
         Class<?>[] parameterTypes = onCommand.getParameterTypes();
         Annotation[][] parameterAnnotations = onCommand.getParameterAnnotations();
 
@@ -345,28 +299,4 @@ class CommandIssuer {
         return commandParamMap;
     }
 
-    static Command getCommand(Object command) {
-        return getCommand(getOnCommand(command));
-    }
-
-    private static Command getCommand(Method onCommand) {
-        return onCommand.getAnnotation(Command.class);
-    }
-
-    private static Method getOnCommand(Object command) {
-        Method onCommand = null;
-        for (Method method : command.getClass().getMethods()) {
-            if (!method.getName().equals("onCommand")) continue;
-            if (!Modifier.isPublic(method.getModifiers()))
-                throw new DeclarationException("onCommand() at " + command.getClass() + " is not declared public");
-
-            onCommand = method;
-            break;
-        }
-
-        if (onCommand == null)
-            throw new DeclarationException(command.getClass() + " did not contain onCommand()");
-
-        return onCommand;
-    }
 }

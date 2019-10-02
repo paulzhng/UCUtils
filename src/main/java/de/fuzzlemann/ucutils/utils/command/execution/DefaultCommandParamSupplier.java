@@ -1,6 +1,6 @@
-package de.fuzzlemann.ucutils.utils.command;
+package de.fuzzlemann.ucutils.utils.command.execution;
 
-import de.fuzzlemann.ucutils.utils.command.api.CommandParam;
+import de.fuzzlemann.ucutils.utils.command.CommandParam;
 
 /**
  * @author Fuzzlemann

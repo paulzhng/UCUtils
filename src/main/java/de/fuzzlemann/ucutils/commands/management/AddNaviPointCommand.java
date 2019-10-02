@@ -3,8 +3,8 @@ package de.fuzzlemann.ucutils.commands.management;
 import de.fuzzlemann.ucutils.common.CustomNaviPoint;
 import de.fuzzlemann.ucutils.utils.abstraction.UPlayer;
 import de.fuzzlemann.ucutils.utils.api.APIUtils;
-import de.fuzzlemann.ucutils.utils.command.api.Command;
-import de.fuzzlemann.ucutils.utils.command.api.CommandParam;
+import de.fuzzlemann.ucutils.utils.command.Command;
+import de.fuzzlemann.ucutils.utils.command.CommandParam;
 import de.fuzzlemann.ucutils.utils.text.TextUtils;
 import net.minecraft.util.math.BlockPos;
 

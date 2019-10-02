@@ -18,7 +18,7 @@ import java.util.UUID;
  * @author Fuzzlemann
  */
 public class UPlayerImpl implements UPlayer {
-    
+
     @Override
     public boolean isConnected() {
         return getPlayer() != null;
@@ -41,12 +41,12 @@ public class UPlayerImpl implements UPlayer {
 
     @Override
     public String getName() {
-        return getPlayer().getName();
+        return Main.MINECRAFT.getSession().getUsername();
     }
 
     @Override
     public UUID getUniqueID() {
-        return getPlayer().getUniqueID();
+        return Main.MINECRAFT.getSession().getProfile().getId();
     }
 
     @Override
@@ -88,7 +88,7 @@ public class UPlayerImpl implements UPlayer {
     public NetHandlerPlayClient getConnection() {
         return getPlayer().connection;
     }
-    
+
     private EntityPlayerSP getPlayer() {
         return Main.MINECRAFT.player;
     }

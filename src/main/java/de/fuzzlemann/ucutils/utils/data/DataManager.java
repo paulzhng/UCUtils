@@ -1,5 +1,6 @@
 package de.fuzzlemann.ucutils.utils.data;
 
+import de.fuzzlemann.ucutils.utils.ForgeUtils;
 import de.fuzzlemann.ucutils.utils.Logger;
 import de.fuzzlemann.ucutils.utils.text.Message;
 import net.minecraft.util.text.TextFormatting;
@@ -16,7 +17,7 @@ public class DataManager {
 
     private static final List<DataLoader> DATA_LOADERS = new ArrayList<>();
 
-    public static void initDataLoaders(ASMDataTable asmDataTable) {
+    public static void registerDataLoaders(ASMDataTable asmDataTable) {
         if (!DATA_LOADERS.isEmpty()) return;
 
         Set<ASMDataTable.ASMData> asmDataSet = asmDataTable.getAll(DataModule.class.getCanonicalName());
@@ -35,6 +36,7 @@ public class DataManager {
     public static void loadData(boolean verbose) {
         for (DataLoader dataLoader : DATA_LOADERS) {
             DataModule dataModule = dataLoader.getClass().getAnnotation(DataModule.class);
+            if (ForgeUtils.isTest() && !dataModule.test()) continue;
 
             moduleMessage(verbose, dataModule, "wird geladen...");
             try {

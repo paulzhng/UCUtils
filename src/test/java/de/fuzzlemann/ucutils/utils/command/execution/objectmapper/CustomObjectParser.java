@@ -1,6 +1,6 @@
-package de.fuzzlemann.ucutils.utils.command.objectmapper;
+package de.fuzzlemann.ucutils.utils.command.execution.objectmapper;
 
-import de.fuzzlemann.ucutils.utils.command.api.ParameterParser;
+import de.fuzzlemann.ucutils.utils.command.ParameterParser;
 
 /**
  * @author Fuzzlemann

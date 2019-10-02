@@ -2,7 +2,7 @@ package de.fuzzlemann.ucutils.commands.faction;
 
 import com.google.common.util.concurrent.Uninterruptibles;
 import de.fuzzlemann.ucutils.utils.abstraction.AbstractionLayer;
-import de.fuzzlemann.ucutils.utils.command.api.Command;
+import de.fuzzlemann.ucutils.utils.command.Command;
 import de.fuzzlemann.ucutils.utils.faction.Faction;
 import de.fuzzlemann.ucutils.utils.text.Message;
 import net.minecraft.util.text.TextFormatting;

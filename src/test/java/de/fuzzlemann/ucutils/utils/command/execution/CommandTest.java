@@ -1,10 +1,10 @@
-package de.fuzzlemann.ucutils.utils.command;
+package de.fuzzlemann.ucutils.utils.command.execution;
 
 import de.fuzzlemann.ucutils.commands.UpdateCommand;
 import de.fuzzlemann.ucutils.commands.faction.CheckActiveMembersCommand;
 import de.fuzzlemann.ucutils.utils.abstraction.AbstractionLayer;
 import de.fuzzlemann.ucutils.utils.abstraction.TestPlayer;
-import de.fuzzlemann.ucutils.utils.command.api.Command;
+import de.fuzzlemann.ucutils.utils.command.Command;
 import de.fuzzlemann.ucutils.utils.io.FileManager;
 import net.minecraftforge.fml.common.discovery.ASMDataTable;
 import org.junit.jupiter.api.BeforeAll;
@@ -70,7 +70,7 @@ class CommandTest {
     @Test
     void testNoDirectException() {
         for (String label : CommandRegistry.COMMAND_REGISTRY.keySet()) {
-            CommandIssuer.issueCommand(label, new String[]{}, true);
+            new CommandIssuer(label, new String[]{}, true).issue();
         }
     }
 }

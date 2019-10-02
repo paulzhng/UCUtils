@@ -16,4 +16,6 @@ public @interface DataModule {
 
     boolean hasFallback() default false;
 
+    boolean test() default true;
+
 }

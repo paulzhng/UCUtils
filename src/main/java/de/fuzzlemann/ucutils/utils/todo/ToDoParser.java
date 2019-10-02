@@ -1,6 +1,6 @@
 package de.fuzzlemann.ucutils.utils.todo;
 
-import de.fuzzlemann.ucutils.utils.command.api.ParameterParser;
+import de.fuzzlemann.ucutils.utils.command.ParameterParser;
 
 /**
  * @author Fuzzlemann

@@ -11,7 +11,7 @@ import net.minecraft.client.Minecraft;
 /**
  * @author Fuzzlemann
  */
-@DataModule("API-Connection")
+@DataModule(value = "API-Connection", test = false)
 public class APIKeyLoader implements DataLoader {
 
     @Override

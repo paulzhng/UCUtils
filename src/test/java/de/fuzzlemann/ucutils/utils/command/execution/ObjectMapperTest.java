@@ -1,12 +1,12 @@
-package de.fuzzlemann.ucutils.utils.command;
+package de.fuzzlemann.ucutils.utils.command.execution;
 
-import de.fuzzlemann.ucutils.utils.command.api.CommandParam;
+import de.fuzzlemann.ucutils.utils.command.CommandParam;
 import de.fuzzlemann.ucutils.utils.command.exceptions.ArgumentException;
 import de.fuzzlemann.ucutils.utils.command.exceptions.DeclarationException;
-import de.fuzzlemann.ucutils.utils.command.objectmapper.CustomObjectParser;
-import de.fuzzlemann.ucutils.utils.command.objectmapper.DeclaredTestObject;
-import de.fuzzlemann.ucutils.utils.command.objectmapper.GeneralParser;
-import de.fuzzlemann.ucutils.utils.command.objectmapper.GeneralTestObject;
+import de.fuzzlemann.ucutils.utils.command.execution.objectmapper.CustomObjectParser;
+import de.fuzzlemann.ucutils.utils.command.execution.objectmapper.DeclaredTestObject;
+import de.fuzzlemann.ucutils.utils.command.execution.objectmapper.GeneralParser;
+import de.fuzzlemann.ucutils.utils.command.execution.objectmapper.GeneralTestObject;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 

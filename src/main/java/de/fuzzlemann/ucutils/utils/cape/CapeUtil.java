@@ -18,7 +18,7 @@ import java.util.Map;
  * @author Fuzzlemann
  */
 @Mod.EventBusSubscriber
-@DataModule("Cape")
+@DataModule(value = "Cape", test = false)
 public class CapeUtil implements DataLoader {
 
     private static final Map<String, ResourceLocation> CAPE_TYPES = new HashMap<>();

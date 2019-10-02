@@ -1,8 +1,8 @@
 package de.fuzzlemann.ucutils.commands.supporter;
 
 import de.fuzzlemann.ucutils.utils.abstraction.UPlayer;
-import de.fuzzlemann.ucutils.utils.command.api.Command;
-import de.fuzzlemann.ucutils.utils.command.api.TabCompletion;
+import de.fuzzlemann.ucutils.utils.command.Command;
+import de.fuzzlemann.ucutils.utils.command.TabCompletion;
 import de.fuzzlemann.ucutils.utils.noobchat.NoobChatAnswer;
 import de.fuzzlemann.ucutils.utils.noobchat.NoobChatManager;
 import de.fuzzlemann.ucutils.utils.text.TextUtils;

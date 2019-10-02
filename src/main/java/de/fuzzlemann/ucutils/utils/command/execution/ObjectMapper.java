@@ -1,7 +1,7 @@
-package de.fuzzlemann.ucutils.utils.command;
+package de.fuzzlemann.ucutils.utils.command.execution;
 
-import de.fuzzlemann.ucutils.utils.command.api.CommandParam;
-import de.fuzzlemann.ucutils.utils.command.api.ParameterParser;
+import de.fuzzlemann.ucutils.utils.command.CommandParam;
+import de.fuzzlemann.ucutils.utils.command.ParameterParser;
 import de.fuzzlemann.ucutils.utils.command.exceptions.ArgumentException;
 import de.fuzzlemann.ucutils.utils.command.exceptions.DeclarationException;
 import de.fuzzlemann.ucutils.utils.text.TextUtils;
@@ -13,6 +13,7 @@ import java.lang.reflect.Method;
  * @author Fuzzlemann
  */
 class ObjectMapper {
+
     static Object parseToObject(String arg, Class<?> parameterType, CommandParam commandParam) {
         Object parsedObject;
         try {

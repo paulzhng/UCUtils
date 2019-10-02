@@ -1,4 +1,4 @@
-package de.fuzzlemann.ucutils.utils.command.objectmapper;
+package de.fuzzlemann.ucutils.utils.command.execution.objectmapper;
 
 /**
  * @author Fuzzlemann

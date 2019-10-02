@@ -1,6 +1,6 @@
 package de.fuzzlemann.ucutils.utils.faction.badfaction.drug;
 
-import de.fuzzlemann.ucutils.utils.command.api.ParameterParser;
+import de.fuzzlemann.ucutils.utils.command.ParameterParser;
 
 import java.util.Arrays;
 import java.util.Objects;

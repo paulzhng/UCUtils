@@ -2,7 +2,7 @@ package de.fuzzlemann.ucutils.commands.faction.badfaction;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import de.fuzzlemann.ucutils.utils.command.api.Command;
+import de.fuzzlemann.ucutils.utils.command.Command;
 import de.fuzzlemann.ucutils.utils.location.navigation.NavigationUtil;
 import de.fuzzlemann.ucutils.utils.text.Message;
 import net.minecraft.util.math.BlockPos;

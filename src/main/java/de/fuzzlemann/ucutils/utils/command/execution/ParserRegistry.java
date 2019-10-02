@@ -1,7 +1,7 @@
-package de.fuzzlemann.ucutils.utils.command;
+package de.fuzzlemann.ucutils.utils.command.execution;
 
 import de.fuzzlemann.ucutils.utils.ReflectionUtil;
-import de.fuzzlemann.ucutils.utils.command.api.ParameterParser;
+import de.fuzzlemann.ucutils.utils.command.ParameterParser;
 import de.fuzzlemann.ucutils.utils.faction.ActivityTestParser;
 import de.fuzzlemann.ucutils.utils.house.HouseParser;
 import de.fuzzlemann.ucutils.utils.io.FileParser;

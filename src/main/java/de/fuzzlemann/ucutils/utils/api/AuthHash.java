@@ -1,6 +1,6 @@
 package de.fuzzlemann.ucutils.utils.api;
 
-import de.fuzzlemann.ucutils.Main;
+import de.fuzzlemann.ucutils.utils.abstraction.AbstractionLayer;
 
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
@@ -21,7 +21,7 @@ public class AuthHash {
     private final String hash;
 
     public AuthHash() {
-        username = Main.MINECRAFT.getSession().getUsername();
+        username = AbstractionLayer.getPlayer().getName();
         currentTime = System.currentTimeMillis();
         randomLong = RANDOM.nextLong();
         hash = hash(username + currentTime + randomLong);

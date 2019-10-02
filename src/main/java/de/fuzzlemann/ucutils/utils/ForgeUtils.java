@@ -42,15 +42,11 @@ public class ForgeUtils {
         }
 
         try {
-            Class.forName("de.fuzzlemann.ucutils.utils.command.CommandTest");
+            Class.forName("de.fuzzlemann.ucutils.utils.command.execution.CommandTest");
             isTest = true;
         } catch (ClassNotFoundException e) {
             isTest = false;
         }
-    }
-
-    public static boolean isConnected() {
-        return AbstractionLayer.getPlayer().isConnected();
     }
 
     public static boolean isTest() {

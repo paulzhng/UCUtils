@@ -18,7 +18,7 @@ public class InitializorHandler {
 
     private static final SetMultimap<String, IInitializor> INITIALIZORS = TreeMultimap.create(Ordering.natural(), new InitializorComparator());
 
-    public static void initInitializors(ASMDataTable asmDataTable) {
+    public static void registerInitializors(ASMDataTable asmDataTable) {
         if (!INITIALIZORS.isEmpty()) return;
 
         Set<ASMDataTable.ASMData> asmDataSet = asmDataTable.getAll(Initializor.class.getCanonicalName());

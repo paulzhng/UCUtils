@@ -1,7 +1,7 @@
 package de.fuzzlemann.ucutils.commands.jobs;
 
 import de.fuzzlemann.ucutils.utils.abstraction.UPlayer;
-import de.fuzzlemann.ucutils.utils.command.api.Command;
+import de.fuzzlemann.ucutils.utils.command.Command;
 import de.fuzzlemann.ucutils.utils.text.TextUtils;
 import net.minecraft.scoreboard.Score;
 import net.minecraft.scoreboard.Scoreboard;

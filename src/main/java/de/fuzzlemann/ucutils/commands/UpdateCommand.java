@@ -1,7 +1,7 @@
 package de.fuzzlemann.ucutils.commands;
 
 import de.fuzzlemann.ucutils.utils.Logger;
-import de.fuzzlemann.ucutils.utils.command.api.Command;
+import de.fuzzlemann.ucutils.utils.command.Command;
 import de.fuzzlemann.ucutils.utils.text.Message;
 import de.fuzzlemann.ucutils.utils.text.TextUtils;
 import net.minecraft.util.text.TextFormatting;

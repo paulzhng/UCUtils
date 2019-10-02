@@ -1,4 +1,4 @@
-package de.fuzzlemann.ucutils.utils.command.api;
+package de.fuzzlemann.ucutils.utils.command;
 
 import java.lang.annotation.*;
 

@@ -1,6 +1,6 @@
 package de.fuzzlemann.ucutils.utils.io;
 
-import de.fuzzlemann.ucutils.utils.command.api.ParameterParser;
+import de.fuzzlemann.ucutils.utils.command.ParameterParser;
 
 import java.io.File;
 

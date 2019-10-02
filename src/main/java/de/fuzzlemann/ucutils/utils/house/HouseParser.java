@@ -1,7 +1,7 @@
 package de.fuzzlemann.ucutils.utils.house;
 
 import de.fuzzlemann.ucutils.common.House;
-import de.fuzzlemann.ucutils.utils.command.api.ParameterParser;
+import de.fuzzlemann.ucutils.utils.command.ParameterParser;
 
 /**
  * @author Fuzzlemann

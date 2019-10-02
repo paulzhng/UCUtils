@@ -1,9 +1,9 @@
 package de.fuzzlemann.ucutils.commands;
 
 import de.fuzzlemann.ucutils.utils.abstraction.UPlayer;
-import de.fuzzlemann.ucutils.utils.command.api.Command;
-import de.fuzzlemann.ucutils.utils.command.api.CommandParam;
-import de.fuzzlemann.ucutils.utils.command.api.TabCompletion;
+import de.fuzzlemann.ucutils.utils.command.Command;
+import de.fuzzlemann.ucutils.utils.command.CommandParam;
+import de.fuzzlemann.ucutils.utils.command.TabCompletion;
 import de.fuzzlemann.ucutils.utils.data.DataManager;
 import de.fuzzlemann.ucutils.utils.text.Message;
 import net.minecraft.util.text.TextFormatting;

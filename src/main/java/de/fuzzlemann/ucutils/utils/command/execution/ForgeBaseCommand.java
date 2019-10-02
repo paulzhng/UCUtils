@@ -1,8 +1,8 @@
-package de.fuzzlemann.ucutils.utils.command;
+package de.fuzzlemann.ucutils.utils.command.execution;
 
 import de.fuzzlemann.ucutils.utils.ForgeUtils;
 import de.fuzzlemann.ucutils.utils.abstraction.AbstractionLayer;
-import de.fuzzlemann.ucutils.utils.command.api.TabCompletion;
+import de.fuzzlemann.ucutils.utils.command.TabCompletion;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
@@ -54,7 +54,7 @@ class ForgeBaseCommand extends CommandBase implements IClientCommand {
 
     @Override
     public void execute(@Nonnull MinecraftServer server, @Nonnull ICommandSender sender, @Nonnull String[] args) {
-        CommandIssuer.issueCommand(name, args);
+        new CommandIssuer(name, args, false).issue();
     }
 
     @Override

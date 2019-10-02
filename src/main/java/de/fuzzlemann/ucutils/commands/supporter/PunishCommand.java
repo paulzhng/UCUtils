@@ -1,9 +1,9 @@
 package de.fuzzlemann.ucutils.commands.supporter;
 
 import de.fuzzlemann.ucutils.utils.abstraction.UPlayer;
-import de.fuzzlemann.ucutils.utils.command.api.Command;
-import de.fuzzlemann.ucutils.utils.command.api.CommandParam;
-import de.fuzzlemann.ucutils.utils.command.api.TabCompletion;
+import de.fuzzlemann.ucutils.utils.command.Command;
+import de.fuzzlemann.ucutils.utils.command.CommandParam;
+import de.fuzzlemann.ucutils.utils.command.TabCompletion;
 import de.fuzzlemann.ucutils.utils.punishment.PunishManager;
 import de.fuzzlemann.ucutils.utils.punishment.Violation;
 import net.minecraftforge.fml.relauncher.Side;
