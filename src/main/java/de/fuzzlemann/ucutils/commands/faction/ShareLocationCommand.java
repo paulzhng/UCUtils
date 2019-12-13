@@ -1,15 +1,14 @@
 package de.fuzzlemann.ucutils.commands.faction;
 
 import de.fuzzlemann.ucutils.utils.ForgeUtils;
-import de.fuzzlemann.ucutils.utils.abstraction.AbstractionLayer;
-import de.fuzzlemann.ucutils.utils.abstraction.UPlayer;
-import de.fuzzlemann.ucutils.utils.command.Command;
-import de.fuzzlemann.ucutils.utils.command.CommandParam;
+import de.fuzzlemann.ucutils.base.abstraction.AbstractionLayer;
+import de.fuzzlemann.ucutils.base.abstraction.UPlayer;
+import de.fuzzlemann.ucutils.base.command.Command;
+import de.fuzzlemann.ucutils.base.command.CommandParam;
 import de.fuzzlemann.ucutils.utils.location.navigation.NavigationUtil;
-import de.fuzzlemann.ucutils.utils.text.Message;
-import de.fuzzlemann.ucutils.utils.text.TextUtils;
+import de.fuzzlemann.ucutils.base.text.Message;
+import de.fuzzlemann.ucutils.base.text.TextUtils;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -17,7 +16,10 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -32,10 +34,9 @@ public class ShareLocationCommand {
 
     @SubscribeEvent
     public static void onChatReceived(ClientChatReceivedEvent e) {
-        ITextComponent messageComponent = e.getMessage();
-        String msg = messageComponent.getUnformattedText();
+        String message = e.getMessage().getUnformattedText();
 
-        Matcher shareLocationMatcher = SHARE_LOCATION_PATTERN.matcher(msg);
+        Matcher shareLocationMatcher = SHARE_LOCATION_PATTERN.matcher(message);
         if (!shareLocationMatcher.find()) return;
 
         UPlayer p = AbstractionLayer.getPlayer();

@@ -1,6 +1,6 @@
 package de.fuzzlemann.ucutils.utils.api;
 
-import de.fuzzlemann.ucutils.utils.abstraction.AbstractionLayer;
+import de.fuzzlemann.ucutils.base.abstraction.AbstractionLayer;
 
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;

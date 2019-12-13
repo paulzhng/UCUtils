@@ -1,13 +1,13 @@
 package de.fuzzlemann.ucutils.commands.faction.badfaction.drug;
 
-import de.fuzzlemann.ucutils.utils.abstraction.UPlayer;
-import de.fuzzlemann.ucutils.utils.command.Command;
-import de.fuzzlemann.ucutils.utils.command.CommandParam;
-import de.fuzzlemann.ucutils.utils.command.TabCompletion;
+import de.fuzzlemann.ucutils.base.abstraction.UPlayer;
+import de.fuzzlemann.ucutils.base.command.Command;
+import de.fuzzlemann.ucutils.base.command.CommandParam;
+import de.fuzzlemann.ucutils.base.command.TabCompletion;
 import de.fuzzlemann.ucutils.utils.faction.badfaction.drug.Drug;
 import de.fuzzlemann.ucutils.utils.faction.badfaction.drug.DrugUtil;
-import de.fuzzlemann.ucutils.utils.text.Message;
-import de.fuzzlemann.ucutils.utils.text.TextUtils;
+import de.fuzzlemann.ucutils.base.text.Message;
+import de.fuzzlemann.ucutils.base.text.TextUtils;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -68,16 +68,15 @@ public class DrugPriceCommand implements TabCompletion {
     }
 
     private void sendDrugPrices() {
-        Message.Builder builder = Message.builder();
-
-        builder.of("» ").color(TextFormatting.DARK_GRAY).advance()
-                .of("Eingestellte Drogenpreise\n").color(TextFormatting.DARK_AQUA).advance();
-        for (Drug drug : DrugUtil.DRUGS) {
-            builder.of("  * ").color(TextFormatting.DARK_GRAY).advance()
-                    .of(drug.getName() + ": ").color(TextFormatting.GRAY).advance()
-                    .of(drug.getPrice() + "$\n").color(TextFormatting.BLUE).advance();
-        }
-
-        builder.send();
+        Message.builder()
+                .of("» ").color(TextFormatting.DARK_GRAY).advance()
+                .of("Eingestellte Drogenpreise\n").color(TextFormatting.DARK_AQUA).advance()
+                .joiner(DrugUtil.DRUGS)
+                .consumer((b, drug) -> b.of("  * ").color(TextFormatting.DARK_GRAY).advance()
+                        .of(drug.getName() + ": ").color(TextFormatting.GRAY).advance()
+                        .of(drug.getPrice() + "$").color(TextFormatting.BLUE).advance())
+                .newLineJoiner()
+                .advance()
+                .send();
     }
 }

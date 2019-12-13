@@ -1,13 +1,13 @@
 package de.fuzzlemann.ucutils.commands.faction.police;
 
 import de.fuzzlemann.ucutils.utils.ForgeUtils;
-import de.fuzzlemann.ucutils.utils.abstraction.UPlayer;
-import de.fuzzlemann.ucutils.utils.command.Command;
-import de.fuzzlemann.ucutils.utils.command.TabCompletion;
+import de.fuzzlemann.ucutils.base.abstraction.UPlayer;
+import de.fuzzlemann.ucutils.base.command.Command;
+import de.fuzzlemann.ucutils.base.command.TabCompletion;
 import de.fuzzlemann.ucutils.utils.faction.police.WantedManager;
 import de.fuzzlemann.ucutils.utils.faction.police.WantedReason;
 import de.fuzzlemann.ucutils.utils.math.Expression;
-import de.fuzzlemann.ucutils.utils.text.TextUtils;
+import de.fuzzlemann.ucutils.base.text.TextUtils;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -19,26 +19,13 @@ import java.util.*;
 @SideOnly(Side.CLIENT)
 public class ASUCommand implements TabCompletion {
 
-    @Command(value = "asu", usage = "/%label% [Spieler...] [Grund] (Variation) (-v/-b/-fsa)")
+    @Command(value = "asu", usage = "/%label% [Spieler...] [Grund] (-v/-b/-fsa)")
     public boolean onCommand(UPlayer p, String[] args) {
         if (args.length < 2) return false;
 
         Set<Flag> flags = getFlags(args);
-        int variationIndex = args.length - 1 - flags.size();
 
-        int variation = 0;
-        try {
-            variation = Integer.parseInt(args[variationIndex]);
-        } catch (NumberFormatException e) {
-            variationIndex++;
-        }
-
-        if (Math.abs(variation) > 10) {
-            TextUtils.error("Die Variation darf nicht größer als 10 Wanteds sein.");
-            return true;
-        }
-
-        int reasonIndex = variationIndex - 1;
+        int reasonIndex = args.length - flags.size() - 1;
 
         List<String> players = Arrays.asList(args).subList(0, reasonIndex);
         String reason = args[reasonIndex];
@@ -58,7 +45,7 @@ public class ASUCommand implements TabCompletion {
             wantedAmount = flag.modifyWanteds(wantedAmount);
         }
 
-        giveWanteds(p, wantedReason, wantedAmount + variation, players);
+        giveWanteds(p, wantedReason, wantedAmount, players);
         return true;
     }
 

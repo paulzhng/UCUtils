@@ -1,7 +1,7 @@
 package de.fuzzlemann.ucutils.events;
 
 import de.fuzzlemann.ucutils.Main;
-import de.fuzzlemann.ucutils.utils.abstraction.AbstractionLayer;
+import de.fuzzlemann.ucutils.base.abstraction.AbstractionLayer;
 import de.fuzzlemann.ucutils.utils.faction.Faction;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemSkull;

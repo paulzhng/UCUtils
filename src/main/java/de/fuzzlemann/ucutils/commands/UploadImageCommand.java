@@ -1,8 +1,8 @@
 package de.fuzzlemann.ucutils.commands;
 
-import de.fuzzlemann.ucutils.utils.command.Command;
+import de.fuzzlemann.ucutils.base.command.Command;
 import de.fuzzlemann.ucutils.utils.image.ImageUploader;
-import de.fuzzlemann.ucutils.utils.text.Message;
+import de.fuzzlemann.ucutils.base.text.Message;
 import net.minecraft.util.text.TextFormatting;
 
 import java.awt.*;

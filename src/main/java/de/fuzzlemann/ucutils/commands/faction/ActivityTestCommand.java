@@ -1,20 +1,19 @@
 package de.fuzzlemann.ucutils.commands.faction;
 
-import de.fuzzlemann.ucutils.commands.UploadImageCommand;
-import de.fuzzlemann.ucutils.commands.time.ClockCommand;
 import de.fuzzlemann.ucutils.common.activity.ActivityTestType;
 import de.fuzzlemann.ucutils.keybind.KeyBindRegistry;
 import de.fuzzlemann.ucutils.utils.ForgeUtils;
 import de.fuzzlemann.ucutils.utils.Logger;
-import de.fuzzlemann.ucutils.utils.abstraction.UPlayer;
+import de.fuzzlemann.ucutils.base.abstraction.UPlayer;
 import de.fuzzlemann.ucutils.utils.api.APIUtils;
-import de.fuzzlemann.ucutils.utils.command.Command;
-import de.fuzzlemann.ucutils.utils.command.TabCompletion;
+import de.fuzzlemann.ucutils.base.command.Command;
+import de.fuzzlemann.ucutils.base.command.TabCompletion;
+import de.fuzzlemann.ucutils.base.command.execution.CommandHandler;
 import de.fuzzlemann.ucutils.utils.image.ImageUploader;
 import de.fuzzlemann.ucutils.utils.io.FileManager;
-import de.fuzzlemann.ucutils.utils.text.Message;
-import de.fuzzlemann.ucutils.utils.text.MessagePart;
-import de.fuzzlemann.ucutils.utils.text.TextUtils;
+import de.fuzzlemann.ucutils.base.text.Message;
+import de.fuzzlemann.ucutils.base.text.MessagePart;
+import de.fuzzlemann.ucutils.base.text.TextUtils;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.event.ClickEvent;
 import net.minecraft.util.text.event.HoverEvent;
@@ -28,6 +27,7 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
@@ -38,15 +38,15 @@ public class ActivityTestCommand implements TabCompletion {
 
     private static final File ACTIVITY_TEST_FOLDER = new File(FileManager.MC_DIRECTORY, "activityTests");
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd-MM-yyyy_HH-mm-ss");
+    private static long lastScreenshot;
 
     @Command(value = "activitytest", usage = "/%label% [Thema]")
     public boolean onCommand(ActivityTestType testType) {
         try {
-            new ClockCommand().onCommand();
+            CommandHandler.issueCommand("clock");
 
-            if (!ACTIVITY_TEST_FOLDER.exists()) {
+            if (!ACTIVITY_TEST_FOLDER.exists())
                 ACTIVITY_TEST_FOLDER.mkdir();
-            }
 
             File file = new File(ACTIVITY_TEST_FOLDER, testType.getName().toLowerCase() + "_" + System.currentTimeMillis() + ".jpg");
             ForgeUtils.makeScreenshot(file);
@@ -98,26 +98,28 @@ public class ActivityTestCommand implements TabCompletion {
     }
 
     private static void handleAlternateScreenshot() {
-        if (!KeyBindRegistry.isPressed(KeyBindRegistry.alternateScreenshot) && !KeyBindRegistry.isPressed(KeyBindRegistry.alternateScreenshotWithUpload))
+        if (!KeyBindRegistry.alternateScreenshot.isPressed() && !KeyBindRegistry.alternateScreenshotWithUpload.isPressed())
             return;
+
+        if (System.currentTimeMillis() - lastScreenshot < TimeUnit.SECONDS.toMillis(1)) return;
 
         if (!ACTIVITY_TEST_FOLDER.exists())
             ACTIVITY_TEST_FOLDER.mkdir();
 
         String date = DATE_FORMAT.format(new Date());
 
-        StringBuilder name = new StringBuilder(date);
+        StringBuilder sb = new StringBuilder(date);
         int i = 1;
-        while (new File(ACTIVITY_TEST_FOLDER, name + ".jpg").exists()) {
+        while (new File(ACTIVITY_TEST_FOLDER, sb + ".jpg").exists()) {
             if (i == 1) {
-                name.append("_");
-                name.append(i++);
+                sb.append("_").append(i++);
             } else {
-                name.replace(name.length() - 1, name.length(), String.valueOf(i));
+                sb.replace(sb.length() - 1, sb.length(), String.valueOf(i));
             }
         }
 
-        String fullName = name + ".jpg";
+        sb.append(".jpg");
+        String fullName = sb.toString();
 
         File file = new File(ACTIVITY_TEST_FOLDER, fullName);
         ForgeUtils.makeScreenshot(file);
@@ -138,8 +140,10 @@ public class ActivityTestCommand implements TabCompletion {
                 .advance()
                 .send();
 
-        if (KeyBindRegistry.isPressed(KeyBindRegistry.alternateScreenshotWithUpload)) {
-            new UploadImageCommand().onCommand(file);
+        if (KeyBindRegistry.alternateScreenshotWithUpload.isPressed()) {
+            CommandHandler.issueCommand("uploadimage", file.getAbsolutePath());
         }
+
+        lastScreenshot = System.currentTimeMillis();
     }
 }

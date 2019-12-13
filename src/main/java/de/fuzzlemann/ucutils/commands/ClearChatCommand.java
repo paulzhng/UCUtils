@@ -1,7 +1,7 @@
 package de.fuzzlemann.ucutils.commands;
 
 import de.fuzzlemann.ucutils.Main;
-import de.fuzzlemann.ucutils.utils.command.Command;
+import de.fuzzlemann.ucutils.base.command.Command;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 

@@ -83,7 +83,7 @@ public class APIUtils {
 
     private static String consumeEntity(HttpEntity entity) throws IOException {
         try {
-            return EntityUtils.toString(entity);
+            return EntityUtils.toString(entity, StandardCharsets.UTF_8);
         } finally {
             EntityUtils.consumeQuietly(entity);
         }

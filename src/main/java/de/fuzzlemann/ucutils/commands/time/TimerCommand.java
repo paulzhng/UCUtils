@@ -2,15 +2,15 @@ package de.fuzzlemann.ucutils.commands.time;
 
 import de.fuzzlemann.ucutils.Main;
 import de.fuzzlemann.ucutils.utils.FormatUtils;
-import de.fuzzlemann.ucutils.utils.abstraction.UPlayer;
-import de.fuzzlemann.ucutils.utils.command.Command;
-import de.fuzzlemann.ucutils.utils.command.CommandParam;
-import de.fuzzlemann.ucutils.utils.command.TabCompletion;
+import de.fuzzlemann.ucutils.base.abstraction.UPlayer;
+import de.fuzzlemann.ucutils.base.command.Command;
+import de.fuzzlemann.ucutils.base.command.CommandParam;
+import de.fuzzlemann.ucutils.base.command.TabCompletion;
 import de.fuzzlemann.ucutils.utils.sound.SoundUtil;
 import de.fuzzlemann.ucutils.utils.sound.TimerSound;
-import de.fuzzlemann.ucutils.utils.text.Message;
-import de.fuzzlemann.ucutils.utils.text.MessagePart;
-import de.fuzzlemann.ucutils.utils.text.TextUtils;
+import de.fuzzlemann.ucutils.base.text.Message;
+import de.fuzzlemann.ucutils.base.text.MessagePart;
+import de.fuzzlemann.ucutils.base.text.TextUtils;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.event.ClickEvent;
 import net.minecraft.util.text.event.HoverEvent;
@@ -112,25 +112,23 @@ public class TimerCommand implements TabCompletion {
         Message.Builder builder = Message.builder();
 
         builder.of("» ").color(TextFormatting.DARK_GRAY).advance()
-                .of("Timer\n").color(TextFormatting.DARK_AQUA).advance();
+                .of("Timer\n").color(TextFormatting.DARK_AQUA).advance()
+                .joiner(timers.entrySet())
+                .consumer((b, entry) -> {
+                    int id = entry.getKey();
+                    long time = entry.getValue();
 
-        for (Map.Entry<Integer, Long> entry : timers.entrySet()) {
-            int id = entry.getKey();
-            long time = entry.getValue();
+                    long timeLeft = time - System.currentTimeMillis();
 
-            long timeLeft = time - System.currentTimeMillis();
-
-            builder.of("  * ").color(TextFormatting.DARK_GRAY).advance()
-                    .of("#" + id).color(TextFormatting.GRAY).advance()
-                    .of(": ").color(TextFormatting.GRAY).advance()
-                    .messageParts(FormatUtils.formatMillisecondsToMessage(timeLeft))
-                    .of(" verbleibend").color(TextFormatting.GRAY).advance()
-                    .of(" [✗]").color(TextFormatting.RED).clickEvent(ClickEvent.Action.RUN_COMMAND, "/timer stop " + id)
-                    .hoverEvent(HoverEvent.Action.SHOW_TEXT, MessagePart.simple("Den Timer löschen", TextFormatting.RED)).advance()
-                    .newLine();
-        }
-
-        builder.send();
+                    b.of("  * ").color(TextFormatting.DARK_GRAY).advance()
+                            .of("#" + id).color(TextFormatting.GRAY).advance()
+                            .of(": ").color(TextFormatting.GRAY).advance()
+                            .messageParts(FormatUtils.formatMillisecondsToMessage(timeLeft))
+                            .of(" verbleibend").color(TextFormatting.GRAY).advance()
+                            .of(" [✗]").color(TextFormatting.RED).clickEvent(ClickEvent.Action.RUN_COMMAND, "/timer stop " + id)
+                            .hoverEvent(HoverEvent.Action.SHOW_TEXT, MessagePart.simple("Den Timer löschen", TextFormatting.RED)).advance();
+                }).newLineJoiner().advance()
+                .send();
     }
 
     @Override

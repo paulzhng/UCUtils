@@ -4,10 +4,10 @@ import de.fuzzlemann.ucutils.teamspeak.CommandResponse;
 import de.fuzzlemann.ucutils.teamspeak.TSUtils;
 import de.fuzzlemann.ucutils.teamspeak.commands.ClientMoveCommand;
 import de.fuzzlemann.ucutils.teamspeak.objects.Client;
-import de.fuzzlemann.ucutils.utils.command.Command;
-import de.fuzzlemann.ucutils.utils.command.CommandParam;
+import de.fuzzlemann.ucutils.base.command.Command;
+import de.fuzzlemann.ucutils.base.command.CommandParam;
 import de.fuzzlemann.ucutils.utils.mcapi.MojangAPI;
-import de.fuzzlemann.ucutils.utils.text.TextUtils;
+import de.fuzzlemann.ucutils.base.text.TextUtils;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 

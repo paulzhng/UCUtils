@@ -1,7 +1,7 @@
 package de.fuzzlemann.ucutils.utils;
 
-import de.fuzzlemann.ucutils.utils.text.Message;
-import de.fuzzlemann.ucutils.utils.text.MessagePart;
+import de.fuzzlemann.ucutils.base.text.Message;
+import de.fuzzlemann.ucutils.base.text.MessagePart;
 import net.minecraft.util.text.TextFormatting;
 
 import java.util.ArrayList;
@@ -18,8 +18,8 @@ public class FormatUtils {
         return Message.builder()
                 .joiner(timeElements)
                 .consumer((b, s) -> b.of(s).color(TextFormatting.BLUE).advance())
-                .commaJoiner(TextFormatting.GRAY)
-                .andNiceJoiner(TextFormatting.GRAY)
+                .commaJoiner()
+                .andNiceJoiner()
                 .advance()
                 .build()
                 .getMessageParts();
@@ -53,16 +53,6 @@ public class FormatUtils {
         }
 
         return timeElements;
-    }
-
-    public static long toMilliseconds(String[] input) {
-        long ms = 0;
-
-        for (String s : input) {
-            ms += toMilliseconds(s);
-        }
-
-        return ms;
     }
 
     public static long toMilliseconds(String input) {

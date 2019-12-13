@@ -6,13 +6,13 @@ import de.fuzzlemann.ucutils.teamspeak.commands.ChannelListCommand;
 import de.fuzzlemann.ucutils.teamspeak.commands.ClientMoveCommand;
 import de.fuzzlemann.ucutils.teamspeak.objects.Channel;
 import de.fuzzlemann.ucutils.utils.ForgeUtils;
-import de.fuzzlemann.ucutils.utils.abstraction.UPlayer;
-import de.fuzzlemann.ucutils.utils.command.Command;
-import de.fuzzlemann.ucutils.utils.command.CommandParam;
-import de.fuzzlemann.ucutils.utils.command.TabCompletion;
+import de.fuzzlemann.ucutils.base.abstraction.UPlayer;
+import de.fuzzlemann.ucutils.base.command.Command;
+import de.fuzzlemann.ucutils.base.command.CommandParam;
+import de.fuzzlemann.ucutils.base.command.TabCompletion;
 import de.fuzzlemann.ucutils.utils.faction.Faction;
-import de.fuzzlemann.ucutils.utils.text.Message;
-import de.fuzzlemann.ucutils.utils.text.TextUtils;
+import de.fuzzlemann.ucutils.base.text.Message;
+import de.fuzzlemann.ucutils.base.text.TextUtils;
 import net.minecraft.util.text.TextFormatting;
 
 import java.util.ArrayList;
@@ -25,7 +25,7 @@ import java.util.Map;
  */
 public class TSJoinCommand implements TabCompletion {
 
-    @Command(value = "tsjoin", usage = "/%label% [Channel] (Passwort)")
+    @Command(value = "tsjoin", usage = "/%label% [Channel] (Passwort)", async = true)
     public boolean onCommand(String channelName,
                              @CommandParam(joinStart = true, required = false, defaultValue = CommandParam.NULL) String password) {
         ChannelListCommand.Response channelListResponse = new ChannelListCommand().getResponse();

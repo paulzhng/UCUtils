@@ -1,14 +1,14 @@
 package de.fuzzlemann.ucutils.commands.faction.police;
 
-import de.fuzzlemann.ucutils.utils.abstraction.UPlayer;
-import de.fuzzlemann.ucutils.utils.command.Command;
-import de.fuzzlemann.ucutils.utils.command.CommandParam;
-import de.fuzzlemann.ucutils.utils.command.ParameterParser;
-import de.fuzzlemann.ucutils.utils.command.TabCompletion;
+import de.fuzzlemann.ucutils.base.abstraction.UPlayer;
+import de.fuzzlemann.ucutils.base.command.Command;
+import de.fuzzlemann.ucutils.base.command.CommandParam;
+import de.fuzzlemann.ucutils.base.command.ParameterParser;
+import de.fuzzlemann.ucutils.base.command.TabCompletion;
 import de.fuzzlemann.ucutils.utils.faction.police.Wanted;
 import de.fuzzlemann.ucutils.utils.faction.police.WantedManager;
 import de.fuzzlemann.ucutils.utils.math.Expression;
-import de.fuzzlemann.ucutils.utils.text.TextUtils;
+import de.fuzzlemann.ucutils.base.text.TextUtils;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -17,7 +17,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static de.fuzzlemann.ucutils.utils.command.CommandParam.NULL;
+import static de.fuzzlemann.ucutils.base.command.CommandParam.NULL;
 
 /**
  * @author Fuzzlemann
@@ -101,7 +101,7 @@ public class ModifyWantedsCommand implements TabCompletion {
         DRUG_REMOVAL_10("da10", " + Drogenabnahme", "x-10"),
         DRUG_REMOVAL_15("da15", " + Drogenabnahme", "x-15"),
         DRIVERS_LICENSE_WITHDRAWAL("fsa", " + Führerscheinabnahme", "x"),
-        RESISTANCE_TO_ENFORCEMENT_OFFICERS("wgv", " + Widerstand gegen Vollstreckungsbeamte", "x+10");
+        RESISTANCE_TO_ENFORCEMENT_OFFICERS("wgv", " + Widerstand gegen Vollstreckungsbeamte", "x+5");
 
         private final String flagArgument;
         private final String postponeReason;

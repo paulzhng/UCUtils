@@ -1,9 +1,9 @@
 package de.fuzzlemann.ucutils.utils.cape;
 
 import de.fuzzlemann.ucutils.Main;
-import de.fuzzlemann.ucutils.utils.initializor.IInitializor;
-import de.fuzzlemann.ucutils.utils.initializor.InitMode;
-import de.fuzzlemann.ucutils.utils.initializor.Initializor;
+import de.fuzzlemann.ucutils.base.initializor.IInitializor;
+import de.fuzzlemann.ucutils.base.initializor.InitMode;
+import de.fuzzlemann.ucutils.base.initializor.Initializor;
 import net.minecraft.client.renderer.entity.RenderPlayer;
 import net.minecraft.entity.player.EnumPlayerModelParts;
 

@@ -1,16 +1,20 @@
 package de.fuzzlemann.ucutils.commands;
 
+import com.google.common.reflect.TypeToken;
+import com.google.gson.Gson;
 import de.fuzzlemann.ucutils.Main;
+import de.fuzzlemann.ucutils.common.DonationEntry;
 import de.fuzzlemann.ucutils.teamspeak.TSClientQuery;
 import de.fuzzlemann.ucutils.teamspeak.exceptions.ClientQueryException;
 import de.fuzzlemann.ucutils.utils.Logger;
-import de.fuzzlemann.ucutils.utils.abstraction.UPlayer;
-import de.fuzzlemann.ucutils.utils.command.Command;
-import de.fuzzlemann.ucutils.utils.command.CommandParam;
-import de.fuzzlemann.ucutils.utils.command.TabCompletion;
-import de.fuzzlemann.ucutils.utils.text.Message;
-import de.fuzzlemann.ucutils.utils.text.MessagePart;
-import de.fuzzlemann.ucutils.utils.text.TextUtils;
+import de.fuzzlemann.ucutils.base.abstraction.UPlayer;
+import de.fuzzlemann.ucutils.utils.api.APIUtils;
+import de.fuzzlemann.ucutils.base.command.Command;
+import de.fuzzlemann.ucutils.base.command.CommandParam;
+import de.fuzzlemann.ucutils.base.command.TabCompletion;
+import de.fuzzlemann.ucutils.base.text.Message;
+import de.fuzzlemann.ucutils.base.text.MessagePart;
+import de.fuzzlemann.ucutils.base.text.TextUtils;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.event.ClickEvent;
 import net.minecraft.util.text.event.HoverEvent;
@@ -26,8 +30,9 @@ import java.util.List;
 public class UCUtilsCommand implements TabCompletion {
 
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
-    private final long compileTime = 1570017583699L; //updated by gradle
+    private final long compileTime = 1576244232552L; //updated by gradle
     private final String formattedTime = dateFormat.format(new Date(compileTime));
+    private final Gson gson = new Gson();
 
     @Command("ucutils")
     public boolean onCommand(@CommandParam(required = false, requiredValue = "teamSpeakReconnect") boolean teamSpeakReconnect) {
@@ -42,7 +47,7 @@ public class UCUtilsCommand implements TabCompletion {
             return true;
         }
 
-        Message.builder()
+        Message.Builder builder = Message.builder()
                 .prefix()
                 .of("UCUtils ").color(TextFormatting.GRAY).advance()
                 .of(Main.VERSION).color(TextFormatting.BLUE).advance()
@@ -67,8 +72,30 @@ public class UCUtilsCommand implements TabCompletion {
                 .newLine()
                 .prefix()
                 .of("~ by ").color(TextFormatting.GRAY).advance()
-                .of("Fuzzlemann").color(TextFormatting.BLUE).advance()
-                .send();
+                .of("Fuzzlemann").color(TextFormatting.BLUE).advance();
+
+        String response = APIUtils.get("http://tomcat.fuzzlemann.de/factiononline/topDonors");
+        if (response != null) {
+            List<DonationEntry> topDonations = gson.fromJson(response, new TypeToken<List<DonationEntry>>() {
+            }.getType());
+
+            builder.newLine()
+                    .prefix()
+                    .of("~ Danke an ").color(TextFormatting.GRAY).advance()
+                    .joiner(topDonations)
+                    .commaJoiner()
+                    .andNiceJoiner()
+                    .consumer((b, donation) -> b.of(donation.getName()).color(TextFormatting.BLUE)
+                            .hoverEvent(HoverEvent.Action.SHOW_TEXT, Message.builder().of("\"").color(TextFormatting.GRAY).advance()
+                                    .of(donation.getMessage()).color(TextFormatting.BLUE).advance()
+                                    .of("\"").color(TextFormatting.GRAY).advance().build()).advance()
+                            .of(" (").color(TextFormatting.GRAY).advance()
+                            .of(donation.getAmount() + "€").color(TextFormatting.BLUE).advance()
+                            .of(")").color(TextFormatting.GRAY).advance()).advance()
+                    .of("!").color(TextFormatting.GRAY).advance();
+        }
+
+        builder.send();
         return true;
     }
 

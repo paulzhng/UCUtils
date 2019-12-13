@@ -1,7 +1,7 @@
 package de.fuzzlemann.ucutils.utils.sound;
 
 import de.fuzzlemann.ucutils.Main;
-import de.fuzzlemann.ucutils.utils.abstraction.AbstractionLayer;
+import de.fuzzlemann.ucutils.base.abstraction.AbstractionLayer;
 import net.minecraft.client.audio.MovingSound;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.Vec3d;

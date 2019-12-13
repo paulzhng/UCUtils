@@ -4,8 +4,8 @@ import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 import de.fuzzlemann.ucutils.common.House;
 import de.fuzzlemann.ucutils.utils.api.APIUtils;
-import de.fuzzlemann.ucutils.utils.data.DataLoader;
-import de.fuzzlemann.ucutils.utils.data.DataModule;
+import de.fuzzlemann.ucutils.base.data.DataLoader;
+import de.fuzzlemann.ucutils.base.data.DataModule;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +23,6 @@ public class HouseUtil implements DataLoader {
         String json = APIUtils.get("http://tomcat.fuzzlemann.de/factiononline/houses");
 
         Gson gson = new Gson();
-        //noinspection UnstableApiUsage
         List<House> houses = gson.fromJson(json, new TypeToken<List<House>>() {
         }.getType());
 

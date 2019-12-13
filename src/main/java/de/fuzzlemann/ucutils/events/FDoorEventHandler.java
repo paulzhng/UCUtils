@@ -1,8 +1,8 @@
 package de.fuzzlemann.ucutils.events;
 
 import com.google.common.collect.ImmutableSet;
-import de.fuzzlemann.ucutils.utils.abstraction.AbstractionLayer;
-import de.fuzzlemann.ucutils.utils.abstraction.UPlayer;
+import de.fuzzlemann.ucutils.base.abstraction.AbstractionLayer;
+import de.fuzzlemann.ucutils.base.abstraction.UPlayer;
 import net.minecraft.block.BlockAir;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;

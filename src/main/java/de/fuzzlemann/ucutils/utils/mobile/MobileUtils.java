@@ -1,7 +1,7 @@
 package de.fuzzlemann.ucutils.utils.mobile;
 
 import com.google.common.util.concurrent.Uninterruptibles;
-import de.fuzzlemann.ucutils.utils.abstraction.AbstractionLayer;
+import de.fuzzlemann.ucutils.base.abstraction.AbstractionLayer;
 import de.fuzzlemann.ucutils.utils.io.JsonManager;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.fml.common.Mod;

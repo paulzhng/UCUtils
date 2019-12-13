@@ -1,6 +1,6 @@
 package de.fuzzlemann.ucutils.utils;
 
-import de.fuzzlemann.ucutils.utils.command.tabcompletion.TabCompleterEx;
+import de.fuzzlemann.ucutils.base.command.tabcompletion.TabCompleterEx;
 import net.minecraft.client.gui.GuiChat;
 
 import java.lang.annotation.Annotation;

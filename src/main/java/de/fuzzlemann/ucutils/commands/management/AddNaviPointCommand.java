@@ -1,11 +1,11 @@
 package de.fuzzlemann.ucutils.commands.management;
 
 import de.fuzzlemann.ucutils.common.CustomNaviPoint;
-import de.fuzzlemann.ucutils.utils.abstraction.UPlayer;
+import de.fuzzlemann.ucutils.base.abstraction.UPlayer;
 import de.fuzzlemann.ucutils.utils.api.APIUtils;
-import de.fuzzlemann.ucutils.utils.command.Command;
-import de.fuzzlemann.ucutils.utils.command.CommandParam;
-import de.fuzzlemann.ucutils.utils.text.TextUtils;
+import de.fuzzlemann.ucutils.base.command.Command;
+import de.fuzzlemann.ucutils.base.command.CommandParam;
+import de.fuzzlemann.ucutils.base.text.TextUtils;
 import net.minecraft.util.math.BlockPos;
 
 import java.util.ArrayList;

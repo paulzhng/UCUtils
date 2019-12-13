@@ -2,8 +2,8 @@ package de.fuzzlemann.ucutils.utils.punishment;
 
 import com.google.gson.Gson;
 import de.fuzzlemann.ucutils.utils.api.APIUtils;
-import de.fuzzlemann.ucutils.utils.data.DataLoader;
-import de.fuzzlemann.ucutils.utils.data.DataModule;
+import de.fuzzlemann.ucutils.base.data.DataLoader;
+import de.fuzzlemann.ucutils.base.data.DataModule;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;

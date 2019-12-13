@@ -5,10 +5,10 @@ import com.google.gson.Gson;
 import de.fuzzlemann.ucutils.common.CustomNaviPoint;
 import de.fuzzlemann.ucutils.utils.ForgeUtils;
 import de.fuzzlemann.ucutils.utils.api.APIUtils;
-import de.fuzzlemann.ucutils.utils.data.DataLoader;
-import de.fuzzlemann.ucutils.utils.data.DataModule;
-import de.fuzzlemann.ucutils.utils.text.Message;
-import de.fuzzlemann.ucutils.utils.text.MessagePart;
+import de.fuzzlemann.ucutils.base.data.DataLoader;
+import de.fuzzlemann.ucutils.base.data.DataModule;
+import de.fuzzlemann.ucutils.base.text.Message;
+import de.fuzzlemann.ucutils.base.text.MessagePart;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
@@ -108,7 +108,6 @@ public class NavigationUtil implements DataLoader {
         String json = APIUtils.get("http://tomcat.fuzzlemann.de/factiononline/navipoints");
 
         Gson gson = new Gson();
-        //noinspection UnstableApiUsage
         List<CustomNaviPoint> naviPoints = gson.fromJson(json, new TypeToken<List<CustomNaviPoint>>() {
         }.getType());
 

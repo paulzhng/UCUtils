@@ -1,6 +1,6 @@
 package de.fuzzlemann.ucutils.events;
 
-import de.fuzzlemann.ucutils.utils.abstraction.AbstractionLayer;
+import de.fuzzlemann.ucutils.base.abstraction.AbstractionLayer;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;

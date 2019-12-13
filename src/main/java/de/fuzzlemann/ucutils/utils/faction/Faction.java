@@ -1,6 +1,6 @@
 package de.fuzzlemann.ucutils.utils.faction;
 
-import de.fuzzlemann.ucutils.utils.command.ParameterParser;
+import de.fuzzlemann.ucutils.base.command.ParameterParser;
 import de.fuzzlemann.ucutils.utils.info.CommandDescription;
 import de.fuzzlemann.ucutils.utils.info.CommandInfo;
 import de.fuzzlemann.ucutils.utils.info.FactionInfo;

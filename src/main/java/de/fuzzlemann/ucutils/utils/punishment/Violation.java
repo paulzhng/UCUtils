@@ -2,7 +2,7 @@ package de.fuzzlemann.ucutils.utils.punishment;
 
 import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.ListMultimap;
-import de.fuzzlemann.ucutils.utils.command.ParameterParser;
+import de.fuzzlemann.ucutils.base.command.ParameterParser;
 
 import java.util.ArrayList;
 import java.util.Collections;

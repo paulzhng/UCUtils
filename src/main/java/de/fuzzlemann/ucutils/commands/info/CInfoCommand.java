@@ -1,7 +1,7 @@
 package de.fuzzlemann.ucutils.commands.info;
 
-import de.fuzzlemann.ucutils.utils.abstraction.UPlayer;
-import de.fuzzlemann.ucutils.utils.command.Command;
+import de.fuzzlemann.ucutils.base.abstraction.UPlayer;
+import de.fuzzlemann.ucutils.base.command.Command;
 import de.fuzzlemann.ucutils.utils.info.CommandDescription;
 import de.fuzzlemann.ucutils.utils.info.CommandInfo;
 import net.minecraftforge.fml.relauncher.Side;

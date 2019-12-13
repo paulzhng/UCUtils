@@ -6,9 +6,9 @@ import de.fuzzlemann.ucutils.teamspeak.TSClientQuery;
 import de.fuzzlemann.ucutils.utils.AnalyticsUtil;
 import de.fuzzlemann.ucutils.utils.Logger;
 import de.fuzzlemann.ucutils.utils.chatlog.ChatLogger;
-import de.fuzzlemann.ucutils.utils.command.execution.CommandRegistry;
-import de.fuzzlemann.ucutils.utils.data.DataManager;
-import de.fuzzlemann.ucutils.utils.initializor.InitializorHandler;
+import de.fuzzlemann.ucutils.base.command.execution.CommandRegistry;
+import de.fuzzlemann.ucutils.base.data.DataManager;
+import de.fuzzlemann.ucutils.base.initializor.InitializorHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.common.config.Config;
 import net.minecraftforge.common.config.ConfigManager;
@@ -31,7 +31,7 @@ public class Main {
     public static final Minecraft MINECRAFT = Minecraft.getMinecraft();
 
     public static final String MOD_ID = "ucutils";
-    public static final String VERSION = "1.12.2-1.7";
+    public static final String VERSION = "1.12.2-1.8";
 
     static final String NAME = "UC Utils";
     static final String CERTIFICATE_FINGERPRINT = "d3c444c8828b6fe0d86675d009f6c057d4bf25f1";

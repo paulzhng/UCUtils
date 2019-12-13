@@ -71,7 +71,6 @@ public class JsonManager {
         createFile(file);
 
         List<T> objectList = new ArrayList<>();
-
         Gson gson = new Gson();
 
         try {

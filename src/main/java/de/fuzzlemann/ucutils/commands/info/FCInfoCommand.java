@@ -1,8 +1,8 @@
 package de.fuzzlemann.ucutils.commands.info;
 
-import de.fuzzlemann.ucutils.utils.abstraction.UPlayer;
-import de.fuzzlemann.ucutils.utils.command.Command;
-import de.fuzzlemann.ucutils.utils.command.CommandParam;
+import de.fuzzlemann.ucutils.base.abstraction.UPlayer;
+import de.fuzzlemann.ucutils.base.command.Command;
+import de.fuzzlemann.ucutils.base.command.CommandParam;
 import de.fuzzlemann.ucutils.utils.faction.Faction;
 import de.fuzzlemann.ucutils.utils.info.FactionInfo;
 import net.minecraft.util.text.TextComponentString;

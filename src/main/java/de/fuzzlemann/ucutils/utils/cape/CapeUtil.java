@@ -2,8 +2,8 @@ package de.fuzzlemann.ucutils.utils.cape;
 
 import de.fuzzlemann.ucutils.Main;
 import de.fuzzlemann.ucutils.utils.api.APIUtils;
-import de.fuzzlemann.ucutils.utils.data.DataLoader;
-import de.fuzzlemann.ucutils.utils.data.DataModule;
+import de.fuzzlemann.ucutils.base.data.DataLoader;
+import de.fuzzlemann.ucutils.base.data.DataModule;
 import net.minecraft.client.renderer.IImageBuffer;
 import net.minecraft.client.renderer.ThreadDownloadImageData;
 import net.minecraft.util.ResourceLocation;

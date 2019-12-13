@@ -1,10 +1,10 @@
 package de.fuzzlemann.ucutils.commands.faction;
 
 import com.google.common.util.concurrent.Uninterruptibles;
-import de.fuzzlemann.ucutils.utils.abstraction.AbstractionLayer;
-import de.fuzzlemann.ucutils.utils.command.Command;
+import de.fuzzlemann.ucutils.base.abstraction.AbstractionLayer;
+import de.fuzzlemann.ucutils.base.command.Command;
 import de.fuzzlemann.ucutils.utils.faction.Faction;
-import de.fuzzlemann.ucutils.utils.text.Message;
+import de.fuzzlemann.ucutils.base.text.Message;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.event.ClickEvent;
 import net.minecraft.util.text.event.HoverEvent;
@@ -71,6 +71,7 @@ public class CheckActiveMembersCommand {
                 .consumer((b, faction) -> {
                     Map<Boolean, Integer> members = getMembers(faction);
                     int activeMembers = members.get(true);
+                    int inactiveMembers = members.get(false);
 
                     b.of(" * ").color(TextFormatting.DARK_GRAY).advance()
                             .of(faction.getFactionInfo().getFullName() + ": ").color(TextFormatting.GRAY)
@@ -78,7 +79,7 @@ public class CheckActiveMembersCommand {
                             .hoverEvent(HoverEvent.Action.SHOW_TEXT, Message.builder().of("/memberinfo").color(TextFormatting.AQUA).advance().of(" ausführen").color(TextFormatting.GRAY).advance().build()).advance()
                             .of(String.valueOf(activeMembers)).color(TextFormatting.DARK_GREEN).advance()
                             .of("/").color(TextFormatting.GRAY).advance()
-                            .of(String.valueOf(members.size())).color(TextFormatting.GREEN).advance();
+                            .of(String.valueOf(activeMembers + inactiveMembers)).color(TextFormatting.GREEN).advance();
                 }).newLineJoiner().advance()
                 .send();
 

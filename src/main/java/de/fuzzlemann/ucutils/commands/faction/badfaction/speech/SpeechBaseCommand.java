@@ -2,7 +2,7 @@ package de.fuzzlemann.ucutils.commands.faction.badfaction.speech;
 
 import de.fuzzlemann.ucutils.utils.faction.badfaction.speech.SpeechModifier;
 import de.fuzzlemann.ucutils.utils.faction.badfaction.speech.SpeechModifyUtil;
-import de.fuzzlemann.ucutils.utils.text.TextUtils;
+import de.fuzzlemann.ucutils.base.text.TextUtils;
 import net.minecraftforge.client.event.ClientChatEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;

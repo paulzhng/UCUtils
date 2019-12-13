@@ -2,15 +2,15 @@ package de.fuzzlemann.ucutils.commands.faction;
 
 import de.fuzzlemann.ucutils.common.CustomNaviPoint;
 import de.fuzzlemann.ucutils.utils.ForgeUtils;
-import de.fuzzlemann.ucutils.utils.abstraction.AbstractionLayer;
-import de.fuzzlemann.ucutils.utils.abstraction.UPlayer;
-import de.fuzzlemann.ucutils.utils.command.Command;
-import de.fuzzlemann.ucutils.utils.command.CommandParam;
-import de.fuzzlemann.ucutils.utils.command.ParameterParser;
-import de.fuzzlemann.ucutils.utils.command.TabCompletion;
+import de.fuzzlemann.ucutils.base.abstraction.AbstractionLayer;
+import de.fuzzlemann.ucutils.base.abstraction.UPlayer;
+import de.fuzzlemann.ucutils.base.command.Command;
+import de.fuzzlemann.ucutils.base.command.CommandParam;
+import de.fuzzlemann.ucutils.base.command.ParameterParser;
+import de.fuzzlemann.ucutils.base.command.TabCompletion;
 import de.fuzzlemann.ucutils.utils.location.navigation.NavigationUtil;
-import de.fuzzlemann.ucutils.utils.text.Message;
-import de.fuzzlemann.ucutils.utils.text.MessagePart;
+import de.fuzzlemann.ucutils.base.text.Message;
+import de.fuzzlemann.ucutils.base.text.MessagePart;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
@@ -24,6 +24,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.commons.lang3.ObjectUtils;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -70,6 +71,8 @@ public class CallReinforcementCommand implements TabCompletion {
             }
 
             CustomNaviPoint nearestNaviPoint = ForgeUtils.getNearestObject(new BlockPos(posX, posY, posZ), NavigationUtil.NAVI_POINTS, CustomNaviPoint::getX, CustomNaviPoint::getY, CustomNaviPoint::getZ).getValue();
+            if (nearestNaviPoint == null)
+                nearestNaviPoint = new CustomNaviPoint(Collections.singletonList("n/a"), 0, 0, 0); //fix for instances where the webserver is not available
 
             Message hover = Message.builder()
                     .of("X: ").color(TextFormatting.GRAY).advance()

@@ -4,8 +4,8 @@ import com.mojang.authlib.exceptions.AuthenticationException;
 import de.fuzzlemann.ucutils.Main;
 import de.fuzzlemann.ucutils.config.UCUtilsConfig;
 import de.fuzzlemann.ucutils.utils.Logger;
-import de.fuzzlemann.ucutils.utils.data.DataLoader;
-import de.fuzzlemann.ucutils.utils.data.DataModule;
+import de.fuzzlemann.ucutils.base.data.DataLoader;
+import de.fuzzlemann.ucutils.base.data.DataModule;
 import net.minecraft.client.Minecraft;
 
 /**

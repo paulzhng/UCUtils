@@ -3,7 +3,7 @@ package de.fuzzlemann.ucutils.events;
 import de.fuzzlemann.ucutils.Main;
 import de.fuzzlemann.ucutils.config.UCUtilsConfig;
 import de.fuzzlemann.ucutils.utils.faction.HouseBanHandler;
-import de.fuzzlemann.ucutils.utils.text.TextUtils;
+import de.fuzzlemann.ucutils.base.text.TextUtils;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemSkull;

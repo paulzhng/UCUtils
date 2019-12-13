@@ -2,7 +2,7 @@ package de.fuzzlemann.ucutils.teamspeak.commands;
 
 import de.fuzzlemann.ucutils.teamspeak.CommandResponse;
 import de.fuzzlemann.ucutils.teamspeak.objects.Client;
-import de.fuzzlemann.ucutils.utils.text.TextUtils;
+import de.fuzzlemann.ucutils.base.text.TextUtils;
 
 import java.util.Arrays;
 import java.util.List;

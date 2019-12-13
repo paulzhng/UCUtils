@@ -2,8 +2,8 @@ package de.fuzzlemann.ucutils.utils;
 
 import com.google.common.collect.Maps;
 import de.fuzzlemann.ucutils.Main;
-import de.fuzzlemann.ucutils.utils.abstraction.AbstractionLayer;
-import de.fuzzlemann.ucutils.utils.text.TextUtils;
+import de.fuzzlemann.ucutils.base.abstraction.AbstractionLayer;
+import de.fuzzlemann.ucutils.base.text.TextUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.client.network.NetworkPlayerInfo;
@@ -42,7 +42,7 @@ public class ForgeUtils {
         }
 
         try {
-            Class.forName("de.fuzzlemann.ucutils.utils.command.execution.CommandTest");
+            Class.forName("de.fuzzlemann.ucutils.base.command.execution.CommandTest");
             isTest = true;
         } catch (ClassNotFoundException e) {
             isTest = false;

@@ -1,8 +1,8 @@
 package de.fuzzlemann.ucutils.commands.jobs;
 
-import de.fuzzlemann.ucutils.utils.abstraction.UPlayer;
-import de.fuzzlemann.ucutils.utils.command.Command;
-import de.fuzzlemann.ucutils.utils.text.TextUtils;
+import de.fuzzlemann.ucutils.base.abstraction.UPlayer;
+import de.fuzzlemann.ucutils.base.command.Command;
+import de.fuzzlemann.ucutils.base.text.TextUtils;
 import net.minecraft.scoreboard.Score;
 import net.minecraft.scoreboard.Scoreboard;
 import net.minecraftforge.fml.relauncher.Side;

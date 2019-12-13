@@ -1,7 +1,7 @@
 package de.fuzzlemann.ucutils.utils.faction.badfaction.drug;
 
-import de.fuzzlemann.ucutils.utils.data.DataLoader;
-import de.fuzzlemann.ucutils.utils.data.DataModule;
+import de.fuzzlemann.ucutils.base.data.DataLoader;
+import de.fuzzlemann.ucutils.base.data.DataModule;
 import de.fuzzlemann.ucutils.utils.io.JsonManager;
 
 import java.io.File;

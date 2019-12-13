@@ -2,8 +2,8 @@ package de.fuzzlemann.ucutils.events;
 
 import de.fuzzlemann.ucutils.Main;
 import de.fuzzlemann.ucutils.keybind.KeyBindRegistry;
-import de.fuzzlemann.ucutils.utils.abstraction.AbstractionLayer;
-import de.fuzzlemann.ucutils.utils.abstraction.UPlayer;
+import de.fuzzlemann.ucutils.base.abstraction.AbstractionLayer;
+import de.fuzzlemann.ucutils.base.abstraction.UPlayer;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;

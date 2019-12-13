@@ -1,8 +1,8 @@
 package de.fuzzlemann.ucutils.utils.faction.badfaction.blacklist;
 
 import de.fuzzlemann.ucutils.utils.ForgeUtils;
-import de.fuzzlemann.ucutils.utils.data.DataLoader;
-import de.fuzzlemann.ucutils.utils.data.DataModule;
+import de.fuzzlemann.ucutils.base.data.DataLoader;
+import de.fuzzlemann.ucutils.base.data.DataModule;
 import de.fuzzlemann.ucutils.utils.io.JsonManager;
 
 import java.io.File;

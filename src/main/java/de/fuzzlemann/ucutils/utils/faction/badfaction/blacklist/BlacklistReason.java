@@ -1,6 +1,6 @@
 package de.fuzzlemann.ucutils.utils.faction.badfaction.blacklist;
 
-import de.fuzzlemann.ucutils.utils.command.ParameterParser;
+import de.fuzzlemann.ucutils.base.command.ParameterParser;
 
 import java.util.Objects;
 

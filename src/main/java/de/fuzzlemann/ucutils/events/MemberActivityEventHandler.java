@@ -1,6 +1,6 @@
 package de.fuzzlemann.ucutils.events;
 
-import de.fuzzlemann.ucutils.utils.text.Message;
+import de.fuzzlemann.ucutils.base.text.Message;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;

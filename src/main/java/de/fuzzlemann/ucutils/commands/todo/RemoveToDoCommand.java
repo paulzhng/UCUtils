@@ -1,7 +1,7 @@
 package de.fuzzlemann.ucutils.commands.todo;
 
-import de.fuzzlemann.ucutils.utils.command.Command;
-import de.fuzzlemann.ucutils.utils.text.TextUtils;
+import de.fuzzlemann.ucutils.base.command.Command;
+import de.fuzzlemann.ucutils.base.text.TextUtils;
 import de.fuzzlemann.ucutils.utils.todo.ToDo;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;

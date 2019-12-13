@@ -1,13 +1,13 @@
 package de.fuzzlemann.ucutils.commands.faction.badfaction.blacklist;
 
-import de.fuzzlemann.ucutils.utils.abstraction.UPlayer;
-import de.fuzzlemann.ucutils.utils.command.Command;
-import de.fuzzlemann.ucutils.utils.command.CommandParam;
-import de.fuzzlemann.ucutils.utils.command.TabCompletion;
+import de.fuzzlemann.ucutils.base.abstraction.UPlayer;
+import de.fuzzlemann.ucutils.base.command.Command;
+import de.fuzzlemann.ucutils.base.command.CommandParam;
+import de.fuzzlemann.ucutils.base.command.TabCompletion;
 import de.fuzzlemann.ucutils.utils.faction.badfaction.blacklist.BlacklistReason;
 import de.fuzzlemann.ucutils.utils.faction.badfaction.blacklist.BlacklistUtil;
-import de.fuzzlemann.ucutils.utils.text.Message;
-import de.fuzzlemann.ucutils.utils.text.TextUtils;
+import de.fuzzlemann.ucutils.base.text.Message;
+import de.fuzzlemann.ucutils.base.text.TextUtils;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -72,17 +72,16 @@ public class BlacklistPriceCommand implements TabCompletion {
     }
 
     private void sendBlacklistPrices() {
-        Message.Builder builder = Message.builder();
-
-        builder.of("» ").color(TextFormatting.DARK_GRAY).advance()
-                .of("Eingestellte Blacklistpreise\n").color(TextFormatting.DARK_AQUA).advance();
-        for (BlacklistReason blacklistReason : BlacklistUtil.BLACKLIST_REASONS) {
-            builder.of("  * ").color(TextFormatting.DARK_GRAY).advance()
-                    .of(blacklistReason.getReason()).color(TextFormatting.GRAY).advance()
-                    .of(": ").color(TextFormatting.DARK_GRAY).advance()
-                    .of(blacklistReason.getPrice() + "$\n").color(TextFormatting.BLUE).advance();
-        }
-
-        builder.send();
+        Message.builder()
+                .of("» ").color(TextFormatting.DARK_GRAY).advance()
+                .of("Eingestellte Blacklistpreise\n").color(TextFormatting.DARK_AQUA).advance()
+                .joiner(BlacklistUtil.BLACKLIST_REASONS)
+                .consumer((b, blacklistReason) -> b.of("  * ").color(TextFormatting.DARK_GRAY).advance()
+                        .of(blacklistReason.getReason()).color(TextFormatting.GRAY).advance()
+                        .of(": ").color(TextFormatting.DARK_GRAY).advance()
+                        .of(blacklistReason.getPrice() + "$").color(TextFormatting.BLUE).advance())
+                .newLineJoiner()
+                .advance()
+                .send();
     }
 }

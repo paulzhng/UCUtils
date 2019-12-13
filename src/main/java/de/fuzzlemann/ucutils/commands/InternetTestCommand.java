@@ -1,9 +1,9 @@
 package de.fuzzlemann.ucutils.commands;
 
 import de.fuzzlemann.ucutils.utils.Logger;
-import de.fuzzlemann.ucutils.utils.command.Command;
-import de.fuzzlemann.ucutils.utils.text.Message;
-import de.fuzzlemann.ucutils.utils.text.TextUtils;
+import de.fuzzlemann.ucutils.base.command.Command;
+import de.fuzzlemann.ucutils.base.text.Message;
+import de.fuzzlemann.ucutils.base.text.TextUtils;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -25,27 +25,23 @@ public class InternetTestCommand {
 
     @Command(value = {"internettest", "inettest"}, async = true)
     public boolean onCommand() {
-        Message.Builder builder = Message.builder();
+        Message.builder()
+                .joiner(hosts)
+                .consumer((b, host) -> {
+                    String result;
+                    try {
+                        result = ping(host);
+                    } catch (IOException e) {
+                        Logger.LOGGER.catching(e);
+                        TextUtils.error("Konnte keine Verbindung zu " + host + " herstellen.");
+                        return;
+                    }
 
-        for (int i = 0; i < hosts.size(); i++) {
-            String host = hosts.get(i);
-            String result;
-            try {
-                result = ping(host);
-            } catch (IOException e) {
-                Logger.LOGGER.catching(e);
-                TextUtils.error("Es ist ein Fehler beim Testen vom Ping aufgetreten.");
-                return true;
-            }
-
-            builder.of(host).color(TextFormatting.DARK_AQUA).advance()
-                    .of("> ").color(TextFormatting.DARK_GRAY).advance()
-                    .of(result).color(TextFormatting.BLUE).advance();
-
-            if (i != hosts.size() - 1) builder.newLine();
-        }
-
-        builder.send();
+                    b.of(host).color(TextFormatting.DARK_AQUA).advance()
+                            .of("> ").color(TextFormatting.DARK_GRAY).advance()
+                            .of(result).color(TextFormatting.BLUE).advance();
+                }).newLineJoiner().advance()
+                .send();
         return true;
     }
 
