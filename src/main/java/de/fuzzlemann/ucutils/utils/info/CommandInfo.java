@@ -1,55 +1,39 @@
 package de.fuzzlemann.ucutils.utils.info;
 
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentString;
+import de.fuzzlemann.ucutils.base.text.Message;
+import de.fuzzlemann.ucutils.common.udf.data.info.UDFCommandDescription;
 import net.minecraft.util.text.TextFormatting;
-import org.apache.commons.lang3.ArrayUtils;
+
+import java.util.Set;
 
 /**
  * @author Fuzzlemann
  */
 public class CommandInfo {
 
-    private CommandDescription[] commands;
+    private Set<UDFCommandDescription> commands;
 
-    public CommandInfo(CommandDescription... commands) {
+    public CommandInfo(Set<UDFCommandDescription> commands) {
         this.commands = commands;
     }
 
-    public CommandDescription[] getCommands() {
+    public Set<UDFCommandDescription> getCommands() {
         return commands;
     }
 
-    public ITextComponent constructMessage(String heading) {
-        TextComponentString headingBegin = new TextComponentString("\n  === ");
-        headingBegin.getStyle().setColor(TextFormatting.DARK_GRAY);
-
-        TextComponentString headingComponent = new TextComponentString(heading);
-        headingComponent.getStyle().setColor(TextFormatting.GOLD);
-
-        TextComponentString headingEnd = new TextComponentString(" ===");
-        headingEnd.getStyle().setColor(TextFormatting.DARK_GRAY);
-
-        return headingBegin.appendSibling(headingComponent).appendSibling(headingEnd).appendSibling(constructMessage());
-    }
-
-    private ITextComponent constructMessage() {
-        TextComponentString text = new TextComponentString("");
-
-        for (CommandDescription command : commands) {
-            text.appendText("\n").appendSibling(command.constructMessage());
-        }
-
-        return text;
-    }
-
-    public CommandInfo append(CommandInfo commandInfo) {
-        this.commands = ArrayUtils.addAll(getCommands(), commandInfo.getCommands());
-
-        return this;
-    }
-
-    public CommandInfo createCopy() {
-        return new CommandInfo(commands);
+    public Message constructMessage(String heading) {
+        return Message.builder()
+                .newLine()
+                .of("  === ").color(TextFormatting.DARK_GRAY).advance()
+                .of(heading).color(TextFormatting.GOLD).advance()
+                .of(" ===").color(TextFormatting.DARK_GRAY).advance()
+                .newLine()
+                .joiner(commands)
+                .consumer((builder, commandDescription) ->
+                        builder.of(commandDescription.getCommand()).color(TextFormatting.GREEN).advance()
+                                .of(": ").color(TextFormatting.GRAY).advance()
+                                .of(commandDescription.getDescription()).color(TextFormatting.DARK_AQUA).advance())
+                .newLineJoiner().advance()
+                .build();
     }
 }

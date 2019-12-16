@@ -1,21 +1,18 @@
 package de.fuzzlemann.ucutils.utils.faction.police;
 
 import com.google.common.util.concurrent.Uninterruptibles;
+import de.fuzzlemann.ucutils.base.abstraction.AbstractionLayer;
+import de.fuzzlemann.ucutils.base.udf.UDFLoader;
+import de.fuzzlemann.ucutils.base.udf.UDFModule;
+import de.fuzzlemann.ucutils.common.udf.DataRegistry;
 import de.fuzzlemann.ucutils.events.NameFormatEventHandler;
 import de.fuzzlemann.ucutils.utils.ForgeUtils;
-import de.fuzzlemann.ucutils.base.abstraction.AbstractionLayer;
-import de.fuzzlemann.ucutils.utils.api.APIUtils;
-import de.fuzzlemann.ucutils.base.data.DataLoader;
-import de.fuzzlemann.ucutils.base.data.DataModule;
-import de.fuzzlemann.ucutils.utils.io.JsonManager;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.apache.commons.lang3.StringEscapeUtils;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -29,12 +26,10 @@ import java.util.stream.Collectors;
  */
 @SideOnly(Side.CLIENT)
 @Mod.EventBusSubscriber
-@DataModule(value = "Wanteds", hasFallback = true)
-public class WantedManager implements DataLoader {
+@UDFModule(value = DataRegistry.WANTED_CATALOG, version = 1)
+public class WantedManager implements UDFLoader<List<WantedReason>> {
 
-    private static final File WANTED_FILE = new File(JsonManager.DIRECTORY, "wanteds.storage");
     private static final List<WantedReason> WANTED_LIST = new ArrayList<>();
-
     private static final Pattern WANTED_INFO_PATTERN = Pattern.compile("^HQ: (?:\\[UC])*([a-zA-Z0-9_]+) wird aus folgendem Grund gesucht: (.+), Over.$");
 
     private static boolean blockNextMessage;
@@ -101,28 +96,12 @@ public class WantedManager implements DataLoader {
     }
 
     @Override
-    public void load() {
-        WANTED_LIST.clear();
-
-        String result = APIUtils.get("http://tomcat.fuzzlemann.de/factiononline/wantedreasons");
-
-        String[] wantedStrings = result.split("<>");
-
-        for (String wantedString : wantedStrings) {
-            String[] splittedWantedString = wantedString.split(";");
-
-            String reason = StringEscapeUtils.unescapeJava(splittedWantedString[0]);
-            int wanteds = Integer.parseInt(splittedWantedString[1]);
-
-            WANTED_LIST.add(new WantedReason(reason, wanteds));
-        }
-
-        JsonManager.writeList(WANTED_FILE, WANTED_LIST);
+    public void supply(List<WantedReason> wantedReasons) {
+        WANTED_LIST.addAll(wantedReasons);
     }
 
     @Override
-    public void fallbackLoading() {
+    public void cleanUp() {
         WANTED_LIST.clear();
-        WANTED_LIST.addAll(new ArrayList<>(JsonManager.loadObjects(WANTED_FILE, WantedReason.class)));
     }
 }

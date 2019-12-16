@@ -5,6 +5,7 @@ import de.fuzzlemann.ucutils.base.command.ParameterParser;
 import de.fuzzlemann.ucutils.utils.faction.ActivityTestParser;
 import de.fuzzlemann.ucutils.utils.house.HouseParser;
 import de.fuzzlemann.ucutils.utils.io.FileParser;
+import de.fuzzlemann.ucutils.utils.punishment.ViolationParser;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,6 +21,7 @@ class ParserRegistry {
         registerParser(HouseParser.class);
         registerParser(ActivityTestParser.class);
         registerParser(FileParser.class);
+        registerParser(ViolationParser.class);
     }
 
     static void registerParser(Class<? extends ParameterParser<?, ?>> parserClass) {

@@ -1,11 +1,11 @@
 package de.fuzzlemann.ucutils.checks;
 
 import de.fuzzlemann.ucutils.Main;
-import de.fuzzlemann.ucutils.utils.api.APIUtils;
-import de.fuzzlemann.ucutils.base.data.DataLoader;
-import de.fuzzlemann.ucutils.base.data.DataModule;
 import de.fuzzlemann.ucutils.base.text.Message;
 import de.fuzzlemann.ucutils.base.text.MessagePart;
+import de.fuzzlemann.ucutils.base.udf.UDFLoader;
+import de.fuzzlemann.ucutils.base.udf.UDFModule;
+import de.fuzzlemann.ucutils.common.udf.DataRegistry;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.event.ClickEvent;
 import net.minecraft.util.text.event.HoverEvent;
@@ -21,8 +21,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  */
 @Mod.EventBusSubscriber
 @SideOnly(Side.CLIENT)
-@DataModule("Update-Checker")
-public class UpdateChecker implements DataLoader {
+@UDFModule(value = DataRegistry.VERSION, version = 1)
+public class UpdateChecker implements UDFLoader<String> {
     private static boolean updateNeeded;
     private static boolean connected;
 
@@ -54,16 +54,12 @@ public class UpdateChecker implements DataLoader {
     }
 
     @Override
-    public void load() {
-        updateNeeded = getCurrentVersion() < getLatestVersion();
+    public void supply(String latestVersion) {
+        updateNeeded = getCurrentVersion() < parseVersion(latestVersion);
     }
 
     private int getCurrentVersion() {
         return parseVersion(Main.VERSION);
-    }
-
-    private int getLatestVersion() {
-        return parseVersion(APIUtils.get("http://fuzzlemann.de/latestversion.html"));
     }
 
     private int parseVersion(String versionString) {

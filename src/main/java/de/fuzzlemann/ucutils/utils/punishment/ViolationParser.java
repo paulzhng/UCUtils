@@ -1,6 +1,7 @@
 package de.fuzzlemann.ucutils.utils.punishment;
 
 import de.fuzzlemann.ucutils.base.command.ParameterParser;
+import de.fuzzlemann.ucutils.common.udf.data.supporter.violation.Violation;
 
 /**
  * @author Fuzzlemann

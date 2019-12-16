@@ -1,21 +1,17 @@
 package de.fuzzlemann.ucutils.utils.faction;
 
-import de.fuzzlemann.ucutils.base.abstraction.AbstractionLayer;
-import de.fuzzlemann.ucutils.utils.api.APIUtils;
-import de.fuzzlemann.ucutils.base.data.DataLoader;
-import de.fuzzlemann.ucutils.base.data.DataModule;
+import de.fuzzlemann.ucutils.base.udf.UDFLoader;
+import de.fuzzlemann.ucutils.base.udf.UDFModule;
+import de.fuzzlemann.ucutils.common.udf.DataRegistry;
 
 /**
  * @author Fuzzlemann
  */
-@DataModule("Faction")
-public class FactionLoader implements DataLoader {
+@UDFModule(value = DataRegistry.FACTION, version = 1)
+public class FactionLoader implements UDFLoader<String> {
 
     @Override
-    public void load() {
-        Faction.factionOfPlayer = Faction.byAPIName(
-                APIUtils.post("http://tomcat.fuzzlemann.de/factiononline/getfaction",
-                        "uuid", AbstractionLayer.getPlayer().getUniqueID().toString())
-        );
+    public void supply(String faction) {
+        Faction.factionOfPlayer = Faction.byAPIName(faction);
     }
 }

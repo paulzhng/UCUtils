@@ -13,6 +13,8 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import java.util.UUID;
+
 /**
  * @author Fuzzlemann
  */
@@ -29,7 +31,7 @@ public class CustomLayerCape implements LayerRenderer<AbstractClientPlayer> {
         if (!p.hasPlayerInfo() || p.isInvisible() || !p.isWearing(EnumPlayerModelParts.CAPE))
             return;
 
-        String uuid = p.getUniqueID().toString();
+        UUID uuid = p.getUniqueID();
         ResourceLocation cape = CapeUtil.getCape(uuid);
 
         if (cape == null) return;

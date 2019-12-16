@@ -3,6 +3,8 @@ package de.fuzzlemann.ucutils.utils.api;
 import com.google.gson.Gson;
 import com.mojang.authlib.exceptions.AuthenticationException;
 import de.fuzzlemann.ucutils.Main;
+import de.fuzzlemann.ucutils.base.abstraction.AbstractionLayer;
+import de.fuzzlemann.ucutils.common.udf.AuthHash;
 import de.fuzzlemann.ucutils.config.UCUtilsConfig;
 import de.fuzzlemann.ucutils.utils.Logger;
 import net.minecraft.client.Minecraft;
@@ -35,6 +37,12 @@ public class APIUtils {
         System.arraycopy(paramArray, 0, newParams, 2, paramArray.length);
 
         return post(url, newParams);
+    }
+
+    public static <T> T post(Class<T> clazz, String url, Object... paramArray) {
+        String source = post(url, paramArray);
+        Gson gson = new Gson();
+        return gson.fromJson(source, clazz);
     }
 
     public static String post(String url, Object... paramArray) {
@@ -91,7 +99,7 @@ public class APIUtils {
 
     public static String generateAuthKey() {
         Minecraft mc = Main.MINECRAFT;
-        AuthHash authHash = new AuthHash();
+        AuthHash authHash = new AuthHash(AbstractionLayer.getPlayer().getName());
 
         try {
             mc.getSessionService().joinServer(mc.getSession().getProfile(), mc.getSession().getToken(), authHash.getHash());

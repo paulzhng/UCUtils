@@ -1,9 +1,12 @@
 package de.fuzzlemann.ucutils.utils.punishment;
 
-import com.google.gson.Gson;
-import de.fuzzlemann.ucutils.utils.api.APIUtils;
-import de.fuzzlemann.ucutils.base.data.DataLoader;
-import de.fuzzlemann.ucutils.base.data.DataModule;
+import com.google.common.collect.LinkedListMultimap;
+import com.google.common.collect.ListMultimap;
+import de.fuzzlemann.ucutils.base.udf.UDFLoader;
+import de.fuzzlemann.ucutils.base.udf.UDFModule;
+import de.fuzzlemann.ucutils.common.udf.DataRegistry;
+import de.fuzzlemann.ucutils.common.udf.data.supporter.violation.Punishment;
+import de.fuzzlemann.ucutils.common.udf.data.supporter.violation.Violation;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -17,8 +20,8 @@ import java.util.stream.Collectors;
  */
 @SideOnly(Side.CLIENT)
 @Mod.EventBusSubscriber
-@DataModule("Violations")
-public class PunishManager implements DataLoader {
+@UDFModule(value = DataRegistry.VIOLATIONS, version = 1)
+public class PunishManager implements UDFLoader<List<Violation>> {
 
     private static final List<Violation> VIOLATIONS = new ArrayList<>();
 
@@ -35,16 +38,60 @@ public class PunishManager implements DataLoader {
                 .orElse(null);
     }
 
-    @Override
-    public void load() {
-        VIOLATIONS.clear();
+    public static Violation combineViolations(Violation[] violations) {
+        ListMultimap<Punishment.PunishmentType, Punishment> punishmentMap = LinkedListMultimap.create();
 
-        String result = APIUtils.get("http://fuzzlemann.de/violations.html");
-        String[] jsonList = result.split("\n");
+        List<Punishment> disconnectPunishments = new ArrayList<>();
+        for (Violation violation : violations) {
+            for (Punishment punishment : violation.getPunishments()) {
+                if (punishment.getType() == Punishment.PunishmentType.TEMPORARY_BAN || punishment.getType() == Punishment.PunishmentType.PERMANENT_BAN || punishment.getType() == Punishment.PunishmentType.KICK) {
+                    disconnectPunishments.add(punishment);
+                    continue;
+                }
 
-        Gson gson = new Gson();
-        for (String json : jsonList) {
-            VIOLATIONS.add(gson.fromJson(json, Violation.class));
+                punishmentMap.put(punishment.getType(), punishment);
+            }
         }
+
+        for (Punishment banPunishment : disconnectPunishments) {
+            punishmentMap.put(banPunishment.getType(), banPunishment);
+        }
+
+        List<Punishment> punishments = new ArrayList<>();
+        for (Punishment.PunishmentType punishmentType : punishmentMap.keySet()) {
+            List<Punishment> specificPunishments = punishmentMap.get(punishmentType);
+
+            StringBuilder sb = new StringBuilder();
+            int value = 0;
+
+            int i = 0;
+            for (Punishment specificPunishment : specificPunishments) {
+                if (specificPunishment.getType() == Punishment.PunishmentType.WARN) {
+                    punishments.add(specificPunishment);
+                    continue;
+                }
+
+                value += specificPunishment.getValue();
+                sb.append(specificPunishment.getReason());
+
+                if (++i != specificPunishments.size())
+                    sb.append(" + ");
+            }
+
+            if (punishmentType != Punishment.PunishmentType.WARN)
+                punishments.add(new Punishment(punishmentType, sb.toString(), value));
+        }
+
+        return new Violation(null, punishments);
+    }
+
+    @Override
+    public void supply(List<Violation> violations) {
+        VIOLATIONS.addAll(violations);
+    }
+
+    @Override
+    public void cleanUp() {
+        VIOLATIONS.clear();
     }
 }

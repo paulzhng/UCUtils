@@ -1,9 +1,11 @@
 package de.fuzzlemann.ucutils.utils.cape;
 
 import de.fuzzlemann.ucutils.Main;
-import de.fuzzlemann.ucutils.utils.api.APIUtils;
-import de.fuzzlemann.ucutils.base.data.DataLoader;
-import de.fuzzlemann.ucutils.base.data.DataModule;
+import de.fuzzlemann.ucutils.base.udf.UDFLoader;
+import de.fuzzlemann.ucutils.base.udf.UDFModule;
+import de.fuzzlemann.ucutils.common.udf.DataRegistry;
+import de.fuzzlemann.ucutils.common.udf.data.misc.cape.UDFCape;
+import de.fuzzlemann.ucutils.utils.ForgeUtils;
 import net.minecraft.client.renderer.IImageBuffer;
 import net.minecraft.client.renderer.ThreadDownloadImageData;
 import net.minecraft.util.ResourceLocation;
@@ -12,19 +14,21 @@ import net.minecraftforge.fml.common.Mod;
 import javax.annotation.Nonnull;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * @author Fuzzlemann
  */
 @Mod.EventBusSubscriber
-@DataModule(value = "Cape", test = false)
-public class CapeUtil implements DataLoader {
+@UDFModule(value = DataRegistry.CAPES, version = 1)
+public class CapeUtil implements UDFLoader<List<UDFCape>> {
 
     private static final Map<String, ResourceLocation> CAPE_TYPES = new HashMap<>();
-    private static final Map<String, String> CAPES = new HashMap<>();
+    private static final Map<UUID, String> CAPES = new HashMap<>();
 
-    static ResourceLocation getCape(String uuid) {
+    static ResourceLocation getCape(UUID uuid) {
         String capeType = CAPES.get(uuid);
         if (capeType == null) return null;
 
@@ -32,20 +36,22 @@ public class CapeUtil implements DataLoader {
     }
 
     @Override
-    public void load() {
+    public void supply(List<UDFCape> capes) {
+        for (UDFCape cape : capes) {
+            CAPES.put(cape.getUUID(), cape.getType());
+        }
+
+        loadCapes();
+    }
+
+    @Override
+    public void cleanUp() {
         CAPES.clear();
         CAPE_TYPES.clear();
+    }
 
-        String result = APIUtils.get("http://tomcat.fuzzlemann.de/factiononline/capes");
-
-        for (String entry : result.split("\\|")) {
-            String[] splittedEntry = entry.split(":");
-
-            String uuid = splittedEntry[0];
-            String capeType = splittedEntry[1];
-
-            CAPES.put(uuid, capeType);
-        }
+    public void loadCapes() {
+        if (ForgeUtils.isTest()) return;
 
         for (String capeType : CAPES.values()) {
             if (CAPE_TYPES.containsKey(capeType)) continue;

@@ -1,5 +1,6 @@
 package de.fuzzlemann.ucutils;
 
+import de.fuzzlemann.ucutils.base.udf.UnifiedDataFetcher;
 import de.fuzzlemann.ucutils.commands.UpdateCommand;
 import de.fuzzlemann.ucutils.config.UCUtilsConfig;
 import de.fuzzlemann.ucutils.teamspeak.TSClientQuery;
@@ -36,6 +37,8 @@ public class Main {
     static final String NAME = "UC Utils";
     static final String CERTIFICATE_FINGERPRINT = "d3c444c8828b6fe0d86675d009f6c057d4bf25f1";
 
+    public static UnifiedDataFetcher unifiedDataFetcher;
+
     @Mod.EventHandler
     public void onFingerprintViolation(FMLFingerprintViolationEvent e) {
         Logger.LOGGER.warn("Invalid fingerprint detected! The mod may have been tampered with. (expected: " + e.getExpectedFingerprint() + "; keys found: " + e.getFingerprints() + ")");
@@ -51,12 +54,15 @@ public class Main {
         DataManager.registerDataLoaders(asmDataTable);
         InitializorHandler.registerInitializors(asmDataTable);
         CommandRegistry.registerAllCommands(asmDataTable);
+
+        unifiedDataFetcher = new UnifiedDataFetcher(asmDataTable);
     }
 
     @Mod.EventHandler
     public void postInit(FMLPostInitializationEvent e) {
         new Thread(() -> DataManager.loadData(false)).start();
         new Thread(AnalyticsUtil::sendStartupAnalytics).start();
+        new Thread(() -> unifiedDataFetcher.load()).start();
 
         if (!UCUtilsConfig.tsAPIKey.isEmpty()) {
             new Thread(TSClientQuery::getInstance).start();

@@ -30,7 +30,7 @@ import java.util.List;
 public class UCUtilsCommand implements TabCompletion {
 
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
-    private final long compileTime = 1576244232552L; //updated by gradle
+    private final long compileTime = 1576432180635L; //updated by gradle
     private final String formattedTime = dateFormat.format(new Date(compileTime));
     private final Gson gson = new Gson();
 
@@ -72,7 +72,11 @@ public class UCUtilsCommand implements TabCompletion {
                 .newLine()
                 .prefix()
                 .of("~ by ").color(TextFormatting.GRAY).advance()
-                .of("Fuzzlemann").color(TextFormatting.BLUE).advance();
+                .of("Fuzzlemann").color(TextFormatting.BLUE).advance()
+                .newLine()
+                .prefix()
+                .of("~ hosted by ").color(TextFormatting.GRAY).advance()
+                .of("Kresu24.com").clickEvent(ClickEvent.Action.OPEN_URL, "https://kresu24.com").color(TextFormatting.BLUE).advance();
 
         String response = APIUtils.get("http://tomcat.fuzzlemann.de/factiononline/topDonors");
         if (response != null) {

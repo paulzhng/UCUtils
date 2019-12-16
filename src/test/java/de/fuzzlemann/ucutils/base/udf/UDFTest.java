@@ -1,4 +1,4 @@
-package de.fuzzlemann.ucutils.base.data;
+package de.fuzzlemann.ucutils.base.udf;
 
 import de.fuzzlemann.ucutils.base.abstraction.AbstractionLayer;
 import de.fuzzlemann.ucutils.base.abstraction.TestPlayer;
@@ -20,7 +20,9 @@ import static org.mockito.Mockito.when;
 /**
  * @author Fuzzlemann
  */
-public class DataTest {
+public class UDFTest {
+
+    private static UnifiedDataFetcher unifiedDataFetcher = null;
 
     @BeforeAll
     static void setUp() {
@@ -32,7 +34,7 @@ public class DataTest {
         Reflections reflections = new Reflections(new ConfigurationBuilder()
                 .setUrls(ClasspathHelper.forPackage("de.fuzzlemann.ucutils"))
                 .setScanners(new TypeAnnotationsScanner(), new SubTypesScanner()));
-        Set<Class<?>> dataClasses = reflections.getTypesAnnotatedWith(DataModule.class);
+        Set<Class<?>> dataClasses = reflections.getTypesAnnotatedWith(UDFModule.class);
 
         for (Class<?> clazz : dataClasses) {
             ASMDataTable.ASMData asmData = mock(ASMDataTable.ASMData.class);
@@ -41,19 +43,13 @@ public class DataTest {
             asmDataSet.add(asmData);
         }
 
-        when(asmDataTable.getAll(DataModule.class.getCanonicalName())).thenReturn(asmDataSet);
+        when(asmDataTable.getAll(UDFModule.class.getCanonicalName())).thenReturn(asmDataSet);
 
-        DataManager.registerDataLoaders(asmDataTable);
+        unifiedDataFetcher = new UnifiedDataFetcher(asmDataTable);
     }
 
     @Test
-    void testLoadDataWithoutMessage() {
-        DataManager.loadData(false);
+    void testUDFLoad() {
+        unifiedDataFetcher.load();
     }
-
-    @Test
-    void testLoadDataWithMessage() {
-        DataManager.loadData(true);
-    }
-
 }

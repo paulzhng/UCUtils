@@ -1,7 +1,7 @@
 package de.fuzzlemann.ucutils.utils.house;
 
-import de.fuzzlemann.ucutils.common.House;
 import de.fuzzlemann.ucutils.base.command.ParameterParser;
+import de.fuzzlemann.ucutils.common.udf.data.misc.house.House;
 
 /**
  * @author Fuzzlemann

@@ -1,14 +1,12 @@
 package de.fuzzlemann.ucutils.utils.location.navigation;
 
-import com.google.common.reflect.TypeToken;
-import com.google.gson.Gson;
-import de.fuzzlemann.ucutils.common.CustomNaviPoint;
-import de.fuzzlemann.ucutils.utils.ForgeUtils;
-import de.fuzzlemann.ucutils.utils.api.APIUtils;
-import de.fuzzlemann.ucutils.base.data.DataLoader;
-import de.fuzzlemann.ucutils.base.data.DataModule;
 import de.fuzzlemann.ucutils.base.text.Message;
 import de.fuzzlemann.ucutils.base.text.MessagePart;
+import de.fuzzlemann.ucutils.base.udf.UDFLoader;
+import de.fuzzlemann.ucutils.base.udf.UDFModule;
+import de.fuzzlemann.ucutils.common.udf.DataRegistry;
+import de.fuzzlemann.ucutils.common.udf.data.misc.navipoint.CustomNaviPoint;
+import de.fuzzlemann.ucutils.utils.ForgeUtils;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
@@ -21,8 +19,8 @@ import java.util.List;
 /**
  * @author Fuzzlemann
  */
-@DataModule("Navigation")
-public class NavigationUtil implements DataLoader {
+@UDFModule(value = DataRegistry.CUSTOM_NAVI_POINT, version = 1)
+public class NavigationUtil implements UDFLoader<List<CustomNaviPoint>> {
 
     public static final List<CustomNaviPoint> NAVI_POINTS = new ArrayList<>();
 
@@ -104,14 +102,12 @@ public class NavigationUtil implements DataLoader {
     }
 
     @Override
-    public void load() {
-        String json = APIUtils.get("http://tomcat.fuzzlemann.de/factiononline/navipoints");
+    public void supply(List<CustomNaviPoint> customNaviPoints) {
+        NAVI_POINTS.addAll(customNaviPoints);
+    }
 
-        Gson gson = new Gson();
-        List<CustomNaviPoint> naviPoints = gson.fromJson(json, new TypeToken<List<CustomNaviPoint>>() {
-        }.getType());
-
+    @Override
+    public void cleanUp() {
         NAVI_POINTS.clear();
-        NAVI_POINTS.addAll(naviPoints);
     }
 }

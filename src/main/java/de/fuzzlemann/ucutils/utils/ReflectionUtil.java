@@ -1,5 +1,6 @@
 package de.fuzzlemann.ucutils.utils;
 
+import com.google.common.collect.Maps;
 import de.fuzzlemann.ucutils.base.command.tabcompletion.TabCompleterEx;
 import net.minecraft.client.gui.GuiChat;
 
@@ -8,11 +9,16 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @author Fuzzlemann
  */
 public class ReflectionUtil {
+
+    public static final Pattern DIAMOND_PATTERN = Pattern.compile("<(.+)>");
 
     public static Class<?> getGenericParameter(Class<?> clazz, int interfaceIndex, int typeIndex) {
         ParameterizedType parameterizedType = (ParameterizedType) clazz.getGenericInterfaces()[interfaceIndex];
@@ -22,7 +28,49 @@ public class ReflectionUtil {
         try {
             return Class.forName(className);
         } catch (ClassNotFoundException e) {
-            throw new IllegalStateException(e); //should not happen
+            return null;
+        }
+    }
+
+    public static Map.Entry<Class<?>, Class<?>> getCollectionAndCollectionParameter(Class<?> clazz, int interfaceIndex, int typeIndex) {
+        ParameterizedType parameterizedType = (ParameterizedType) clazz.getGenericInterfaces()[interfaceIndex];
+        Type objectType = parameterizedType.getActualTypeArguments()[typeIndex];
+        String className = objectType.getTypeName();
+
+        Matcher diamondMatcher = DIAMOND_PATTERN.matcher(className);
+        if (!diamondMatcher.find()) return null;
+
+        String collectionParameter = diamondMatcher.group(1);
+        className = diamondMatcher.replaceAll("");
+
+        try {
+            Class<?> collectionClass = Class.forName(className);
+            Class<?> collectionParameterClass = Class.forName(collectionParameter);
+
+            return Maps.immutableEntry(collectionClass, collectionParameterClass);
+        } catch (ClassNotFoundException e) {
+            return null;
+        }
+    }
+
+    public static Map.Entry<Class<?>, Class<?>> getMapAndMapParameter(Class<?> clazz, int interfaceIndex, int typeIndex) {
+        ParameterizedType parameterizedType = (ParameterizedType) clazz.getGenericInterfaces()[interfaceIndex];
+        Type objectType = parameterizedType.getActualTypeArguments()[typeIndex];
+        String className = objectType.getTypeName();
+
+        Matcher diamondMatcher = DIAMOND_PATTERN.matcher(className);
+        if (!diamondMatcher.find()) return null;
+
+        String collectionParameter = diamondMatcher.group(1);
+        className = diamondMatcher.replaceAll("");
+
+        try {
+            Class<?> collectionClass = Class.forName(className);
+            Class<?> collectionParameterClass = Class.forName(collectionParameter);
+
+            return Maps.immutableEntry(collectionClass, collectionParameterClass);
+        } catch (ClassNotFoundException e) {
+            return null;
         }
     }
 

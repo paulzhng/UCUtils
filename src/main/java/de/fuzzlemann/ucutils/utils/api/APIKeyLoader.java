@@ -1,36 +1,19 @@
 package de.fuzzlemann.ucutils.utils.api;
 
-import com.mojang.authlib.exceptions.AuthenticationException;
-import de.fuzzlemann.ucutils.Main;
+import de.fuzzlemann.ucutils.base.udf.UDFLoader;
+import de.fuzzlemann.ucutils.base.udf.UDFModule;
+import de.fuzzlemann.ucutils.common.udf.DataRegistry;
 import de.fuzzlemann.ucutils.config.UCUtilsConfig;
-import de.fuzzlemann.ucutils.utils.Logger;
-import de.fuzzlemann.ucutils.base.data.DataLoader;
-import de.fuzzlemann.ucutils.base.data.DataModule;
-import net.minecraft.client.Minecraft;
 
 /**
  * @author Fuzzlemann
  */
-@DataModule(value = "API-Connection", test = false)
-public class APIKeyLoader implements DataLoader {
+@UDFModule(value = DataRegistry.API_KEY, version = 1)
+public class APIKeyLoader implements UDFLoader<String> {
 
     @Override
-    public void load() {
-        Minecraft mc = Main.MINECRAFT;
-        AuthHash authHash = new AuthHash();
-
-        try {
-            mc.getSessionService().joinServer(mc.getSession().getProfile(), mc.getSession().getToken(), authHash.getHash());
-        } catch (AuthenticationException e) {
-            Logger.LOGGER.catching(e);
-            return;
-        }
-
-        String response = APIUtils.post("http://tomcat.fuzzlemann.de/factiononline/getapikey", "username", authHash.getUsername(), "hash", authHash.getHash());
-        if (response == null || response.isEmpty()) return;
-        if (response.contains(" ")) return; //check for invalid API Keys
-
-        UCUtilsConfig.apiKey = response;
+    public void supply(String apiKey) {
+        UCUtilsConfig.apiKey = apiKey;
         UCUtilsConfig.onConfigChange(null);
     }
 }

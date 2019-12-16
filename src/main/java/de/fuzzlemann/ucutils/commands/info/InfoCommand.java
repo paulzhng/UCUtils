@@ -17,21 +17,21 @@ public class InfoCommand {
 
     @Command("info")
     public boolean onCommand() {
-        Message.Builder builder = Message.builder();
-
-        constructText(builder, "Fraktionen", "/finfo");
-        constructText(builder, "Wichtige Befehle", "/cinfo");
-        constructText(builder, "Fraktionsbefehle", "/fcinfo");
-
-        builder.send();
+        Message.builder()
+                .messageParts(constructText("Fraktionen", "/finfo").getMessageParts())
+                .messageParts(constructText("Wichtige Befehle", "/cinfo").getMessageParts())
+                .messageParts(constructText("Fraktionsbefehle", "/fcinfo").getMessageParts())
+                .send();
         return true;
     }
 
-    private void constructText(Message.Builder builder, String text, String command) {
-        builder.of("\n » ").color(TextFormatting.RED).advance()
+    private Message constructText(String text, String command) {
+        return Message.builder()
+                .newLine()
+                .of(" » ").color(TextFormatting.RED).advance()
                 .of(text).color(TextFormatting.DARK_GREEN)
-                .hoverEvent(HoverEvent.Action.SHOW_TEXT, MessagePart.simple("Klick mich!", TextFormatting.GREEN))
-                .clickEvent(ClickEvent.Action.RUN_COMMAND, command)
-                .advance();
+                .hoverEvent(HoverEvent.Action.SHOW_TEXT, MessagePart.simple("Informationen abrufen", TextFormatting.GREEN))
+                .clickEvent(ClickEvent.Action.RUN_COMMAND, command).advance()
+                .build();
     }
 }

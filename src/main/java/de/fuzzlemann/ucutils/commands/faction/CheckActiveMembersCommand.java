@@ -3,8 +3,9 @@ package de.fuzzlemann.ucutils.commands.faction;
 import com.google.common.util.concurrent.Uninterruptibles;
 import de.fuzzlemann.ucutils.base.abstraction.AbstractionLayer;
 import de.fuzzlemann.ucutils.base.command.Command;
-import de.fuzzlemann.ucutils.utils.faction.Faction;
 import de.fuzzlemann.ucutils.base.text.Message;
+import de.fuzzlemann.ucutils.utils.faction.Faction;
+import de.fuzzlemann.ucutils.utils.info.InfoStorage;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.event.ClickEvent;
 import net.minecraft.util.text.event.HoverEvent;
@@ -74,7 +75,7 @@ public class CheckActiveMembersCommand {
                     int inactiveMembers = members.get(false);
 
                     b.of(" * ").color(TextFormatting.DARK_GRAY).advance()
-                            .of(faction.getFactionInfo().getFullName() + ": ").color(TextFormatting.GRAY)
+                            .of(InfoStorage.factionInfoMap.get(faction).getFullName() + ": ").color(TextFormatting.GRAY)
                             .clickEvent(ClickEvent.Action.RUN_COMMAND, "/memberinfo " + faction.getFactionKey())
                             .hoverEvent(HoverEvent.Action.SHOW_TEXT, Message.builder().of("/memberinfo").color(TextFormatting.AQUA).advance().of(" ausführen").color(TextFormatting.GRAY).advance().build()).advance()
                             .of(String.valueOf(activeMembers)).color(TextFormatting.DARK_GREEN).advance()

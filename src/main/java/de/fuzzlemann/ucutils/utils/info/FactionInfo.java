@@ -1,8 +1,8 @@
 package de.fuzzlemann.ucutils.utils.info;
 
+import de.fuzzlemann.ucutils.base.text.Message;
+import de.fuzzlemann.ucutils.base.text.MessagePart;
 import de.fuzzlemann.ucutils.utils.location.navigation.NavigationUtil;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.event.ClickEvent;
 import net.minecraft.util.text.event.HoverEvent;
@@ -64,56 +64,47 @@ public class FactionInfo {
         return commandInfo;
     }
 
-    public ITextComponent constructClickableMessage(String command) {
-        TextComponentString text = new TextComponentString("[" + shortName + "]");
-        text.getStyle().setColor(TextFormatting.BLUE);
-
-        TextComponentString hoverText = new TextComponentString("Klick mich!");
-        hoverText.getStyle().setColor(TextFormatting.GREEN);
-
-        text.getStyle().setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, hoverText));
-        text.getStyle().setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, command));
-
-        return text;
+    public Message constructClickableMessage(String command) {
+        return Message.builder()
+                .of("[" + shortName + "]").color(TextFormatting.BLUE)
+                .hoverEvent(HoverEvent.Action.SHOW_TEXT, MessagePart.simple("Informationen abrufen", TextFormatting.GREEN))
+                .clickEvent(ClickEvent.Action.RUN_COMMAND, command).advance()
+                .build();
     }
 
-    public ITextComponent constructFactionMessage() {
-        TextComponentString headingBegin = new TextComponentString("\n  === ");
-        headingBegin.getStyle().setColor(TextFormatting.DARK_GRAY);
-
-        TextComponentString headingComponent = new TextComponentString(shortName);
-        headingComponent.getStyle().setColor(TextFormatting.GOLD);
-
-        TextComponentString headingEnd = new TextComponentString(" ===");
-        headingEnd.getStyle().setColor(TextFormatting.DARK_GRAY);
-
-        return headingBegin.appendSibling(headingComponent).appendSibling(headingEnd)
-                .appendSibling(constructText("HQ", hqPosition))
-                .appendSibling(constructText("Aufgaben", tasks))
-                .appendSibling(constructText("Fraktionsart", factionType))
-                .appendText("\n")
-                .appendSibling(NavigationUtil.getNavigationText(naviPoint));
+    public Message constructFactionMessage() {
+        return Message.builder()
+                .newLine()
+                .of("  === ").color(TextFormatting.DARK_GRAY).advance()
+                .of(shortName).color(TextFormatting.GOLD).advance()
+                .of(" ===").color(TextFormatting.DARK_GRAY).advance()
+                .messageParts(constructText("HQ", hqPosition).getMessageParts())
+                .messageParts(constructText("Aufgaben", tasks).getMessageParts())
+                .messageParts(constructText("Fraktionsart", factionType).getMessageParts())
+                .newLine()
+                .messageParts(NavigationUtil.getNavigationMessage(naviPoint).getMessageParts())
+                .build();
     }
 
-    public ITextComponent constructCommandHelpMessage() {
+    public Message constructCommandHelpMessage() {
         return commandInfo.constructMessage("Befehle von " + shortName);
     }
 
-    private ITextComponent constructText(String preamble, String text) {
-        return constructPreamble(preamble).appendSibling(new TextComponentString(text));
+    private Message constructText(String preamble, String text) {
+        return Message.builder()
+                .messageParts(constructPreamble(preamble).getMessageParts())
+                .of(text).color(TextFormatting.GRAY).advance()
+                .build();
     }
 
-    private ITextComponent constructPreamble(String preamble) {
-        TextComponentString preambleComponent = new TextComponentString(preamble + ": ");
-        preambleComponent.getStyle().setColor(TextFormatting.GREEN);
-
-        return getPrefix().appendSibling(preambleComponent);
+    private Message constructPreamble(String preamble) {
+        return Message.builder()
+                .messageParts(getPrefix())
+                .of(preamble + ": ").color(TextFormatting.GREEN).advance()
+                .build();
     }
 
-    private ITextComponent getPrefix() {
-        TextComponentString prefix = new TextComponentString("\n » ");
-        prefix.getStyle().setColor(TextFormatting.GRAY);
-
-        return prefix;
+    private MessagePart getPrefix() {
+        return MessagePart.simple("\n » ", TextFormatting.GRAY);
     }
 }

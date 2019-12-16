@@ -1,5 +1,6 @@
 package de.fuzzlemann.ucutils.commands;
 
+import de.fuzzlemann.ucutils.Main;
 import de.fuzzlemann.ucutils.base.abstraction.UPlayer;
 import de.fuzzlemann.ucutils.base.command.Command;
 import de.fuzzlemann.ucutils.base.command.CommandParam;
@@ -18,6 +19,8 @@ public class RefreshDataCommand implements TabCompletion {
 
     @Command("refreshdata")
     public boolean onCommand(@CommandParam(required = false, requiredValue = "-v") boolean verbose) {
+        Main.unifiedDataFetcher.reload();
+
         if (verbose) {
             DataManager.loadData(true);
         } else {

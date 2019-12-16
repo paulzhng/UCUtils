@@ -1,11 +1,9 @@
 package de.fuzzlemann.ucutils.utils.house;
 
-import com.google.common.reflect.TypeToken;
-import com.google.gson.Gson;
-import de.fuzzlemann.ucutils.common.House;
-import de.fuzzlemann.ucutils.utils.api.APIUtils;
-import de.fuzzlemann.ucutils.base.data.DataLoader;
-import de.fuzzlemann.ucutils.base.data.DataModule;
+import de.fuzzlemann.ucutils.base.udf.UDFLoader;
+import de.fuzzlemann.ucutils.base.udf.UDFModule;
+import de.fuzzlemann.ucutils.common.udf.DataRegistry;
+import de.fuzzlemann.ucutils.common.udf.data.misc.house.House;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,20 +11,18 @@ import java.util.List;
 /**
  * @author Fuzzlemann
  */
-@DataModule("House")
-public class HouseUtil implements DataLoader {
+@UDFModule(value = DataRegistry.HOUSES, version = 1)
+public class HouseUtil implements UDFLoader<List<House>> {
 
     public static final List<House> HOUSES = new ArrayList<>();
 
     @Override
-    public void load() {
-        String json = APIUtils.get("http://tomcat.fuzzlemann.de/factiononline/houses");
-
-        Gson gson = new Gson();
-        List<House> houses = gson.fromJson(json, new TypeToken<List<House>>() {
-        }.getType());
-
-        HOUSES.clear();
+    public void supply(List<House> houses) {
         HOUSES.addAll(houses);
+    }
+
+    @Override
+    public void cleanUp() {
+        HOUSES.clear();
     }
 }

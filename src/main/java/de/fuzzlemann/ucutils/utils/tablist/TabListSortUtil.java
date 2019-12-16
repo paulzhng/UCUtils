@@ -10,7 +10,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  */
 @SideOnly(Side.CLIENT)
 public class TabListSortUtil {
-    public static void replaceOrdering(Class clazz) {
+    public static void replaceOrdering(Class<?> clazz) {
         ReflectionUtil.setValue(clazz, Ordering.class, Ordering.from(new TabListComparator()));
     }
 }

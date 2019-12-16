@@ -65,7 +65,7 @@ public class NameFormatEventHandler {
         //Prevents people who are masked from being detected
         if (displayName.contains("§k")) return;
 
-        String color = getPrefix(userName);
+        String color = getPrefix(userName, p.getUniqueID());
         if (color == null) return;
 
         e.setDisplayname(color + userName);
@@ -86,7 +86,7 @@ public class NameFormatEventHandler {
 
             if (name.startsWith("§8")) continue; //Hitman Corpse
 
-            String color = getPrefix(TextUtils.stripPrefix(colorStrippedName));
+            String color = getPrefix(TextUtils.stripPrefix(colorStrippedName), null);
             if (color == null) {
                 if (name.startsWith("§7")) continue;
 
@@ -280,7 +280,7 @@ public class NameFormatEventHandler {
         }
     }
 
-    private static String getPrefix(String userName) {
+    private static String getPrefix(String userName, UUID uniqueID) {
         Integer wanteds = WANTED_MAP.get(userName);
         if (wanteds != null) {
             if (wanteds == 1) {
@@ -298,7 +298,7 @@ public class NameFormatEventHandler {
             }
         } else if (BLACKLIST.contains(userName) || CONTRACT_LIST.contains(userName)) {
             return "§4";
-        } else if (UCUtilsConfig.showHouseBans && HouseBanHandler.HOUSE_BANS.contains(userName)) {
+        } else if (UCUtilsConfig.showHouseBans && uniqueID != null && HouseBanHandler.HOUSE_BANS.contains(uniqueID.toString())) {
             return "§8[§cHV§8] §f";
         }
 
