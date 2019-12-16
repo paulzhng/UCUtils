@@ -6,7 +6,7 @@
 
     <groupId>de.fuzzlemann</groupId>
     <artifactId>common</artifactId>
-    <version>1.0.7</version>
+    <version>1.0.63</version>
 
     <dependencies>
         <dependency>

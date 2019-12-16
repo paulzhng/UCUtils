@@ -1,4 +1,6 @@
-package de.fuzzlemann.ucutils.common;
+package de.fuzzlemann.ucutils.common.udf.data.misc.navipoint;
+
+import com.google.gson.annotations.Expose;
 
 import javax.persistence.*;
 import java.util.List;
@@ -13,9 +15,13 @@ public class CustomNaviPoint {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @ElementCollection
+    @Expose
     private List<String> names;
+    @Expose
     private int x;
+    @Expose
     private int y;
+    @Expose
     private int z;
 
     public CustomNaviPoint() {

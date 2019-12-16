@@ -1,4 +1,4 @@
-package de.fuzzlemann.ucutils.common;
+package de.fuzzlemann.ucutils.common.udf.data.misc.house;
 
 import com.google.gson.annotations.Expose;
 
