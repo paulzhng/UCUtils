@@ -17,5 +17,5 @@ public class DataRegistry {
     public static final String VIOLATIONS = "violations";
     public static final String INFO = "info";
     public static final String DRUG_PRICE = "drug-price";
-
+    public static final String BLACKLIST_PRICE = "blacklist-price";
 }

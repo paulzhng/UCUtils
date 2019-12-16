@@ -1,5 +1,7 @@
 package de.fuzzlemann.ucutils.common.udf.data.faction.drug;
 
+import com.google.gson.annotations.Expose;
+
 import javax.persistence.*;
 import java.util.Map;
 
@@ -16,6 +18,7 @@ public class DrugPrice {
     @ElementCollection
     @MapKeyColumn(name = "drugType")
     @MapKeyEnumerated
+    @Expose
     private Map<DrugType, Integer> prices;
 
     public DrugPrice() {
