@@ -3,7 +3,7 @@ package de.fuzzlemann.ucutils.common.udf.data.faction.drug;
 import com.google.gson.annotations.Expose;
 
 import javax.persistence.*;
-import java.util.Map;
+import java.util.List;
 
 /**
  * @author Fuzzlemann
@@ -15,16 +15,14 @@ public class DrugPrice {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String faction;
-    @ElementCollection
-    @MapKeyColumn(name = "drugType")
-    @MapKeyEnumerated
     @Expose
-    private Map<DrugType, Integer> prices;
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<DrugPriceEntry> prices;
 
     public DrugPrice() {
     }
 
-    public DrugPrice(String faction, Map<DrugType, Integer> prices) {
+    public DrugPrice(String faction, List<DrugPriceEntry> prices) {
         this.faction = faction;
         this.prices = prices;
     }
@@ -45,11 +43,11 @@ public class DrugPrice {
         this.faction = faction;
     }
 
-    public Map<DrugType, Integer> getPrices() {
+    public List<DrugPriceEntry> getPrices() {
         return prices;
     }
 
-    public void setPrices(Map<DrugType, Integer> prices) {
+    public void setPrices(List<DrugPriceEntry> prices) {
         this.prices = prices;
     }
 }

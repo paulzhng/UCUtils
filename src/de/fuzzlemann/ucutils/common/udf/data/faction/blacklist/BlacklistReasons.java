@@ -9,7 +9,7 @@ import java.util.Set;
  * @author Fuzzlemann
  */
 @Entity
-public class BlacklistPrice {
+public class BlacklistReasons {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,10 +19,10 @@ public class BlacklistPrice {
     @Expose
     private Set<BlacklistReason> reasons;
 
-    public BlacklistPrice() {
+    public BlacklistReasons() {
     }
 
-    public BlacklistPrice(String faction, Set<BlacklistReason> reasons) {
+    public BlacklistReasons(String faction, Set<BlacklistReason> reasons) {
         this.faction = faction;
         this.reasons = reasons;
     }
