@@ -49,7 +49,7 @@ public class BombTimerEventHandler {
 
         long timeDifference = System.currentTimeMillis() - bombPlaced;
 
-        if (timeDifference > TimeUnit.MINUTES.toMillis(15)) {
+        if (timeDifference > TimeUnit.MINUTES.toMillis(20)) {
             bombPlaced = -1;
             return;
         }

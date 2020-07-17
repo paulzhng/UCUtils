@@ -1,6 +1,7 @@
 package de.fuzzlemann.ucutils.utils;
 
 import de.fuzzlemann.ucutils.Main;
+import de.fuzzlemann.ucutils.config.UCUtilsConfig;
 import de.fuzzlemann.ucutils.utils.api.APIUtils;
 import de.fuzzlemann.ucutils.utils.io.JsonManager;
 import net.minecraft.util.Session;
@@ -17,7 +18,7 @@ public class AnalyticsUtil {
     private static final File ANALYTICS_STORAGE_FILE = new File(JsonManager.DIRECTORY, "analyticsid.storage");
 
     public static void sendStartupAnalytics() {
-        if (!Main.MINECRAFT.isSnooperEnabled()) return;
+        if (!UCUtilsConfig.analytics) return;
 
         Session session = Main.MINECRAFT.getSession();
         String uuid = session.getProfile().getId().toString();

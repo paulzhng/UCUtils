@@ -49,7 +49,6 @@ class CommandTest {
 
             if (commandClass.getPackage().getName().startsWith("de.fuzzlemann.ucutils.commands.teamspeak")) continue;
             if (commandClass == CheckActiveMembersCommand.class) continue;
-            ;
 
             ASMDataTable.ASMData asmData = mock(ASMDataTable.ASMData.class);
             when(asmData.getClassName()).thenReturn(commandClass.getCanonicalName());

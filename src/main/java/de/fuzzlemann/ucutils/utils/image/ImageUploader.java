@@ -18,12 +18,14 @@ package de.fuzzlemann.ucutils.utils.image;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.io.FileUtils;
 
-import javax.xml.bind.DatatypeConverter;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 
 /**
  * Derived from https://github.com/DV8FromTheWorld/Imgur-Uploader-Java/blob/master/src/net/dv8tion/Uploader.java
@@ -35,7 +37,7 @@ public class ImageUploader {
     private static final String UPLOAD_API_URL = "https://api.imgur.com/3/image";
 
     public static String uploadToLink(File file) {
-        String json = ImageUploader.upload(file);
+        String json = upload(file);
 
         JsonParser jsonParser = new JsonParser();
         JsonElement jsonElement = jsonParser.parse(json);
@@ -51,9 +53,17 @@ public class ImageUploader {
      * @return The JSON response from Imgur.
      */
     public static String upload(File file) {
-        HttpURLConnection conn = getHttpConnection(UPLOAD_API_URL);
-        writeToConnection(conn, "image=" + toBase64(file));
-        return getResponse(conn);
+        HttpURLConnection conn = null;
+        try {
+            conn = getHttpConnection(UPLOAD_API_URL);
+            writeToConnection(conn, "image=" + toBase64(file));
+
+            return getResponse(conn);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } finally {
+            if (conn != null) conn.disconnect();
+        }
     }
 
     /**
@@ -62,16 +72,9 @@ public class ImageUploader {
      * @param file The file to be converted.
      * @return The file as a Base64 String.
      */
-    private static String toBase64(File file) {
-        try {
-            byte[] b = new byte[(int) file.length()];
-            try (FileInputStream fs = new FileInputStream(file)) {
-                fs.read(b);
-            }
-            return URLEncoder.encode(DatatypeConverter.printBase64Binary(b), "UTF-8");
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+    private static String toBase64(File file) throws IOException {
+        byte[] encoded = Base64.encodeBase64(FileUtils.readFileToByteArray(file));
+        return URLEncoder.encode(new String(encoded, StandardCharsets.US_ASCII), StandardCharsets.UTF_8.toString());
     }
 
     /**
@@ -80,43 +83,39 @@ public class ImageUploader {
      * @param url The URL to connect to. (check Imgur API for correct URL).
      * @return The newly created HttpURLConnection.
      */
-    private static HttpURLConnection getHttpConnection(String url) {
-        HttpURLConnection conn;
-        try {
-            conn = (HttpURLConnection) new URL(url).openConnection();
-            conn.setDoInput(true);
-            conn.setDoOutput(true);
-            conn.setRequestMethod("POST");
-            conn.setRequestProperty("Authorization", "Client-ID 578628302728265");
-            conn.setReadTimeout(100000);
-            conn.connect();
-            return conn;
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+    private static HttpURLConnection getHttpConnection(String url) throws IOException {
+        HttpURLConnection conn = (HttpURLConnection) new URL(url).openConnection();
+        conn.setDoInput(true);
+        conn.setDoOutput(true);
+        conn.setRequestMethod("POST");
+        conn.setRequestProperty("Authorization", "Client-ID 578628302728265");
+        conn.setReadTimeout(100000);
+        conn.connect();
+
+        return conn;
     }
 
-    private static void writeToConnection(HttpURLConnection conn, String message) {
-        try (OutputStreamWriter writer = new OutputStreamWriter(conn.getOutputStream())) {
+    private static void writeToConnection(HttpURLConnection conn, String message) throws IOException {
+        try (OutputStream outputStream = conn.getOutputStream();
+             OutputStreamWriter writer = new OutputStreamWriter(outputStream)) {
             writer.write(message);
             writer.flush();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
         }
     }
 
-    private static String getResponse(HttpURLConnection conn) {
-        StringBuilder str = new StringBuilder();
+    private static String getResponse(HttpURLConnection conn) throws IOException {
+        InputStream inputStream = conn.getInputStream();
+        StringBuilder sb = new StringBuilder();
+
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()))) {
             String line;
             while ((line = reader.readLine()) != null) {
-                str.append(line);
+                sb.append(line);
             }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        } finally {
+            inputStream.close();
         }
 
-        return str.toString();
+        return sb.toString();
     }
-
 }

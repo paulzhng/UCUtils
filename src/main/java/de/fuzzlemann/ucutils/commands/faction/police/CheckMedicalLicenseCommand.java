@@ -10,7 +10,7 @@ import net.minecraft.util.text.TextFormatting;
  */
 public class CheckMedicalLicenseCommand {
 
-    @Command(value = {"checkmedicallicense", "cml"}, usage = "/%label% [Spieler]")
+    @Command(value = {"checkmedicallicense", "cml"}, usage = "/%label% [Spieler]", async = true)
     public boolean onCommand(String target) {
         boolean hasMedicalLicense = MedicalLicenseHandler.hasMedicalLicense(target);
 

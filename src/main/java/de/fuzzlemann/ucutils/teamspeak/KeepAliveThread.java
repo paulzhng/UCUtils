@@ -12,14 +12,13 @@ import java.util.concurrent.TimeUnit;
 public class KeepAliveThread extends Thread implements Closeable {
 
     private final TSClientQuery clientQuery;
+    private volatile boolean closed;
 
     public KeepAliveThread(TSClientQuery clientQuery) {
         this.clientQuery = clientQuery;
 
         setName("UCUtils-TSClientQuery-KeepAliveThread");
     }
-
-    private volatile boolean closed;
 
     @Override
     public void run() {

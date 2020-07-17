@@ -36,6 +36,7 @@ public class TimerCommand implements TabCompletion {
                              @CommandParam(required = false, defaultValue = CommandParam.NULL) Integer id,
                              @CommandParam(required = false, defaultValue = CommandParam.NULL) String time) {
         switch (argument) {
+            case "set":
             case "start":
                 if (time == null) return false;
 

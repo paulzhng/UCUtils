@@ -14,6 +14,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -109,6 +110,8 @@ public class NaviCommand implements TabCompletion {
         for (CustomNaviPoint naviPoint : NavigationUtil.NAVI_POINTS) {
             naviPointNames.addAll(naviPoint.getNames());
         }
+
+        Collections.sort(naviPointNames);
 
         return naviPointNames;
     }

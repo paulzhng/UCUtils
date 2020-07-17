@@ -1,5 +1,6 @@
 package de.fuzzlemann.ucutils.commands.faction;
 
+import de.fuzzlemann.ucutils.activitytest.ActivityTestHandler;
 import de.fuzzlemann.ucutils.base.abstraction.AbstractionLayer;
 import de.fuzzlemann.ucutils.base.abstraction.UPlayer;
 import de.fuzzlemann.ucutils.base.command.Command;
@@ -8,6 +9,7 @@ import de.fuzzlemann.ucutils.base.command.ParameterParser;
 import de.fuzzlemann.ucutils.base.command.TabCompletion;
 import de.fuzzlemann.ucutils.base.text.Message;
 import de.fuzzlemann.ucutils.base.text.MessagePart;
+import de.fuzzlemann.ucutils.common.activity.ActivityTestType;
 import de.fuzzlemann.ucutils.common.udf.data.misc.navipoint.CustomNaviPoint;
 import de.fuzzlemann.ucutils.utils.ForgeUtils;
 import de.fuzzlemann.ucutils.utils.location.navigation.NavigationUtil;
@@ -38,7 +40,7 @@ import java.util.stream.Collectors;
 public class CallReinforcementCommand implements TabCompletion {
 
     private static final Pattern REINFORCEMENT_PATTERN = Pattern.compile("^(.+ ((?:\\[UC])*[a-zA-Z0-9_]+)): Benötige Verstärkung! -> X: (-*\\d+) \\| Y: (-*\\d+) \\| Z: (-*\\d+)$");
-    private static final Pattern ON_THE_WAY_PATTERN = Pattern.compile("^(.+ (?:\\[UC])*[a-zA-Z0-9_]+): ((?:\\[UC])*[a-zA-Z0-9_]+), ich bin zu deinem Verstärkungsruf unterwegs! \\((\\d+) Meter entfernt\\)$");
+    private static final Pattern ON_THE_WAY_PATTERN = Pattern.compile("^(.+ (?:\\[UC])*([a-zA-Z0-9_]+)): ((?:\\[UC])*[a-zA-Z0-9_]+), ich bin zu deinem Verstärkungsruf unterwegs! \\((\\d+) Meter entfernt\\)$");
 
     private static ReinforcementType lastReinforcement;
 
@@ -105,13 +107,21 @@ public class CallReinforcementCommand implements TabCompletion {
         Matcher onTheWayMatcher = ON_THE_WAY_PATTERN.matcher(msg);
         if (onTheWayMatcher.find()) {
             String senderFullName = onTheWayMatcher.group(1);
-            String reinforcementSenderName = onTheWayMatcher.group(2);
-            String distance = onTheWayMatcher.group(3);
+            String senderName = onTheWayMatcher.group(2);
+            String reinforcementSenderName = onTheWayMatcher.group(3);
+            String distance = onTheWayMatcher.group(4);
 
-            Message.builder()
+            ITextComponent message = Message.builder()
                     .of(senderFullName).color(TextFormatting.DARK_GREEN).advance()
                     .of(" kommt zum Verstärkungsruf von " + reinforcementSenderName + "! (" + distance + " Meter entfernt)").color(TextFormatting.GREEN).advance()
-                    .send();
+                    .build()
+                    .toTextComponent();
+
+            if (senderName.equals(AbstractionLayer.getPlayer().getName())) {
+                ActivityTestHandler.modifyTextComponent(ActivityTestType.REINFORCEMENT, message);
+            }
+
+            AbstractionLayer.getPlayer().sendMessage(message);
 
             e.setCanceled(true);
             return;

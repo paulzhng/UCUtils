@@ -3,9 +3,9 @@ package de.fuzzlemann.ucutils.utils.info;
 import de.fuzzlemann.ucutils.base.udf.UDFLoader;
 import de.fuzzlemann.ucutils.base.udf.UDFModule;
 import de.fuzzlemann.ucutils.common.udf.DataRegistry;
-import de.fuzzlemann.ucutils.common.udf.data.info.UDFCommandInfo;
-import de.fuzzlemann.ucutils.common.udf.data.info.UDFFactionInfo;
-import de.fuzzlemann.ucutils.common.udf.data.info.UDFInfo;
+import de.fuzzlemann.ucutils.common.udf.data.misc.info.UDFCommandInfo;
+import de.fuzzlemann.ucutils.common.udf.data.misc.info.UDFFactionInfo;
+import de.fuzzlemann.ucutils.common.udf.data.misc.info.UDFInfo;
 import de.fuzzlemann.ucutils.utils.faction.Faction;
 
 import java.util.HashMap;

@@ -49,7 +49,7 @@ public class UpdateChecker implements UDFLoader<String> {
                 .of("/updateucutils").color(TextFormatting.RED)
                 .hoverEvent(HoverEvent.Action.SHOW_TEXT, MessagePart.simple("Ausführen", TextFormatting.GREEN))
                 .clickEvent(ClickEvent.Action.RUN_COMMAND, "/updateucutils").advance()
-                .of("direkt updaten.").color(TextFormatting.RED).advance()
+                .of(" direkt updaten.").color(TextFormatting.RED).advance()
                 .send();
     }
 

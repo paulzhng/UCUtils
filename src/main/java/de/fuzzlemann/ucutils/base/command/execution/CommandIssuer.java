@@ -2,14 +2,14 @@ package de.fuzzlemann.ucutils.base.command.execution;
 
 import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.ListMultimap;
-import de.fuzzlemann.ucutils.utils.Logger;
-import de.fuzzlemann.ucutils.utils.ReflectionUtil;
 import de.fuzzlemann.ucutils.base.abstraction.AbstractionLayer;
 import de.fuzzlemann.ucutils.base.abstraction.UPlayer;
 import de.fuzzlemann.ucutils.base.command.Command;
 import de.fuzzlemann.ucutils.base.command.CommandParam;
 import de.fuzzlemann.ucutils.base.command.exceptions.ArgumentException;
 import de.fuzzlemann.ucutils.base.text.TextUtils;
+import de.fuzzlemann.ucutils.utils.Logger;
+import de.fuzzlemann.ucutils.utils.ReflectionUtil;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.commons.lang3.ClassUtils;
@@ -33,9 +33,9 @@ class CommandIssuer {
     private final String[] args;
     private final boolean throwException;
 
-    private Object commandExecutor;
-    private Method onCommand;
-    private Command commandAnnotation;
+    private final Object commandExecutor;
+    private final Method onCommand;
+    private final Command commandAnnotation;
 
     /**
      * @param label          the label of the command

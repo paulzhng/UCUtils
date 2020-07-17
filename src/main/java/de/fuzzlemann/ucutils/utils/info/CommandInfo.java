@@ -1,7 +1,7 @@
 package de.fuzzlemann.ucutils.utils.info;
 
 import de.fuzzlemann.ucutils.base.text.Message;
-import de.fuzzlemann.ucutils.common.udf.data.info.UDFCommandDescription;
+import de.fuzzlemann.ucutils.common.udf.data.misc.info.UDFCommandDescription;
 import net.minecraft.util.text.TextFormatting;
 
 import java.util.Set;

@@ -27,7 +27,7 @@ public class DeleteFriendConfirmEventHandler {
 
         String name = splitted[2];
         if (splitted.length > 3 && splitted[3].equals("confirm")) {
-            e.setMessage("/Friend delete " + name);
+            e.setMessage("/Friend delete " + name); //uppercase necessary
             return;
         }
 

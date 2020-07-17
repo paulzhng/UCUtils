@@ -1,6 +1,7 @@
 package de.fuzzlemann.ucutils.utils.faction.badfaction.blacklist;
 
 import de.fuzzlemann.ucutils.base.command.ParameterParser;
+import de.fuzzlemann.ucutils.common.udf.data.faction.blacklist.BlacklistReason;
 
 /**
  * @author Fuzzlemann

@@ -21,6 +21,17 @@ import java.nio.charset.StandardCharsets;
 public class TSClientQuery implements Closeable {
 
     private static TSClientQuery instance;
+    private final String apiKey;
+    private Socket socket;
+    private volatile ClientQueryWriter writer;
+    private volatile ClientQueryReader reader;
+    private volatile KeepAliveThread keepAliveThread;
+    private volatile boolean authenticated;
+    private volatile int schandlerID;
+
+    private TSClientQuery(String apiKey) {
+        this.apiKey = apiKey;
+    }
 
     public static TSClientQuery getInstance() {
         if (instance == null) {
@@ -45,18 +56,6 @@ public class TSClientQuery implements Closeable {
             Logger.LOGGER.info("Closing the TeamSpeak Client Query Connection...");
             instance.close();
         }
-    }
-
-    private final String apiKey;
-    private Socket socket;
-    private volatile ClientQueryWriter writer;
-    private volatile ClientQueryReader reader;
-    private volatile KeepAliveThread keepAliveThread;
-    private volatile boolean authenticated;
-    private volatile int schandlerID;
-
-    private TSClientQuery(String apiKey) {
-        this.apiKey = apiKey;
     }
 
     public void executeCommand(BaseCommand<?> command) {

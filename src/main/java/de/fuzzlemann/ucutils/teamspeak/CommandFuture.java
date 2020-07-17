@@ -1,5 +1,7 @@
 package de.fuzzlemann.ucutils.teamspeak;
 
+import de.fuzzlemann.ucutils.teamspeak.exceptions.ClientQueryFutureException;
+
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -11,7 +13,7 @@ public class CommandFuture<T> extends CompletableFuture<T> {
         try {
             return super.get();
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new ClientQueryFutureException(e);
         }
     }
 

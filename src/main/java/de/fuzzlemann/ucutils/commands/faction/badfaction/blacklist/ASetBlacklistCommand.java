@@ -1,11 +1,11 @@
 package de.fuzzlemann.ucutils.commands.faction.badfaction.blacklist;
 
-import de.fuzzlemann.ucutils.utils.ForgeUtils;
 import de.fuzzlemann.ucutils.base.abstraction.UPlayer;
 import de.fuzzlemann.ucutils.base.command.Command;
 import de.fuzzlemann.ucutils.base.command.CommandParam;
 import de.fuzzlemann.ucutils.base.command.TabCompletion;
-import de.fuzzlemann.ucutils.utils.faction.badfaction.blacklist.BlacklistReason;
+import de.fuzzlemann.ucutils.common.udf.data.faction.blacklist.BlacklistReason;
+import de.fuzzlemann.ucutils.utils.ForgeUtils;
 import de.fuzzlemann.ucutils.utils.faction.badfaction.blacklist.BlacklistUtil;
 
 import java.util.Collections;
@@ -20,7 +20,7 @@ public class ASetBlacklistCommand implements TabCompletion {
     @Command(value = {"asetblacklist", "asetbl"}, usage = "/%label% [Spieler...] [Grund]")
     public boolean onCommand(UPlayer p, @CommandParam(arrayStart = true) String[] targets, BlacklistReason reason) {
         for (String player : targets) {
-            p.sendChatMessage("/bl set " + player + " 100 " + reason.getPrice() + " " + reason.getReason());
+            p.sendChatMessage("/bl set " + player + " " + reason.getKills() + " " + reason.getAmount() + " " + reason.getReason());
         }
 
         return true;

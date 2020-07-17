@@ -20,7 +20,6 @@ import java.util.regex.Pattern;
 @Mod.EventBusSubscriber
 public class MedicalLicenseHandler {
 
-    private static final Pattern SHOW_INV_PATTERN = Pattern.compile("^Tascheninhalt von ([a-zA-Z0-9_]+):$");
     private static final Pattern MARIJUANA_PATTERN = Pattern.compile("^ {2}- Marihuana: (\\d+)$|^ - Gras: (\\d+)g$");
     private static String lastName;
 
@@ -48,8 +47,6 @@ public class MedicalLicenseHandler {
         ITextComponent textComponent = e.getMessage();
         String message = textComponent.getUnformattedText();
 
-        Matcher showInvMatcher = SHOW_INV_PATTERN.matcher(message);
-        if (showInvMatcher.find()) lastName = showInvMatcher.group(1);
         if (lastName == null) return;
 
         Matcher marijuanaMatcher = MARIJUANA_PATTERN.matcher(message);
@@ -80,7 +77,7 @@ public class MedicalLicenseHandler {
     public static boolean hasMedicalLicense(String playerName) {
         try {
             String response = APIUtils.post("http://tomcat.fuzzlemann.de/factiononline/checkmedicallicense", "name", playerName);
-            return Boolean.valueOf(response);
+            return Boolean.parseBoolean(response);
         } catch (Exception e) {
             Logger.LOGGER.catching(e);
             return false;

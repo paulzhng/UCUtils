@@ -15,6 +15,10 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 @Mod.EventBusSubscriber
 public class UCUtilsConfig {
 
+    @Config.Name("analytics")
+    @Config.Comment("Sendet nützliche Informationen um Fehler in der Modifikation leichter zu beheben und um Hilfe bei gewissen Fehlern zu bieten")
+    public static boolean analytics = true;
+
     @Config.Name("blockResourcePackReminder")
     @Config.Comment("Blockiert die Nachricht, die einen informiert, dass man das UC Resourcepack downloaden sollte")
     public static boolean blockResourcePackReminder = false;

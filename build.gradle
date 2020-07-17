@@ -20,15 +20,15 @@ plugins {
 }
 
 repositories {
+    mavenLocal()
     flatDir {
         dirs '/libs'
-        dirs '../UCUtils_common/target'
     }
 }
 
 apply plugin: 'net.minecraftforge.gradle.forge'
 
-version = "1.12.2-1.8"
+version = "1.12.2-1.9"
 group = "de.fuzzlemann.ucutils"
 archivesBaseName = "ucutils"
 
@@ -48,7 +48,7 @@ idea {
 
 dependencies {
     provided 'net.labymod:lm_api_mc1.12.2:3.4.2'
-    shade 'de.fuzzlemann.common:common-1.0.62:1.0.62'
+    shade 'de.fuzzlemann:common:1.1.3'
 
     testImplementation 'org.reflections:reflections:0.9.11'
     testImplementation 'org.mockito:mockito-junit-jupiter:2.28.2'
@@ -114,19 +114,6 @@ processResources {
     )
 }
 
-task signJar(type: SignJar, dependsOn: reobfJar) {
-    onlyIf {
-        project.hasProperty('keyStore')
-    }
-
-    keyStore = project.findProperty('keyStore')
-    alias = project.findProperty('keyStoreAlias')
-    storePass = project.findProperty('keyStorePass')
-    keyPass = project.findProperty('keyStoreKeyPass')
-    inputFile = jar.archivePath
-    outputFile = jar.archivePath
-}
-
 jar {
     configurations.shade.each { dep ->
         from(project.zipTree(dep)) {
@@ -135,20 +122,22 @@ jar {
     }
 }
 
-build.dependsOn signJar
-
 remotes {
-    webServer {
+    fuzzlemann {
         host = project.findProperty('host')
         user = project.findProperty('user')
         identity = new File(project.findProperty('identity'))
     }
 }
 
+ssh.settings {
+    knownHosts = addHostKey(file("$buildDir/known_hosts"))
+}
+
 task deployRemote(dependsOn: build) {
     doLast {
         ssh.run {
-            session(remotes.webServer) {
+            session(remotes.fuzzlemann) {
                 put from: 'build/libs/' + archivesBaseName + '-' + version + '.jar', into: '/var/www/html/UCUtils.jar'
             }
         }
@@ -159,7 +148,7 @@ task deployLocal(type: Exec, dependsOn: build) {
     commandLine = ['cmd', '/c', 'start', '\"\"', 'replaceLocal.bat']
 }
 
-List<String> deactivatedTasks = Arrays.asList('check', 'sourceTestJava', 'compileTestJava', 'processTestResources', 'test', 'testClasses');
+List<String> deactivatedTasks = Arrays.asList('check', 'sourceTestJava', 'compileTestJava', 'processTestResources', 'test', 'testClasses')
 tasks.matching {
     Task task = (Task) it
     String taskName = task.name

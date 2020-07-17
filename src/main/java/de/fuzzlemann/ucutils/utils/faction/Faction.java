@@ -1,7 +1,6 @@
 package de.fuzzlemann.ucutils.utils.faction;
 
 import de.fuzzlemann.ucutils.base.command.ParameterParser;
-import de.fuzzlemann.ucutils.utils.info.CommandInfo;
 import de.fuzzlemann.ucutils.utils.info.InfoStorage;
 
 import java.util.Arrays;
@@ -20,14 +19,12 @@ public enum Faction {
     CHURCH("kirche", "Church", 101),
     LA_COSA_NOSTRA("lacosanostra", "Mafia", 79),
     CALDERON("calderon", "Mexican", 94),
-    JUGGALOS("juggalos", "Gang", 86),
+    BALLAS("ballas", "Gang", 86),
     KERZAKOV("kerzakov", "Kerzakov", 163),
     TRIADS("triaden", "Triaden", 5419),
     OBRIEN("o_brien", "O_Brien", 12328);
 
     static Faction factionOfPlayer;
-    private static CommandInfo factionCommandInfo;
-    private static CommandInfo badFactionCommandInfo;
     private final String apiName;
     private final String factionKey;
     private final int publicChannelID;

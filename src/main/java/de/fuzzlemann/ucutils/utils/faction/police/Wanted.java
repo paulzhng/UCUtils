@@ -5,8 +5,8 @@ package de.fuzzlemann.ucutils.utils.faction.police;
  */
 public class Wanted {
 
-    private final String reason;
-    private final int amount;
+    private String reason;
+    private int amount;
 
     public Wanted(String reason, int amount) {
         this.reason = reason;
@@ -17,7 +17,15 @@ public class Wanted {
         return reason;
     }
 
+    public void setReason(String reason) {
+        this.reason = reason;
+    }
+
     public int getAmount() {
         return amount;
+    }
+
+    public void setAmount(int amount) {
+        this.amount = amount;
     }
 }

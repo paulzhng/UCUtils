@@ -19,7 +19,7 @@ import java.util.List;
 public class ReviveEventHandler {
 
     @SubscribeEvent
-    public void onRevive(PlayerInteractEvent.RightClickBlock e) {
+    public static void onRevive(PlayerInteractEvent.RightClickBlock e) {
         if (Faction.getFactionOfPlayer() != Faction.UCMD) return;
 
         BlockPos pos = e.getPos();

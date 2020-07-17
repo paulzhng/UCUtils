@@ -20,8 +20,9 @@ import java.util.Set;
 public class FDoorEventHandler {
 
     private static final Set<FDoor> F_DOORS = ImmutableSet.of(
-            new FDoor(new BlockPos(-167, 69, 204), new BlockPos(-167, 71, 205)), //Juggalos HQ
-            new FDoor(new BlockPos(993, 70, -100), new BlockPos(993, 72, -104))  //Triads HQ
+            new FDoor(new BlockPos(-167, 69, 204), new BlockPos(-167, 71, 205)), //Ballas HQ
+            new FDoor(new BlockPos(993, 70, -100), new BlockPos(993, 72, -104)),  //Triads HQ
+            new FDoor(new BlockPos(878, 62, -89), new BlockPos(880, 64, -89)) //FBI HQ
     );
     private static long lastClick;
 

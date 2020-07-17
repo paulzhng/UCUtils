@@ -29,11 +29,11 @@ import java.util.regex.Pattern;
 public class NotificationEventHandler {
 
     private static final Timer TIMER = new Timer();
-    private static final Pattern RESOURCEPACK_PATTERN = Pattern.compile("^Wir empfehlen dir unser Resourcepack zu nutzen.$|" +
-            "^Unter http://unicacity.de/dl/UnicaCity[_a-zA-Z\\d]+.zip kannst du es dir herunterladen.$");
+    private static final Pattern RESOURCEPACK_PATTERN = Pattern.compile("^Wir empfehlen dir unser Resourcepack zu nutzen\\.$|" +
+            "^Unter https://unicacity\\.de/dl/UnicaCity[_a-zA-Z\\d]+.zip kannst du es dir herunterladen.$");
     private static final Pattern UNINVITE_PATTERN = Pattern.compile("^(?:\\[UC])*[a-zA-Z0-9_]+ wurde von (?:\\[UC])*[a-zA-Z0-9_]+ aus der Fraktion geschmissen.$");
-    private static final Pattern INVITE_PATTERN = Pattern.compile("^[a-zA-Z0-9_]+ ist der Fraktion mit Rang \\d beigetreten.$");
-    private static final Pattern FRIEND_JOINED_PATTERN = Pattern.compile("^ » Freundesliste: ([a-zA-Z0-9_]+) ist nun online.$");
+    private static final Pattern INVITE_PATTERN = Pattern.compile("^(?:\\[UC])*[a-zA-Z0-9_]+ ist der Fraktion mit Rang \\d beigetreten.$");
+    private static final Pattern FRIEND_JOINED_PATTERN = Pattern.compile("^ » Freundesliste: (?:\\[UC])*([a-zA-Z0-9_]+) ist nun online.$");
     private static final Pattern REPORT_RECEIVED_PATTERN = Pattern.compile("^§cEs liegt ein neuer Report §8\\[§9\\d+§8]§c von §6[a-zA-Z0-9_]+ §cvor! Thema: §9[a-zA-Z]+$|" +
             "^§cEs liegt ein neuer Report von §6[a-zA-Z0-9_]+ §cvor! Thema: §9[a-zA-Z]+$");
     private static final Pattern REPORT_ACCEPTED_PATTERN = Pattern.compile("^\\[Report] Du hast den Report von [a-zA-Z0-9_]+ \\[Level \\d+] angenommen! Thema: [a-zA-Z]+$");

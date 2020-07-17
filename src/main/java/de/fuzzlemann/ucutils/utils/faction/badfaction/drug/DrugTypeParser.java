@@ -1,13 +1,14 @@
 package de.fuzzlemann.ucutils.utils.faction.badfaction.drug;
 
 import de.fuzzlemann.ucutils.base.command.ParameterParser;
+import de.fuzzlemann.ucutils.common.udf.data.faction.drug.DrugType;
 
 /**
  * @author Fuzzlemann
  */
-public class DrugParser implements ParameterParser<String, Drug> {
+public class DrugTypeParser implements ParameterParser<String, DrugType> {
     @Override
-    public Drug parse(String input) {
+    public DrugType parse(String input) {
         return DrugUtil.getDrug(input);
     }
 

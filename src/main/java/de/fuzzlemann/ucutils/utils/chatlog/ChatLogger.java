@@ -87,7 +87,7 @@ public class ChatLogger {
         instance.log("---- Disconnected from " + address + " ----");
     }
 
-    Logger getLogger() {
+    public Logger getLogger() {
         return logger;
     }
 

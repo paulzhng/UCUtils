@@ -3,14 +3,16 @@ package de.fuzzlemann.ucutils.events.teamspeak;
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
 import de.fuzzlemann.ucutils.Main;
+import de.fuzzlemann.ucutils.base.abstraction.AbstractionLayer;
+import de.fuzzlemann.ucutils.base.text.Message;
 import de.fuzzlemann.ucutils.config.UCUtilsConfig;
 import de.fuzzlemann.ucutils.teamspeak.commands.ClientVariableCommand;
 import de.fuzzlemann.ucutils.teamspeak.events.ClientMovedEvent;
-import de.fuzzlemann.ucutils.base.abstraction.AbstractionLayer;
 import de.fuzzlemann.ucutils.utils.faction.Faction;
 import de.fuzzlemann.ucutils.utils.sound.SoundUtil;
-import de.fuzzlemann.ucutils.base.text.Message;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.event.ClickEvent;
+import net.minecraft.util.text.event.HoverEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
@@ -68,6 +70,11 @@ public class WaitingRoomEventHandler {
             } else {
                 builder.of("hat den Öffentlich-Channel betreten.").color(TextFormatting.GRAY).advance();
             }
+
+            builder.space()
+                    .of("[↓]").color(TextFormatting.BLUE)
+                    .hoverEvent(HoverEvent.Action.SHOW_TEXT, Message.builder().of("Move ").color(TextFormatting.GRAY).advance().of(name).color(TextFormatting.BLUE).advance().of(" zu dir").color(TextFormatting.GRAY).advance().build())
+                    .clickEvent(ClickEvent.Action.RUN_COMMAND, "/movehere " + name).advance();
 
             builder.send();
 

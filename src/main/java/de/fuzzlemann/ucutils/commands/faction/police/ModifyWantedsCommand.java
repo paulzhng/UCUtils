@@ -5,10 +5,10 @@ import de.fuzzlemann.ucutils.base.command.Command;
 import de.fuzzlemann.ucutils.base.command.CommandParam;
 import de.fuzzlemann.ucutils.base.command.ParameterParser;
 import de.fuzzlemann.ucutils.base.command.TabCompletion;
-import de.fuzzlemann.ucutils.utils.faction.police.Wanted;
-import de.fuzzlemann.ucutils.utils.faction.police.WantedManager;
-import de.fuzzlemann.ucutils.utils.math.Expression;
 import de.fuzzlemann.ucutils.base.text.TextUtils;
+import de.fuzzlemann.ucutils.events.NameFormatEventHandler;
+import de.fuzzlemann.ucutils.utils.faction.police.Wanted;
+import de.fuzzlemann.ucutils.utils.math.Expression;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -17,19 +17,15 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static de.fuzzlemann.ucutils.base.command.CommandParam.NULL;
-
 /**
  * @author Fuzzlemann
  */
 @SideOnly(Side.CLIENT)
 public class ModifyWantedsCommand implements TabCompletion {
 
-    @Command(value = {"modifywanteds", "mw"}, usage = "/%label% [Spieler] [GF/SF/SSF/S/DA5/DA10/DA15/FSA/WGV oder eine Zahl]", async = true)
-    public boolean onCommand(UPlayer p, String target, @CommandParam(required = false, requiredValue = NULL) Integer amount, @CommandParam(arrayStart = true, required = false) Type[] types) {
-        if (amount == null && types.length == 0) return false;
-
-        Wanted wanted = WantedManager.getWanteds(target);
+    @Command(value = {"modifywanteds", "mw"}, usage = "/%label% [Spieler] [GF/SF/SSF/S/DA5/DA10/DA15/FSA/WGV]", async = true)
+    public boolean onCommand(UPlayer p, String target, @CommandParam(arrayStart = true) Type[] types) {
+        Wanted wanted = NameFormatEventHandler.WANTED_MAP.get(target);
         if (wanted == null) {
             TextUtils.error("Du hast /wanteds noch nicht ausgeführt.");
             return true;
@@ -39,36 +35,28 @@ public class ModifyWantedsCommand implements TabCompletion {
         int wantedAmount = wanted.getAmount();
 
         for (Type flag : types) {
-            if (wantedReason.contains(flag.postponeReason)) continue;
+            if (wantedReason.contains(flag.reason)) continue;
 
             if (flag == Type.VERY_BAD_CONDUCT) {
-                if (wantedReason.contains(Type.BAD_CONDUCT.postponeReason)) {
-                    wantedReason = wantedReason.replace(Type.BAD_CONDUCT.postponeReason, "");
-                    wantedAmount -= 10;
-                }
-
-                if (wantedReason.contains(Type.RESISTANCE_TO_ENFORCEMENT_OFFICERS.postponeReason)) {
-                    wantedReason = wantedReason.replace(Type.RESISTANCE_TO_ENFORCEMENT_OFFICERS.postponeReason, "");
+                if (wantedReason.contains(Type.BAD_CONDUCT.reason)) {
+                    wantedReason = wantedReason.replace(Type.BAD_CONDUCT.reason, "");
                     wantedAmount -= 10;
                 }
             }
 
+            if (flag == Type.BAD_CONDUCT) {
+                if (wantedReason.contains(Type.VERY_BAD_CONDUCT.reason)) {
+                    wantedReason = wantedReason.replace(Type.VERY_BAD_CONDUCT.reason, "");
+                    wantedAmount -= 15;
+                }
+            }
 
             wantedReason = flag.modifyReason(wantedReason);
             wantedAmount = flag.modifyWanteds(wantedAmount);
         }
 
-        if (amount != null) {
-            if (Math.abs(amount) > 10) {
-                TextUtils.error("Die Variation darf nicht größer als 10 Wanteds sein.");
-                return true;
-            }
-
-            wantedAmount += amount;
-        }
-
         if (wanted.getAmount() > wantedAmount)
-            p.sendChatMessage("/clear " + target + " .");
+            p.sendChatMessage("/clear " + target);
 
         if (wantedAmount > 69)
             wantedAmount = 69;
@@ -104,17 +92,17 @@ public class ModifyWantedsCommand implements TabCompletion {
         RESISTANCE_TO_ENFORCEMENT_OFFICERS("wgv", " + Widerstand gegen Vollstreckungsbeamte", "x+5");
 
         private final String flagArgument;
-        private final String postponeReason;
+        private final String reason;
         private final String wantedModification;
 
-        Type(String flagArgument, String postponeReason, String wantedModification) {
+        Type(String flagArgument, String reason, String wantedModification) {
             this.flagArgument = flagArgument;
-            this.postponeReason = postponeReason;
+            this.reason = reason;
             this.wantedModification = wantedModification;
         }
 
-        private String modifyReason(String reason) {
-            return reason + postponeReason;
+        private String modifyReason(String oldReason) {
+            return oldReason + this.reason;
         }
 
         private int modifyWanteds(int wanteds) {

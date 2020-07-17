@@ -1,14 +1,13 @@
 package de.fuzzlemann.ucutils.events;
 
 import de.fuzzlemann.ucutils.Main;
-import de.fuzzlemann.ucutils.keybind.KeyBindRegistry;
 import de.fuzzlemann.ucutils.base.abstraction.AbstractionLayer;
 import de.fuzzlemann.ucutils.base.abstraction.UPlayer;
+import de.fuzzlemann.ucutils.keybind.KeyBindRegistry;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
-import org.lwjgl.input.Keyboard;
 
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
@@ -41,10 +40,10 @@ public class AdControlEventHandler {
         if (System.currentTimeMillis() - adTime > TimeUnit.SECONDS.toMillis(20)) return;
 
         UPlayer p = AbstractionLayer.getPlayer();
-        if (Keyboard.isKeyDown(KeyBindRegistry.acceptAD.getKeyCode())) {
+        if (KeyBindRegistry.acceptAD.isPressed()) {
             p.sendChatMessage("/adcontrol " + adSender + " freigeben");
             adSender = null;
-        } else if (Keyboard.isKeyDown(KeyBindRegistry.denyAD.getKeyCode())) {
+        } else if (KeyBindRegistry.denyAD.isPressed()) {
             p.sendChatMessage("/adcontrol " + adSender + " blockieren");
             adSender = null;
         }

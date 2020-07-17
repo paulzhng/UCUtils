@@ -3,6 +3,7 @@ package de.fuzzlemann.ucutils.base.udf;
 import com.mojang.authlib.exceptions.AuthenticationException;
 import de.fuzzlemann.ucutils.Main;
 import de.fuzzlemann.ucutils.base.abstraction.AbstractionLayer;
+import de.fuzzlemann.ucutils.base.udf.exception.UDFLoadingException;
 import de.fuzzlemann.ucutils.common.udf.*;
 import de.fuzzlemann.ucutils.config.UCUtilsConfig;
 import de.fuzzlemann.ucutils.utils.ForgeUtils;
@@ -59,8 +60,10 @@ public class UnifiedDataFetcher {
         }
     }
 
-    private void fetch() {
+    private void fetch() throws UDFLoadingException {
         DataCollection dataCollection = sendUDFRequest();
+        if (dataCollection == null) throw new UDFLoadingException("response == null");
+
         save(dataCollection);
         distributeDataCollection(dataCollection);
     }

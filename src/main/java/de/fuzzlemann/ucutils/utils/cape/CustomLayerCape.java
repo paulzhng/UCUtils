@@ -71,7 +71,6 @@ public class CustomLayerCape implements LayerRenderer<AbstractClientPlayer> {
         GlStateManager.rotate(180.0F, 0.0F, 1.0F, 0.0F);
 
         this.playerRenderer.getMainModel().renderCape(0.0625F);
-
         GlStateManager.popMatrix();
     }
 

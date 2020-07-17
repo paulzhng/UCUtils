@@ -1,9 +1,10 @@
 package de.fuzzlemann.ucutils.events;
 
 import de.fuzzlemann.ucutils.Main;
+import de.fuzzlemann.ucutils.base.text.TextUtils;
 import de.fuzzlemann.ucutils.config.UCUtilsConfig;
 import de.fuzzlemann.ucutils.utils.faction.HouseBanHandler;
-import de.fuzzlemann.ucutils.base.text.TextUtils;
+import de.fuzzlemann.ucutils.utils.faction.police.Wanted;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemSkull;
@@ -12,6 +13,7 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
@@ -29,22 +31,25 @@ import java.util.regex.Pattern;
 @SideOnly(Side.CLIENT)
 public class NameFormatEventHandler {
 
-    //--------------------- PLAYER_MAP ---------------------\\
+    //--------------------- Player Map ---------------------\\
     private static final Map<String, EntityPlayer> PLAYER_MAP = new HashMap<>();
     //--------------------- Wanteds ---------------------\\
-    public static final Map<String, Integer> WANTED_MAP = new HashMap<>();
-    private static final Pattern WANTED_LIST_ENTRY_PATTERN = Pattern.compile("^ {2}- (?:\\[UC])*([a-zA-Z0-9_]+) \\| (\\d+)(?:.+)*$");
-    private static final Pattern WANTEDS_GIVEN_PATTERN = Pattern.compile("^HQ: (?:\\[UC])*([a-zA-Z0-9_]+)'s momentanes WantedLevel: (\\d+)$");
-    private static final Pattern WANTEDS_DELETED_PATTERN = Pattern.compile("^HQ: (?:\\[UC])*([a-zA-Z0-9_]+) wurde von (?:\\[UC])*[a-zA-Z0-9_]+ eingesperrt.$" +
-            "|^.+ (?:\\[UC])*[a-zA-Z0-9_]+ hat (?:\\[UC])*([a-zA-Z0-9_]+) getötet!$" +
-            "|^HQ: .+ (?:\\[UC])*[a-zA-Z0-9_]+ hat (?:\\[UC])*([a-zA-Z0-9_]+)(?:'s)*(?: seine| ihre)* Akten gelöscht, over.$");
+    public static final Map<String, Wanted> WANTED_MAP = new HashMap<>();
+    private static final Pattern WANTED_LIST_ENTRY_PATTERN = Pattern.compile("^ {2}- (?:\\[UC])*([a-zA-Z0-9_]+) \\| (\\d+) WPS \\((.+)\\)$");
+    private static final Pattern WANTEDS_GIVEN_REASON_PATTERN = Pattern.compile("^HQ: Gesuchter: (?:\\[UC])*([a-zA-Z0-9_]+)\\. Grund: (.+)$");
+    private static final Pattern WANTEDS_GIVEN_POINTS_PATTERN = Pattern.compile("^HQ: (?:\\[UC])*([a-zA-Z0-9_]+)'s momentanes WantedLevel: (\\d+)$");
+    private static final Pattern WANTEDS_DELETED_PATTERN = Pattern.compile("^HQ: (?:\\[UC])*([a-zA-Z0-9_]+) wurde von (?:\\[UC])*[a-zA-Z0-9_]+ eingesperrt\\.$" +
+            "|^HQ: (?:\\[UC])*([a-zA-Z0-9_]+) wurde von (?:\\[UC])*[a-zA-Z0-9_]+ getötet\\.$" +
+            "|^HQ: .+ (?:\\[UC])*[a-zA-Z0-9_]+ hat (?:\\[UC])*([a-zA-Z0-9_]+)(?:'s)*(?: seine| ihre)* Akten gelöscht, over\\.$");
     //--------------------- Contracts ---------------------\\
     private static final List<String> CONTRACT_LIST = new ArrayList<>();
-    private static final Pattern CONTRACT_SET_PATTERN = Pattern.compile("^\\[Contract] Es wurde ein Kopfgeld auf (?:\\[UC])*([a-zA-Z0-9_]+) \\(\\d+\\$\\) ausgesetzt.$");
-    private static final Pattern CONTRACT_REMOVED_PATTERN = Pattern.compile("(?:^\\[Contract] (?:\\[UC])*[a-zA-Z0-9_]+ hat (?:\\[UC])*([a-zA-Z0-9_]+) von der Contract Liste gelöscht. \\[-\\d+]$)" +
-            "|(?:^\\[Contract] (?:\\[UC])*[a-zA-Z0-9_]+ hat (?:\\[UC])*([a-zA-Z0-9_]+) getötet. Kopfgeld: \\d+\\$)");
+    private static final Pattern CONTRACT_SET_PATTERN = Pattern.compile("^\\[Contract] Es wurde ein Kopfgeld auf (?:\\[UC])*([a-zA-Z0-9_]+) \\(\\d+\\$\\) ausgesetzt\\.$");
+    private static final Pattern CONTRACT_REMOVED_PATTERN = Pattern.compile("(?:^\\[Contract] (?:\\[UC])*[a-zA-Z0-9_]+ hat (?:\\[UC])*([a-zA-Z0-9_]+) von der Contract Liste gelöscht\\. \\[-\\d+]$)" +
+            "|(?:^\\[Contract] (?:\\[UC])*[a-zA-Z0-9_]+ hat (?:\\[UC])*([a-zA-Z0-9_]+) getötet\\. Kopfgeld: \\d+\\$)");
     //--------------------- Blacklist ---------------------\\
-    private static final List<String> BLACKLIST = new ArrayList<>();
+    private static final Map<String, Boolean> BLACKLIST_MAP = new HashMap<>();
+    private static final Pattern BLACKLIST_START_PATTERN = Pattern.compile("=== Blacklist .+ ===");
+    private static final Pattern BLACKLIST_LIST_PATTERN = Pattern.compile("^ » (?:\\[UC])*([a-zA-Z0-9_]+) \\| (.+) \\| .+ \\| \\d+ Kills | \\d+\\$");
     private static final Pattern BLACKLIST_ADDED_PATTERN = Pattern.compile("^\\[Blacklist] (?:\\[UC])*([a-zA-Z0-9_]+) wurde von (?:\\[UC])*[a-zA-Z0-9_]+ auf die Blacklist gesetzt!$");
     private static final Pattern BLACKLIST_REMOVED_PATTERN = Pattern.compile("^\\[Blacklist] (?:\\[UC])*([a-zA-Z0-9_]+) wurde von (?:\\[UC])*[a-zA-Z0-9_]+ von der Blacklist gelöscht!$");
     //--------------------- Time ---------------------\\
@@ -82,11 +87,12 @@ public class NameFormatEventHandler {
 
         for (EntityItem entityItem : items) {
             String name = entityItem.getCustomNameTag();
-            String colorStrippedName = TextUtils.stripColor(name);
-
             if (name.startsWith("§8")) continue; //Hitman Corpse
 
-            String color = getPrefix(TextUtils.stripPrefix(colorStrippedName), null);
+            String colorStrippedName = name.substring(2);
+            String realName = colorStrippedName.substring(1);
+
+            String color = getPrefix(TextUtils.stripPrefix(realName), null);
             if (color == null) {
                 if (name.startsWith("§7")) continue;
 
@@ -105,22 +111,34 @@ public class NameFormatEventHandler {
         PLAYER_MAP.remove(p.getName());
     }
 
-    @SubscribeEvent
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void onWantedsGiven(ClientChatReceivedEvent e) {
         ITextComponent message = e.getMessage();
         String unformattedMessage = message.getUnformattedText();
 
-        Matcher matcher = WANTEDS_GIVEN_PATTERN.matcher(unformattedMessage);
-        if (!matcher.find()) return;
+        Matcher wantedsGivenReasonMatcher = WANTEDS_GIVEN_REASON_PATTERN.matcher(unformattedMessage);
+        if (wantedsGivenReasonMatcher.find()) {
+            String name = wantedsGivenReasonMatcher.group(1);
+            String reason = wantedsGivenReasonMatcher.group(2);
 
-        String name = matcher.group(1);
-        int wanteds = Integer.parseInt(matcher.group(2));
+            WANTED_MAP.put(name, new Wanted(reason, 0));
+            return;
+        }
 
-        WANTED_MAP.put(name, wanteds);
-        refreshDisplayName(name);
+        Matcher wantedsGivenPointsMatcher = WANTEDS_GIVEN_POINTS_PATTERN.matcher(unformattedMessage);
+        if (wantedsGivenPointsMatcher.find()) {
+            String name = wantedsGivenPointsMatcher.group(1);
+            int wantedPoints = Integer.parseInt(wantedsGivenPointsMatcher.group(2));
+
+            Wanted wanted = WANTED_MAP.get(name);
+            if (wanted == null) return;
+
+            wanted.setAmount(wantedPoints);
+            refreshDisplayName(name);
+        }
     }
 
-    @SubscribeEvent
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void onWantedsDeleted(ClientChatReceivedEvent e) {
         ITextComponent message = e.getMessage();
         String unformattedMessage = message.getUnformattedText();
@@ -141,7 +159,7 @@ public class NameFormatEventHandler {
         refreshDisplayName(name);
     }
 
-    @SubscribeEvent
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void onWantedsShown(ClientChatReceivedEvent e) {
         ITextComponent message = e.getMessage();
         String unformattedMessage = message.getUnformattedText();
@@ -156,17 +174,18 @@ public class NameFormatEventHandler {
             return;
         }
 
-        Matcher wantedListEntryMatcher = WANTED_LIST_ENTRY_PATTERN.matcher(unformattedMessage);
-        if (currentTime - wantedsShown > 1000L || !wantedListEntryMatcher.find()) return;
+        Matcher matcher = WANTED_LIST_ENTRY_PATTERN.matcher(unformattedMessage);
+        if (currentTime - wantedsShown > 1000L || !matcher.find()) return;
 
-        String name = wantedListEntryMatcher.group(1);
-        int wanteds = Integer.parseInt(wantedListEntryMatcher.group(2));
+        String name = matcher.group(1);
+        int wantedPoints = Integer.parseInt(matcher.group(2));
+        String reason = matcher.group(3);
 
-        WANTED_MAP.put(name, wanteds);
+        WANTED_MAP.put(name, new Wanted(reason, wantedPoints));
         refreshDisplayName(name);
     }
 
-    @SubscribeEvent
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void onHitlistShown(ClientChatReceivedEvent e) {
         ITextComponent message = e.getMessage();
         String unformattedMessage = message.getUnformattedText();
@@ -192,7 +211,7 @@ public class NameFormatEventHandler {
         refreshDisplayName(name);
     }
 
-    @SubscribeEvent
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void onContractSet(ClientChatReceivedEvent e) {
         ITextComponent message = e.getMessage();
         String unformattedMessage = message.getUnformattedText();
@@ -206,7 +225,7 @@ public class NameFormatEventHandler {
         }
     }
 
-    @SubscribeEvent
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void onContractRemoved(ClientChatReceivedEvent e) {
         ITextComponent message = e.getMessage();
         String unformattedMessage = message.getUnformattedText();
@@ -227,32 +246,37 @@ public class NameFormatEventHandler {
         refreshDisplayName(name);
     }
 
-    @SubscribeEvent
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void onBlacklistShown(ClientChatReceivedEvent e) {
         ITextComponent message = e.getMessage();
         String unformattedMessage = message.getUnformattedText();
 
         long currentTime = System.currentTimeMillis();
 
-        if (unformattedMessage.equals("==== Blacklist ====")) {
-            BLACKLIST.clear();
+        Matcher blacklistStartMatcher = BLACKLIST_START_PATTERN.matcher(unformattedMessage);
+        if (blacklistStartMatcher.find()) {
+            BLACKLIST_MAP.clear();
             blacklistShown = currentTime;
 
             refreshAllDisplayNames();
             return;
         }
 
-        if (currentTime - blacklistShown > 5000L || !unformattedMessage.startsWith(" » ")) return;
+        if (currentTime - blacklistShown > 1000L) return;
 
-        //TODO REGEX
-        String[] splittedMessage = StringUtils.split(unformattedMessage, " | ");
-        String name = TextUtils.stripPrefix(splittedMessage[1]);
+        Matcher matcher = BLACKLIST_LIST_PATTERN.matcher(unformattedMessage);
+        if (matcher.find()) {
+            String name = matcher.group(1);
+            String reason = matcher.group(2);
 
-        BLACKLIST.add(name);
-        refreshDisplayName(name);
+            boolean outlaw = reason.toLowerCase().contains("vogelfrei");
+            BLACKLIST_MAP.put(name, outlaw);
+
+            refreshDisplayName(name);
+        }
     }
 
-    @SubscribeEvent
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void onBlacklistAdd(ClientChatReceivedEvent e) {
         ITextComponent message = e.getMessage();
         String unformattedMessage = message.getUnformattedText();
@@ -261,12 +285,12 @@ public class NameFormatEventHandler {
         if (matcher.find()) {
             String name = matcher.group(1);
 
-            BLACKLIST.add(name);
+            BLACKLIST_MAP.put(name, false);
             refreshDisplayName(name);
         }
     }
 
-    @SubscribeEvent
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void onBlacklistRemove(ClientChatReceivedEvent e) {
         ITextComponent message = e.getMessage();
         String unformattedMessage = message.getUnformattedText();
@@ -275,28 +299,43 @@ public class NameFormatEventHandler {
         if (matcher.find()) {
             String name = matcher.group(1);
 
-            BLACKLIST.remove(name);
+            BLACKLIST_MAP.remove(name);
             refreshDisplayName(name);
         }
     }
 
     private static String getPrefix(String userName, UUID uniqueID) {
-        Integer wanteds = WANTED_MAP.get(userName);
-        if (wanteds != null) {
-            if (wanteds == 1) {
-                return "§2";
-            } else if (wanteds < 15) {
-                return "§a";
-            } else if (wanteds < 25) {
-                return "§e";
-            } else if (wanteds < 50) {
-                return "§6";
-            } else if (wanteds < 60) {
-                return "§c";
+        Wanted wanted = WANTED_MAP.get(userName);
+
+        if (wanted != null) {
+            int wantedPoints = wanted.getAmount();
+            if (wantedPoints != 0) {
+                if (wantedPoints == 1) {
+                    return "§2";
+                } else if (wantedPoints < 15) {
+                    return "§a";
+                } else if (wantedPoints < 25) {
+                    return "§e";
+                } else if (wantedPoints < 50) {
+                    return "§6";
+                } else if (wantedPoints < 60) {
+                    return "§c";
+                } else {
+                    return "§4";
+                }
+            }
+        }
+
+        Boolean blacklistOutlaw = BLACKLIST_MAP.get(userName);
+        if (blacklistOutlaw != null) {
+            if (blacklistOutlaw) {
+                return "§8[§cV§8] §4";
             } else {
                 return "§4";
             }
-        } else if (BLACKLIST.contains(userName) || CONTRACT_LIST.contains(userName)) {
+        }
+
+        if (CONTRACT_LIST.contains(userName)) {
             return "§4";
         } else if (UCUtilsConfig.showHouseBans && uniqueID != null && HouseBanHandler.HOUSE_BANS.contains(uniqueID.toString())) {
             return "§8[§cHV§8] §f";

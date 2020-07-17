@@ -27,7 +27,7 @@ public class MemberActivityEventHandler {
 
     private static final Timer TIMER = new Timer();
     private static final Pattern MEMBER_ACTIVITY_PATTERN = Pattern.compile("^Member Aktivität der Fraktion: .+$");
-    private static final Pattern MEMBER_PATTERN = Pattern.compile("^ {2}- ([a-zA-Z0-9_]+): \\d{2}\\.\\d{2}\\.\\d{2} \\d{2}:\\d{2}:\\d{2} \\((?:-)*\\d+\\)$");
+    private static final Pattern MEMBER_PATTERN = Pattern.compile("^ {2}- (?:\\[UC])*([a-zA-Z0-9_]+): \\d{2}\\.\\d{2}\\.\\d{2} \\d{2}:\\d{2}:\\d{2} \\((?:-)*\\d+\\)$");
     private static long lastMessage;
     private static long shown;
 

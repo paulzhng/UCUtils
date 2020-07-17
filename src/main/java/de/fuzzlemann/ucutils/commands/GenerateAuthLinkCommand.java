@@ -23,8 +23,8 @@ public class GenerateAuthLinkCommand {
         Message.builder()
                 .prefix()
                 .of("Du kannst dich unter dem Link ").color(TextFormatting.GRAY).advance()
-                .of("https://tomcat.fuzzlemann.de/factiononline/register?authkey=" + authKey)
-                .clickEvent(ClickEvent.Action.OPEN_URL, "https://tomcat.fuzzlemann.de/factiononline/register?authkey=" + authKey)
+                .of("https://fuzzlemann.de/register?authkey=" + authKey)
+                .clickEvent(ClickEvent.Action.OPEN_URL, "https://fuzzlemann.de/register?authkey=" + authKey)
                 .color(TextFormatting.BLUE).advance()
                 .of(" registrieren.").color(TextFormatting.GRAY).advance()
                 .send();
