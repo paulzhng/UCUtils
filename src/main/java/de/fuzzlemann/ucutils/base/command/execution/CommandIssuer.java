@@ -85,7 +85,7 @@ class CommandIssuer {
 
         // Executes the command in an separate thread when stated
         if (commandAnnotation.async() && !throwException) {
-            new Thread(commandRunnable, "UCUtils-CommandThread-" + label).start(); //asynchronous
+            ForkJoinPool.commonPool().submit(commandRunnable);
         } else {
             commandRunnable.run(); // synchronous
         }
