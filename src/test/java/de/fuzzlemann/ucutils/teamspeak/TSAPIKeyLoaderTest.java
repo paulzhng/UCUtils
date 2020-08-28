@@ -1,8 +1,8 @@
 package de.fuzzlemann.ucutils.teamspeak;
 
 import de.fuzzlemann.ucutils.config.UCUtilsConfig;
-import jdk.nashorn.internal.ir.annotations.Ignore;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 /**
  * @author Fuzzlemann
  */
-@Ignore
+@Disabled
 class TSAPIKeyLoaderTest {
 
     @BeforeAll
