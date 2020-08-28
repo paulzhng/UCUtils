@@ -133,8 +133,10 @@ class CommandIssuer {
 
         try {
             return (boolean) onCommand.invoke(commandExecutor, checkedParameters); //executes the command itself
-        } catch (IllegalAccessException | InvocationTargetException | IllegalArgumentException e) {
-            return false; //the resolved arguments were wrong; the cause is the wrong usage of the command
+        } catch (IllegalAccessException | IllegalArgumentException e) {
+            return false; // the resolved arguments were wrong; the cause is the wrong usage of the command
+        } catch (InvocationTargetException e) {
+            throw e.getCause(); // the underlying method throws an exception
         }
     }
 
