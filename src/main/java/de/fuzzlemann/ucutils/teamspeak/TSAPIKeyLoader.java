@@ -84,6 +84,7 @@ public class TSAPIKeyLoader implements DataLoader {
 
         for (File possibleTeamSpeakFolder : possibleTeamSpeakFolders) {
             possibleConfigDirectories.add(new File(possibleTeamSpeakFolder, "config"));
+            possibleConfigDirectories.add(possibleTeamSpeakFolder);
         }
 
         possibleConfigDirectories.removeIf(config -> !config.exists());

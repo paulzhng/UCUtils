@@ -1,10 +1,17 @@
 package de.fuzzlemann.ucutils.base.command.execution;
 
-import de.fuzzlemann.ucutils.commands.UpdateCommand;
-import de.fuzzlemann.ucutils.commands.faction.CheckActiveMembersCommand;
+import com.google.common.collect.ImmutableSet;
 import de.fuzzlemann.ucutils.base.abstraction.AbstractionLayer;
 import de.fuzzlemann.ucutils.base.abstraction.TestPlayer;
 import de.fuzzlemann.ucutils.base.command.Command;
+import de.fuzzlemann.ucutils.commands.ClearChatCommand;
+import de.fuzzlemann.ucutils.commands.UpdateCommand;
+import de.fuzzlemann.ucutils.commands.faction.ChannelActivityCommand;
+import de.fuzzlemann.ucutils.commands.faction.CheckActiveMembersCommand;
+import de.fuzzlemann.ucutils.commands.faction.badfaction.drug.DrugPriceCommand;
+import de.fuzzlemann.ucutils.commands.jobs.ADropDrinkCommand;
+import de.fuzzlemann.ucutils.commands.jobs.ADropTransportCommand;
+import de.fuzzlemann.ucutils.commands.jobs.AGetPizzaCommand;
 import de.fuzzlemann.ucutils.utils.io.FileManager;
 import net.minecraftforge.fml.common.discovery.ASMDataTable;
 import org.junit.jupiter.api.BeforeAll;
@@ -30,6 +37,8 @@ import static org.mockito.Mockito.when;
  */
 @ExtendWith(MockitoExtension.class)
 class CommandTest {
+
+    private final Set<Class<?>> excludeFromDirectExceptionTesting = ImmutableSet.of(ADropDrinkCommand.class, ADropTransportCommand.class, AGetPizzaCommand.class, ChannelActivityCommand.class, ClearChatCommand.class, DrugPriceCommand.class);
 
     @BeforeAll
     static void setUp() {
@@ -64,12 +73,5 @@ class CommandTest {
     @Test
     void testCommandRegistry() {
         assertFalse(CommandRegistry.COMMAND_REGISTRY.isEmpty());
-    }
-
-    @Test
-    void testNoDirectException() {
-        for (String label : CommandRegistry.COMMAND_REGISTRY.keySet()) {
-            new CommandIssuer(label, new String[]{}, true).issue();
-        }
     }
 }
