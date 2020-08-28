@@ -35,7 +35,8 @@ public class UCUtilsCommand implements TabCompletion {
     private final Gson gson = new Gson();
 
     @Command("ucutils")
-    public boolean onCommand(@CommandParam(required = false, requiredValue = "teamSpeakReconnect") boolean teamSpeakReconnect) {
+    public boolean onCommand(@CommandParam(required = false, requiredValue = "teamSpeakReconnect") boolean teamSpeakReconnect,
+                             @CommandParam(required = false, requiredValue = "resetAccount") boolean resetAccount) {
         if (teamSpeakReconnect) {
             try {
                 TSClientQuery.reconnect();
@@ -45,6 +46,11 @@ public class UCUtilsCommand implements TabCompletion {
                 TextUtils.error("Ein Fehler ist beim Verbinden zur TeamSpeak ClientQuery aufgetreten.");
             }
             return true;
+        }
+
+        if (resetAccount) {
+            APIUtils.postAuthenticated("http://tomcat.fuzzlemann.de/resetAccount");
+            TextUtils.simpleMessage("Dein Account wurde erfolgreich resettet.");
         }
 
         Message.Builder builder = Message.builder()
@@ -101,7 +107,7 @@ public class UCUtilsCommand implements TabCompletion {
 
     @Override
     public List<String> getTabCompletions(UPlayer p, String[] args) {
-        if (args.length == 1) return Collections.singletonList("teamSpeakReconnect");
+        if (args.length == 1) return Arrays.asList("teamSpeakReconnect", "resetAccount");
 
         return null;
     }
