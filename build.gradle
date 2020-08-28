@@ -23,12 +23,12 @@ repositories {
     maven {
         url = 'https://maven.pkg.github.com/Fuzzlemann/UCUtils'
         credentials {
-             username = project.findProperty("gpr.user") ?: System.getenv("USERNAME")
-             password = project.findProperty("gpr.key") ?: System.getenv("TOKEN")
+             username = project.findProperty('gpr.user') ?: System.getenv('USERNAME')
+             password = project.findProperty('gpr.key') ?: System.getenv('TOKEN')
         }
     }
     flatDir {
-        dirs '/libs'
+        dirs project.findProperty('libs') ?: '/libs'
     }
 }
 
