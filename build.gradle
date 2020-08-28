@@ -160,5 +160,7 @@ tasks.matching {
     String taskName = task.name
     deactivatedTasks.contains(taskName)
 }.all {
-    enabled = false
+    if (project.findProperty('no-test')) {
+        enabled = false
+    }
 }
