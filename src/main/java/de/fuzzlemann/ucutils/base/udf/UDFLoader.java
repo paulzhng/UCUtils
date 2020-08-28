@@ -13,7 +13,7 @@ public interface UDFLoader<T> {
     void supply(T t);
 
     default void supplyO(Object o, Class<?> expected, Class<?> collectionParameterClass) {
-        if (collectionParameterClass != null) { //workaround for gson parse failures
+        if (collectionParameterClass != null) { // workaround for gson parse failures
             Gson gson = new Gson();
             Collection<?> collection = (Collection<?>) reParse(o, expected);
 

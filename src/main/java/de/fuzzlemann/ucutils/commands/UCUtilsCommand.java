@@ -3,24 +3,24 @@ package de.fuzzlemann.ucutils.commands;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 import de.fuzzlemann.ucutils.Main;
-import de.fuzzlemann.ucutils.common.DonationEntry;
-import de.fuzzlemann.ucutils.teamspeak.TSClientQuery;
-import de.fuzzlemann.ucutils.teamspeak.exceptions.ClientQueryException;
-import de.fuzzlemann.ucutils.utils.Logger;
 import de.fuzzlemann.ucutils.base.abstraction.UPlayer;
-import de.fuzzlemann.ucutils.utils.api.APIUtils;
 import de.fuzzlemann.ucutils.base.command.Command;
 import de.fuzzlemann.ucutils.base.command.CommandParam;
 import de.fuzzlemann.ucutils.base.command.TabCompletion;
 import de.fuzzlemann.ucutils.base.text.Message;
 import de.fuzzlemann.ucutils.base.text.MessagePart;
 import de.fuzzlemann.ucutils.base.text.TextUtils;
+import de.fuzzlemann.ucutils.common.DonationEntry;
+import de.fuzzlemann.ucutils.teamspeak.TSClientQuery;
+import de.fuzzlemann.ucutils.teamspeak.exceptions.ClientQueryException;
+import de.fuzzlemann.ucutils.utils.Logger;
+import de.fuzzlemann.ucutils.utils.api.APIUtils;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.event.ClickEvent;
 import net.minecraft.util.text.event.HoverEvent;
 
 import java.text.SimpleDateFormat;
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -30,7 +30,7 @@ import java.util.List;
 public class UCUtilsCommand implements TabCompletion {
 
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
-    private final long compileTime = 1593849936129L; //updated by gradle
+    private final long compileTime = 1598616399515L; // updated by gradle
     private final String formattedTime = dateFormat.format(new Date(compileTime));
     private final Gson gson = new Gson();
 

@@ -80,7 +80,7 @@ public class TSClientQuery implements Closeable {
         writer = new ClientQueryWriter(this, new PrintWriter(socket.getOutputStream(), true));
         reader = new ClientQueryReader(this, new BufferedReader(new InputStreamReader(socket.getInputStream(), StandardCharsets.UTF_8)));
 
-        //welcome messages
+        // welcome messages
         while (reader.getReader().ready()) {
             reader.getReader().readLine();
         }

@@ -28,7 +28,7 @@ public class DataManager {
                 DataLoader dataLoader = (DataLoader) clazz.newInstance();
                 DATA_LOADERS.add(dataLoader);
             } catch (ClassNotFoundException | IllegalAccessException | InstantiationException e) {
-                throw new IllegalStateException(e); //should not happen
+                throw new IllegalStateException(e); // should not happen
             }
         }
     }

@@ -72,7 +72,7 @@ class ForgeBaseCommand extends CommandBase implements IClientCommand {
             List<String> returnedTabCompletions = tabCompletion.getTabCompletions(AbstractionLayer.getPlayer(), args);
 
             if (returnedTabCompletions != null) {
-                tabCompletions = new ArrayList<>(returnedTabCompletions); //prevent UnsupportedOperationException when an immutable list is returned
+                tabCompletions = new ArrayList<>(returnedTabCompletions); // prevent UnsupportedOperationException when an immutable list is returned
 
                 if (tabCompletions.isEmpty()) tabCompletions = ForgeUtils.getOnlinePlayers();
             } else {

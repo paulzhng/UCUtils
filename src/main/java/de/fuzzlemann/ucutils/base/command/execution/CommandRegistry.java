@@ -29,7 +29,7 @@ public class CommandRegistry {
                     registerCommand(command);
                 }
             } catch (ClassNotFoundException | IllegalAccessException | InstantiationException e) {
-                throw new IllegalStateException(e); //should not happen
+                throw new IllegalStateException(e); // should not happen
             }
         }
     }

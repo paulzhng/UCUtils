@@ -46,7 +46,7 @@ public class CommandReflection {
     static boolean hasPlayerParam(Method onCommand) {
         Class<?>[] parameterTypes = onCommand.getParameterTypes();
         if (parameterTypes.length == 0)
-            return false; //no parameters at all -> UPLayer cannot be the first parameter
+            return false; // no parameters at all -> UPLayer cannot be the first parameter
 
         return parameterTypes[0].isAssignableFrom(UPlayer.class);
     }
@@ -61,16 +61,16 @@ public class CommandReflection {
     static boolean checkDefaultUsage(Method onCommand) {
         Class<?>[] parameterTypes = onCommand.getParameterTypes();
         if (parameterTypes.length == 0)
-            return false; //when no arguments are present, no String[] can be passed onto the method
+            return false; // when no arguments are present, no String[] can be passed onto the method
 
         boolean containsNonAnnotatedStringArray = false;
         for (Class<?> parameterType : parameterTypes) {
-            if (parameterType.isAssignableFrom(String[].class) && !parameterType.isAnnotationPresent(CommandParam.class)) { //checks if the parameter type is a String[]
+            if (parameterType.isAssignableFrom(String[].class) && !parameterType.isAnnotationPresent(CommandParam.class)) { // checks if the parameter type is a String[]
                 containsNonAnnotatedStringArray = true;
                 continue;
             }
 
-            if (!parameterType.isAssignableFrom(UPlayer.class)) { //UPlayer can be another valid parameter type
+            if (!parameterType.isAssignableFrom(UPlayer.class)) { // UPlayer can be another valid parameter type
                 return false; //no other parameter types except UPlayer and String[] can be defined when using default usage
             }
         }

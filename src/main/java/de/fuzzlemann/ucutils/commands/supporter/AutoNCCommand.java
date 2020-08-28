@@ -152,7 +152,7 @@ public class AutoNCCommand {
                 String word = words[i1];
 
                 if (i1 != words.length - 1) {
-                    int answerLength = answerJoiner.length() + word.length() + 1; //1 for the space
+                    int answerLength = answerJoiner.length() + word.length() + 1; // 1 for the space
 
                     if (answerLength > 252) {
                         subMessages.add(answerJoiner.toString());

@@ -69,7 +69,7 @@ public class NameFormatEventHandler {
 
         PLAYER_MAP.put(userName, p);
 
-        //Prevents people who are masked from being detected
+        // Prevents people who are masked from being detected
         if (displayName.contains("§k")) return;
 
         String color = getPrefix(userName, p.getUniqueID());
@@ -202,7 +202,7 @@ public class NameFormatEventHandler {
             return;
         }
 
-        //TODO TRANSFORM TO REGEX
+        // TODO TRANSFORM TO REGEX
         if (currentTime - hitlistShown > 5000L || !unformattedMessage.startsWith(" - ")) return;
         if (!unformattedMessage.contains("$")) return;
 

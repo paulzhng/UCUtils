@@ -113,7 +113,7 @@ public class TextUtils {
             int pos = message.indexOf(' ', i);
             if (pos == -1) pos = message.length();
 
-            if (urlMatcher.region(i, pos).find()) { //Web link handling
+            if (urlMatcher.region(i, pos).find()) { // Web link handling
                 if (builder.length() > 0) {
                     MessagePart.Builder old = messagePart;
                     old.message(builder.toString());

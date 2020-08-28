@@ -20,9 +20,9 @@ import java.util.Set;
 public class FDoorEventHandler {
 
     private static final Set<FDoor> F_DOORS = ImmutableSet.of(
-            new FDoor(new BlockPos(-167, 69, 204), new BlockPos(-167, 71, 205)), //Ballas HQ
-            new FDoor(new BlockPos(993, 70, -100), new BlockPos(993, 72, -104)),  //Triads HQ
-            new FDoor(new BlockPos(878, 62, -89), new BlockPos(880, 64, -89)) //FBI HQ
+            new FDoor(new BlockPos(-167, 69, 204), new BlockPos(-167, 71, 205)), // Ballas HQ
+            new FDoor(new BlockPos(993, 70, -100), new BlockPos(993, 72, -104)),  // Triads HQ
+            new FDoor(new BlockPos(878, 62, -89), new BlockPos(880, 64, -89)) // FBI HQ
     );
     private static long lastClick;
 
@@ -69,11 +69,11 @@ public class FDoorEventHandler {
             int relevantCoordinate1 = xConstant ? lowerCorner.getZ() : x1;
             int relevantCoordinate2 = xConstant ? upperCorner.getZ() : x2;
 
-            int constantCoordinate = xConstant ? x1 : lowerCorner.getZ(); //irrelevant which X or Z coordinate to pick as those are identical
+            int constantCoordinate = xConstant ? x1 : lowerCorner.getZ(); // irrelevant which X or Z coordinate to pick as those are identical
 
-            //relevantCoordinate1 should be less than relevantCoordinate2 in order to prevent an endless loop
+            // relevantCoordinate1 should be less than relevantCoordinate2 in order to prevent an endless loop
             if (relevantCoordinate1 > relevantCoordinate2) {
-                //swap variables
+                // swap variables
                 int temp = relevantCoordinate1;
 
                 relevantCoordinate1 = relevantCoordinate2;

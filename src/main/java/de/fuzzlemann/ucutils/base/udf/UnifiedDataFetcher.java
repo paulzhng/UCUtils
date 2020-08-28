@@ -39,7 +39,7 @@ public class UnifiedDataFetcher {
                 udfLoaders.put(udfModule, dataLoader);
                 namesToLoaders.put(udfModule.value(), dataLoader);
             } catch (ClassNotFoundException | IllegalAccessException | InstantiationException e) {
-                throw new IllegalStateException(e); //should not happen
+                throw new IllegalStateException(e); // should not happen
             }
         }
     }
@@ -101,7 +101,7 @@ public class UnifiedDataFetcher {
 
             if (clazz == null) {
                 Map.Entry<Class<?>, Class<?>> collectionAndCollectionParameter = ReflectionUtil.getCollectionAndCollectionParameter(udfLoader.getClass(), 0, 0);
-                if (collectionAndCollectionParameter == null) throw new IllegalStateException(); //should not happen
+                if (collectionAndCollectionParameter == null) throw new IllegalStateException(); // should not happen
 
                 clazz = collectionAndCollectionParameter.getKey();
                 collectionParameterClass = collectionAndCollectionParameter.getValue();

@@ -74,7 +74,7 @@ public class CallReinforcementCommand implements TabCompletion {
 
             CustomNaviPoint nearestNaviPoint = ForgeUtils.getNearestObject(new BlockPos(posX, posY, posZ), NavigationUtil.NAVI_POINTS, CustomNaviPoint::getX, CustomNaviPoint::getY, CustomNaviPoint::getZ).getValue();
             if (nearestNaviPoint == null)
-                nearestNaviPoint = new CustomNaviPoint(Collections.singletonList("n/a"), 0, 0, 0); //fix for instances where the webserver is not available
+                nearestNaviPoint = new CustomNaviPoint(Collections.singletonList("n/a"), 0, 0, 0); // fix for instances where the webserver is not available
 
             Message hover = Message.builder()
                     .of("X: ").color(TextFormatting.GRAY).advance()

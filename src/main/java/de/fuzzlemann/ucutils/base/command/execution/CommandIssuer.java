@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ForkJoinPool;
 
 /**
  * @author Fuzzlemann
@@ -57,22 +58,22 @@ class CommandIssuer {
      * Issues the command associated with the {@code label}.
      */
     void issue() {
-        //Runnable containing the surrounding logic of the command execution
+        // Runnable containing the surrounding logic of the command execution
         Runnable commandRunnable = () -> {
             String usage = commandAnnotation.usage();
 
             try {
-                //Sends the usage if the arguments given were incorrect (false is returned)
+                // Sends the usage if the arguments given were incorrect (false is returned)
                 if (!executeCommand())
                     sendUsage(usage, label);
-            } catch (Throwable e) { //check if the throwable is expected; if so, send the usage
-                if (throwException) throw e;
+            } catch (Throwable e) { // check if the throwable is expected; if so, send the usage
+                if (throwException) throw new RuntimeException(e);
 
                 Class<? extends Throwable>[] sendUsageOn = commandAnnotation.sendUsageOn();
 
                 for (Class<? extends Throwable> clazz : sendUsageOn) {
                     if (e.getClass().isAssignableFrom(clazz)) {
-                        sendUsage(usage, label); //throwable is expected; send usage
+                        sendUsage(usage, label); // throwable is expected; send usage
                         return;
                     }
                 }
@@ -82,11 +83,11 @@ class CommandIssuer {
             }
         };
 
-        //Executes the command in an separate thread when stated
+        // Executes the command in an separate thread when stated
         if (commandAnnotation.async() && !throwException) {
             new Thread(commandRunnable, "UCUtils-CommandThread-" + label).start(); //asynchronous
         } else {
-            commandRunnable.run(); //synchronous
+            commandRunnable.run(); // synchronous
         }
     }
 
@@ -107,15 +108,15 @@ class CommandIssuer {
      *
      * @return {@code true}, if the execution of the command was successful; {@code false}, if the arguments ({@code args}) were not given correctly
      */
-    private boolean executeCommand() {
+    private boolean executeCommand() throws Throwable {
         Object[] parameters;
-        if (CommandReflection.checkDefaultUsage(onCommand)) { //checks if the raw unparsed arguments should be passed on to onCommand
+        if (CommandReflection.checkDefaultUsage(onCommand)) { // checks if the raw unparsed arguments should be passed on to onCommand
             parameters = new Object[]{args};
         } else {
             try {
                 parameters = parseArguments();
             } catch (ArgumentException e) {
-                return !e.showUsage(); //arguments failed to parse properly as those were not given correctly
+                return !e.showUsage(); // arguments failed to parse properly as those were not given correctly
             }
         }
 
@@ -127,7 +128,7 @@ class CommandIssuer {
             checkedParameters[0] = AbstractionLayer.getPlayer();
             System.arraycopy(parameters, 0, checkedParameters, 1, parameters.length); //Content of the previous array is inserted in the new array at index 1
         } else {
-            checkedParameters = parameters; //no player param present -> use previous array
+            checkedParameters = parameters; // no player param present -> use previous array
         }
 
         try {
@@ -144,8 +145,8 @@ class CommandIssuer {
      * @throws ArgumentException when invalid arguments were given
      */
     private Object[] parseArguments() {
-        ListMultimap<Class<?>, CommandParam> commandParamMap = parseParameters(); //the parameter types associated with the CommandParam
-        List<Object> arguments = new ArrayList<>(); //the list where all parsed objects land in
+        ListMultimap<Class<?>, CommandParam> commandParamMap = parseParameters(); // the parameter types associated with the CommandParam
+        List<Object> arguments = new ArrayList<>(); // the list where all parsed objects land in
 
         int index = 0;
         for (Map.Entry<Class<?>, CommandParam> entry : commandParamMap.entries()) {
@@ -155,8 +156,8 @@ class CommandIssuer {
             if (commandParam.joinStart() || commandParam.arrayStart()) {
                 String[] joiningArray;
                 int endIndex = getEndIndexOfArgumentArray(index, commandParamMap);
-                if (args.length <= endIndex) { //checks if the end index is outside the argument array
-                    if (commandParam.required()) //as an own argument is required, the execution is ended here
+                if (args.length <= endIndex) { // checks if the end index is outside the argument array
+                    if (commandParam.required()) // as an own argument is required, the execution is ended here
                         throw new ArgumentException("Array or String join parameter is required but not satisfied (args.length <= index)");
 
                     if (commandParam.defaultValue().equals(commandParam.NULL)) {
@@ -165,7 +166,7 @@ class CommandIssuer {
                         continue;
                     }
 
-                    //set it to the default value (when joinStart()) or to the default value split by a whitespace (when arrayStart())
+                    // set it to the default value (when joinStart()) or to the default value split by a whitespace (when arrayStart())
                     joiningArray = commandParam.joinStart()
                             ? new String[]{commandParam.defaultValue()}
                             : commandParam.defaultValue().split(" ");
@@ -199,24 +200,24 @@ class CommandIssuer {
 
             String arg;
             Object argument;
-            if (args.length <= index) { //checks if the index is outside the argument array
-                if (commandParam.required()) //as an own argument is required, the execution is ended here
+            if (args.length <= index) { // checks if the index is outside the argument array
+                if (commandParam.required()) // as an own argument is required, the execution is ended here
                     throw new ArgumentException("Parameter is required but not satisfied (args.length <= index)");
 
-                argument = null; //argument is set to 'null' as the argument is optional -> preparing for default value
+                argument = null; // argument is set to 'null' as the argument is optional -> preparing for default value
             } else {
                 arg = args[index];
                 argument = ObjectMapper.parseToObject(arg, parameterType, commandParam); //parses the argument to the Object itself
             }
 
-            if (argument == null) { //checks if the argument is null (argument parsing failed or argument is not given (see previous code block))
+            if (argument == null) { // checks if the argument is null (argument parsing failed or argument is not given (see previous code block))
                 if (commandParam.required())
                     throw new ArgumentException("Parameter is required but not satisfied (argument == null)");
 
                 arg = commandParam.defaultValue().equals(commandParam.NULL) ? null : commandParam.defaultValue(); //the default argument
                 argument = ObjectMapper.parseToObject(arg, parameterType, commandParam); //the default argument is parsed to the Object
             } else {
-                index++; //argument was successfully read and parsed
+                index++; // argument was successfully read and parsed
             }
 
             arguments.add(argument);
@@ -229,7 +230,7 @@ class CommandIssuer {
         ListMultimap<Class<?>, CommandParam> followingParams = extractFollowingParams(commandParamMap);
 
         int index = args.length - 1;
-        if (followingParams.isEmpty()) return index; //array start is the last parameter
+        if (followingParams.isEmpty()) return index; // array start is the last parameter
 
         List<Map.Entry<Class<?>, CommandParam>> entryList = new ArrayList<>(followingParams.entries()); //making #get available
         for (int i = entryList.size() - 1; i >= 0; i--) {

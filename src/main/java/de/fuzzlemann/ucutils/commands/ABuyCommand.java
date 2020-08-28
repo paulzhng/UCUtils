@@ -1,11 +1,11 @@
 package de.fuzzlemann.ucutils.commands;
 
 import de.fuzzlemann.ucutils.Main;
-import de.fuzzlemann.ucutils.keybind.KeyBindRegistry;
 import de.fuzzlemann.ucutils.base.abstraction.AbstractionLayer;
 import de.fuzzlemann.ucutils.base.command.Command;
 import de.fuzzlemann.ucutils.base.command.CommandParam;
 import de.fuzzlemann.ucutils.base.text.Message;
+import de.fuzzlemann.ucutils.keybind.KeyBindRegistry;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.inventory.ClickType;
 import net.minecraft.inventory.Container;
@@ -19,7 +19,6 @@ import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import org.lwjgl.input.Keyboard;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -65,7 +64,7 @@ public class ABuyCommand {
     public static void onKeyboardClickEvent(GuiScreenEvent.KeyboardInputEvent.Post e) {
         if (amount == 0) return;
 
-        if (Keyboard.isKeyDown(KeyBindRegistry.aBuy.getKeyCode())) return;
+        if (KeyBindRegistry.aBuy.isPressed()) return;
 
         if (!(e.getGui() instanceof GuiContainer)) return;
         GuiContainer inv = (GuiContainer) e.getGui();
