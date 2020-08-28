@@ -3,6 +3,8 @@ package de.fuzzlemann.ucutils.events;
 import de.fuzzlemann.ucutils.Main;
 import de.fuzzlemann.ucutils.base.text.TextUtils;
 import de.fuzzlemann.ucutils.config.UCUtilsConfig;
+import de.fuzzlemann.ucutils.utils.faction.Faction;
+import de.fuzzlemann.ucutils.utils.faction.FactionPlayersList;
 import de.fuzzlemann.ucutils.utils.faction.HouseBanHandler;
 import de.fuzzlemann.ucutils.utils.faction.police.Wanted;
 import net.minecraft.entity.item.EntityItem;
@@ -337,8 +339,18 @@ public class NameFormatEventHandler {
 
         if (CONTRACT_LIST.contains(userName)) {
             return "§4";
-        } else if (UCUtilsConfig.showHouseBans && uniqueID != null && HouseBanHandler.HOUSE_BANS.contains(uniqueID.toString())) {
+        }
+
+        if (UCUtilsConfig.showHouseBans && uniqueID != null && HouseBanHandler.HOUSE_BANS.contains(uniqueID.toString())) {
             return "§8[§cHV§8] §f";
+        }
+
+        if (UCUtilsConfig.showFactionPlayers) {
+            Faction faction = Faction.getFactionOfPlayer();
+
+            if (faction != null && FactionPlayersList.PLAYER_TO_FACTION_MAP.get(userName) == faction) {
+                return "§9";
+            }
         }
 
         return null;

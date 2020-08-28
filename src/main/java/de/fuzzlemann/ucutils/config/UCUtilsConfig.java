@@ -59,6 +59,10 @@ public class UCUtilsConfig {
     @Config.Comment("Der Chat wird geloggt und im Minecraft-Order unter /chatlogs gespeichert")
     public static boolean logChat = true;
 
+    @Config.Name("showFactionPlayers")
+    @Config.Comment("Kennzeichnet Personen aus deiner Fraktion")
+    public static boolean showFactionPlayers = false;
+
     @Config.Name("showHouseBans")
     @Config.Comment("Kennzeichnet Personen mit einem Hausverbot")
     public static boolean showHouseBans = false;
