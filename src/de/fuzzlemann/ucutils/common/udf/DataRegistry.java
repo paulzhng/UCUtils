@@ -18,4 +18,6 @@ public class DataRegistry {
     public static final String INFO = "info";
     public static final String DRUG_PRICE = "drug-price";
     public static final String BLACKLIST_REASONS = "blacklist-reasons";
+    public static final String FACTION_PLAYERS = "faction-players";
+
 }
