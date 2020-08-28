@@ -1,4 +1,7 @@
 # UCUtils
+
+![Build badge](https://ci.fuzzlemann.de/job/UCUtils/badge/icon)
+
 UCUtils is a Forge-based modification for UnicaCity providing specialized and nice-to-have features and utilities for everyday gameplay.
 
 ### Installation
