@@ -85,7 +85,7 @@ class CommandIssuer {
 
         // Executes the command in an separate thread when stated
         if (commandAnnotation.async() && !throwException) {
-            ForkJoinPool.commonPool().submit(commandRunnable);
+            ForkJoinPool.commonPool().submit(commandRunnable); // asynchronous
         } else {
             commandRunnable.run(); // synchronous
         }
@@ -122,7 +122,7 @@ class CommandIssuer {
 
         Object[] checkedParameters;
         if (CommandReflection.hasPlayerParam(onCommand)) { //checks if UPlayer should be passed on to the command
-            // the UPLayer parameter *must* always be the first one, so when it is present, the other parameters
+            // the UPlayer parameter *must* always be the first one, so when it is present, the other parameters
             // are getting moved one to the right and the UPlayer is inserted at the start of the (new) array
             checkedParameters = new Object[parameters.length + 1];
             checkedParameters[0] = AbstractionLayer.getPlayer();
