@@ -20,7 +20,13 @@ plugins {
 }
 
 repositories {
-    mavenLocal()
+    maven {
+        url = 'https://maven.pkg.github.com/Fuzzlemann/UCUtils'
+        credentials {
+             username = project.findProperty("gpr.user") ?: System.getenv("USERNAME")
+             password = project.findProperty("gpr.key") ?: System.getenv("TOKEN")
+        }
+    }
     flatDir {
         dirs '/libs'
     }
@@ -48,7 +54,7 @@ idea {
 
 dependencies {
     provided 'net.labymod:lm_api_mc1.12.2:3.4.2'
-    shade 'de.fuzzlemann:common:1.1.4'
+    shade 'de.fuzzlemann:common:1.1.5'
 
     testImplementation 'org.reflections:reflections:0.9.11'
     testImplementation 'org.mockito:mockito-junit-jupiter:2.28.2'
