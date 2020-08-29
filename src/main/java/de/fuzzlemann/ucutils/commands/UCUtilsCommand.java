@@ -49,8 +49,9 @@ public class UCUtilsCommand implements TabCompletion {
         }
 
         if (resetAccount) {
-            APIUtils.postAuthenticated("http://tomcat.fuzzlemann.de/resetAccount");
+            APIUtils.postAuthenticated("http://tomcat.fuzzlemann.de/factiononline/resetAccount");
             TextUtils.simpleMessage("Dein Account wurde erfolgreich resettet.");
+            return true;
         }
 
         Message.Builder builder = Message.builder()
