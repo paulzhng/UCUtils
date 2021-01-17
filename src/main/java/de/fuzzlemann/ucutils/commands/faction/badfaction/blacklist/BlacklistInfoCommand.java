@@ -20,6 +20,8 @@ public class BlacklistInfoCommand {
 
     @Command(value = {"blacklistinfo", "blinfo"}, usage = "/%label% [Spieler...]")
     public boolean onCommand(UPlayer p, @CommandParam(arrayStart = true) String[] targets) {
+        if (targets.length == 0) return false;
+
         PLAYERS.clear();
 
         executedTime = System.currentTimeMillis();
