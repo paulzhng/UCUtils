@@ -20,6 +20,8 @@ plugins {
 }
 
 repositories {
+    mavenLocal()
+    mavenCentral()
     maven {
         url = 'https://maven.pkg.github.com/Fuzzlemann/UCUtils'
         credentials {
