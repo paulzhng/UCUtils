@@ -24,7 +24,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 /**
  * @author Fuzzlemann
  */
-
 @SideOnly(Side.CLIENT)
 @Mod(name = Main.NAME, modid = Main.MOD_ID, version = Main.VERSION, clientSideOnly = true, acceptedMinecraftVersions = "[1.12,1.12.2]")
 public class Main {

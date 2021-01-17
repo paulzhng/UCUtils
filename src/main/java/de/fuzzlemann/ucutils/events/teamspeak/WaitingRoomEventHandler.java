@@ -68,15 +68,20 @@ public class WaitingRoomEventHandler {
             if (support) {
                 builder.of("hat das Wartezimmer betreten.").color(TextFormatting.GRAY).advance();
             } else {
-                builder.of("hat den Öffentlich-Channel betreten.").color(TextFormatting.GRAY).advance();
+                builder.of("hat den Öffentlich-Channel betreten.").color(TextFormatting.GRAY).advance()
+                        .space()
+                        .of("[↑]").color(TextFormatting.BLUE)
+                        .hoverEvent(HoverEvent.Action.SHOW_TEXT, Message.builder().of("Betritt den Öffentlich-Channel").color(TextFormatting.GRAY).advance().build())
+                        .clickEvent(ClickEvent.Action.RUN_COMMAND, "/tsjoin Öffentlich")
+                        .advance()
+                        .space();
             }
 
             builder.space()
                     .of("[↓]").color(TextFormatting.BLUE)
                     .hoverEvent(HoverEvent.Action.SHOW_TEXT, Message.builder().of("Move ").color(TextFormatting.GRAY).advance().of(name).color(TextFormatting.BLUE).advance().of(" zu dir").color(TextFormatting.GRAY).advance().build())
-                    .clickEvent(ClickEvent.Action.RUN_COMMAND, "/movehere " + name).advance();
-
-            builder.send();
+                    .clickEvent(ClickEvent.Action.RUN_COMMAND, "/movehere " + name).advance()
+                    .send();
 
             Main.MINECRAFT.addScheduledTask(() -> AbstractionLayer.getPlayer().playSound(Objects.requireNonNull(SoundUtil.getSoundEvent("block.note.pling")), 1, 1));
         }).start();
