@@ -4,6 +4,7 @@ import de.fuzzlemann.ucutils.base.abstraction.UPlayer;
 import de.fuzzlemann.ucutils.base.command.Command;
 import de.fuzzlemann.ucutils.base.command.CommandParam;
 import de.fuzzlemann.ucutils.base.command.TabCompletion;
+import de.fuzzlemann.ucutils.base.text.TextUtils;
 import de.fuzzlemann.ucutils.common.udf.data.faction.drug.DrugQuality;
 import de.fuzzlemann.ucutils.common.udf.data.faction.drug.DrugType;
 import net.minecraftforge.fml.relauncher.Side;
@@ -25,7 +26,7 @@ public class GiveDrugCommand implements TabCompletion {
         if (giveMoney)
             p.sendChatMessage("/pay " + target + " 1");
 
-        p.sendChatMessage("/selldrug " + target + " " + drugType.getName() + " " + drugQuality.getId() + " " + amount);
+        p.sendChatMessage("/selldrug " + target + " " + drugType.getName() + " " + drugQuality.getId() + " " + amount + " 1");
         return true;
     }
 
