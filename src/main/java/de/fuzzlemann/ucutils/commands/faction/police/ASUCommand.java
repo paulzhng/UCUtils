@@ -1,23 +1,26 @@
 package de.fuzzlemann.ucutils.commands.faction.police;
 
-import de.fuzzlemann.ucutils.utils.ForgeUtils;
 import de.fuzzlemann.ucutils.base.abstraction.UPlayer;
 import de.fuzzlemann.ucutils.base.command.Command;
 import de.fuzzlemann.ucutils.base.command.TabCompletion;
+import de.fuzzlemann.ucutils.base.text.TextUtils;
+import de.fuzzlemann.ucutils.utils.ForgeUtils;
 import de.fuzzlemann.ucutils.utils.faction.police.WantedManager;
 import de.fuzzlemann.ucutils.utils.faction.police.WantedReason;
 import de.fuzzlemann.ucutils.utils.math.Expression;
-import de.fuzzlemann.ucutils.base.text.TextUtils;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author Fuzzlemann
  */
 @SideOnly(Side.CLIENT)
 public class ASUCommand implements TabCompletion {
+
+    private final Timer timer = new Timer();
 
     @Command(value = "asu", usage = "/%label% [Spieler...] [Grund] (-v/-b/-fsa)")
     public boolean onCommand(UPlayer p, String[] args) {
@@ -50,7 +53,23 @@ public class ASUCommand implements TabCompletion {
     }
 
     private void giveWanteds(UPlayer issuer, String reason, int amount, List<String> players) {
-        amount = Math.min(amount, 69);
+        int maxAmount = Math.min(amount, 69);
+
+        timer.scheduleAtFixedRate(new TimerTask() {
+            private int i;
+
+            @Override
+            public void run() {
+                if (i >= players.size()) {
+                    cancel();
+                    return;
+                }
+
+                String player = players.get(i++);
+
+                issuer.sendChatMessage("/su " + maxAmount + " " + player + " " + reason);
+            }
+        }, 0, TimeUnit.SECONDS.toMillis(1));
 
         for (String player : players) {
             issuer.sendChatMessage("/su " + amount + " " + player + " " + reason);
