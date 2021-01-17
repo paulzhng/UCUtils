@@ -10,6 +10,9 @@ import de.fuzzlemann.ucutils.utils.faction.badfaction.blacklist.BlacklistUtil;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
@@ -17,10 +20,29 @@ import java.util.stream.Collectors;
  */
 public class ASetBlacklistCommand implements TabCompletion {
 
+    private final Timer timer = new Timer();
+
     @Command(value = {"asetblacklist", "asetbl"}, usage = "/%label% [Spieler...] [Grund]")
     public boolean onCommand(UPlayer p, @CommandParam(arrayStart = true) String[] targets, BlacklistReason reason) {
-        for (String player : targets) {
-            p.sendChatMessage("/bl set " + player + " " + reason.getKills() + " " + reason.getAmount() + " " + reason.getReason());
+        if (targets.length < 14) {
+            for (String player : targets) {
+                p.sendChatMessage("/bl set " + player + " " + reason.getKills() + " " + reason.getAmount() + " " + reason.getReason());
+            }
+        } else {
+            timer.scheduleAtFixedRate(new TimerTask() {
+                private int i;
+                @Override
+                public void run() {
+                    if (i >= targets.length) {
+                        cancel();
+                        return;
+                    }
+
+                    String player = targets[i++];
+
+                    p.sendChatMessage("/bl set " + player + " " + reason.getKills() + " " + reason.getAmount() + " " + reason.getReason());
+                }
+            }, 0, TimeUnit.SECONDS.toMillis(1));
         }
 
         return true;
