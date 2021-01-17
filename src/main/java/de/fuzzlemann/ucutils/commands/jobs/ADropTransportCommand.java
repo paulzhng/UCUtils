@@ -8,10 +8,12 @@ import net.minecraft.scoreboard.Scoreboard;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import java.util.Optional;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @author Fuzzlemann
@@ -27,21 +29,21 @@ public class ADropTransportCommand {
         if (started.get()) return true;
 
         Scoreboard scoreboard = p.getWorldScoreboard();
-        Score score = scoreboard.getScores().stream()
+
+        Optional<Score> score = scoreboard.getScores().stream()
                 .filter(scorePredicate -> {
                     String playerName = scorePredicate.getPlayerName();
 
-                    return playerName.equals("§9Kisten§8: ") || playerName.equals("§9Waffenkisten§8: ") || playerName.equals("§6Weizen&8: ");
+                    return playerName.equals("§aTransport") || playerName.equals("§9Kisten§8: ") || playerName.equals("§9Waffenkisten§8: ") || playerName.equals("§6Weizen&8: ");
                 })
-                .findFirst()
-                .orElse(null);
+                .findFirst();
 
-        if (score == null) {
+        if (!score.isPresent()) {
             TextUtils.error("Du bist derzeit in keinem Transport.");
             return true;
         }
 
-        int amount = score.getScorePoints();
+        int amount = score.get().getScorePoints();
 
         started.set(true);
         timer.scheduleAtFixedRate(new TimerTask() {
@@ -55,7 +57,7 @@ public class ADropTransportCommand {
                     cancel();
                 }
             }
-        }, 0L, TimeUnit.SECONDS.toMillis((long) 10.1));
+        }, 0L, TimeUnit.SECONDS.toMillis(10));
         return true;
     }
 }
