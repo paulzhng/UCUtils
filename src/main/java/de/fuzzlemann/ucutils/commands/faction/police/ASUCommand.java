@@ -55,24 +55,26 @@ public class ASUCommand implements TabCompletion {
     private void giveWanteds(UPlayer issuer, String reason, int amount, List<String> players) {
         int maxAmount = Math.min(amount, 69);
 
-        timer.scheduleAtFixedRate(new TimerTask() {
-            private int i;
+        if players.size() > 14 {
+            timer.scheduleAtFixedRate(new TimerTask() {
+                private int i;
 
-            @Override
-            public void run() {
-                if (i >= players.size()) {
-                    cancel();
-                    return;
+                @Override
+                public void run() {
+                    if (i >= players.size()) {
+                        cancel();
+                        return;
+                    }
+
+                    String player = players.get(i++);
+
+                    issuer.sendChatMessage("/su " + maxAmount + " " + player + " " + reason);
                 }
-
-                String player = players.get(i++);
-
-                issuer.sendChatMessage("/su " + maxAmount + " " + player + " " + reason);
+            }, 0, TimeUnit.SECONDS.toMillis(1));
+        } else{
+            for (String player : players) {
+                issuer.sendChatMessage("/su " + amount + " " + player + " " + reason);
             }
-        }, 0, TimeUnit.SECONDS.toMillis(1));
-
-        for (String player : players) {
-            issuer.sendChatMessage("/su " + amount + " " + player + " " + reason);
         }
     }
 
