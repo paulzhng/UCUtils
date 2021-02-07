@@ -49,10 +49,19 @@ public class SpeechModifyUtil {
 
     public static String replaceIgnoreCase(String toReplaceString, List<Map.Entry<String, String>> replaceMap) {
         for (Map.Entry<String, String> entry : replaceMap) {
-            String toReplace = entry.getKey();
-            String replaceTo = entry.getValue();
+            String[] s = toReplaceString.split(" ");
 
-            toReplaceString = toReplaceString.replaceAll("(?i)" + toReplace, replaceTo);
+            for (int i=0; i<s.length; i++) {
+                String toReplace = entry.getKey();
+                String replaceTo = entry.getValue();
+                
+                if (s[i].equalsIgnoreCase(toReplace)) {
+                    s[i].replace("(?i)" + toReplace, replaceTo);
+                }
+            }
+
+            toReplaceString = s.toString();
+
         }
 
         return toReplaceString;
