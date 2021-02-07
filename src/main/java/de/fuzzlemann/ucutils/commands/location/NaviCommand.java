@@ -57,6 +57,10 @@ public class NaviCommand implements TabCompletion {
             return true;
         }
 
+        if (Pattern.matches("[0-9]+", argument)) {
+            passToServer(p, "Haus:"+argument);
+        }
+
         CustomNaviPoint naviPoint = NavigationUtil.getNaviPoint(argument);
         if (naviPoint == null) {
             passToServer(p, argument);
