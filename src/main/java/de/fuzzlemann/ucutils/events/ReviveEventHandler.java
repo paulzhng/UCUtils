@@ -21,8 +21,7 @@ import java.util.concurrent.TimeUnit;
 @Mod.EventBusSubscriber
 public class ReviveEventHandler {
 
-    private static Timer timer = new Timer();
-    private static boolean reviveblock = false;
+    private static long latestEcecute = -1;
 
     @SubscribeEvent
     public static void onRevive(PlayerInteractEvent.RightClickBlock e) {
@@ -36,16 +35,11 @@ public class ReviveEventHandler {
             double distance = entityItem.getDistanceSq(pos.getX(), pos.getY(), pos.getZ());
 
             if (distance < 2) {
-                if (!reviveblock) {
-                    AbstractionLayer.getPlayer().sendChatMessage("/revive");
-                    reviveblock=true;
-                    timer.schedule(new TimerTask() {
-                        @Override
-                        public void run() {
-                            reviveblock=false;
-                        }
-                    },5);
-                }
+                if (System.currentTimeMillis() - latestEcecute < 5000) return;
+
+                AbstractionLayer.getPlayer().sendChatMessage("/revive");
+                latestEcecute = System.currentTimeMillis();
+            }
                 return;
             }
         }
