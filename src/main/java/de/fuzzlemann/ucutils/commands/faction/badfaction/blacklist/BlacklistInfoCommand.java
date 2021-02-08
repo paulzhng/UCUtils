@@ -3,6 +3,7 @@ package de.fuzzlemann.ucutils.commands.faction.badfaction.blacklist;
 import de.fuzzlemann.ucutils.base.abstraction.UPlayer;
 import de.fuzzlemann.ucutils.base.command.Command;
 import de.fuzzlemann.ucutils.base.command.CommandParam;
+import de.fuzzlemann.ucutils.base.text.TextUtils;
 import de.fuzzlemann.ucutils.events.NameFormatEventHandler;
 import de.fuzzlemann.ucutils.utils.ForgeUtils;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
@@ -45,7 +46,7 @@ public class BlacklistInfoCommand {
         Matcher matcher = NameFormatEventHandler.BLACKLIST_LIST_PATTERN.matcher(text);
         if (!matcher.find()) return;
 
-        String name = matcher.group(0);
+        String name = matcher.group(1);
         if (!PLAYERS.contains(name))
             e.setCanceled(true);
     }
