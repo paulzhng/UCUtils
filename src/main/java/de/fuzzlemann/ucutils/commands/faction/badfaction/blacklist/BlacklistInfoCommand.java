@@ -38,7 +38,7 @@ public class BlacklistInfoCommand {
     }
 
     @SubscribeEvent
-    public void onBlacklistInfo(ClientChatReceivedEvent e) {
+    public static void onBlacklistInfo(ClientChatReceivedEvent e) {
         if (System.currentTimeMillis() - executedTime > 1000L) return;
 
         String text = e.getMessage().getUnformattedText();
