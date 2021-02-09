@@ -54,7 +54,7 @@ public class SpeechModifyUtil {
             for (int i=0; i<s.length; i++) {
                 String toReplace = entry.getKey();
                 String replaceTo = entry.getValue();
-                
+
                 if (s[i].equalsIgnoreCase(toReplace)) {
                     s[i].replace("(?i)" + toReplace, replaceTo);
                 }
