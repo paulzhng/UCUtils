@@ -55,7 +55,7 @@ public class ASUCommand implements TabCompletion {
     private void giveWanteds(UPlayer issuer, String reason, int amount, List<String> players) {
         int maxAmount = Math.min(amount, 69);
 
-        if players.size() > 14 {
+        if (players.size() > 14) {
             timer.scheduleAtFixedRate(new TimerTask() {
                 private int i;
 
