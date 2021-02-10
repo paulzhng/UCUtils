@@ -11,12 +11,17 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author Fuzzlemann
  */
 @Mod.EventBusSubscriber
 public class ReviveEventHandler {
+
+    private static long latestExecute = -1;
 
     @SubscribeEvent
     public static void onRevive(PlayerInteractEvent.RightClickBlock e) {
@@ -29,8 +34,9 @@ public class ReviveEventHandler {
         for (EntityItem entityItem : items) {
             double distance = entityItem.getDistanceSq(pos.getX(), pos.getY(), pos.getZ());
 
-            if (distance < 2) {
+            if (distance >= 2 && System.currentTimeMillis() - latestExecute < 500) return;
                 AbstractionLayer.getPlayer().sendChatMessage("/revive");
+                latestExecute = System.currentTimeMillis();
                 return;
             }
         }
