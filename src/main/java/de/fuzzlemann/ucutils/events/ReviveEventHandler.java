@@ -11,9 +11,6 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @author Fuzzlemann
@@ -35,10 +32,9 @@ public class ReviveEventHandler {
             double distance = entityItem.getDistanceSq(pos.getX(), pos.getY(), pos.getZ());
 
             if (distance >= 2 && System.currentTimeMillis() - latestExecute < 500) return;
-                AbstractionLayer.getPlayer().sendChatMessage("/revive");
-                latestExecute = System.currentTimeMillis();
-                return;
-            }
+            AbstractionLayer.getPlayer().sendChatMessage("/revive");
+            latestExecute = System.currentTimeMillis();
+            return;
         }
     }
 }
