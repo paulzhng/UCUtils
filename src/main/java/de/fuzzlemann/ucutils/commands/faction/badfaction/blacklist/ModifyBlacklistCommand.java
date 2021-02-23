@@ -26,14 +26,19 @@ public class ModifyBlacklistCommand implements TabCompletion {
     private static UPlayer p;
     private static String target;
     private static BlacklistReason addReason;
-
+    private static boolean vogelfrei = false;
     private static long executedTime = -1;
 
     @Command(value = {"modifyblacklist", "mbl"}, usage = "/%label% [Spieler] [Grund]")
-    public boolean onCommand(UPlayer p, String target, BlacklistReason reason) {
+    public boolean onCommand(UPlayer p, String target,
+                             @CommandParam(required = false) BlacklistReason reason,
+                             @CommandParam(required = false, requiredValue = "-v") boolean vogelfrei) {
+        this.vogelfrei = vogelfrei;
         this.target = target;
         this.p = p;
-        this.addReason = reason;
+        if (reason != null) {
+            this.addReason = reason;
+        }
         this.executedTime = System.currentTimeMillis();
         p.sendChatMessage("/bl");
         return true;
@@ -55,9 +60,18 @@ public class ModifyBlacklistCommand implements TabCompletion {
 
         String name = matcher.group(1);
         if (name.equals(target)) {
+            if (vogelfrei) {
+                int kills = Integer.parseInt(matcher.group(4));
+                int price = Integer.parseInt(matcher.group(5));
+                String reason = matcher.group(2) + " [Vogelfrei]";
+                p.sendChatMessage("/bl del " + target);
+                p.sendChatMessage("/bl set " + target + " " + kills + " " + price + " " + reason);
+                e.setCanceled(true);
+                return;
+            }
             int kills = calcKills(matcher);
             int price = calcPrice(matcher);
-            String reasons = matcher.group(2) + " + " + addReason.getReason();
+            String reasons = addReason.getReason() + " + " + matcher.group(2);
             p.sendChatMessage("/bl del " + target);
             p.sendChatMessage("/bl set " + target + " " + kills + " " + price + " " + reasons);
         }
