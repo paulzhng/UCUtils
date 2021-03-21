@@ -115,8 +115,8 @@ processResources {
 
     ant.replaceregexp(
             file: './src/main/java/de/fuzzlemann/ucutils/commands/UCUtilsCommand.java',
-            match: /\d+L; \/\/updated by gradle/,
-            replace: new Date().toTimestamp().getTime() + "L; //updated by gradle",
+            match: /\d+L; \/\/ updated by gradle/,
+            replace: new Date().toTimestamp().getTime() + "L; // updated by gradle",
             flags: 'g',
             byline: true
     )

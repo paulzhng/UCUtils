@@ -38,7 +38,7 @@ public class WaitingRoomEventHandler {
 
         int targetChannelID = e.getTargetChannelID();
         boolean support;
-        if (targetChannelID == 30) {
+        if (targetChannelID == 41) {
             if (!supportNotification) return;
             support = true;
         } else if (Faction.getFactionOfPlayer() != null && targetChannelID == Faction.getFactionOfPlayer().getPublicChannelID()) {
