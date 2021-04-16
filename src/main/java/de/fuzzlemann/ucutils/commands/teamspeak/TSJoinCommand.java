@@ -1,24 +1,21 @@
 package de.fuzzlemann.ucutils.commands.teamspeak;
 
+import de.fuzzlemann.ucutils.base.abstraction.UPlayer;
+import de.fuzzlemann.ucutils.base.command.Command;
+import de.fuzzlemann.ucutils.base.command.CommandParam;
+import de.fuzzlemann.ucutils.base.command.TabCompletion;
+import de.fuzzlemann.ucutils.base.text.Message;
+import de.fuzzlemann.ucutils.base.text.TextUtils;
 import de.fuzzlemann.ucutils.teamspeak.CommandResponse;
 import de.fuzzlemann.ucutils.teamspeak.TSUtils;
 import de.fuzzlemann.ucutils.teamspeak.commands.ChannelListCommand;
 import de.fuzzlemann.ucutils.teamspeak.commands.ClientMoveCommand;
 import de.fuzzlemann.ucutils.teamspeak.objects.Channel;
 import de.fuzzlemann.ucutils.utils.ForgeUtils;
-import de.fuzzlemann.ucutils.base.abstraction.UPlayer;
-import de.fuzzlemann.ucutils.base.command.Command;
-import de.fuzzlemann.ucutils.base.command.CommandParam;
-import de.fuzzlemann.ucutils.base.command.TabCompletion;
 import de.fuzzlemann.ucutils.utils.faction.Faction;
-import de.fuzzlemann.ucutils.base.text.Message;
-import de.fuzzlemann.ucutils.base.text.TextUtils;
 import net.minecraft.util.text.TextFormatting;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author Fuzzlemann
@@ -47,7 +44,7 @@ public class TSJoinCommand implements TabCompletion {
 
         channelName = channelName.replace('-', ' ');
         Channel foundChannel;
-        if (channelName.equals("Öffentlich") && Faction.getFactionOfPlayer() != null) {
+        if (channelName.equalsIgnoreCase("Öffentlich") && Faction.getFactionOfPlayer() != null) {
             foundChannel = new Channel(Faction.getFactionOfPlayer().getPublicChannelID(), "Öffentlich", 0, 0);
         } else {
             foundChannel = ForgeUtils.getMostMatching(channelMaps.values(), channelName, (channel) -> modifyChannelName(channel.getName()));
@@ -83,7 +80,7 @@ public class TSJoinCommand implements TabCompletion {
     @Override
     public List<String> getTabCompletions(UPlayer p, String[] args) {
         ChannelListCommand.Response response = new ChannelListCommand().getResponse();
-        List<String> names = new ArrayList<>();
+        Set<String> names = new HashSet<>(); // use hashset to dedup
         for (Channel channel : response.getChannels()) {
             String name = channel.getName();
             if (name.startsWith("[cspacer")) continue;
@@ -93,7 +90,7 @@ public class TSJoinCommand implements TabCompletion {
             names.add(name);
         }
 
-        return names;
+        return new ArrayList<>(names);
     }
 
     private String modifyChannelName(String input) {
