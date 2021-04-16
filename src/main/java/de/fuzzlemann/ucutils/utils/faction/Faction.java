@@ -10,19 +10,19 @@ import java.util.Arrays;
  */
 @ParameterParser.At(FactionParser.class)
 public enum Faction {
-    UCPD("polizei", "Police", 60),
-    FBI("fbi", "FBI", 5412),
-    UCMD("rettungsdienst", "Medic", 69),
-    NEWS("news", "News", 109),
-    TERRORISTS("terroristen", "Terroristen", 199),
-    HITMAN("hitman", "Hitman", 150),
-    CHURCH("kirche", "Church", 101),
-    LA_COSA_NOSTRA("lacosanostra", "Mafia", 79),
-    CALDERON("calderon", "Mexican", 94),
-    BALLAS("ballas", "Gang", 86),
-    KERZAKOV("kerzakov", "Kerzakov", 163),
-    TRIADS("triaden", "Triaden", 5419),
-    OBRIEN("o_brien", "O_Brien", 12328);
+    UCPD("polizei", "Police", 78),
+    FBI("fbi", "FBI", 106),
+    UCMD("rettungsdienst", "Medic", 118),
+    NEWS("news", "News", 239),
+    TERRORISTS("terroristen", "Terroristen", 203),
+    HITMAN("hitman", "Hitman", 215),
+    CHURCH("kirche", "Church", 227),
+    LA_COSA_NOSTRA("lacosanostra", "Mafia", 130),
+    CALDERON("calderon", "Mexican", 154),
+    BALLAS("ballas", "Gang", 142),
+    KERZAKOV("kerzakov", "Kerzakov", 166),
+    TRIADS("triaden", "Triaden", 179),
+    OBRIEN("o_brien", "O_Brien", 191);
 
     static Faction factionOfPlayer;
     private final String apiName;
