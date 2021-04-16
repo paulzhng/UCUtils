@@ -1,46 +1,52 @@
 package de.fuzzlemann.ucutils.commands.faction.badfaction.blacklist;
 
+import de.fuzzlemann.ucutils.base.abstraction.AbstractionLayer;
 import de.fuzzlemann.ucutils.base.abstraction.UPlayer;
 import de.fuzzlemann.ucutils.base.command.Command;
 import de.fuzzlemann.ucutils.base.command.CommandParam;
 import de.fuzzlemann.ucutils.base.command.TabCompletion;
-import de.fuzzlemann.ucutils.base.text.Message;
 import de.fuzzlemann.ucutils.common.udf.data.faction.blacklist.BlacklistReason;
-import de.fuzzlemann.ucutils.common.udf.data.faction.blacklist.BlacklistReasons;
 import de.fuzzlemann.ucutils.events.NameFormatEventHandler;
 import de.fuzzlemann.ucutils.utils.ForgeUtils;
-import de.fuzzlemann.ucutils.utils.faction.Faction;
 import de.fuzzlemann.ucutils.utils.faction.badfaction.blacklist.BlacklistUtil;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.stream.Collectors;
 
+/**
+ * @author Dimikou
+ */
 @Mod.EventBusSubscriber
 public class ModifyBlacklistCommand implements TabCompletion {
 
-    private static UPlayer p;
     private static String target;
+    private static ModifyBlacklistType type;
     private static BlacklistReason addReason;
-    private static boolean vogelfrei = false;
     private static long executedTime = -1;
 
-    @Command(value = {"modifyblacklist", "mbl"}, usage = "/%label% [Spieler] [Grund]")
+    @Command(value = {"modifyblacklist", "mbl"}, usage = "/%label% [Spieler] (Grund) (-v)")
     public boolean onCommand(UPlayer p, String target,
                              @CommandParam(required = false) BlacklistReason reason,
-                             @CommandParam(required = false, requiredValue = "-v") boolean vogelfrei) {
-        this.vogelfrei = vogelfrei;
-        this.target = target;
-        this.p = p;
+                             @CommandParam(required = false, requiredValue = "-v", defaultValue = CommandParam.NULL) Boolean outlaw) {
+        if (outlaw == null && reason == null) return false; // we need one of both
+        if (outlaw != null && reason != null) return false; // but not both at the same time
+
+        ModifyBlacklistCommand.target = target;
         if (reason != null) {
-            this.addReason = reason;
+            addReason = reason;
+            type = ModifyBlacklistType.OUTLAW;
+        } else {
+            type = ModifyBlacklistType.MODIFY_REASON;
         }
-        this.executedTime = System.currentTimeMillis();
-        p.sendChatMessage("/bl");
+
+        executedTime = System.currentTimeMillis();
+
+        p.sendChatMessage("/blacklist");
         return true;
     }
 
@@ -49,47 +55,41 @@ public class ModifyBlacklistCommand implements TabCompletion {
         if (System.currentTimeMillis() - executedTime > 1000L) return;
 
         String text = e.getMessage().getUnformattedText();
-        Matcher matcher = NameFormatEventHandler.BLACKLIST_START_PATTERN.matcher(text);
 
-        if (matcher.find()) {
+        // remove start message
+        Matcher startPattern = NameFormatEventHandler.BLACKLIST_START_PATTERN.matcher(text);
+        if (startPattern.find()) {
             e.setCanceled(true);
-        }
-        matcher = NameFormatEventHandler.BLACKLIST_LIST_PATTERN.matcher(text);
-
-        if (!matcher.find()) return;
-
-        String name = matcher.group(1);
-        if (name.equals(target)) {
-            if (vogelfrei) {
-                int kills = Integer.parseInt(matcher.group(4));
-                int price = Integer.parseInt(matcher.group(5));
-                String reason = matcher.group(2) + " [Vogelfrei]";
-                p.sendChatMessage("/bl del " + target);
-                p.sendChatMessage("/bl set " + target + " " + kills + " " + price + " " + reason);
-                e.setCanceled(true);
-                return;
-            }
-            int kills = calcKills(matcher);
-            int price = calcPrice(matcher);
-            String reasons = addReason.getReason() + " + " + matcher.group(2);
-            p.sendChatMessage("/bl del " + target);
-            p.sendChatMessage("/bl set " + target + " " + kills + " " + price + " " + reasons);
+            return;
         }
 
+        Matcher listPattern = NameFormatEventHandler.BLACKLIST_LIST_PATTERN.matcher(text);
+        if (!listPattern.find()) return;
+
+        // remove list message
         e.setCanceled(true);
-    }
 
-    private static int calcKills(Matcher matcher) {
-        if (Integer.parseInt(matcher.group(4)) + addReason.getKills() > 100) return 100;
+        // extract variables
+        String name = listPattern.group(1);
+        String reason = listPattern.group(2);
+        // issuer (group 3) is ignored
+        int kills = Integer.parseInt(listPattern.group(4));
+        int price = Integer.parseInt(listPattern.group(5));
 
-        return Integer.parseInt(matcher.group(4)) + addReason.getKills();
-    }
+        if (!name.equals(target)) return;
 
-    private static int calcPrice(Matcher matcher) {
+        if (type == ModifyBlacklistType.OUTLAW) {
+            reason += " [Vogelfrei]"; // append outlaw reason
+        } else {
+            kills = Math.min(kills + addReason.getKills(), 100); // max 100 kills
+            price = Math.min(price + addReason.getAmount(), 10000); // max 10.000$ bounty
+            reason = addReason.getReason() + " + " + reason; // prepend reason to original one
+        }
 
-        if (Integer.parseInt(matcher.group(5)) + addReason.getAmount() > 10000) return 10000;
-
-        return Integer.parseInt(matcher.group(5)) + addReason.getAmount();
+        // delete from and re-add blacklist
+        UPlayer p = AbstractionLayer.getPlayer();
+        p.sendChatMessage("/blacklist del " + target);
+        p.sendChatMessage("/blacklist set " + target + " " + kills + " " + price + " " + reason);
     }
 
     @Override
@@ -109,4 +109,8 @@ public class ModifyBlacklistCommand implements TabCompletion {
         return completions;
     }
 
+    enum ModifyBlacklistType {
+        MODIFY_REASON,
+        OUTLAW
+    }
 }
