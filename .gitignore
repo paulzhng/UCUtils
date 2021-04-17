@@ -11,6 +11,5 @@ build
 
 # other
 run
-libs/
 gradle.properties
 /replaceLocal.bat
