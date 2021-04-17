@@ -23,7 +23,7 @@ repositories {
     mavenLocal()
     mavenCentral()
     flatDir {
-        dirs project.findProperty('libs') ?: '/libs'
+        dirs project.findProperty('libs') ?: project.file('/libs').getPath()
     }
 }
 
