@@ -48,8 +48,7 @@ idea {
 }
 
 dependencies {
-    provided 'net.labymod:lm_api_mc1.12.2:3.4.2'
-    shade 'de.fuzzlemann:common-1.1.5:1.1.5'
+    provided fileTree(dir: 'libs', include: '*.jar')
 
     testImplementation 'org.reflections:reflections:0.9.11'
     testImplementation 'org.mockito:mockito-junit-jupiter:2.28.2'
