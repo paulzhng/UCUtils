@@ -25,8 +25,8 @@ repositories {
     maven {
         url = 'https://maven.pkg.github.com/Fuzzlemann/UCUtils'
         credentials {
-             username = project.findProperty('gpr.user') ?: System.getenv('USERNAME')
-             password = project.findProperty('gpr.key') ?: System.getenv('TOKEN')
+            username = project.findProperty('gpr.user') ?: System.getenv('USERNAME')
+            password = project.findProperty('gpr.key') ?: System.getenv('TOKEN')
         }
     }
     flatDir {
@@ -130,30 +130,59 @@ jar {
     }
 }
 
-remotes {
-    fuzzlemann {
-        host = project.findProperty('host')
-        user = project.findProperty('user')
-        identity = new File(project.findProperty('identity'))
+if (project.findProperty('host') != null) {
+    remotes {
+        fuzzlemann {
+            host = project.findProperty('host')
+            user = project.findProperty('user')
+            identity = new File(project.findProperty('identity') as String)
+        }
     }
-}
 
-ssh.settings {
-    knownHosts = addHostKey(file("$buildDir/known_hosts"))
-}
+    ssh.settings {
+        knownHosts = addHostKey(file("$buildDir/known_hosts"))
+    }
 
-task deployRemote(dependsOn: build) {
-    doLast {
-        ssh.run {
-            session(remotes.fuzzlemann) {
-                put from: 'build/libs/' + archivesBaseName + '-' + version + '.jar', into: '/var/www/html/UCUtils.jar'
+    task deployRemote(dependsOn: build) {
+        doLast {
+            ssh.run {
+                session(remotes.fuzzlemann) {
+                    put from: 'build/libs/' + archivesBaseName + '-' + version + '.jar', into: '/var/www/html/UCUtils.jar'
+                }
             }
         }
     }
 }
 
-task deployLocal(type: Exec, dependsOn: build) {
-    commandLine = ['cmd', '/c', 'start', '\"\"', 'replaceLocal.bat']
+import java.nio.file.Files
+import java.nio.file.Paths
+import java.nio.file.StandardCopyOption
+import java.util.concurrent.TimeUnit;
+
+task deployLocal(dependsOn: build) {
+    doLast {
+        // retry until successful
+        while (true) {
+            def source = Paths.get("$buildDir/libs/" + archivesBaseName + '-' + version + '.jar')
+            def target = Paths.get(project.findProperty('target-path') as String)
+
+            if (!source.toFile().exists()) {
+                throw new IllegalStateException("Source file does not exist")
+            }
+
+            try {
+                Files.copy(source, target, StandardCopyOption.REPLACE_EXISTING)
+            } catch (IOException e) {
+                println("Copy operation failed: " + e.getMessage())
+                println("trying again...")
+                Thread.sleep(TimeUnit.SECONDS.toMillis(1))
+                continue
+            }
+
+            println("Updated mods file")
+            break
+        }
+    }
 }
 
 List<String> deactivatedTasks = Arrays.asList('check', 'sourceTestJava', 'compileTestJava', 'processTestResources', 'test', 'testClasses')

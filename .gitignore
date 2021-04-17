@@ -11,13 +11,6 @@ build
 
 # other
 run
-gradle.properties
-gradle/
-gradlew.bat
-logs/
-sonarqube.bat
 libs/
+gradle.properties
 /replaceLocal.bat
-/gradlew
-/UCUtils-common/
-/UCUtils-common/target/
