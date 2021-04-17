@@ -47,6 +47,10 @@ public class UCUtilsConfig {
     @Config.Comment("Spielt einen Sound ab, wenn eine Bombe gelegt wird")
     public static boolean bombAnnouncement = true;
 
+    @Config.Name("autoNavigationForCarFind")
+    @Config.Comment("Startet automatisch die Navi Route zu deinem Auto nach dem ausführen von /car find")
+    public static boolean autoNavigationForCarFind = true;
+
     @Config.Name("munitionDisplay")
     @Config.Comment("Zeigt die Munition an, wenn man schießt")
     public static boolean munitionDisplay = true;
