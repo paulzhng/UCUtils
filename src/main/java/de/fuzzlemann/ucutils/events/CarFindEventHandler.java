@@ -21,10 +21,11 @@ public class CarFindEventHandler {
 
     @SubscribeEvent
     public static void onChatReceived(ClientChatReceivedEvent e) {
-        if (!UCUtilsConfig.autoNavigationForCarFind)
-            return;
-        Matcher m = CAR_POSITION_MESSAGE.matcher(e.getMessage().getUnformattedText());
-        if (m.find())
-            AbstractionLayer.getPlayer().sendChatMessage("/navi " + m.group(1) + "/" + m.group(2) + "/" + m.group(3));
+        if (!UCUtilsConfig.autoNavigationForCarFind) return;
+        
+        Matcher carPositionMessageMatcher = CAR_POSITION_MESSAGE.matcher(e.getMessage().getUnformattedText());
+        if (carPositionMessageMatcher.find()) {
+            AbstractionLayer.getPlayer().sendChatMessage("/navi " + carPositionMessageMatcher.group(1) + "/" + carPositionMessageMatcher.group(2) + "/" + carPositionMessageMatcher.group(3));
+        }
     }
 }
