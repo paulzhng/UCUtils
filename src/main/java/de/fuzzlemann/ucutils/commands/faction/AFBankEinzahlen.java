@@ -33,8 +33,9 @@ public class AFBankEinzahlen implements TabCompletion {
 
         if (!interaction.equalsIgnoreCase("einzahlen") && !interaction.equalsIgnoreCase("auszahlen")) return false;
 
+        // check if there are taxes
         p.sendChatMessage("/fbank " + interaction + " 4");
-        this.amount = amount - 4;
+        this.amount = amount - 4; // we already paid 4$
 
         STARTED.set(true);
 
