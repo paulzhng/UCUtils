@@ -87,6 +87,12 @@ public class ShareLocationCommand {
         List<String> onlinePlayers = ForgeUtils.getOnlinePlayers();
         Set<String> playerNames = new LinkedHashSet<>();
 
+        //Prevents Players from sharing their location without communication devices
+        if (!CallReinforcementCommand.playerHasKomms) {
+            TextUtils.error("Du hast keine Kommunikationsgeräte.");
+            return true;
+        }
+
         for (String player : players) {
             String foundPlayer = ForgeUtils.getMostMatching(onlinePlayers, player);
             if (foundPlayer == null) continue;
