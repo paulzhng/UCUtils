@@ -75,10 +75,10 @@ public class AFBankEinzahlen implements TabCompletion {
 
         String msg = e.getMessage().getUnformattedText();
         Matcher taxesMatcher = FBANK_TAXES.matcher(msg);
-
         if (taxesMatcher.find()) {
             STARTED.set(false);
             ClockCommand.sendClockMessage();
+            return;
         }
 
         if (msg.equals("[F-Bank] Du hast zu wenig Geld.") || msg.equals("Du befindest dich nicht in der Nähe eines Bankautomaten.")) {
