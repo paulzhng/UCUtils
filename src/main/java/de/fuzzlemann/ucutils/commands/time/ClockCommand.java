@@ -16,12 +16,17 @@ import java.util.Locale;
 @SideOnly(Side.CLIENT)
 public class ClockCommand {
 
-    private final SimpleDateFormat dayFormat = new SimpleDateFormat("EEEE", Locale.GERMAN);
-    private final SimpleDateFormat dateFormat = new SimpleDateFormat("dd. MMMM yyyy", Locale.GERMAN);
-    private final SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss 'Uhr'");
-
     @Command({"clock", "uhrzeit", "uhr"})
     public boolean onCommand() {
+        sendClockMessage();
+        return true;
+    }
+
+    public static void sendClockMessage() {
+        SimpleDateFormat dayFormat = new SimpleDateFormat("EEEE", Locale.GERMAN);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd. MMMM yyyy", Locale.GERMAN);
+        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss 'Uhr'");
+
         Date date = new Date();
 
         String dayString = dayFormat.format(date);
@@ -38,6 +43,5 @@ public class ClockCommand {
                 .of(timeString).color(TextFormatting.BLUE).advance()
                 .of(".").color(TextFormatting.GRAY).advance()
                 .send();
-        return true;
     }
 }
