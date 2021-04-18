@@ -42,11 +42,11 @@ public class CallReinforcementCommand implements TabCompletion {
 
     private static final Pattern REINFORCEMENT_PATTERN = Pattern.compile("^(.+ ((?:\\[UC])*[a-zA-Z0-9_]+)): Benötige Verstärkung! -> X: (-*\\d+) \\| Y: (-*\\d+) \\| Z: (-*\\d+)$");
     private static final Pattern ON_THE_WAY_PATTERN = Pattern.compile("^(.+ (?:\\[UC])*([a-zA-Z0-9_]+)): ((?:\\[UC])*[a-zA-Z0-9_]+), ich bin zu deinem Verstärkungsruf unterwegs! \\((\\d+) Meter entfernt\\)$");
-    private static final Pattern PLAYER_TOOK_KOMMS_PATTERN = Pattern.compile("^((?:\\[UC])*[a-zA-Z0-9_]+) hat dir deine Kommunikationsgeräte abgenommen\\.$");
+    private static final Pattern PLAYER_TOOK_COMMUNICATIONS_PATTERN = Pattern.compile("^((?:\\[UC])*[a-zA-Z0-9_]+) hat dir deine Kommunikationsgeräte abgenommen\\.$");
 
     private static ReinforcementType lastReinforcement;
 
-    public static boolean playerHasKomms = true;
+    public static boolean hasCommunications = true;
 
     @SubscribeEvent
     public static void onChatReceived(ClientChatReceivedEvent e) {
@@ -131,14 +131,14 @@ public class CallReinforcementCommand implements TabCompletion {
             return;
         }
 
-        Matcher kommsTakenMatcher = PLAYER_TOOK_KOMMS_PATTERN.matcher(msg);
-        if (kommsTakenMatcher.find()) {
-            playerHasKomms = false;
+        Matcher communicationsTaken = PLAYER_TOOK_COMMUNICATIONS_PATTERN.matcher(msg);
+        if (communicationsTaken.find()) {
+            hasCommunications = false;
             return;
         }
 
         if (msg.equalsIgnoreCase("Du hast dein Handy genommen.")) {
-            playerHasKomms = true;
+            hasCommunications = true;
             return;
         }
 
@@ -178,7 +178,7 @@ public class CallReinforcementCommand implements TabCompletion {
         }
 
         //Prevents Players from sending Reinforcements without communication devices
-        if (!playerHasKomms) {
+        if (!hasCommunications) {
             TextUtils.error("Du hast keine Kommunikationsgeräte.");
             return true;
         }
