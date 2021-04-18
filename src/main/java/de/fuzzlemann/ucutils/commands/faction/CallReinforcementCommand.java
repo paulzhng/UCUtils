@@ -9,6 +9,7 @@ import de.fuzzlemann.ucutils.base.command.ParameterParser;
 import de.fuzzlemann.ucutils.base.command.TabCompletion;
 import de.fuzzlemann.ucutils.base.text.Message;
 import de.fuzzlemann.ucutils.base.text.MessagePart;
+import de.fuzzlemann.ucutils.base.text.TextUtils;
 import de.fuzzlemann.ucutils.common.activity.ActivityTestType;
 import de.fuzzlemann.ucutils.common.udf.data.misc.navipoint.CustomNaviPoint;
 import de.fuzzlemann.ucutils.utils.ForgeUtils;
@@ -41,8 +42,11 @@ public class CallReinforcementCommand implements TabCompletion {
 
     private static final Pattern REINFORCEMENT_PATTERN = Pattern.compile("^(.+ ((?:\\[UC])*[a-zA-Z0-9_]+)): Benötige Verstärkung! -> X: (-*\\d+) \\| Y: (-*\\d+) \\| Z: (-*\\d+)$");
     private static final Pattern ON_THE_WAY_PATTERN = Pattern.compile("^(.+ (?:\\[UC])*([a-zA-Z0-9_]+)): ((?:\\[UC])*[a-zA-Z0-9_]+), ich bin zu deinem Verstärkungsruf unterwegs! \\((\\d+) Meter entfernt\\)$");
+    private static final Pattern PLAYER_TOOK_KOMMS_PATTERN = Pattern.compile("^((?:\\[UC])*[a-zA-Z0-9_]+) hat dir deine Kommunikationsgeräte abgenommen\\.$");
 
     private static ReinforcementType lastReinforcement;
+
+    public static boolean playerHasKomms = true;
 
     @SubscribeEvent
     public static void onChatReceived(ClientChatReceivedEvent e) {
@@ -127,6 +131,17 @@ public class CallReinforcementCommand implements TabCompletion {
             return;
         }
 
+        Matcher kommsTakenMatcher = PLAYER_TOOK_KOMMS_PATTERN.matcher(msg);
+        if (kommsTakenMatcher.find()) {
+            playerHasKomms = false;
+            return;
+        }
+
+        if (msg.equalsIgnoreCase("Du hast dein Handy genommen.")) {
+            playerHasKomms = true;
+            return;
+        }
+
         for (Type type : Type.values()) {
             Pattern pattern = type.getPattern();
             if (pattern == null) continue;
@@ -159,6 +174,12 @@ public class CallReinforcementCommand implements TabCompletion {
 
             String message = "/" + chatType + " " + name + ", ich bin zu deinem Verstärkungsruf unterwegs! (" + (int) p.getPosition().getDistance(x, y, z) + " Meter entfernt)";
             p.sendChatMessage(message);
+            return true;
+        }
+
+        //Prevents Players from sending Reinforcements without communication devices
+        if (!playerHasKomms) {
+            TextUtils.error("Du hast keine Kommunikationsgeräte.");
             return true;
         }
 
