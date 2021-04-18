@@ -29,12 +29,12 @@ public class ModifyBlacklistCommand implements TabCompletion {
     private static BlacklistReason addReason;
     private static long executedTime = -1;
 
-    @Command(value = {"modifyblacklist", "mbl"}, usage = "/%label% [Spieler] (Grund) (-v)")
+    @Command(value = {"modifyblacklist", "mbl"}, usage = "/%label% [Spieler] [Grund/-v]")
     public boolean onCommand(UPlayer p, String target,
-                             @CommandParam(required = false) BlacklistReason reason,
-                             @CommandParam(required = false, requiredValue = "-v", defaultValue = CommandParam.NULL) Boolean outlaw) {
-        if (outlaw == null && reason == null) return false; // we need one of both
-        if (outlaw != null && reason != null) return false; // but not both at the same time
+                             @CommandParam(required = false, defaultValue = CommandParam.NULL) BlacklistReason reason,
+                             @CommandParam(required = false, requiredValue = "-v") boolean outlaw) {
+        if (outlaw && reason == null) return false; // we need one of both
+        if (!outlaw && reason != null) return false; // but not both at the same time
 
         ModifyBlacklistCommand.target = target;
         if (reason != null) {
