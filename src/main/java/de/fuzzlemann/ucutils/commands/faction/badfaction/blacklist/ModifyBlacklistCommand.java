@@ -33,8 +33,8 @@ public class ModifyBlacklistCommand implements TabCompletion {
     public boolean onCommand(UPlayer p, String target,
                              @CommandParam(required = false, defaultValue = CommandParam.NULL) BlacklistReason reason,
                              @CommandParam(required = false, requiredValue = "-v") boolean outlaw) {
-        if (outlaw && reason == null) return false; // we need one of both
-        if (!outlaw && reason != null) return false; // but not both at the same time
+        if (!outlaw && reason == null) return false; // we need one of both
+        if (outlaw && reason != null) return false; // but not both at the same time
 
         ModifyBlacklistCommand.target = target;
         if (reason != null) {
@@ -103,8 +103,6 @@ public class ModifyBlacklistCommand implements TabCompletion {
         String input = args[args.length - 1].toLowerCase().replace('-', ' ');
 
         completions.removeIf(tabComplete -> !tabComplete.toLowerCase().startsWith(input));
-
-        completions.addAll(ForgeUtils.getOnlinePlayers());
 
         return completions;
     }
