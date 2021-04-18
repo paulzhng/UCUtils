@@ -33,6 +33,8 @@ version = "1.12.2-1.9"
 group = "de.fuzzlemann.ucutils"
 archivesBaseName = "ucutils"
 
+def buildFile = "$buildDir/libs/$archivesBaseName-${version}.jar"
+
 configurations {
     shade
     compile.extendsFrom(shade)
@@ -139,7 +141,7 @@ if (project.findProperty('host') != null) {
         doLast {
             ssh.run {
                 session(remotes.fuzzlemann) {
-                    put from: 'build/libs/' + archivesBaseName + '-' + version + '.jar', into: '/var/www/html/UCUtils.jar'
+                    put from: buildFile, into: '/var/www/html/UCUtils.jar'
                 }
             }
         }
@@ -153,15 +155,15 @@ import java.util.concurrent.TimeUnit;
 
 task deployLocal(dependsOn: build) {
     doLast {
+        def source = Paths.get(buildFile)
+        def target = Paths.get(project.findProperty('target-path') as String)
+
+        if (!source.toFile().exists()) {
+            throw new IllegalStateException("Source file does not exist")
+        }
+
         // retry until successful
         while (true) {
-            def source = Paths.get("$buildDir/libs/" + archivesBaseName + '-' + version + '.jar')
-            def target = Paths.get(project.findProperty('target-path') as String)
-
-            if (!source.toFile().exists()) {
-                throw new IllegalStateException("Source file does not exist")
-            }
-
             try {
                 Files.copy(source, target, StandardCopyOption.REPLACE_EXISTING)
             } catch (IOException e) {
