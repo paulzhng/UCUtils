@@ -17,8 +17,11 @@ import de.fuzzlemann.ucutils.commands.time.ClockCommand;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
+/**
+ * @author Dimikou
+ */
 public class AFbankEinzahlen implements TabCompletion {
-    
+
     private int betrag;
 
     private final Timer timer = new Timer();
