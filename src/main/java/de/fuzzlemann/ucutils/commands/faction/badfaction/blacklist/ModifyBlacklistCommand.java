@@ -46,7 +46,7 @@ public class ModifyBlacklistCommand implements TabCompletion {
 
         executedTime = System.currentTimeMillis();
 
-        p.sendChatMessage("/blacklist");
+        p.sendChatMessage("/bl");
         return true;
     }
 
@@ -88,8 +88,8 @@ public class ModifyBlacklistCommand implements TabCompletion {
 
         // delete from and re-add blacklist
         UPlayer p = AbstractionLayer.getPlayer();
-        p.sendChatMessage("/blacklist del " + target);
-        p.sendChatMessage("/blacklist set " + target + " " + kills + " " + price + " " + reason);
+        p.sendChatMessage("/bl del " + target);
+        p.sendChatMessage("/bl set " + target + " " + kills + " " + price + " " + reason);
     }
 
     @Override
