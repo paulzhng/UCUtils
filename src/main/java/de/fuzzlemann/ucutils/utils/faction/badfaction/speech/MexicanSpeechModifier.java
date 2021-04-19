@@ -39,10 +39,7 @@ public class MexicanSpeechModifier implements SpeechModifier {
     public String turnIntoSpeech(String[] words) {
         String fullString = String.join(" ", words);
         fullString = SpeechModifyUtil.replaceIgnoreCase(fullString, REPLACE_IGNORE_CASE);
-        words = fullString.split(" ");
 
-        StringJoiner stringJoiner = new StringJoiner(" ");
-
-        return stringJoiner.toString();
+        return fullString;
     }
 }
