@@ -1,5 +1,6 @@
 package de.fuzzlemann.ucutils.utils.location.navigation;
 
+import de.fuzzlemann.ucutils.base.abstraction.AbstractionLayer;
 import de.fuzzlemann.ucutils.base.text.Message;
 import de.fuzzlemann.ucutils.base.text.MessagePart;
 import de.fuzzlemann.ucutils.base.udf.UDFLoader;
@@ -12,15 +13,26 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.event.ClickEvent;
 import net.minecraft.util.text.event.HoverEvent;
+import net.minecraftforge.client.event.ClientChatReceivedEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @author Fuzzlemann
  */
+
+@Mod.EventBusSubscriber
 @UDFModule(value = DataRegistry.CUSTOM_NAVI_POINT, version = 1)
 public class NavigationUtil implements UDFLoader<List<CustomNaviPoint>> {
+
+    private static long routeMessageClearExecuteTime = -1;
+    private static final Pattern ROUTE_PATTERNS = Pattern.compile("^Du hast keine Route\\.$" +
+            "|^Du hast deine Route gelöscht\\.$");
 
     public static final List<CustomNaviPoint> NAVI_POINTS = new ArrayList<>();
 
@@ -101,6 +113,11 @@ public class NavigationUtil implements UDFLoader<List<CustomNaviPoint>> {
                 .build();
     }
 
+    public static void stopRoute() {
+        routeMessageClearExecuteTime = System.currentTimeMillis();
+        AbstractionLayer.getPlayer().sendChatMessage("/stoproute");
+    }
+
     @Override
     public void supply(List<CustomNaviPoint> customNaviPoints) {
         NAVI_POINTS.addAll(customNaviPoints);
@@ -109,5 +126,15 @@ public class NavigationUtil implements UDFLoader<List<CustomNaviPoint>> {
     @Override
     public void cleanUp() {
         NAVI_POINTS.clear();
+    }
+
+    @SubscribeEvent
+    public static void onChatReceived(ClientChatReceivedEvent e) {
+        if (System.currentTimeMillis() - routeMessageClearExecuteTime >= 500L) return;
+
+        Matcher routeMatcher = ROUTE_PATTERNS.matcher(e.getMessage().getUnformattedText());
+        if (routeMatcher.find()) {
+            e.setCanceled(true);
+        }
     }
 }
