@@ -30,7 +30,7 @@ import java.util.regex.Pattern;
 @UDFModule(value = DataRegistry.CUSTOM_NAVI_POINT, version = 1)
 public class NavigationUtil implements UDFLoader<List<CustomNaviPoint>> {
 
-    private static long executedTime = -1;
+    private static long routeMessageClearExecuteTime = -1;
     private static final Pattern ROUTE_PATTERNS = Pattern.compile("^Du hast keine Route\\.$" +
             "|^Du hast deine Route gelöscht\\.$");
 
@@ -114,7 +114,7 @@ public class NavigationUtil implements UDFLoader<List<CustomNaviPoint>> {
     }
 
     public static void stopRoute() {
-        executedTime = System.currentTimeMillis();
+        routeMessageClearExecuteTime = System.currentTimeMillis();
         AbstractionLayer.getPlayer().sendChatMessage("/stoproute");
     }
 
@@ -129,10 +129,15 @@ public class NavigationUtil implements UDFLoader<List<CustomNaviPoint>> {
     }
 
     @SubscribeEvent
-    public void onChatReceived(ClientChatReceivedEvent e) {
-        Matcher routeMatcher = ROUTE_PATTERNS.matcher(e.getMessage().getUnformattedText());
-        if (routeMatcher.find() && System.currentTimeMillis() - executedTime < 500L)
-            e.setCanceled(true);
+    public static void onChatReceived(ClientChatReceivedEvent e) {
+
+        if (System.currentTimeMillis() - routeMessageClearExecuteTime < 500L) {
+            Matcher routeMatcher = ROUTE_PATTERNS.matcher(e.getMessage().getUnformattedText());
+            if (routeMatcher.find()) {
+                e.setCanceled(true);
+            }
+        }
+
     }
 
 }
