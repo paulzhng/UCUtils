@@ -2,6 +2,7 @@ package de.fuzzlemann.ucutils.events;
 
 import de.fuzzlemann.ucutils.base.abstraction.AbstractionLayer;
 import de.fuzzlemann.ucutils.config.UCUtilsConfig;
+import de.fuzzlemann.ucutils.utils.location.navigation.NavigationUtil;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -18,25 +19,15 @@ import java.util.regex.Pattern;
 @SideOnly(Side.CLIENT)
 public class CarFindEventHandler {
 
-    private static long executedTime = -1;
-
     private static final Pattern CAR_POSITION_MESSAGE = Pattern.compile("^\\[Car] Das Fahrzeug befindet sich bei . X: (-?\\d+) \\| Y: (-?\\d+) \\| Z: (-?\\d+)$");
-    private static final Pattern ROUTE_PATTERNS = Pattern.compile("^Du hast keine Route\\.$" +
-            "|^Du hast deine Route gelöscht\\.$");
-
 
     @SubscribeEvent
     public static void onChatReceived(ClientChatReceivedEvent e) {
         if (!UCUtilsConfig.autoNavigationForCarFind) return;
 
-        Matcher routeMatcher = ROUTE_PATTERNS.matcher(e.getMessage().getUnformattedText());
-        if (routeMatcher.find() && System.currentTimeMillis() - executedTime < 500L)
-            e.setCanceled(true);
-
         Matcher carPositionMessageMatcher = CAR_POSITION_MESSAGE.matcher(e.getMessage().getUnformattedText());
         if (carPositionMessageMatcher.find()) {
-            executedTime = System.currentTimeMillis();
-            AbstractionLayer.getPlayer().sendChatMessage("/stoproute");
+            NavigationUtil.stopRoute();
             AbstractionLayer.getPlayer().sendChatMessage("/navi " + carPositionMessageMatcher.group(1) + "/" + carPositionMessageMatcher.group(2) + "/" + carPositionMessageMatcher.group(3));
         }
 
