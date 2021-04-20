@@ -27,7 +27,7 @@ public class KerzakovSpeechModifier implements SpeechModifier {
             Maps.immutableEntry("tochter", "doch'"),
             Maps.immutableEntry("sohn", "syn"),
             Maps.immutableEntry("häschen", "saika"),
-            Maps.immutableEntry("krümmel", "kroschka"),
+            Maps.immutableEntry("krümel", "kroschka"),
             Maps.immutableEntry("engel", "angil"),
             Maps.immutableEntry("bärchen", "mischka"),
             Maps.immutableEntry("hure", "slyha"),
