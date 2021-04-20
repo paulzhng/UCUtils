@@ -174,6 +174,7 @@ public class CallReinforcementCommand implements TabCompletion {
 
             String message = "/" + chatType + " " + name + ", ich bin zu deinem Verstärkungsruf unterwegs! (" + (int) p.getPosition().getDistance(x, y, z) + " Meter entfernt)";
             p.sendChatMessage(message);
+            NavigationUtil.stopRoute();
             p.sendChatMessage("/navi " + x + "/" + y + "/" + z);
             return true;
         }
