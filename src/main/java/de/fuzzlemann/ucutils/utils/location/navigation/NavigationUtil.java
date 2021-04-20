@@ -130,14 +130,11 @@ public class NavigationUtil implements UDFLoader<List<CustomNaviPoint>> {
 
     @SubscribeEvent
     public static void onChatReceived(ClientChatReceivedEvent e) {
+        if (System.currentTimeMillis() - routeMessageClearExecuteTime >= 500L) return;
 
-        if (System.currentTimeMillis() - routeMessageClearExecuteTime < 500L) {
-            Matcher routeMatcher = ROUTE_PATTERNS.matcher(e.getMessage().getUnformattedText());
-            if (routeMatcher.find()) {
-                e.setCanceled(true);
-            }
+        Matcher routeMatcher = ROUTE_PATTERNS.matcher(e.getMessage().getUnformattedText());
+        if (routeMatcher.find()) {
+            e.setCanceled(true);
         }
-
     }
-
 }
