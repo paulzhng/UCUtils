@@ -24,7 +24,7 @@ public class MexicanSpeechModifier implements SpeechModifier {
             Maps.immutableEntry("tochter", "hermana'"),
             Maps.immutableEntry("sohn", "el hijo"),
             Maps.immutableEntry("häschen", "conejito"),
-            Maps.immutableEntry("krümmel", "migas"),
+            Maps.immutableEntry("krümel", "migas"),
             Maps.immutableEntry("engel", "ángel"),
             Maps.immutableEntry("bärchen", "osito"),
             Maps.immutableEntry("hure", "puta"),
