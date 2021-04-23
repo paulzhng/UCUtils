@@ -5,9 +5,9 @@ import de.fuzzlemann.ucutils.base.abstraction.UPlayer;
 import de.fuzzlemann.ucutils.base.command.Command;
 import de.fuzzlemann.ucutils.base.command.CommandParam;
 import de.fuzzlemann.ucutils.base.command.TabCompletion;
+import de.fuzzlemann.ucutils.base.text.TextUtils;
 import de.fuzzlemann.ucutils.common.udf.data.faction.blacklist.BlacklistReason;
 import de.fuzzlemann.ucutils.events.NameFormatEventHandler;
-import de.fuzzlemann.ucutils.utils.ForgeUtils;
 import de.fuzzlemann.ucutils.utils.faction.badfaction.blacklist.BlacklistUtil;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -39,9 +39,9 @@ public class ModifyBlacklistCommand implements TabCompletion {
         ModifyBlacklistCommand.target = target;
         if (reason != null) {
             addReason = reason;
-            type = ModifyBlacklistType.OUTLAW;
-        } else {
             type = ModifyBlacklistType.MODIFY_REASON;
+        } else {
+            type = ModifyBlacklistType.OUTLAW;
         }
 
         executedTime = System.currentTimeMillis();
@@ -81,6 +81,11 @@ public class ModifyBlacklistCommand implements TabCompletion {
         if (type == ModifyBlacklistType.OUTLAW) {
             reason += " [Vogelfrei]"; // append outlaw reason
         } else {
+            if (reason.contains(addReason.getReason())) {
+                TextUtils.error("Der Spieler besitzt diesen Blacklistgrund bereits.");
+                return;
+            }
+
             kills = Math.min(kills + addReason.getKills(), 100); // max 100 kills
             price = Math.min(price + addReason.getAmount(), 10000); // max 10.000$ bounty
             reason = addReason.getReason() + " + " + reason; // prepend reason to original one
