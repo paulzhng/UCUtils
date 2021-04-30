@@ -21,7 +21,7 @@ import java.util.regex.Pattern;
  */
 public class AFBankEinzahlen implements TabCompletion {
 
-    private static final Pattern FBANK_TAXES = Pattern.compile("^\\[F-Bank] (?:\\[UC])*([a-zA-Z0-9_]+) hat (\\d+)\\$ \\((-\\d)\\$\\) .+ Fraktionsbank ([a-zA-Z_]+)\\.$");
+    private static final Pattern FBANK_TAXES = Pattern.compile("^\\[F-Bank] (?:\\[UC])*([a-zA-Z0-9_]+) hat (\\d+)\\$ \\(-(\\d+)\\$\\) in die F-Bank eingezahlt\\.$");
     private static final AtomicBoolean STARTED = new AtomicBoolean();
 
     private final Timer timer = new Timer();
