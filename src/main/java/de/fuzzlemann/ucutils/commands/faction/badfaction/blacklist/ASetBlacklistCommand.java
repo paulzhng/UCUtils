@@ -24,7 +24,7 @@ public class ASetBlacklistCommand implements TabCompletion {
 
     @Command(value = {"asetblacklist", "asetbl"}, usage = "/%label% [Spieler...] [Grund]")
     public boolean onCommand(UPlayer p, @CommandParam(arrayStart = true) String[] targets, BlacklistReason reason) {
-        if (targets.length < 14) {
+        if (targets.length < 11) {
             for (String player : targets) {
                 p.sendChatMessage("/bl set " + player + " " + reason.getKills() + " " + reason.getAmount() + " " + reason.getReason());
             }
