@@ -3,8 +3,11 @@ package de.fuzzlemann.ucutils.commands.faction;
 import de.fuzzlemann.ucutils.base.abstraction.UPlayer;
 import de.fuzzlemann.ucutils.base.command.Command;
 import de.fuzzlemann.ucutils.base.command.TabCompletion;
+import de.fuzzlemann.ucutils.base.text.Message;
 import de.fuzzlemann.ucutils.commands.time.ClockCommand;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.util.Arrays;
@@ -19,13 +22,15 @@ import java.util.regex.Pattern;
 /**
  * @author Dimikou
  */
+@Mod.EventBusSubscriber
 public class AFBankEinzahlen implements TabCompletion {
 
-    private static final Pattern FBANK_TAXES = Pattern.compile("^\\[F-Bank] (?:\\[UC])*([a-zA-Z0-9_]+) hat (\\d+)\\$ \\(-(\\d+)\\$\\) in die F-Bank eingezahlt\\.$");
+    private static final Pattern FBANK_TAXES = Pattern.compile("^\\[F-Bank] (?:\\[UC])*([a-zA-Z0-9_]+) hat (\\d+)\\$ \\(-(\\d+)\\$\\) in die F-Bank eingezahlt\\.$" +
+            "|^\\[F-Bank] (?:\\[UC])*([a-zA-Z0-9_]+) hat (\\d+)\\$ \\(\\+(\\d+)\\$\\) aus der F-Bank genommen\\.$");
     private static final AtomicBoolean STARTED = new AtomicBoolean();
 
-    private final Timer timer = new Timer();
-    private int amount;
+    private static final Timer timer = new Timer();
+    private static int amount;
 
     @Command(value = "afbank", usage = "/%label% [einzahlen/auszahlen] [Betrag]")
     public boolean onCommand(UPlayer p, String interaction, int amount) {
@@ -77,7 +82,18 @@ public class AFBankEinzahlen implements TabCompletion {
         Matcher taxesMatcher = FBANK_TAXES.matcher(msg);
         if (taxesMatcher.find()) {
             STARTED.set(false);
-            ClockCommand.sendClockMessage();
+            // send clock command
+            timer.schedule(new TimerTask() {
+                public void run() {
+                    ClockCommand.sendClockMessage();
+                    Message.builder()
+                            .prefix()
+                            .of("Nicht eingezahlt wurden: ").color(TextFormatting.GRAY).advance()
+                            .of(amount+"$").color(TextFormatting.BLUE).advance()
+                            .of(".").color(TextFormatting.GRAY).advance()
+                            .send();
+                }
+            }, 200L);
             return;
         }
 
