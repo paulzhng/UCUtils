@@ -49,7 +49,7 @@ public class NameFormatEventHandler {
     private static final Pattern CONTRACT_REMOVED_PATTERN = Pattern.compile("(?:^\\[Contract] (?:\\[UC])*[a-zA-Z0-9_]+ hat (?:\\[UC])*([a-zA-Z0-9_]+) von der Contract Liste gelöscht\\. \\[-\\d+]$)" +
             "|(?:^\\[Contract] (?:\\[UC])*[a-zA-Z0-9_]+ hat (?:\\[UC])*([a-zA-Z0-9_]+) getötet\\. Kopfgeld: \\d+\\$)");
     //--------------------- Blacklist ---------------------\\
-    private static final Map<String, Boolean> BLACKLIST_MAP = new HashMap<>();
+    private static final Map<String, BlacklistModifier> BLACKLIST_MAP = new HashMap<>();
     public static final Pattern BLACKLIST_START_PATTERN = Pattern.compile("=== Blacklist .+ ===");
     public static final Pattern BLACKLIST_LIST_PATTERN = Pattern.compile("^ » (?:\\[UC])*([a-zA-Z0-9_]+) \\| (.+) \\| (.+) \\| (\\d+) Kills \\| (\\d+)\\$");
     private static final Pattern BLACKLIST_ADDED_PATTERN = Pattern.compile("^\\[Blacklist] (?:\\[UC])*([a-zA-Z0-9_]+) wurde von (?:\\[UC])*[a-zA-Z0-9_]+ auf die Blacklist gesetzt!$");
@@ -271,8 +271,13 @@ public class NameFormatEventHandler {
             String name = matcher.group(1);
             String reason = matcher.group(2);
 
-            boolean outlaw = reason.toLowerCase().contains("vogelfrei");
-            BLACKLIST_MAP.put(name, outlaw);
+            if (reason.toLowerCase().contains("vogelfrei")) {
+                BLACKLIST_MAP.put(name, BlacklistModifier.OUTLAW);
+            } else if (reason.toLowerCase().contains("muerte")) {
+                BLACKLIST_MAP.put(name, BlacklistModifier.MUERTE);
+            } else if (reason.toLowerCase().contains("yobannoe dno")) {
+                BLACKLIST_MAP.put(name, BlacklistModifier.YOBANNOE_DNO);
+            }
 
             refreshDisplayName(name);
         }
@@ -287,7 +292,7 @@ public class NameFormatEventHandler {
         if (matcher.find()) {
             String name = matcher.group(1);
 
-            BLACKLIST_MAP.put(name, false);
+            BLACKLIST_MAP.put(name, BlacklistModifier.NONE);
             refreshDisplayName(name);
         }
     }
@@ -328,12 +333,13 @@ public class NameFormatEventHandler {
             }
         }
 
-        Boolean blacklistOutlaw = BLACKLIST_MAP.get(userName);
-        if (blacklistOutlaw != null) {
-            if (blacklistOutlaw) {
+        if (BLACKLIST_MAP.get(userName) != null) {
+            if (BLACKLIST_MAP.get(userName) == BlacklistModifier.OUTLAW) {
                 return "§8[§cV§8] §4";
-            } else {
-                return "§4";
+            } else if (BLACKLIST_MAP.get(userName) == BlacklistModifier.MUERTE){
+                return "§8[§cM§8] §4";
+            } else if (BLACKLIST_MAP.get(userName) == BlacklistModifier.YOBANNOE_DNO){
+                return "§8[§cY§8] §4";
             }
         }
 
@@ -376,5 +382,12 @@ public class NameFormatEventHandler {
         }
 
         entityPlayer.refreshDisplayName();
+    }
+
+    private enum BlacklistModifier {
+        NONE,
+        OUTLAW,
+        MUERTE,
+        YOBANNOE_DNO
     }
 }
