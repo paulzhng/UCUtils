@@ -3,6 +3,7 @@ package de.fuzzlemann.ucutils.commands;
 import de.fuzzlemann.ucutils.base.abstraction.UPlayer;
 import de.fuzzlemann.ucutils.base.command.Command;
 import de.fuzzlemann.ucutils.base.command.TabCompletion;
+import de.fuzzlemann.ucutils.base.text.TextUtils;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -14,37 +15,39 @@ import java.util.concurrent.atomic.AtomicBoolean;
 /**
  * @author Dimiikou
  */
-
 @Mod.EventBusSubscriber
-public class ADropAmmo implements TabCompletion{
+public class ADropAmmo implements TabCompletion {
 
-    private List<String> WEAPONS = Arrays.asList("m4", "mp5", "jagdflinte", "pistole");
-    private static AtomicBoolean STARTED = new AtomicBoolean();
-
-    private int ammo;
+    private static final AtomicBoolean STARTED = new AtomicBoolean();
+    private final List<String> weapons = Arrays.asList("m4", "mp5", "jagdflinte", "pistole");
 
     @Command(value = "adropammo", usage = "/%label% [Waffe] [Munition]")
-    public boolean onCommand(UPlayer p, String weapon, int ammo) {
-        if (STARTED.get()) return false;
-        if (!WEAPONS.contains(weapon.toLowerCase())) return false;
-        if (ammo <= 0) return false;
+    public boolean onCommand(UPlayer p, String weapon, int ammunition) {
+        if (!weapons.contains(weapon.toLowerCase())) return false;
+        if (ammunition <= 0) return false;
 
-        ADropAmmo instance = this;
-        instance.ammo = ammo;
+        if (STARTED.get()) {
+            TextUtils.error("Der Befehl wird derzeit bereits ausgeführt.");
+            return true;
+        }
+
         STARTED.set(true);
 
         Timer t = new Timer();
         t.scheduleAtFixedRate(new TimerTask() {
+            private int remainingAmmunition = ammunition;
+
             public void run() {
                 if (!STARTED.get()) {
                     cancel();
                     return;
                 }
-                if (instance.ammo > 100) {
+
+                if (remainingAmmunition > 100) {
                     p.sendChatMessage("/dropammo " + weapon + " 100");
-                    instance.ammo -= 100;
+                    remainingAmmunition -= 100;
                 } else {
-                    p.sendChatMessage("/dropammo " + weapon + " " + instance.ammo);
+                    p.sendChatMessage("/dropammo " + weapon + " " + remainingAmmunition);
                     cancel();
                     STARTED.set(false);
                 }
@@ -64,6 +67,7 @@ public class ADropAmmo implements TabCompletion{
         }
     }
 
-    public List<String> getTabCompletions(UPlayer p, String[] args) { return WEAPONS; }
-
+    public List<String> getTabCompletions(UPlayer p, String[] args) {
+        return weapons;
+    }
 }
