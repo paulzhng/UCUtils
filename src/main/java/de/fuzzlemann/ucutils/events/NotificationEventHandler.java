@@ -80,17 +80,13 @@ public class NotificationEventHandler {
             p.playSound(SoundUtil.BOMB_PLACED, 0.15F, 1);
             return;
         }
-
-        //TODO REGEX
-        if (UCUtilsConfig.contractFulfilledAnnouncement
-                && unformattedText.startsWith("[Contract] ")
-                && unformattedText.contains(" getötet. Kopfgeld: ")) {
+        
+        if (UCUtilsConfig.contractFulfilledAnnouncement && NameFormatEventHandler.CONTRACT_REMOVED_PATTERN.matcher(unformattedText).find()) {
             p.playSound(SoundUtil.CONTRACT_FULFILLED, 1, 1);
             return;
         }
 
-        //TODO REGEX
-        if (UCUtilsConfig.contractAnnouncement && unformattedText.startsWith("[Contract] Es wurde ein Kopfgeld auf")) {
+        if (UCUtilsConfig.contractAnnouncement && NameFormatEventHandler.CONTRACT_SET_PATTERN.matcher(unformattedText).find()) {
             p.playSound(SoundUtil.CONTRACT_PLACED, 1, 1);
             return;
         }
