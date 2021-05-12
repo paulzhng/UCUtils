@@ -32,7 +32,7 @@ import java.util.regex.Pattern;
 @Mod.EventBusSubscriber
 @SideOnly(Side.CLIENT)
 public class NameFormatEventHandler {
-
+    
     //--------------------- Player Map ---------------------\\
     private static final Map<String, EntityPlayer> PLAYER_MAP = new HashMap<>();
     //--------------------- Wanteds ---------------------\\
@@ -277,6 +277,8 @@ public class NameFormatEventHandler {
                 BLACKLIST_MAP.put(name, BlacklistModifier.MUERTE);
             } else if (reason.toLowerCase().contains("yobannoe dno")) {
                 BLACKLIST_MAP.put(name, BlacklistModifier.YOBANNOE_DNO);
+            } else {
+                BLACKLIST_MAP.put(name, BlacklistModifier.NONE);
             }
 
             refreshDisplayName(name);
@@ -336,9 +338,9 @@ public class NameFormatEventHandler {
         if (BLACKLIST_MAP.get(userName) != null) {
             if (BLACKLIST_MAP.get(userName) == BlacklistModifier.OUTLAW) {
                 return "§8[§cV§8] §4";
-            } else if (BLACKLIST_MAP.get(userName) == BlacklistModifier.MUERTE){
+            } else if (BLACKLIST_MAP.get(userName) == BlacklistModifier.MUERTE) {
                 return "§8[§cM§8] §4";
-            } else if (BLACKLIST_MAP.get(userName) == BlacklistModifier.YOBANNOE_DNO){
+            } else if (BLACKLIST_MAP.get(userName) == BlacklistModifier.YOBANNOE_DNO) {
                 return "§8[§cY§8] §4";
             }
         }
