@@ -32,7 +32,7 @@ import java.util.regex.Pattern;
 @Mod.EventBusSubscriber
 @SideOnly(Side.CLIENT)
 public class NameFormatEventHandler {
-    
+
     //--------------------- Player Map ---------------------\\
     private static final Map<String, EntityPlayer> PLAYER_MAP = new HashMap<>();
     //--------------------- Wanteds ---------------------\\
