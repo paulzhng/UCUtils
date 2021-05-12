@@ -336,7 +336,9 @@ public class NameFormatEventHandler {
         }
 
         if (BLACKLIST_MAP.get(userName) != null) {
-            if (BLACKLIST_MAP.get(userName) == BlacklistModifier.OUTLAW) {
+            if (BLACKLIST_MAP.get(userName) == BlacklistModifier.NONE) {
+                return "§4";
+            } else if (BLACKLIST_MAP.get(userName) == BlacklistModifier.OUTLAW) {
                 return "§8[§cV§8] §4";
             } else if (BLACKLIST_MAP.get(userName) == BlacklistModifier.MUERTE) {
                 return "§8[§cM§8] §4";
