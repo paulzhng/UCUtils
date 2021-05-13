@@ -88,7 +88,12 @@ public class ModifyBlacklistCommand implements TabCompletion {
 
             kills = Math.min(kills + addReason.getKills(), 100); // max 100 kills
             price = Math.min(price + addReason.getAmount(), 10000); // max 10.000$ bounty
-            reason = addReason.getReason() + " + " + reason; // prepend reason to original one
+            if (addReason.getReason().startsWith("[") || addReason.getReason().startsWith("(")) {
+                reason = reason + " " + addReason.getReason(); // append modifier to blacklist
+            } else {
+                reason = addReason.getReason() + " + " + reason; // prepend reason to original one
+            }
+
         }
 
         // delete from and re-add blacklist
