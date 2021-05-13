@@ -88,7 +88,7 @@ public class ChannelActivityCommand {
     private void copyList(List<String> members) {
         StringJoiner stringJoiner = new StringJoiner("\n");
 
-        stringJoiner.add("[color=#008080][b]Nicht-Anwesende Member:[/b][/color]");
+        stringJoiner.add("<p><span style='color: CadetBlue'><strong>Nicht-Anwesende Member:</strong></span></p>");
 
         for (String member : members) {
             stringJoiner.add(member);
