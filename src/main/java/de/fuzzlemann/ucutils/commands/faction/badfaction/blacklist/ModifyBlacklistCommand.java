@@ -1,6 +1,5 @@
 package de.fuzzlemann.ucutils.commands.faction.badfaction.blacklist;
 
-import com.sun.deploy.util.BlackList;
 import de.fuzzlemann.ucutils.base.abstraction.AbstractionLayer;
 import de.fuzzlemann.ucutils.base.abstraction.UPlayer;
 import de.fuzzlemann.ucutils.base.command.Command;
@@ -8,7 +7,6 @@ import de.fuzzlemann.ucutils.base.command.CommandParam;
 import de.fuzzlemann.ucutils.base.command.TabCompletion;
 import de.fuzzlemann.ucutils.base.text.TextUtils;
 import de.fuzzlemann.ucutils.common.udf.data.faction.blacklist.BlacklistReason;
-import de.fuzzlemann.ucutils.common.udf.data.faction.blacklist.BlacklistReasons;
 import de.fuzzlemann.ucutils.events.NameFormatEventHandler;
 import de.fuzzlemann.ucutils.utils.faction.badfaction.blacklist.BlacklistUtil;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
