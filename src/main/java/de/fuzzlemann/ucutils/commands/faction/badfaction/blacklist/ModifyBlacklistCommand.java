@@ -1,5 +1,6 @@
 package de.fuzzlemann.ucutils.commands.faction.badfaction.blacklist;
 
+import com.sun.deploy.util.BlackList;
 import de.fuzzlemann.ucutils.base.abstraction.AbstractionLayer;
 import de.fuzzlemann.ucutils.base.abstraction.UPlayer;
 import de.fuzzlemann.ucutils.base.command.Command;
@@ -7,6 +8,7 @@ import de.fuzzlemann.ucutils.base.command.CommandParam;
 import de.fuzzlemann.ucutils.base.command.TabCompletion;
 import de.fuzzlemann.ucutils.base.text.TextUtils;
 import de.fuzzlemann.ucutils.common.udf.data.faction.blacklist.BlacklistReason;
+import de.fuzzlemann.ucutils.common.udf.data.faction.blacklist.BlacklistReasons;
 import de.fuzzlemann.ucutils.events.NameFormatEventHandler;
 import de.fuzzlemann.ucutils.utils.faction.badfaction.blacklist.BlacklistUtil;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
@@ -79,6 +81,7 @@ public class ModifyBlacklistCommand implements TabCompletion {
         if (!name.equals(target)) return;
 
         if (type == ModifyBlacklistType.OUTLAW) {
+            removeModifiers(reason);
             reason += " [Vogelfrei]"; // append outlaw reason
         } else {
             if (reason.contains(addReason.getReason())) {
@@ -89,6 +92,7 @@ public class ModifyBlacklistCommand implements TabCompletion {
             kills = Math.min(kills + addReason.getKills(), 100); // max 100 kills
             price = Math.min(price + addReason.getAmount(), 10000); // max 10.000$ bounty
             if (addReason.getReason().startsWith("[") || addReason.getReason().startsWith("(")) {
+                removeModifiers(reason);
                 reason = reason + " " + addReason.getReason(); // append modifier to blacklist
             } else {
                 reason = addReason.getReason() + " + " + reason; // prepend reason to original one
@@ -100,6 +104,15 @@ public class ModifyBlacklistCommand implements TabCompletion {
         UPlayer p = AbstractionLayer.getPlayer();
         p.sendChatMessage("/bl del " + target);
         p.sendChatMessage("/bl set " + target + " " + kills + " " + price + " " + reason);
+    }
+
+    //Removes all known Modifiers
+    private static String removeModifiers(String reason) {
+        reason.replaceAll(" \\[Yobannoe dno]", ""); // Removes Yobbanoe dno modifier
+        reason.replaceAll(" \\(muerte\\)", ""); // Removes Muerte modifier
+        reason.replaceAll(" \\[Vogelfrei]", ""); // Removes Vogelfrei Modifier
+
+        return reason;
     }
 
     @Override
