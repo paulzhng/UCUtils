@@ -84,7 +84,7 @@ public class ModifyBlacklistCommand implements TabCompletion {
                 TextUtils.error("Der Spieler ist bereits Vogelfrei.");
                 return;
             }
-            
+
             reason = removeModifiers(reason);
             reason += " [Vogelfrei]"; // append outlaw reason
         } else {
