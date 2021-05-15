@@ -80,7 +80,7 @@ public class ModifyBlacklistCommand implements TabCompletion {
 
         if (type == ModifyBlacklistType.OUTLAW) {
             if (reason.contains("[Vogelfrei]")) {
-                TextUtils.error("Der Spieler ist bereits Vogelfrei.");
+                TextUtils.error("Der Spieler ist bereits vogelfrei.");
                 return;
             }
 
