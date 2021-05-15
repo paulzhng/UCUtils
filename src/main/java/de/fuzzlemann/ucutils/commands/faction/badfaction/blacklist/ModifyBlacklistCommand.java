@@ -7,7 +7,6 @@ import de.fuzzlemann.ucutils.base.command.CommandParam;
 import de.fuzzlemann.ucutils.base.command.TabCompletion;
 import de.fuzzlemann.ucutils.base.text.TextUtils;
 import de.fuzzlemann.ucutils.common.udf.data.faction.blacklist.BlacklistReason;
-import de.fuzzlemann.ucutils.common.udf.data.faction.blacklist.BlacklistReasons;
 import de.fuzzlemann.ucutils.events.NameFormatEventHandler;
 import de.fuzzlemann.ucutils.utils.faction.badfaction.blacklist.BlacklistUtil;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
@@ -112,9 +111,7 @@ public class ModifyBlacklistCommand implements TabCompletion {
 
     //Removes all known Modifiers
     private static String removeModifiers(String reason) {
-        reason = reason.replace(" [Yobannoe dno]", "") // Removes Yobbanoe dno modifier
-        .replace(" (muerte)", "") // Removes Muerte modifier
-        .replace(" [Vogelfrei]", ""); // Removes Vogelfrei modifier
+        reason = reason.replaceAll(" (:?\\[|\\().+(:?\\]|\\))", "");
 
         return reason;
     }
