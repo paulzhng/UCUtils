@@ -7,6 +7,7 @@ import de.fuzzlemann.ucutils.base.command.CommandParam;
 import de.fuzzlemann.ucutils.base.command.TabCompletion;
 import de.fuzzlemann.ucutils.base.text.TextUtils;
 import de.fuzzlemann.ucutils.common.udf.data.faction.blacklist.BlacklistReason;
+import de.fuzzlemann.ucutils.common.udf.data.faction.blacklist.BlacklistReasons;
 import de.fuzzlemann.ucutils.events.NameFormatEventHandler;
 import de.fuzzlemann.ucutils.utils.faction.badfaction.blacklist.BlacklistUtil;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
@@ -79,6 +80,11 @@ public class ModifyBlacklistCommand implements TabCompletion {
         if (!name.equals(target)) return;
 
         if (type == ModifyBlacklistType.OUTLAW) {
+            if (reason.contains("[Vogelfrei]")) {
+                TextUtils.error("Der Spieler ist bereits Vogelfrei.");
+                return;
+            }
+            
             reason = removeModifiers(reason);
             reason += " [Vogelfrei]"; // append outlaw reason
         } else {
