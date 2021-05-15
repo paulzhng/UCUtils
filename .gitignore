@@ -10,6 +10,7 @@ build
 .gradle
 
 # other
+logs
 run
 gradle.properties
 /replaceLocal.bat
