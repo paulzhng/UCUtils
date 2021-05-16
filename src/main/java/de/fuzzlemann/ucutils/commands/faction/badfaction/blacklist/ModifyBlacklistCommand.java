@@ -79,6 +79,12 @@ public class ModifyBlacklistCommand implements TabCompletion {
         if (!name.equals(target)) return;
 
         if (type == ModifyBlacklistType.OUTLAW) {
+            if (reason.contains("[Vogelfrei]")) {
+                TextUtils.error("Der Spieler ist bereits vogelfrei.");
+                return;
+            }
+
+            reason = removeModifiers(reason);
             reason += " [Vogelfrei]"; // append outlaw reason
         } else {
             if (reason.contains(addReason.getReason())) {
@@ -88,13 +94,26 @@ public class ModifyBlacklistCommand implements TabCompletion {
 
             kills = Math.min(kills + addReason.getKills(), 100); // max 100 kills
             price = Math.min(price + addReason.getAmount(), 10000); // max 10.000$ bounty
-            reason = addReason.getReason() + " + " + reason; // prepend reason to original one
+            if (addReason.getReason().startsWith("[") || addReason.getReason().startsWith("(")) {
+                reason = removeModifiers(reason);
+                reason = reason + " " + addReason.getReason(); // append modifier to blacklist
+            } else {
+                reason = addReason.getReason() + " + " + reason; // prepend reason to original one
+            }
+
         }
 
         // delete from and re-add blacklist
         UPlayer p = AbstractionLayer.getPlayer();
         p.sendChatMessage("/bl del " + target);
         p.sendChatMessage("/bl set " + target + " " + kills + " " + price + " " + reason);
+    }
+
+    //Removes all known Modifiers
+    private static String removeModifiers(String reason) {
+        reason = reason.replaceAll(" (:?\\[|\\().+(:?\\]|\\))", "");
+
+        return reason;
     }
 
     @Override
