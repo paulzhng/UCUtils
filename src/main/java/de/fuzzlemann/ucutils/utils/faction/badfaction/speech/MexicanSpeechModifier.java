@@ -32,8 +32,7 @@ public class MexicanSpeechModifier implements SpeechModifier {
             Maps.immutableEntry("ja", "si"),
             Maps.immutableEntry("nein", "no"),
             Maps.immutableEntry("danke", "gracias"),
-            Maps.immutableEntry("bitte", "por favor"),
-            Maps.immutableEntry("penis", "el pene")
+            Maps.immutableEntry("bitte", "por favor")
     );
 
     @Override
