@@ -22,7 +22,7 @@ public class ASUCommand implements TabCompletion {
 
     private final Timer timer = new Timer();
 
-    @Command(value = "asu", usage = "/%label% [Spieler...] [Grund] (-v/-b/-fsa)")
+    @Command(value = "asu", usage = "/%label% [Spieler...] [Grund] (-v/-b/-fsa/-wsa)")
     public boolean onCommand(UPlayer p, String[] args) {
         if (args.length < 2) return false;
 
@@ -108,7 +108,8 @@ public class ASUCommand implements TabCompletion {
     private enum Flag {
         TRIED("-v", "Versuchte/r/s ", "", "x/2"),
         SUBSIDY("-b", "Beihilfe bei der/dem ", "", "x-10"),
-        DRIVERS_LICENSE_WITHDRAWAL("-fsa", "", " + Führerscheinabnahme", "x");
+        DRIVERS_LICENSE_WITHDRAWAL("-fsa", "", " + Führerscheinabnahme", "x"),
+        WEAPONS_LICENSE_WITHDRAWAL("-wsa", "", "+ Waffenscheinabnahme", "x");
 
         private final String flagArgument;
         private final String prependReason;
