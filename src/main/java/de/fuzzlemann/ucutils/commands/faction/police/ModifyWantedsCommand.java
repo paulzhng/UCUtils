@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 @SideOnly(Side.CLIENT)
 public class ModifyWantedsCommand implements TabCompletion {
 
-    @Command(value = {"modifywanteds", "mw"}, usage = "/%label% [Spieler] [GF/SF/SSF/S/DA5/DA10/DA15/FSA/WGV]", async = true)
+    @Command(value = {"modifywanteds", "mw"}, usage = "/%label% [Spieler] [GF/SF/SSF/S/DA5/DA10/DA15/FSA/WSA/WGV]", async = true)
     public boolean onCommand(UPlayer p, String target, @CommandParam(arrayStart = true) Type[] types) {
         Wanted wanted = NameFormatEventHandler.WANTED_MAP.get(target);
         if (wanted == null) {
@@ -89,6 +89,7 @@ public class ModifyWantedsCommand implements TabCompletion {
         DRUG_REMOVAL_10("da10", " + Drogenabnahme", "x-10"),
         DRUG_REMOVAL_15("da15", " + Drogenabnahme", "x-15"),
         DRIVERS_LICENSE_WITHDRAWAL("fsa", " + Führerscheinabnahme", "x"),
+        WEAPONS_LICENSE_WITHDRAWAL("wsa", " + Waffenscheinabnahme", "x"),
         RESISTANCE_TO_ENFORCEMENT_OFFICERS("wgv", " + Widerstand gegen Vollstreckungsbeamte", "x+5");
 
         private final String flagArgument;
