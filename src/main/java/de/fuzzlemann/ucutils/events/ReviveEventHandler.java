@@ -31,7 +31,7 @@ public class ReviveEventHandler {
         for (EntityItem entityItem : items) {
             double distance = entityItem.getDistanceSq(pos.getX(), pos.getY(), pos.getZ());
 
-            if (distance >= 2 && System.currentTimeMillis() - latestExecute < 500) return;
+            if (distance >= 2 || System.currentTimeMillis() - latestExecute < 500) return;
             AbstractionLayer.getPlayer().sendChatMessage("/revive");
             latestExecute = System.currentTimeMillis();
             return;
