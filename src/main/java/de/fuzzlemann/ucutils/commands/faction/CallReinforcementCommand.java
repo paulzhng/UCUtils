@@ -217,6 +217,7 @@ public class CallReinforcementCommand implements TabCompletion {
         MEDIC("-m", "d", "Medic benötigt!"),
         CORPSE_GUARDING("-lb", "d", "Leichenbewachung!"),
         DRUG_REMOVAL("-da", "d", "Drogenabnahme!"),
+        CONTRACT("-ct", "f", "Contract!"),
         PLANT("-p", "d", "Plant!");
 
         private final String argument;
