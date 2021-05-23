@@ -11,7 +11,6 @@ import java.util.StringJoiner;
  * @author Fuzzlemann
  */
 public class TriadeSpeechModifier implements SpeechModifier {
-
     public static final List<Map.Entry<String, String>> REPLACE_IGNORE_CASE = Lists.newArrayList(
 
             Maps.immutableEntry("Nia Hao", "Halllo"),
@@ -19,14 +18,7 @@ public class TriadeSpeechModifier implements SpeechModifier {
             Maps.immutableEntry("Bu Shi", "Nein"),
             Maps.immutableEntry("Zai Jian", "Tschüss"),
             Maps.immutableEntry("Xie Xie", "Danke")
-
     );
-
-
-
-
-
-
 
     @Override
     public String turnIntoSpeech(String[] words) {
