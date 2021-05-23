@@ -13,13 +13,13 @@ import java.util.StringJoiner;
 public class TriadeSpeechModifier implements SpeechModifier {
     public static final List<Map.Entry<String, String>> REPLACE_IGNORE_CASE = Lists.newArrayList(
 
-            Maps.immutableEntry("Nia Hao", "Halllo"),
-            Maps.immutableEntry("Shi De", "Ja"),
-            Maps.immutableEntry("Bu Shi", "Nein"),
-            Maps.immutableEntry("Zai Jian", "Tschüss"),
-            Maps.immutableEntry("Xie Xie", "Danke")
+            Maps.immutableEntry("Hallo", "Nia Hao"),
+            Maps.immutableEntry("Ja", "Shi De"),
+            Maps.immutableEntry("Nein", "Bu Shi"),
+            Maps.immutableEntry("Tschüss", "Zai Jian"),
+            Maps.immutableEntry("Danke", "Xie Xie")
     );
-
+    
     @Override
     public String turnIntoSpeech(String[] words) {
         StringJoiner joiner = new StringJoiner(" ");
