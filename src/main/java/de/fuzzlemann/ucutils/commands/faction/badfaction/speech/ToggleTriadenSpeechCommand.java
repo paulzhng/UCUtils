@@ -1,7 +1,7 @@
 package de.fuzzlemann.ucutils.commands.faction.badfaction.speech;
 
 import de.fuzzlemann.ucutils.base.command.Command;
-import de.fuzzlemann.ucutils.utils.faction.badfaction.speech.TriadeSpeechModifier;
+import de.fuzzlemann.ucutils.utils.faction.badfaction.speech.TriadsSpeechModifier;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -12,7 +12,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class ToggleTriadenSpeechCommand extends SpeechBaseCommand {
 
     public ToggleTriadenSpeechCommand() {
-        super(new TriadeSpeechModifier(),
+        super(new TriadsSpeechModifier(),
                 "Du hast die Sprache der Triaden aktiviert.",
                 "Du hast die Sprache der Triaden deaktiviert.");
     }
