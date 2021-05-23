@@ -30,7 +30,7 @@ import java.util.List;
 public class UCUtilsCommand implements TabCompletion {
 
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
-    private final long compileTime = 1618778506450L; // updated by gradle
+    private final long compileTime = 1621445161819L; // updated by gradle
     private final String formattedTime = dateFormat.format(new Date(compileTime));
     private final Gson gson = new Gson();
 
@@ -64,18 +64,18 @@ public class UCUtilsCommand implements TabCompletion {
                 .newLine()
                 .prefix()
                 .of("Commands").bold().color(TextFormatting.GRAY)
-                .clickEvent(ClickEvent.Action.OPEN_URL, "https://github.com/Fuzzlemann/UCUtils/wiki/Commands")
+                .clickEvent(ClickEvent.Action.OPEN_URL, "https://github.com/paulzhng/UCUtils/wiki/Commands")
                 .hoverEvent(HoverEvent.Action.SHOW_TEXT, MessagePart.simple("Commands anzeigen", TextFormatting.GRAY))
                 .advance()
                 .add("  ")
                 .of("Source-Code").bold().color(TextFormatting.BLUE)
-                .clickEvent(ClickEvent.Action.OPEN_URL, "https://github.com/Fuzzlemann/UCUtils")
+                .clickEvent(ClickEvent.Action.OPEN_URL, "https://github.com/paulzhng/UCUtils")
                 .hoverEvent(HoverEvent.Action.SHOW_TEXT, MessagePart.simple("Source-Code anzeigen", TextFormatting.GRAY))
                 .advance()
                 .add("  ")
                 .of("Sonstige Features").bold().color(TextFormatting.GRAY)
                 .hoverEvent(HoverEvent.Action.SHOW_TEXT, MessagePart.simple("Sonstige Features anzeigen", TextFormatting.GRAY))
-                .clickEvent(ClickEvent.Action.OPEN_URL, "https://github.com/Fuzzlemann/UCUtils/wiki/Sonstige-Features").advance()
+                .clickEvent(ClickEvent.Action.OPEN_URL, "https://github.com/paulzhng/UCUtils/wiki/Sonstige-Features").advance()
                 .newLine()
                 .prefix()
                 .of("~ by ").color(TextFormatting.GRAY).advance()

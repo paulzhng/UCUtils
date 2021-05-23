@@ -1,6 +1,7 @@
 package de.fuzzlemann.ucutils.utils.tablist;
 
 import de.fuzzlemann.ucutils.utils.ForgeUtils;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
