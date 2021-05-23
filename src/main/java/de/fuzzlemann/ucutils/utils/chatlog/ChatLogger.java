@@ -20,6 +20,7 @@ import java.util.logging.FileHandler;
 import java.util.logging.Formatter;
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;
+import java.util.regex.Pattern;
 
 /**
  * @author Fuzzlemann
@@ -32,6 +33,7 @@ public class ChatLogger {
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
     private final ChatLogConsumer consumer;
     private final Logger logger;
+    private static final Pattern NAVIGATION_MESSAGE_PATTERN = Pattern.compile("^§6Noch §l(.+)m§6 bis zum Ziel\\.$");
 
     public ChatLogger() {
         File directory = new File(FileManager.MC_DIRECTORY, "chatlogs");
@@ -63,6 +65,8 @@ public class ChatLogger {
     @SubscribeEvent
     public static void onReceiveChat(ClientChatReceivedEvent e) {
         if (instance == null) return;
+
+        if (NAVIGATION_MESSAGE_PATTERN.matcher(e.getMessage().getUnformattedText()).find()) return;
 
         instance.log("[CHAT] " + e.getMessage().getUnformattedText());
     }
