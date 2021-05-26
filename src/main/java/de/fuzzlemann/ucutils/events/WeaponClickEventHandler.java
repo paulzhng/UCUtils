@@ -3,6 +3,7 @@ package de.fuzzlemann.ucutils.events;
 import com.google.common.collect.ImmutableSet;
 import de.fuzzlemann.ucutils.Main;
 import de.fuzzlemann.ucutils.base.text.TextUtils;
+import de.fuzzlemann.ucutils.commands.UCUtilsCommand;
 import de.fuzzlemann.ucutils.config.UCUtilsConfig;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -27,6 +28,7 @@ public class WeaponClickEventHandler {
     private static final Set<String> WEAPONS = ImmutableSet.of("§8M4", "§8MP5", "§8Pistole", "§8Jagdflinte");
     public static boolean tazer = false;
 
+
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void onInteract(PlayerInteractEvent e) {
         if (!UCUtilsConfig.munitionDisplay) return;
@@ -37,6 +39,7 @@ public class WeaponClickEventHandler {
         if (!isWeapon(is)) return;
 
         handleMunitionDisplay(is);
+
         if(tazer) {
             tazer = false;
         }
@@ -75,6 +78,7 @@ public class WeaponClickEventHandler {
 
     @SubscribeEvent
     public static void onChat(ClientChatReceivedEvent e) {
+        if(!UCUtilsConfig.tazerwarner) return;
         if(e.getMessage().getUnformattedText().equals("Dein Tazer ist nun bereit!"))
             tazer = true;
         if(e.getMessage().getUnformattedText().equals("Dein Tazer ist nun nicht mehr bereit!") || e.getMessage().getUnformattedText().equals("Dein Tazer muss sich noch aufladen..."))
@@ -83,9 +87,9 @@ public class WeaponClickEventHandler {
 
     @SubscribeEvent
     public static void onInteract1(PlayerInteractEvent e) {
+        if(!UCUtilsConfig.tazerwarner) return;
         if(!tazer) return;
         if(!(e instanceof PlayerInteractEvent.LeftClickBlock || e instanceof PlayerInteractEvent.EntityInteractSpecific || e instanceof PlayerInteractEvent.LeftClickEmpty)) return;
         TextUtils.simpleMessage("Achtung! Dein Tazer ist geladen!");
-
     }
 }
