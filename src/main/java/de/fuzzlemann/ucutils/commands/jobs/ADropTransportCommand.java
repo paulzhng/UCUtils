@@ -34,7 +34,7 @@ public class ADropTransportCommand {
                 .filter(scorePredicate -> {
                     String playerName = scorePredicate.getPlayerName();
 
-                    return playerName.equals("§aTransport") || playerName.equals("§9Kisten§8: ") || playerName.equals("§9Waffenkisten§8: ") || playerName.equals("§6Weizen§8:");
+                    return playerName.equals("§aTransport") || playerName.equals("§9Kisten§8: ") || playerName.equals("§9Waffenkisten§8: ") || playerName.equals("§6Weizen§8:") || playerName.equals("§9Schwarzpulver§8:");
                 })
                 .findFirst();
 
