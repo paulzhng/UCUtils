@@ -91,6 +91,10 @@ public class UCUtilsConfig {
     @Config.Comment("Gibt eine Nachricht und einen Sound ab, wenn eine Person das Öffentlich der eigenen Fraktion im TeamSpeak betritt")
     public static boolean notifyWaitingPublic = false;
 
+    @Config.Name("plantTimer")
+    @Config.Comment("Setzt automatisch einen Timer (/planttimer), wenn man eine Plant düngt oder wässert")
+    public static boolean plantTimer = true;
+
     @SubscribeEvent
     public static void onConfigChange(ConfigChangedEvent e) {
         if (e == null || e.getModID().equals(Main.MOD_ID)) {
