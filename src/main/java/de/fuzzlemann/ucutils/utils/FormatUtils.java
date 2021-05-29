@@ -26,7 +26,6 @@ public class FormatUtils {
     }
 
     private static List<String> getTimeElements(long ms) {
-        long milliseconds = ms % 1000;
         ms /= 1000;
         long seconds = ms % 60;
         ms /= 60;
@@ -46,10 +45,6 @@ public class FormatUtils {
 
         if (seconds != 0) {
             timeElements.add(seconds + (seconds == 1 ? " Sekunde" : " Sekunden"));
-        }
-
-        if (milliseconds != 0) {
-            timeElements.add(milliseconds + (milliseconds == 1 ? " Millisekunde" : " Millisekunden"));
         }
 
         return timeElements;
