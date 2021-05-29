@@ -91,7 +91,6 @@ public class UCUtilsConfig {
     @Config.Comment("Gibt eine Nachricht und einen Sound ab, wenn eine Person das Öffentlich der eigenen Fraktion im TeamSpeak betritt")
     public static boolean notifyWaitingPublic = false;
 
-
     @Config.Name("warnTazer")
     @Config.Comment("Lass dir mit einem Linksklick eine Warnung in den Chat schreiben, sofern dein Tazer geladen ist")
     public static boolean warnTazer = false;
