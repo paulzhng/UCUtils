@@ -179,7 +179,7 @@ public class CallReinforcementCommand implements TabCompletion {
             return true;
         }
 
-        //Prevents Players from sending Reinforcements without communication devices
+        // prevents players from sending reinforcements without communication devices
         if (!hasCommunications) {
             TextUtils.error("Du hast keine Kommunikationsgeräte.");
             return true;
