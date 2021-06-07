@@ -7,7 +7,6 @@ import de.fuzzlemann.ucutils.base.udf.UnifiedDataFetcher;
 import de.fuzzlemann.ucutils.commands.UpdateCommand;
 import de.fuzzlemann.ucutils.config.UCUtilsConfig;
 import de.fuzzlemann.ucutils.teamspeak.TSClientQuery;
-import de.fuzzlemann.ucutils.utils.AnalyticsUtil;
 import de.fuzzlemann.ucutils.utils.Logger;
 import de.fuzzlemann.ucutils.utils.chatlog.ChatLogger;
 import net.minecraft.client.Minecraft;
@@ -20,8 +19,6 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import java.util.Optional;
 
 /**
  * @author Fuzzlemann
@@ -61,7 +58,6 @@ public class Main {
     @Mod.EventHandler
     public void postInit(FMLPostInitializationEvent e) {
         new Thread(() -> DataManager.loadData(false)).start();
-        new Thread(AnalyticsUtil::sendStartupAnalytics).start();
         new Thread(() -> unifiedDataFetcher.load()).start();
 
         if (!UCUtilsConfig.tsAPIKey.isEmpty()) {
