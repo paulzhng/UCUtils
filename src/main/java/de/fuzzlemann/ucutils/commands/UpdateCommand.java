@@ -27,7 +27,7 @@ public class UpdateCommand {
 
     @Command("updateucutils")
     public boolean onCommand() {
-        if (!SystemUtils.IS_OS_WINDOWS) {
+        if (!SystemUtils.IS_OS_WINDOWS && !SystemUtils.IS_OS_UNIX) {
             TextUtils.error("Dieser Befehl ist nur unter Windows unterstützt.");
             return true;
         }
@@ -41,7 +41,11 @@ public class UpdateCommand {
         TextUtils.simpleMessage("Die neue Version wird heruntergeladen...");
 
         try {
-            downloadJar();
+            if (SystemUtils.IS_OS_WINDOWS) {
+                windowsUpdate();
+            } else {
+                unixUpdate();
+            }
         } catch (IOException e) {
             Logger.LOGGER.catching(e);
             TextUtils.error("Ein Fehler ist beim Herunterladen der neuen Version aufgetreten.");
@@ -55,6 +59,18 @@ public class UpdateCommand {
                 .info()
                 .of("Zum Abschließen des Updates musst du nun dein Minecraft neustarten.").color(TextFormatting.WHITE).advance()
                 .send();
+        return true;
+    }
+
+    private void windowsUpdate() throws IOException {
+        try {
+            FileUtils.copyURLToFile(new URL("http://fuzzlemann.de/UCUtils.jar"), UPDATE_FILE, 10000, 10000);
+        } catch (IOException e) {
+            Logger.LOGGER.catching(e);
+            TextUtils.error("Ein Fehler ist beim Herunterladen der neuen Version aufgetreten.");
+            return;
+        }
+
         replace = true;
 
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
@@ -67,12 +83,11 @@ public class UpdateCommand {
                 Logger.LOGGER.catching(e);
             }
         }));
-
-        return true;
     }
 
-    private void downloadJar() throws IOException {
-        FileUtils.copyURLToFile(new URL("http://fuzzlemann.de/UCUtils.jar"), UPDATE_FILE, 10000, 10000);
+    private void unixUpdate() throws IOException {
+        // on unix, we can just overwrite the original file directly as there's no file locking in place
+        FileUtils.copyURLToFile(new URL("http://fuzzlemann.de/UCUtils.jar"), modFile, 10000, 10000);
     }
 
     private void replaceJar() throws IOException {
