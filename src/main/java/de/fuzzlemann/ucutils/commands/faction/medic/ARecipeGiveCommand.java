@@ -7,6 +7,7 @@ import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
 /**
@@ -34,7 +35,7 @@ public class ARecipeGiveCommand {
     }
 
     @SubscribeEvent
-    public static void onRecipeGiveFeedback(ClientChatReceivedEvent e) {
+    public static void onRecipeGiveFeedback(ClientChatReceivedEvent e) throws InterruptedException {
 
         if (recipeGiveAmountLeft < 1) return; //checks if there is an active recipe-give-process
 

@@ -32,7 +32,7 @@ public class ARecipeAcceptCommand {
     }
 
     @SubscribeEvent
-    public static void onRecipeAcceptFeedback(ClientChatReceivedEvent e) throws InterruptedException {
+    public static void onRecipeAcceptFeedback(ClientChatReceivedEvent e) {
 
         if (recipeAcceptAmountLeft < 1) return; //checks if there is an active recipe-accept-process
 
