@@ -40,6 +40,7 @@ public class ARecipeGiveCommand {
 
         String msg = e.getMessage().getUnformattedText();
         if (RECIPE_GIVE_PATTERN.matcher(msg).find()) {
+            TimeUnit.MILLISECONDS.sleep(1000); // wait because if the patient accepts the recipe too quickly, a spam error occurs
             AbstractionLayer.getPlayer().sendChatMessage("/rezept " + target + " " + medication);
             recipeGiveAmountLeft--;
         } else if (
