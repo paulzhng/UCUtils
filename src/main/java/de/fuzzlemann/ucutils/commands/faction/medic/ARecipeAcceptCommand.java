@@ -38,7 +38,6 @@ public class ARecipeAcceptCommand {
 
         String msg = e.getMessage().getUnformattedText();
         if (RECIPE_ACCEPT_PATTERN.matcher(msg).find()) {
-            TimeUnit.MILLISECONDS.sleep(1000); // wait because if the medic uses '/arezept' there is a spam error
             AbstractionLayer.getPlayer().sendChatMessage("/annehmen");
             recipeAcceptAmountLeft--;
         } else if (msg.contains("Dir wird nichts angeboten.") /* termination conditions */ ) {
