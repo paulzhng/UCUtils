@@ -10,6 +10,7 @@ import de.fuzzlemann.ucutils.base.command.TabCompletion;
 import de.fuzzlemann.ucutils.base.text.Message;
 import de.fuzzlemann.ucutils.base.text.MessagePart;
 import de.fuzzlemann.ucutils.base.text.TextUtils;
+import de.fuzzlemann.ucutils.checks.CommunicationsChecker;
 import de.fuzzlemann.ucutils.common.activity.ActivityTestType;
 import de.fuzzlemann.ucutils.common.udf.data.misc.navipoint.CustomNaviPoint;
 import de.fuzzlemann.ucutils.utils.ForgeUtils;
@@ -42,11 +43,8 @@ public class CallReinforcementCommand implements TabCompletion {
 
     private static final Pattern REINFORCEMENT_PATTERN = Pattern.compile("^(.+ ((?:\\[UC])*[a-zA-Z0-9_]+)): Benötige Verstärkung! -> X: (-*\\d+) \\| Y: (-*\\d+) \\| Z: (-*\\d+)$");
     private static final Pattern ON_THE_WAY_PATTERN = Pattern.compile("^(.+ (?:\\[UC])*([a-zA-Z0-9_]+)): ((?:\\[UC])*[a-zA-Z0-9_]+), ich bin zu deinem Verstärkungsruf unterwegs! \\((\\d+) Meter entfernt\\)$");
-    private static final Pattern PLAYER_TOOK_COMMUNICATIONS_PATTERN = Pattern.compile("^((?:\\[UC])*[a-zA-Z0-9_]+) hat dir deine Kommunikationsgeräte abgenommen\\.$");
 
     private static ReinforcementType lastReinforcement;
-
-    public static boolean hasCommunications = true;
 
     @SubscribeEvent
     public static void onChatReceived(ClientChatReceivedEvent e) {
@@ -131,17 +129,6 @@ public class CallReinforcementCommand implements TabCompletion {
             return;
         }
 
-        Matcher communicationsTaken = PLAYER_TOOK_COMMUNICATIONS_PATTERN.matcher(msg);
-        if (communicationsTaken.find()) {
-            hasCommunications = false;
-            return;
-        }
-
-        if (msg.equalsIgnoreCase("Du hast dein Handy genommen.")) {
-            hasCommunications = true;
-            return;
-        }
-
         for (Type type : Type.values()) {
             Pattern pattern = type.getPattern();
             if (pattern == null) continue;
@@ -180,8 +167,8 @@ public class CallReinforcementCommand implements TabCompletion {
         }
 
         // prevents players from sending reinforcements without communication devices
-        if (!hasCommunications) {
-            TextUtils.error("Du hast keine Kommunikationsgeräte.");
+        if (!CommunicationsChecker.hasCommunications) {
+            TextUtils.error(CommunicationsChecker.noCommunicationsMessage);
             return true;
         }
 

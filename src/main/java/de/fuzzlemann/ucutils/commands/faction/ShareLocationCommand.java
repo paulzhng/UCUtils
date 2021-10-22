@@ -6,6 +6,7 @@ import de.fuzzlemann.ucutils.base.command.Command;
 import de.fuzzlemann.ucutils.base.command.CommandParam;
 import de.fuzzlemann.ucutils.base.text.Message;
 import de.fuzzlemann.ucutils.base.text.TextUtils;
+import de.fuzzlemann.ucutils.checks.CommunicationsChecker;
 import de.fuzzlemann.ucutils.common.udf.data.misc.navipoint.CustomNaviPoint;
 import de.fuzzlemann.ucutils.utils.ForgeUtils;
 import de.fuzzlemann.ucutils.utils.location.navigation.NavigationUtil;
@@ -88,8 +89,8 @@ public class ShareLocationCommand {
         Set<String> playerNames = new LinkedHashSet<>();
 
         // prevents players from sharing their location without communication devices
-        if (!CallReinforcementCommand.hasCommunications) {
-            TextUtils.error("Du hast keine Kommunikationsgeräte.");
+        if (!CommunicationsChecker.hasCommunications) {
+            TextUtils.error(CommunicationsChecker.noCommunicationsMessage);
             return true;
         }
 
