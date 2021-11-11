@@ -24,7 +24,7 @@ public class CommunicationsChecker {
     private static final Pattern PLAYER_TOOK_COMMUNICATIONS_PATTERN = Pattern.compile("^((?:\\[UC])*[a-zA-Z0-9_]+) hat dir deine Kommunikationsgeräte abgenommen\\.$");
 
     public static boolean hasCommunications = false;
-    public static String noCommunicationsMessage = "Du hast keine Kommunikationsgeräte oder sie sind ausgeschaltet.";
+    public static String noCommunicationsMessage = "Du hast keine Kommunikationsgeräte.";
 
     @SubscribeEvent
     public static void onJoin(FMLNetworkEvent.ClientConnectedToServerEvent e) {
@@ -51,49 +51,45 @@ public class CommunicationsChecker {
 
         /**
          * conditions to set 'has Communications' to 'false':
-         * - chat: 'Dein Handy ist ausgeschaltet.' (try to use /call)
-         * - chat: 'Du hast dein Telefon ausgeschaltet.'
-         * - chat: 'Der Akku von deinem Handy ist leer.' (try to turn mobile on)
-         * - chat: 'Ihr Akku ist leer.' (try to use /call)
+         * - chat: 'Dein Handy ist ausgeschaltet.' (try to use /call without number on activeCommunicationsCheck)
+         * - chat: 'Dein Handy liegt bei dir Zuhause.' (try to use /mobile - fallback if 'Dein Handy ist ausgeschaltet.' don't trigger)
          * - match: PLAYER_TOOK_COMMUNICATIONS_PATTERN
          *
          * conditions to set 'has Communications' to 'true':
-         * - chat: 'Fehler: /call [Nummer]' (try to use /call without number)
-         * - chat: 'Du hast dein Telefon eingeschaltet.'
-         * - chat: 'Der Akku deines Handys ist nun wieder voll.'
+         * - chat: 'Fehler: /call [Nummer]' (try to use /call without number on activeCommunicationsCheck)
+         * - chat: 'Du hast dein Handy genommen.'
+         * - chat: 'Du hast dein Telefon eingeschaltet.' (fallback if 'Du hast dein Handy genommen.' don't trigger)
          */
 
         String msg = e.getMessage().getUnformattedText();
-        Matcher communicationsTaken = PLAYER_TOOK_COMMUNICATIONS_PATTERN.matcher(msg);
-        if (communicationsTaken.find()) {
-            hasCommunications = false;
-            return;
-        }
 
-        if (msg.equals("Du hast dein Telefon ausgeschaltet.") || msg.equals("Dein Handy ist ausgeschaltet.")) {
-            hasCommunications = false;
-            if (activeCommunicationsCheck) {
+        if (activeCommunicationsCheck) {
+            if (msg.equals("Dein Handy ist ausgeschaltet.")) {
                 activeCommunicationsCheck = false;
+                hasCommunications = false;
                 e.setCanceled(true);
+                return;
             }
-            return;
-        }
 
-        if (msg.equals("Der Akku von deinem Handy ist leer.") || msg.equals("Ihr Akku ist leer.")) {
-            hasCommunications = false;
-            if (activeCommunicationsCheck) {
+            if (msg.equals("Fehler: /call [Nummer]")) {
                 activeCommunicationsCheck = false;
+                hasCommunications = true;
                 e.setCanceled(true);
+                return;
             }
+        }
+
+        if (msg.equals("Dein Handy liegt bei dir Zuhause.")) {
+            hasCommunications = false;
             return;
         }
 
-        if (msg.equals("Du hast dein Telefon eingeschaltet.") || msg.equals("Fehler: /call [Nummer]") || msg.equals("Der Akku deines Handys ist nun wieder voll.")) {
+        if (msg.equals("Du hast dein Handy genommen.") || msg.equals("Du hast dein Telefon eingeschaltet.")) {
             hasCommunications = true;
-            if (activeCommunicationsCheck) {
-                activeCommunicationsCheck = false;
-                e.setCanceled(true);
-            }
+            return;
         }
+
+        Matcher communicationsTaken = PLAYER_TOOK_COMMUNICATIONS_PATTERN.matcher(msg);
+        if (communicationsTaken.find()) hasCommunications = false;
     }
 }
