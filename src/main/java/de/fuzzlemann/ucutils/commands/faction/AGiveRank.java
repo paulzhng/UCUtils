@@ -32,7 +32,7 @@ public class AGiveRank implements TabCompletion {
 
                 String player = targets[i++];
 
-                p.sendChatMessage("/giverank " + rank + " " + player);
+                p.sendChatMessage("/giverank " + player + " " + rank);
             }
         }, 0, TimeUnit.SECONDS.toMillis(1));
 
