@@ -46,8 +46,19 @@ public class CommunicationsChecker {
 
     @SubscribeEvent
     public static void onChatReceived(ClientChatReceivedEvent e) {
-
         String msg = e.getMessage().getUnformattedText();
+
+        /*
+        If the user has set a password for their account, <code>/mobile</code> cannot be listed until the account is unlocked.
+        As a result, <code>hasCommunications</code> remains false. To avoid this, the check is carried out again when the message
+        came that the account was unlocked.
+        */
+        if (msg.equals("Du hast deinen Account freigeschaltet.")) {
+            activeCommunicationsCheck = true;
+            AbstractionLayer.getPlayer().sendChatMessage("/mobile");
+            return;
+        }
+
         if (msg.equals("Du hast dein Handy genommen.")) {
             hasCommunications = true;
             return;
