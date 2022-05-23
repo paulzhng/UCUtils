@@ -1,11 +1,7 @@
 buildscript {
     repositories {
-        mavenLocal()
+        maven { url = "https://files.minecraftforge.net/maven" }
         mavenCentral()
-        maven {
-            url = "https://plugins.gradle.org/m2/"
-            url = "http://files.minecraftforge.net/maven"
-        }
     }
 
     dependencies {
@@ -52,10 +48,10 @@ dependencies {
     provided fileTree(dir: 'libs', include: 'lb_api_mc1.12.2.jar')
     shade fileTree(dir: 'libs', include: 'common-1.1.5.jar')
 
-    testImplementation 'org.reflections:reflections:0.9.11'
-    testImplementation 'org.mockito:mockito-junit-jupiter:2.28.2'
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.5.0-RC1'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.5.0-RC1'
+    testImplementation 'org.reflections:reflections:0.10.2'
+    testImplementation 'org.mockito:mockito-junit-jupiter:4.5.1'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
 }
 
 test {
