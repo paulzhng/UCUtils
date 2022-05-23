@@ -1,11 +1,10 @@
 package de.fuzzlemann.ucutils.checks;
 
 import de.fuzzlemann.ucutils.base.abstraction.AbstractionLayer;
-import net.minecraft.client.gui.inventory.GuiChest;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.client.Minecraft;
 import net.minecraft.inventory.ContainerChest;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
-import net.minecraftforge.client.event.GuiOpenEvent;
+import net.minecraftforge.client.event.GuiContainerEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -57,22 +56,24 @@ public class CommunicationsChecker {
         if (communicationsTaken.find()) hasCommunications = false;
     }
 
+    /**
+     * The GuiOpenEvent is called before a Gui is opened. If we don't want the gui to open, we can cancel the event.<br>
+     * Problem: Since the content of the gui is only set after opening and we haven't opened the gui, the gui items are
+     * placed in the inventory on the client side.<br>
+     * Solution: We close the inventory after opening it (and setting the items).
+     */
     @SubscribeEvent
-    public static void onGuiOpen(GuiOpenEvent e) {
-        if (e.getGui() instanceof GuiChest) {
-            GuiChest mobileGui = (GuiChest) e.getGui();
-            if (mobileGui.inventorySlots instanceof ContainerChest) {
-                ContainerChest mobileContainer = (ContainerChest) mobileGui.inventorySlots;
-                if (mobileContainer.getLowerChestInventory().hasCustomName()) {
-                    if (mobileContainer.getLowerChestInventory().getDisplayName().getUnformattedText().equals("§6Telefon")) {
-                        hasCommunications = true;
-                        if (activeCommunicationsCheck) {
-                            activeCommunicationsCheck = false;
-                            mobileContainer.getLowerChestInventory().closeInventory((EntityPlayer) AbstractionLayer.getPlayer());
-                        }
-                    }
-                }
-            }
+    public static void onGuiOpen(GuiContainerEvent.DrawForeground e) {
+        if (!(e.getGuiContainer().inventorySlots instanceof ContainerChest)) return;
+        ContainerChest containerChest = (ContainerChest) e.getGuiContainer().inventorySlots;
+
+        if (!containerChest.getLowerChestInventory().getDisplayName().getUnformattedText().equals("§6Telefon")) return;
+
+        hasCommunications = true;
+
+        if (activeCommunicationsCheck) {
+            activeCommunicationsCheck = false;
+            Minecraft.getMinecraft().player.closeScreen();
         }
     }
 }
