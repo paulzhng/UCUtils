@@ -25,7 +25,6 @@ import java.util.regex.Pattern;
     private static String medication = null;
     private static int recipeGiveAmountLeft;
     private static long lastExecution;
-    private static List<String> medications = Arrays.asList("Antibiotika", "Hustensaft", "Schmerzmittel");
 
     @Command(value = "arezept", usage = "/%label% [Spieler] [Antibiotika/a/Hustensaft/h/Schmerzmittel/s] [Menge]")
     public boolean onCommand(UPlayer p, String target, String medication, int recipeGiveAmount) {
@@ -40,7 +39,7 @@ import java.util.regex.Pattern;
 
         // the number of remaining recipes is reduced by 1 because a recipe is given directly to trigger the ClientChatReceivedEvent
         recipeGiveAmountLeft = recipeGiveAmount - 1;
-        p.sendChatMessage("/rezept " + (ARecipeGiveCommand.target = target) + " " + (ARecipeGiveCommand.medication = medication));
+        p.sendChatMessage("/rezept " + (ARecipeGiveCommand.target = target) + " " + ARecipeGiveCommand.medication);
         return true;
     }
 
