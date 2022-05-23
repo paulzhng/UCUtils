@@ -3,10 +3,13 @@
     "modid": "ucutils",
     "name": "UC Utils",
     "description": "An useful Util Mod for UnicaCity",
-    "version": "1.12.2-1.9",
+    "version": "1.12.2-1.10",
     "mcversion": "1.12.2",
     "authorList": [
-      "Fuzzlemann"
+      "Fuzzlemann",
+      "Dimiikou",
+      "RettichLP",
+      "NiklasJan"
     ],
     "dependencies": [
       "LabyMod"

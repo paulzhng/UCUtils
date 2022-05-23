@@ -2,7 +2,6 @@ buildscript {
     repositories {
         mavenLocal()
         mavenCentral()
-        jcenter()
         maven {
             url = "https://plugins.gradle.org/m2/"
             url = "http://files.minecraftforge.net/maven"
@@ -29,7 +28,7 @@ repositories {
 
 apply plugin: 'net.minecraftforge.gradle.forge'
 
-version = "1.12.2-1.9"
+version = "1.12.2-1.10"
 group = "de.fuzzlemann.ucutils"
 archivesBaseName = "ucutils"
 
@@ -152,7 +151,7 @@ if (project.findProperty('host') != null) {
 import java.nio.file.Files
 import java.nio.file.Paths
 import java.nio.file.StandardCopyOption
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeUnit
 
 task deployLocal(dependsOn: build) {
     doLast {
