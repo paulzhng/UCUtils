@@ -31,16 +31,20 @@ public class FactionPlayersList implements UDFLoader<List<FactionPlayers>> {
             for (String player : players) {
                 PLAYER_TO_FACTION_MAP.put(player, faction);
             }
-
-            // WORKAROUND Start - because serverside api cannot be updated by contributors (ballas)
-            Matcher matcher = BALLAS_NAME_PATTERN.matcher(getWebsiteSourceCode());
-            while (matcher.find())
-                PLAYER_TO_FACTION_MAP.put(
-                        matcher.group().replace("<h4 class=\"h5 g-mb-5\"><strong>",""),
-                        Faction.BALLAS
-                );
-            // WORKAROUND End
         }
+
+        // WORKAROUND Start - because serverside api cannot be updated by contributors (ballas)
+        Matcher matcher = BALLAS_NAME_PATTERN.matcher(getWebsiteSourceCode());
+        while (matcher.find())
+            PLAYER_TO_FACTION_MAP.put(
+                    matcher.group().replace("<h4 class=\"h5 g-mb-5\"><strong>",""),
+                    Faction.BALLAS
+            );
+
+        PLAYER_TO_FACTION_MAP.forEach((k, v) -> {
+            if (v.equals(Faction.BALLAS)) System.out.println(k);
+        });
+        // WORKAROUND End
     }
 
     @Override
