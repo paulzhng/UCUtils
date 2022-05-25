@@ -19,7 +19,7 @@ public enum Faction {
     CHURCH("kirche", "Church", 227),
     LA_COSA_NOSTRA("lacosanostra", "Mafia", 130),
     CALDERON("calderon", "Mexican", 154),
-    BALLAS("ballas", "Gang", 142),
+    BALLAS("westsideballas", "Gang", 142),
     KERZAKOV("kerzakov", "Kerzakov", 166),
     TRIADS("triaden", "Triaden", 179),
     OBRIEN("o_brien", "O_Brien", 191);
