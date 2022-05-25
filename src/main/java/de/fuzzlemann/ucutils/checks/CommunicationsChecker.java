@@ -40,6 +40,8 @@ public class CommunicationsChecker {
         if (!connected) return;
         connected = false;
 
+        if (!e.getWorld().isRemote) return;
+
         activeCommunicationsCheck = true;
         AbstractionLayer.getPlayer().sendChatMessage("/mobile");
     }
