@@ -54,8 +54,7 @@ import java.util.regex.Pattern;
         long timeSinceLastExecution = System.currentTimeMillis() - lastExecution;
         long delay = 0;
 
-        if (timeSinceLastExecution < 500)
-            delay = 500 - timeSinceLastExecution;
+        if (timeSinceLastExecution < 750) delay = 750 - timeSinceLastExecution;
 
         TIMER.schedule(new TimerTask() {
             @Override public void run() {
